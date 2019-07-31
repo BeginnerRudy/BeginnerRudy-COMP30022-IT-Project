@@ -1,6 +1,6 @@
-# BeginnerRudy-COMP30022-IT-Project
+# Family Artifacts Register 
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
-COMP30022 IT Project
+All teams in COMP30022 in 2019 wil build a Family artifacts register for their capstone project. The problem being addressed is that almost every family has items they may want to pass down the generations. Photographs, letters, previous items such as art or jewellery, items of cultural significance are examples. The project is to build a front end to browse the items in the register, and a back end that stores the items or links to the item.
 
 ## Contributors ✨
 
