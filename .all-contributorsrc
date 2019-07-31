@@ -1,0 +1,23 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "BeginnerRudy",
+      "name": "rudy renjie meng",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/36201915?v=4",
+      "profile": "http://mrj9990123@gmail.com",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "BeginnerRudy-COMP30022-IT-Project",
+  "projectOwner": "BeginnerRudy",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
