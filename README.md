@@ -1,5 +1,5 @@
 # Family Artifacts Register 
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors)
 
 All teams in COMP30022 in 2019 wil build a Family artifacts register for their capstone project. The problem being addressed is that almost every family has items they may want to pass down the generations. Photographs, letters, previous items such as art or jewellery, items of cultural significance are examples. The project is to build a front end to browse the items in the register, and a back end that stores the items or links to the item.
 
@@ -11,6 +11,7 @@ All teams in COMP30022 in 2019 wil build a Family artifacts register for their c
   <tr>
     <td align="center"><a href="http://mrj9990123@gmail.com"><img src="https://avatars2.githubusercontent.com/u/36201915?v=4" width="100px;" alt="rudy renjie meng"/><br /><sub><b>rudy renjie meng</b></sub></a><br /><a href="https://github.com/BeginnerRudy/BeginnerRudy-COMP30022-IT-Project/commits?author=BeginnerRudy" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/MCommandar"><img src="https://avatars1.githubusercontent.com/u/43230612?v=4" width="100px;" alt="MCommandar"/><br /><sub><b>MCommandar</b></sub></a><br /><a href="https://github.com/BeginnerRudy/BeginnerRudy-COMP30022-IT-Project/commits?author=MCommandar" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/motianyi"><img src="https://avatars3.githubusercontent.com/u/37366982?v=4" width="100px;" alt="motianyi"/><br /><sub><b>motianyi</b></sub></a><br /><a href="https://github.com/BeginnerRudy/BeginnerRudy-COMP30022-IT-Project/commits?author=motianyi" title="Code">💻</a></td>
   </tr>
 </table>
 
