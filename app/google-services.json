@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "787560592478",
+    "firebase_url": "https://fir-image-uploader-98bb7.firebaseio.com",
+    "project_id": "fir-image-uploader-98bb7",
+    "storage_bucket": "fir-image-uploader-98bb7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787560592478:android:e8cefbc941c2d69a",
+        "android_client_info": {
+          "package_name": "com.example.FamilyRegister"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "787560592478-l7341ucfmni9du6oavt0lp04vq3ik6f9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.FamilyRegister",
+            "certificate_hash": "903381d1001fd252d05cbf0fb9480cef06f145a3"
+          }
+        },
+        {
+          "client_id": "787560592478-7kmmho1e7o39cj08n2agnedp0so0ibgn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFIzyHPL0RFiuYQ5WN14uoCxYMtc9EGF4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787560592478-7kmmho1e7o39cj08n2agnedp0so0ibgn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
