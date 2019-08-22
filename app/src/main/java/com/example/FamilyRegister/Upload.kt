@@ -3,7 +3,6 @@ package com.example.FamilyRegister
 import com.google.firebase.database.Exclude
 import com.google.firebase.database.PropertyName
 
-//
 data class Upload(
     @set:PropertyName("name")
     @get:PropertyName("name")
