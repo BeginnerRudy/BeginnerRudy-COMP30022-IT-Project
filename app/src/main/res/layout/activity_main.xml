@@ -40,11 +40,12 @@
 
     <Button
         android:id="@+id/btn_upload"
+        android:textSize="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Upload" />
+        android:text="Upload"/>
 
     <TextView
         android:id="@+id/txt_show_upload"
@@ -61,4 +62,5 @@
         android:gravity="center"
         android:text="Show Uploads"
         android:textSize="16dp" />
+
 </RelativeLayout>
