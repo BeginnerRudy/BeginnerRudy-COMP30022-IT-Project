@@ -14,7 +14,7 @@ class ImagesActivity : AppCompatActivity(), ImageAdapter.OnItemClickerListener {
 
     var storage: FirebaseStorage = FirebaseStorage.getInstance()
     lateinit var dbListener: ValueEventListener
-    var databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference(MainActivity.IMAGE_POLDER_PATH)
+    var databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference(AddImageActivity.IMAGE_POLDER_PATH)
     var uploads: ArrayList<Upload> = ArrayList()
 
 
