@@ -1,23 +1,17 @@
 package com.example.FamilyRegister
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresPermission
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.fragment_category.view.*
-import kotlinx.android.synthetic.main.fragment_register.*
 
 class CategoryFragment : Fragment() {
     companion object {
@@ -32,7 +26,7 @@ class CategoryFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_category, container, false)
 
         // retrieve all the category data from the database
-        val categories = ArrayList<Upload>()
+        val categories = ArrayList<CategoryUpload>()
 
         val databaseReference = FirebaseDatabase.getInstance().getReference(RegisterFragment.uid + "/")
         val categoryAdapter = CategoryAdapter(categories, context!!)
@@ -54,19 +48,19 @@ class CategoryFragment : Fragment() {
                     val mValue = it.value
 
                     // check the data
-                    var currUpload: Upload?
+                    var currItemUpload: CategoryUpload?
                     if (mValue == RegisterFragment.fakeInitialValue) {
-                        currUpload = Upload(it.key.toString(), PLEASE_USE_DEFAULT_COVER)
+                        currItemUpload = CategoryUpload(it.key.toString(), PLEASE_USE_DEFAULT_COVER, "0")
                     } else {
-                        val downloadURL = (it.children.last().getValue(Upload::class.java) as Upload).url
-                        currUpload = Upload(it.key.toString(), downloadURL)
+                        val downloadURL = (it.children.last().getValue(ItemUpload::class.java) as ItemUpload).url
+                        val count = it.childrenCount.toString()
+                        currItemUpload = CategoryUpload(it.key.toString(), downloadURL, count)
                     }
 
-                    val count = it.childrenCount
 
                     // add the freshly created object to the categories list
-                    currUpload.key = it.key
-                    categories.add(currUpload)
+                    currItemUpload.key = it.key
+                    categories.add(currItemUpload)
                 }
 
                 // It would update recycler after loading image from firebase storage

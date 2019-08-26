@@ -2,20 +2,18 @@ package com.example.FamilyRegister
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_register.view.*
 
 /**
  * @author: Renjie Meng
  * This class is the Adapter for the recycler view with id -> category_recycler_view in the activity_category
  * */
 
-class CategoryAdapter(val items: ArrayList<Upload>, val mContext: Context) :
+class CategoryAdapter(val items: ArrayList<CategoryUpload>, val mContext: Context) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     var listener: OnItemClickerListener? = null
@@ -28,7 +26,7 @@ class CategoryAdapter(val items: ArrayList<Upload>, val mContext: Context) :
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val currUpload = items[position]
         holder.textViewName.text = currUpload.name
-
+        holder.textViewCount.text = currUpload.count
         // Load image to ImageView via its URL from Firebase Storage
         if (currUpload.url.equals(CategoryFragment.PLEASE_USE_DEFAULT_COVER)){
             holder.imageView.setImageResource(R.drawable.default_cover)

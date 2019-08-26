@@ -11,12 +11,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.fragment.app.FragmentManager
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -24,7 +22,6 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.dialog_add_image.*
 import kotlinx.android.synthetic.main.dialog_add_image.view.*
 
 
@@ -61,7 +58,7 @@ class AddImageDialog(val uploadPath: String) : AppCompatDialogFragment() {
 
         mView.btn_upload.setOnClickListener {
             if (uploadTask != null && uploadTask!!.isInProgress) {
-                toast("Upload in progress", Toast.LENGTH_SHORT)
+                toast("ItemUpload in progress", Toast.LENGTH_SHORT)
             } else {
                 uploadImage()
             }
@@ -91,7 +88,7 @@ class AddImageDialog(val uploadPath: String) : AppCompatDialogFragment() {
                 val fileName = mView.edit_txt_image_name.text.toString()
                 val ref = FirebaseStorage.getInstance().reference.child(uploadPath + fileName)
 
-                // Upload image and its title to Firebase Storage
+                // ItemUpload image and its title to Firebase Storage
                 uploadTask = ref.putFile(selected_img_uri!!)
                     .addOnSuccessListener {
                         Log.d("Image Uploader", "Successfully uploaded image: ${it.metadata?.path}")
@@ -100,15 +97,15 @@ class AddImageDialog(val uploadPath: String) : AppCompatDialogFragment() {
                             mView.progress_bar.setProgress(0, false)
                         }, 500)
 
-                        toast("Upload Successful", Toast.LENGTH_SHORT)
+                        toast("ItemUpload Successful", Toast.LENGTH_SHORT)
 
-                        // Upload image title and its download url to Firebase Real-time Database
+                        // ItemUpload image title and its download url to Firebase Real-time Database
                         ref.downloadUrl.addOnCompleteListener() { taskSnapshot ->
 
                             var url = taskSnapshot.result
 //                            Log.d("url by ref", "url =" + url.toString())
 
-                            val upload = Upload(
+                            val upload = ItemUpload(
                                 mView.edit_txt_image_name.text.toString().trim(),
                                 url.toString()
                             )
@@ -126,7 +123,7 @@ class AddImageDialog(val uploadPath: String) : AppCompatDialogFragment() {
                     }
 
             }
-            else -> toast("Please Upload an Image", Toast.LENGTH_SHORT)
+            else -> toast("Please ItemUpload an Image", Toast.LENGTH_SHORT)
         }
     }
 

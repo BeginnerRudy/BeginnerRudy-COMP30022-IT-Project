@@ -15,7 +15,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
     var storage: FirebaseStorage = FirebaseStorage.getInstance()
     lateinit var dbListener: ValueEventListener
     lateinit var databaseReference: DatabaseReference
-    var uploads: ArrayList<Upload> = ArrayList()
+    var itemUploads: ArrayList<ItemUpload> = ArrayList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +34,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
         recycler_view.layoutManager = LinearLayoutManager(this)
 
         // setting one ItemListAdapter
-        itemListAdapter = ItemListAdapter(uploads, this@ItemListActivity)
+        itemListAdapter = ItemListAdapter(itemUploads, this@ItemListActivity)
         recycler_view.adapter = itemListAdapter
         itemListAdapter.listener = this@ItemListActivity
 
@@ -47,13 +47,13 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
 
             override fun onDataChange(p0: DataSnapshot) {
                 // clear it before filling it
-                uploads.clear()
+                itemUploads.clear()
 
                 p0.children.forEach {
-                    // Retrieve data from database, create an Upload object and store in the list of one ItemListAdapter
-                    val currUpload = it.getValue(Upload::class.java) as Upload
+                    // Retrieve data from database, create an ItemUpload object and store in the list of one ItemListAdapter
+                    val currUpload = it.getValue(ItemUpload::class.java) as ItemUpload
                     currUpload.key = it.key
-                    uploads.add(currUpload)
+                    itemUploads.add(currUpload)
                 }
 
                 // It would update recycler after loading image from firebase storage
@@ -87,7 +87,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
     override fun onDeleteClick(position: Int) {
         toast("Delete click at position $position", Toast.LENGTH_SHORT)
 
-        val selectedItem = uploads[position]
+        val selectedItem = itemUploads[position]
         val selectedKey = selectedItem.key as String
         val imageRef = storage.getReferenceFromUrl(selectedItem.url)
         // Delete image and its tile from Fitrbase Storage

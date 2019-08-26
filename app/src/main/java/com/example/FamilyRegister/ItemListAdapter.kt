@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
-class ItemListAdapter(val items: ArrayList<Upload>, val mContext: Context) :
+class ItemListAdapter(val items: ArrayList<ItemUpload>, val mContext: Context) :
     RecyclerView.Adapter<ItemListAdapter.ImageViewHolder>() {
 
     var listener: OnItemClickerListener? = null
