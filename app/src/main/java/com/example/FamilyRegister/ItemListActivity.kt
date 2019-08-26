@@ -11,10 +11,10 @@ import kotlinx.android.synthetic.main.activity_item_list.*
 
 class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListener {
     lateinit var itemListAdapter: ItemListAdapter
-
+    lateinit var path: String
     var storage: FirebaseStorage = FirebaseStorage.getInstance()
     lateinit var dbListener: ValueEventListener
-    var databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference(AddImageDialog.IMAGE_POLDER_PATH)
+    lateinit var databaseReference: DatabaseReference
     var uploads: ArrayList<Upload> = ArrayList()
 
 
@@ -27,6 +27,9 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_list)
 
+        path = intent.getStringExtra("categoryPath")
+
+        databaseReference = FirebaseDatabase.getInstance().getReference(path)
         // Setting the recycler view
         recycler_view.setHasFixedSize(true)
         recycler_view.layoutManager = LinearLayoutManager(this)
@@ -71,7 +74,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
     }
 
     private fun openDialog() {
-        val addImageDialog = AddImageDialog()
+        val addImageDialog = AddImageDialog(path)
         addImageDialog.show(this@ItemListActivity.supportFragmentManager, "add new item image")
     }
 

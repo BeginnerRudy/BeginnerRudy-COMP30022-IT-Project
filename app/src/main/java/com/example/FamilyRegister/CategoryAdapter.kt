@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_register.view.*
 
 /**
  * @author: Renjie Meng
@@ -37,8 +38,10 @@ class CategoryAdapter(val items: ArrayList<Upload>, val mContext: Context) :
         Log.d("url", currUpload.url)
         holder.imageView.setOnClickListener {
 
-            val goToCategory = Intent(mContext, ItemListActivity::class.java)
-            mContext.startActivity(goToCategory)
+            val goToItemListActivity= Intent(mContext, ItemListActivity::class.java)
+            // pass category path to goToItemListActivity
+            goToItemListActivity.putExtra("categoryPath", holder.textViewName.text.toString())
+            mContext.startActivity(goToItemListActivity)
         }
     }
 
