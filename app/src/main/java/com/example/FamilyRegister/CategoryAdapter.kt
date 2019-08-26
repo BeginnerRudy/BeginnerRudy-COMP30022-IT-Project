@@ -21,14 +21,13 @@ class CategoryAdapter(val items: ArrayList<Upload>, val mContext: Context) :
     var listener: OnItemClickerListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryAdapter.CategoryViewHolder {
-        val v = LayoutInflater.from(mContext).inflate(R.layout.image_item, parent, false)
+        val v = LayoutInflater.from(mContext).inflate(R.layout.category_item, parent, false)
         return CategoryViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val currUpload = items[position]
         holder.textViewName.text = currUpload.name
-        Log.d("The download URL", currUpload.url)
 
         // Load image to ImageView via its URL from Firebase Storage
         if (currUpload.url.equals(CategoryFragment.PLEASE_USE_DEFAULT_COVER)){
@@ -42,7 +41,6 @@ class CategoryAdapter(val items: ArrayList<Upload>, val mContext: Context) :
                 .into(holder.imageView)
         }
 
-//        Log.d("url", currUpload.url)
         holder.imageView.setOnClickListener {
 
             val goToItemListActivity= Intent(mContext, ItemListActivity::class.java)
@@ -65,8 +63,9 @@ class CategoryAdapter(val items: ArrayList<Upload>, val mContext: Context) :
 
     inner class CategoryViewHolder(val viewItem: View) : RecyclerView.ViewHolder(viewItem), View.OnClickListener,
         View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
-        val textViewName: TextView = viewItem.findViewById(R.id.txt_name)
-        val imageView: ImageView = viewItem.findViewById(R.id.img_upload)
+        val textViewName: TextView = viewItem.findViewById(R.id.txt_category_name)
+        val textViewCount: TextView = viewItem.findViewById(R.id.txt_category_count)
+        val imageView: ImageView = viewItem.findViewById(R.id.img_category_cover)
 
         init {
             viewItem.setOnClickListener(this)

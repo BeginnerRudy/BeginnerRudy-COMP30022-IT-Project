@@ -62,6 +62,7 @@ class CategoryFragment : Fragment() {
                         currUpload = Upload(it.key.toString(), downloadURL)
                     }
 
+                    val count = it.childrenCount
 
                     // add the freshly created object to the categories list
                     currUpload.key = it.key
