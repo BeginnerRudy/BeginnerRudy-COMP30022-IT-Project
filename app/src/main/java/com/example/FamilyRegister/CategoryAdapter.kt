@@ -28,14 +28,21 @@ class CategoryAdapter(val items: ArrayList<Upload>, val mContext: Context) :
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val currUpload = items[position]
         holder.textViewName.text = currUpload.name
+        Log.d("The download URL", currUpload.url)
+
         // Load image to ImageView via its URL from Firebase Storage
-        Picasso.get()
-            .load(currUpload.url)
-            .placeholder(R.mipmap.ic_launcher)
-            .fit()
-            .centerCrop()
-            .into(holder.imageView)
-        Log.d("url", currUpload.url)
+        if (currUpload.url.equals(CategoryFragment.PLEASE_USE_DEFAULT_COVER)){
+            holder.imageView.setImageResource(R.drawable.default_cover)
+        }else {
+            Picasso.get()
+                .load(currUpload.url)
+                .placeholder(R.mipmap.ic_launcher)
+                .fit()
+                .centerCrop()
+                .into(holder.imageView)
+        }
+
+//        Log.d("url", currUpload.url)
         holder.imageView.setOnClickListener {
 
             val goToItemListActivity= Intent(mContext, ItemListActivity::class.java)

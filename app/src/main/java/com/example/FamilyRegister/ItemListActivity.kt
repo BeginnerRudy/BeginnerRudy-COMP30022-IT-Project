@@ -18,16 +18,15 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
     var uploads: ArrayList<Upload> = ArrayList()
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (savedInstanceState!=null){
+        if (savedInstanceState != null) {
 
         }
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_list)
 
-        path = intent.getStringExtra("categoryPath")
+        path = RegisterFragment.uid + "/" + intent.getStringExtra("categoryPath") + "/"
 
         databaseReference = FirebaseDatabase.getInstance().getReference(path)
         // Setting the recycler view
@@ -61,7 +60,6 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
                 itemListAdapter.notifyDataSetChanged()
                 progress_circular.visibility = View.INVISIBLE
             }
-
 
 
         })
