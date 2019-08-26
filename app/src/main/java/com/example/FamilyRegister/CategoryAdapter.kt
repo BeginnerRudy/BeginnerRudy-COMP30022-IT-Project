@@ -1,34 +1,51 @@
 package com.example.FamilyRegister
 
 import android.content.Context
-import android.util.Log
+import android.content.Intent
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
-class ImageAdapter(val items: ArrayList<Upload>, val mContext: Context) :
-    RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
+/**
+ * @author: Renjie Meng
+ * This class is the Adapter for the recycler view with id -> category_recycler_view in the activity_category
+ * */
+
+class CategoryAdapter(val items: ArrayList<CategoryUpload>, val mContext: Context) :
+    RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     var listener: OnItemClickerListener? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        val v = LayoutInflater.from(mContext).inflate(R.layout.image_item, parent, false)
-        return ImageViewHolder(v)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryAdapter.CategoryViewHolder {
+        val v = LayoutInflater.from(mContext).inflate(R.layout.category_item, parent, false)
+        return CategoryViewHolder(v)
     }
 
-    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val currUpload = items[position]
         holder.textViewName.text = currUpload.name
+        holder.textViewCount.text = currUpload.count
         // Load image to ImageView via its URL from Firebase Storage
-        Picasso.get()
-            .load(currUpload.url)
-            .placeholder(R.mipmap.ic_launcher)
-            .fit()
-            .centerCrop()
-            .into(holder.imageView)
-        Log.d("url", currUpload.url)
+        if (currUpload.url.equals(CategoryFragment.PLEASE_USE_DEFAULT_COVER)){
+            holder.imageView.setImageResource(R.drawable.default_cover)
+        }else {
+            Picasso.get()
+                .load(currUpload.url)
+                .placeholder(R.mipmap.ic_launcher)
+                .fit()
+                .centerCrop()
+                .into(holder.imageView)
+        }
+
+        holder.imageView.setOnClickListener {
+
+            val goToItemListActivity= Intent(mContext, ItemListActivity::class.java)
+            // pass category path to goToItemListActivity
+            goToItemListActivity.putExtra("categoryPath", holder.textViewName.text.toString())
+            mContext.startActivity(goToItemListActivity)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -42,10 +59,11 @@ class ImageAdapter(val items: ArrayList<Upload>, val mContext: Context) :
         fun onDeleteClick(position: Int)
     }
 
-    inner class ImageViewHolder(val viewItem: View) : RecyclerView.ViewHolder(viewItem), View.OnClickListener,
+    inner class CategoryViewHolder(val viewItem: View) : RecyclerView.ViewHolder(viewItem), View.OnClickListener,
         View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
-        val textViewName: TextView = viewItem.findViewById(R.id.txt_name)
-        val imageView: ImageView = viewItem.findViewById(R.id.img_upload)
+        val textViewName: TextView = viewItem.findViewById(R.id.txt_category_name)
+        val textViewCount: TextView = viewItem.findViewById(R.id.txt_category_count)
+        val imageView: ImageView = viewItem.findViewById(R.id.img_category_cover)
 
         init {
             viewItem.setOnClickListener(this)
@@ -90,6 +108,5 @@ class ImageAdapter(val items: ArrayList<Upload>, val mContext: Context) :
             }
         }
     }
+
 }
-
-
