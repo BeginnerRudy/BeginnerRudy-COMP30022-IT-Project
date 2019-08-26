@@ -37,7 +37,7 @@ class CategoryAdapter(val items: ArrayList<Upload>, val mContext: Context) :
         Log.d("url", currUpload.url)
         holder.imageView.setOnClickListener {
 
-            val goToCategory = Intent(mContext, ImagesActivity::class.java)
+            val goToCategory = Intent(mContext, ItemListActivity::class.java)
             mContext.startActivity(goToCategory)
         }
     }

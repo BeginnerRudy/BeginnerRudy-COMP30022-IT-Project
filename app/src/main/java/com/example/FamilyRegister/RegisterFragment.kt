@@ -16,6 +16,7 @@ class RegisterFragment : Fragment() {
     companion object {
         val defaultCategories = listOf("Letter", "Instrument", "Furniture", "Photos")
         val fakeInitialValue = "fakeInitialValue"
+        lateinit var uid: String
     }
 
     var database = FirebaseDatabase.getInstance()
@@ -28,7 +29,7 @@ class RegisterFragment : Fragment() {
         // Navigate to the category fragment
         view.btn_register.setOnClickListener {
             // uid is the user id entered
-            val uid = view.edit_text_user_id.text.toString()
+            uid = view.edit_text_user_id.text.toString()
             // initialize default categories in user's database
             val path = "$uid/"
             val databaseReference = database.getReference(path)

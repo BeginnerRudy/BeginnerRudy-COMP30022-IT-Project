@@ -7,14 +7,14 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.activity_images.*
+import kotlinx.android.synthetic.main.activity_item_list.*
 
-class ImagesActivity : AppCompatActivity(), ImageAdapter.OnItemClickerListener {
-    lateinit var imageAdapter: ImageAdapter
+class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListener {
+    lateinit var itemListAdapter: ItemListAdapter
 
     var storage: FirebaseStorage = FirebaseStorage.getInstance()
     lateinit var dbListener: ValueEventListener
-    var databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference(AddImageActivity.IMAGE_POLDER_PATH)
+    var databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference(AddImageDialog.IMAGE_POLDER_PATH)
     var uploads: ArrayList<Upload> = ArrayList()
 
 
@@ -25,16 +25,16 @@ class ImagesActivity : AppCompatActivity(), ImageAdapter.OnItemClickerListener {
         }
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_images)
+        setContentView(R.layout.activity_item_list)
 
         // Setting the recycler view
         recycler_view.setHasFixedSize(true)
         recycler_view.layoutManager = LinearLayoutManager(this)
 
-        // setting one ImageAdapter
-        imageAdapter = ImageAdapter(uploads, this@ImagesActivity)
-        recycler_view.adapter = imageAdapter
-        imageAdapter.listener = this@ImagesActivity
+        // setting one ItemListAdapter
+        itemListAdapter = ItemListAdapter(uploads, this@ItemListActivity)
+        recycler_view.adapter = itemListAdapter
+        itemListAdapter.listener = this@ItemListActivity
 
 
         dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
@@ -48,18 +48,31 @@ class ImagesActivity : AppCompatActivity(), ImageAdapter.OnItemClickerListener {
                 uploads.clear()
 
                 p0.children.forEach {
-                    // Retrieve data from database, create an Upload object and store in the list of one ImageAdapter
+                    // Retrieve data from database, create an Upload object and store in the list of one ItemListAdapter
                     val currUpload = it.getValue(Upload::class.java) as Upload
                     currUpload.key = it.key
                     uploads.add(currUpload)
                 }
 
                 // It would update recycler after loading image from firebase storage
-                imageAdapter.notifyDataSetChanged()
+                itemListAdapter.notifyDataSetChanged()
                 progress_circular.visibility = View.INVISIBLE
             }
 
+
+
         })
+
+        // setting for the btn_add
+        btn_add.setOnClickListener {
+            openDialog()
+            toast("Hah", Toast.LENGTH_SHORT)
+        }
+    }
+
+    private fun openDialog() {
+        val addImageDialog = AddImageDialog()
+        addImageDialog.show(this@ItemListActivity.supportFragmentManager, "add new item image")
     }
 
     override fun onItemClick(position: Int) {
@@ -93,7 +106,7 @@ class ImagesActivity : AppCompatActivity(), ImageAdapter.OnItemClickerListener {
         databaseReference.removeEventListener(dbListener)
     }
 
-    fun ImagesActivity.toast(msg: String, duration: Int) {
+    fun ItemListActivity.toast(msg: String, duration: Int) {
         Toast.makeText(this, msg, duration).show()
     }
 }
