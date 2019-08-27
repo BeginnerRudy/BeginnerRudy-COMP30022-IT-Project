@@ -9,8 +9,11 @@ data class ItemUpload(
     var name: String = "",
     @set:PropertyName("url")
     @get:PropertyName("url")
-    var url: String
+    var url: String,
+    @set:PropertyName("description")
+    @get:PropertyName("description")
+    var description: String
 ) {
     @Exclude var key: String? = null
-    constructor() : this("", "")
+    constructor() : this("", "", "None")
 }

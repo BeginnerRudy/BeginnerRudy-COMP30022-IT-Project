@@ -106,10 +106,17 @@ class AddImageDialog(val uploadPath: String) : AppCompatDialogFragment() {
 
                             var url = taskSnapshot.result
 //                            Log.d("url by ref", "url =" + url.toString())
+                            var description = mView.edit_txt_description.text.toString()
+
+                            if (description.trim() == "") {
+                                description = "None"
+                            }
+
 
                             val upload = ItemUpload(
                                 mView.edit_txt_image_name.text.toString().trim(),
-                                url.toString()
+                                url.toString(),
+                                description
                             )
 
                             // Store to database
