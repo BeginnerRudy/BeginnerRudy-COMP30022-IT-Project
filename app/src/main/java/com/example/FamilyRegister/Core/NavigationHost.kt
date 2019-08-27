@@ -1,4 +1,4 @@
-package com.example.FamilyRegister
+package com.example.FamilyRegister.Core
 
 import androidx.fragment.app.Fragment
 

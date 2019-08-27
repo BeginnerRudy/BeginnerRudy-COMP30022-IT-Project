@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.FamilyRegister.MainActivity">
+        <activity android:name="com.example.FamilyRegister.Core.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,7 +20,7 @@
         </activity>
 
 
-        <activity android:name="com.example.FamilyRegister.ItemListActivity"></activity>
+        <activity android:name="com.example.FamilyRegister.Core.ItemListActivity"></activity>
     </application>
 
 </manifest>

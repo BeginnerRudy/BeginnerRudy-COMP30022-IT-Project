@@ -1,4 +1,4 @@
-package com.example.FamilyRegister
+package com.example.FamilyRegister.Core
 
 import android.content.Context
 import android.content.Intent
@@ -6,6 +6,8 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.FamilyRegister.Model.CategoryUpload
+import com.example.FamilyRegister.R
 import com.squareup.picasso.Picasso
 
 /**
@@ -18,7 +20,7 @@ class CategoryAdapter(val items: ArrayList<CategoryUpload>, val mContext: Contex
 
     var listener: OnItemClickerListener? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryAdapter.CategoryViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val v = LayoutInflater.from(mContext).inflate(R.layout.category_item, parent, false)
         return CategoryViewHolder(v)
     }

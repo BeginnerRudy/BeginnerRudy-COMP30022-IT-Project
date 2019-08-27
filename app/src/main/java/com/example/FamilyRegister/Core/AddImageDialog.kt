@@ -1,4 +1,4 @@
-package com.example.FamilyRegister
+package com.example.FamilyRegister.Core
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -15,6 +15,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDialogFragment
+import com.example.FamilyRegister.Model.ItemUpload
+import com.example.FamilyRegister.R
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage

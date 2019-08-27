@@ -1,10 +1,12 @@
-package com.example.FamilyRegister
+package com.example.FamilyRegister.Core
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.FamilyRegister.Model.ItemUpload
+import com.example.FamilyRegister.R
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_item_list.*

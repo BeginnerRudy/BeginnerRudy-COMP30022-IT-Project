@@ -1,4 +1,4 @@
-package com.example.FamilyRegister
+package com.example.FamilyRegister.Core
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.FamilyRegister.Model.CategoryUpload
+import com.example.FamilyRegister.Model.ItemUpload
+import com.example.FamilyRegister.R
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -50,11 +53,16 @@ class CategoryFragment : Fragment() {
                     // check the data
                     var currItemUpload: CategoryUpload?
                     if (mValue == RegisterFragment.fakeInitialValue) {
-                        currItemUpload = CategoryUpload(it.key.toString(), PLEASE_USE_DEFAULT_COVER, "0")
+                        currItemUpload = CategoryUpload(
+                            it.key.toString(),
+                            PLEASE_USE_DEFAULT_COVER,
+                            "0"
+                        )
                     } else {
                         val downloadURL = (it.children.last().getValue(ItemUpload::class.java) as ItemUpload).url
                         val count = it.childrenCount.toString()
-                        currItemUpload = CategoryUpload(it.key.toString(), downloadURL, count)
+                        currItemUpload =
+                            CategoryUpload(it.key.toString(), downloadURL, count)
                     }
 
 

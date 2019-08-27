@@ -1,4 +1,4 @@
-package com.example.FamilyRegister
+package com.example.FamilyRegister.Core
 
 import android.content.Context
 import android.util.Log
@@ -6,6 +6,8 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.FamilyRegister.Model.ItemUpload
+import com.example.FamilyRegister.R
 import com.squareup.picasso.Picasso
 
 class ItemListAdapter(val items: ArrayList<ItemUpload>, val mContext: Context) :

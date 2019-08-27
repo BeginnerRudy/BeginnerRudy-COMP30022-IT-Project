@@ -1,4 +1,4 @@
-package com.example.FamilyRegister
+package com.example.FamilyRegister.Model
 
 import com.google.firebase.database.Exclude
 import com.google.firebase.database.PropertyName

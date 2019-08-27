@@ -1,15 +1,12 @@
-package com.example.FamilyRegister
+package com.example.FamilyRegister.Core
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.firebase.database.DatabaseReference
+import com.example.FamilyRegister.R
 import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.fragment_register.*
 import kotlinx.android.synthetic.main.fragment_register.view.*
 
 class RegisterFragment : Fragment() {
