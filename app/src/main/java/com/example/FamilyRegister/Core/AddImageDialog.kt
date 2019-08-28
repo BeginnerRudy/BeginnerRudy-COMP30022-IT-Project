@@ -67,12 +67,6 @@ class AddImageDialog(val uploadPath: String) : AppCompatDialogFragment() {
         }
 
 
-        // When click on txt_show_upload, go to the ItemListActivity
-        mView.txt_show_upload.setOnClickListener {
-            val show_upload_items = Intent(activity, ItemListActivity::class.java)
-            startActivity(show_upload_items)
-        }
-
         // return the dialog
         return mBuilder.create()
     }
