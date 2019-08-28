@@ -1,11 +1,19 @@
-package com.example.FamilyRegister.Core
+package com.example.familyRegister.core
 
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.FamilyRegister.R
+import com.example.familyRegister.R
+
+/**
+ * The entry point of this application.
+ * Two fragments are associated with this activity
+ *          1. register fragment
+ *          2. category fragment
+ *
+ * */
 
 class MainActivity : AppCompatActivity(), NavigationHost {
     // The unique user id associated with each user account

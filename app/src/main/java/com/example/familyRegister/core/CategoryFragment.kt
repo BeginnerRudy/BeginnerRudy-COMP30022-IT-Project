@@ -1,4 +1,4 @@
-package com.example.FamilyRegister.Core
+package com.example.familyRegister.core
 
 import android.os.Build
 import android.os.Bundle
@@ -7,36 +7,41 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.FamilyRegister.Model.CategoryUpload
-import com.example.FamilyRegister.Model.ItemUpload
-import com.example.FamilyRegister.R
+import com.example.familyRegister.model.CategoryUpload
+import com.example.familyRegister.model.ItemUpload
+import com.example.familyRegister.R
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.fragment_category.view.*
-import kotlinx.android.synthetic.main.fragment_category.view.toolbar_category
 import androidx.appcompat.app.AppCompatActivity
+
+/**
+ * This class handles the events happened in category fragment
+ *      1. when user click on an category, it would navigate to that category page
+ *      2. it would retrieve data from database and show them as category item
+ *      3. (TODO) when user click on add category, he/she could add a new customized category
+ * */
 
 class CategoryFragment : Fragment() {
     companion object {
-        val PLEASE_USE_DEFAULT_COVER = "Default Cover"
+        /*This constant is used as a flag, to show there is no cover image for the category*/
+        /*And, it told the adapter to use the default cover for that categoty*/
+        const val PLEASE_USE_DEFAULT_COVER = "Default Cover"
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        // Snippet from "Navigate to the next Fragment" section goes here.
         val view = inflater.inflate(R.layout.fragment_category, container, false)
-
 
         // Find the toolbar view inside the activity layout
         val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_category)
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         // Make sure the toolbar exists in the activity and is not null
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
-
+        // set menu option to be true, then we could inflate our selected menu on the toolbar
         setHasOptionsMenu(true)
 
 
@@ -79,7 +84,6 @@ class CategoryFragment : Fragment() {
 
 
                     // add the freshly created object to the categories list
-                    currItemUpload.key = it.key
                     categories.add(currItemUpload)
                 }
 
