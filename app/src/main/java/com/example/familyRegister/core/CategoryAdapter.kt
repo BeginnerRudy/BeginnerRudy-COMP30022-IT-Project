@@ -1,4 +1,4 @@
-package com.example.FamilyRegister
+package com.example.familyRegister.core
 
 import android.content.Context
 import android.content.Intent
@@ -6,11 +6,13 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.familyRegister.model.CategoryUpload
+import com.example.familyRegister.R
 import com.squareup.picasso.Picasso
 
 /**
- * @author: Renjie Meng
  * This class is the Adapter for the recycler view with id -> category_recycler_view in the activity_category
+ *
  * */
 
 class CategoryAdapter(val items: ArrayList<CategoryUpload>, val mContext: Context) :
@@ -18,7 +20,7 @@ class CategoryAdapter(val items: ArrayList<CategoryUpload>, val mContext: Contex
 
     var listener: OnItemClickerListener? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryAdapter.CategoryViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val v = LayoutInflater.from(mContext).inflate(R.layout.category_item, parent, false)
         return CategoryViewHolder(v)
     }
@@ -40,7 +42,7 @@ class CategoryAdapter(val items: ArrayList<CategoryUpload>, val mContext: Contex
         }
 
         holder.imageView.setOnClickListener {
-
+            // Snippet from navigate to the ItemListActivity along with the category path
             val goToItemListActivity= Intent(mContext, ItemListActivity::class.java)
             // pass category path to goToItemListActivity
             goToItemListActivity.putExtra("categoryPath", holder.textViewName.text.toString())

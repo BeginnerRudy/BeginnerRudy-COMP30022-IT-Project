@@ -1,15 +1,17 @@
-package com.example.FamilyRegister
+package com.example.familyRegister.core
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.familyRegister.model.ItemUpload
+import com.example.familyRegister.R
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_item_list.*
 
-class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListener {
+class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListener{
     lateinit var itemListAdapter: ItemListAdapter
     lateinit var path: String
     var storage: FirebaseStorage = FirebaseStorage.getInstance()

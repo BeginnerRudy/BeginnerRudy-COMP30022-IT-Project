@@ -1,10 +1,13 @@
-package com.example.FamilyRegister
+package com.example.familyRegister.core
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.icu.text.DateFormat
+import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,9 +15,13 @@ import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialogFragment
+import com.example.familyRegister.model.ItemUpload
+import com.example.familyRegister.R
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -23,18 +30,18 @@ import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.dialog_add_image.view.*
+import java.util.*
 
 
-class AddImageDialog(val uploadPath: String) : AppCompatDialogFragment() {
+class AddImageDialog(val uploadPath: String) : AppCompatDialogFragment(), DatePickerDialog.OnDateSetListener {
     val FILE_CHOOSER = 123
+
     var selected_img_uri: Uri? = null
     lateinit var firebaseStore: FirebaseStorage
     lateinit var storageReference: StorageReference
     lateinit var databaseRef: DatabaseReference
     lateinit var mView: View
     var uploadTask: StorageTask<UploadTask.TaskSnapshot>? = null
-
-
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
@@ -52,6 +59,18 @@ class AddImageDialog(val uploadPath: String) : AppCompatDialogFragment() {
         storageReference = FirebaseStorage.getInstance().getReference(uploadPath)
         databaseRef = FirebaseDatabase.getInstance().getReference(uploadPath)
 
+
+        // set the date to today
+        val sdf = SimpleDateFormat("dd/M/yyyy")
+        val currentDate = sdf.format(Date())
+        mView.txt_date.text = currentDate
+
+        // whe click on the txt_date, pop up a date picker
+        mView.txt_date.setOnClickListener {
+            val datePicker = DatePickerFragment(this)
+            datePicker.show((activity as AppCompatActivity).supportFragmentManager, "Date Picker")
+        }
+
         mView.btn_choose_img.setOnClickListener {
             selectImageInAlbum()
         }
@@ -64,12 +83,6 @@ class AddImageDialog(val uploadPath: String) : AppCompatDialogFragment() {
             }
         }
 
-
-        // When click on txt_show_upload, go to the ItemListActivity
-        mView.txt_show_upload.setOnClickListener {
-            val show_upload_items = Intent(activity, ItemListActivity::class.java)
-            startActivity(show_upload_items)
-        }
 
         // return the dialog
         return mBuilder.create()
@@ -104,10 +117,21 @@ class AddImageDialog(val uploadPath: String) : AppCompatDialogFragment() {
 
                             var url = taskSnapshot.result
 //                            Log.d("url by ref", "url =" + url.toString())
+                            var description = mView.edit_txt_description.text.toString()
+
+                            if (description.trim() == "") {
+                                description = "None"
+                            }
+
+                            // Insert date
+
+                            // Insert location
+
 
                             val upload = ItemUpload(
                                 mView.edit_txt_image_name.text.toString().trim(),
-                                url.toString()
+                                url.toString(),
+                                description
                             )
 
                             // Store to database
@@ -125,6 +149,18 @@ class AddImageDialog(val uploadPath: String) : AppCompatDialogFragment() {
             }
             else -> toast("Please ItemUpload an Image", Toast.LENGTH_SHORT)
         }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
+        val c = Calendar.getInstance()
+        c.set(Calendar.YEAR, p1)
+        c.set(Calendar.MONTH, p2)
+        c.set(Calendar.DAY_OF_MONTH, p3)
+
+        val currentDate = DateFormat.getDateInstance().format(c.time)
+        mView.txt_date.text = currentDate
     }
 
     fun selectImageInAlbum() {

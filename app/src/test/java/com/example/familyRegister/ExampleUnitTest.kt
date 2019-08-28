@@ -1,4 +1,4 @@
-package com.example.FamilyRegister
+package com.example.familyRegister
 
 import org.junit.Test
 
