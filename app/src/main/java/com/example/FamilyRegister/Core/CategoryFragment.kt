@@ -50,7 +50,7 @@ class CategoryFragment : Fragment() {
 
             override fun onCancelled(p0: DatabaseError) {
                 toast(p0.message, Toast.LENGTH_SHORT)
-//                progress_circular.visibility = View.INVISIBLE
+                view.progress_circular_category.visibility = View.INVISIBLE
             }
 
 
@@ -85,7 +85,7 @@ class CategoryFragment : Fragment() {
 
                 // It would update recycler after loading image from firebase storage
                 categoryAdapter.notifyDataSetChanged()
-//                progress_circular.visibility = View.INVISIBLE
+                view.progress_circular_category.visibility = View.INVISIBLE
             }
         })
 
