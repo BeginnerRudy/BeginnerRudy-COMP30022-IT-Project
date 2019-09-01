@@ -77,6 +77,9 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
         val addImageDialog = AddImageDialog(path)
         addImageDialog.show(this@ItemListActivity.supportFragmentManager, "add new item image")
     }
+    override fun onSaveClick(position: Int) {
+        toast("Save click at position $position", Toast.LENGTH_SHORT)
+    }
 
     override fun onItemClick(position: Int) {
         toast("Normal click at position $position", Toast.LENGTH_SHORT)

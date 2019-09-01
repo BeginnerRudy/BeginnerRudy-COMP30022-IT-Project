@@ -59,6 +59,7 @@ class CategoryAdapter(val items: ArrayList<CategoryUpload>, val mContext: Contex
         fun onItemClick(position: Int)
         fun onWhatEverClick(position: Int)
         fun onDeleteClick(position: Int)
+        fun onSaveClick(position: Int)
     }
 
     inner class CategoryViewHolder(val viewItem: View) : RecyclerView.ViewHolder(viewItem), View.OnClickListener,
@@ -85,6 +86,10 @@ class CategoryAdapter(val items: ArrayList<CategoryUpload>, val mContext: Contex
                             listener!!.onDeleteClick(position)
                             return true
                         }
+                        3 -> {
+                            listener!!.onSaveClick(position)
+                            return true
+                        }
                     }
                 }
             }
@@ -95,10 +100,13 @@ class CategoryAdapter(val items: ArrayList<CategoryUpload>, val mContext: Contex
             p0?.setHeaderTitle("Select Action")
             val doWatEver = p0?.add(Menu.NONE, 1, 1, "Do Whatever: ")
             val delete = p0?.add(Menu.NONE, 2, 2, "Do Delete: ")
+            val save =  p0?.add(Menu.NONE, 3, 3, "Do Save: ")
 
             doWatEver?.setOnMenuItemClickListener(this)
 
             delete?.setOnMenuItemClickListener(this)
+
+            save?.setOnMenuItemClickListener(this)
         }
 
         override fun onClick(p0: View?) {
