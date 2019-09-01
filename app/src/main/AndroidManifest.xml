@@ -21,6 +21,7 @@
 
 
         <activity android:name="com.example.familyRegister.core.ItemListActivity"></activity>
+        <activity android:name="com.example.familyRegister.core.ItemDetailActivity"></activity>
     </application>
 
 </manifest>
