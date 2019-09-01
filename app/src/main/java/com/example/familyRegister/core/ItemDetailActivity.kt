@@ -42,7 +42,7 @@ class ItemDetailActivity() : AppCompatActivity(), ItemDetailAdapter.OnItemClicke
         Log.d("excution flag", "$path")
         databaseReference = FirebaseDatabase.getInstance().getReference(path)
 
-        var item_position = intent.getIntExtra("int_key", 0)
+        var item_position = 0
         Log.i(TAG, "position: $item_position")
         if (savedInstanceState!=null){
 
