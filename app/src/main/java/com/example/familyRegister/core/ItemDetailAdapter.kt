@@ -27,6 +27,7 @@ class ItemDetailAdapter(val item: ArrayList<ItemUpload>, val mContext: Context, 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val currUpload = item[item_position]
         holder.textViewName.text = currUpload.name
+        holder.textDescription.text = currUpload.description
         // Load image to ImageView via its URL from Firebase Storage
         Picasso.get()
             .load(currUpload.url)
@@ -44,6 +45,7 @@ class ItemDetailAdapter(val item: ArrayList<ItemUpload>, val mContext: Context, 
     inner class ImageViewHolder(val viewItem: View) : RecyclerView.ViewHolder(viewItem), View.OnClickListener,
         View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
         val textViewName: TextView = viewItem.findViewById(R.id.txt_name)
+        val textDescription: TextView = viewItem.findViewById(R.id.txt_name2)
         val imageView: ImageView = viewItem.findViewById(R.id.img_upload)
 
         init {
