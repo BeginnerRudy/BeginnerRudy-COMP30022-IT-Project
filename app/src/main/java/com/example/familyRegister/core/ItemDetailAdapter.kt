@@ -21,7 +21,7 @@ class ItemDetailAdapter(val item: ArrayList<ItemUpload>, val mContext: Context, 
     }
 
     override fun getItemCount(): Int {
-        return 1
+        return item.size
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
