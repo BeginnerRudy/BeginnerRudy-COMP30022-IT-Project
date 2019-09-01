@@ -1,5 +1,6 @@
 package com.example.familyRegister.core
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -80,6 +81,10 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
 
     override fun onItemClick(position: Int) {
         toast("Normal click at position $position", Toast.LENGTH_SHORT)
+        val intent = Intent(this, ItemDetailActivity()::class.java)
+        intent.putExtra("int_key", position)
+        intent.putExtra("itemPath", path + "/" + itemUploads[position].key.toString())
+        startActivity(intent)
     }
 
     override fun onWhatEverClick(position: Int) {
