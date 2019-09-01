@@ -2,13 +2,18 @@ package com.example.familyRegister.core
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.familyRegister.model.CategoryUpload
 import com.example.familyRegister.R
 import com.squareup.picasso.Picasso
+import java.util.jar.Manifest
 
 /**
  * This class is the Adapter for the recycler view with id -> category_recycler_view in the activity_category
@@ -100,7 +105,7 @@ class CategoryAdapter(val items: ArrayList<CategoryUpload>, val mContext: Contex
             p0?.setHeaderTitle("Select Action")
             val doWatEver = p0?.add(Menu.NONE, 1, 1, "Do Whatever: ")
             val delete = p0?.add(Menu.NONE, 2, 2, "Do Delete: ")
-            val save =  p0?.add(Menu.NONE, 3, 3, "Do Save: ")
+            val save = p0?.add(Menu.NONE, 3, 3, "Do Save: ")
 
             doWatEver?.setOnMenuItemClickListener(this)
 
@@ -108,6 +113,7 @@ class CategoryAdapter(val items: ArrayList<CategoryUpload>, val mContext: Contex
 
             save?.setOnMenuItemClickListener(this)
         }
+
 
         override fun onClick(p0: View?) {
             if (listener != null) {

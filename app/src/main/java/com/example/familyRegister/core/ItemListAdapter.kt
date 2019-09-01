@@ -1,10 +1,16 @@
 package com.example.familyRegister.core
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.ActivityCompat.requestPermissions
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.recyclerview.widget.RecyclerView
 import com.example.familyRegister.model.ItemUpload
 import com.example.familyRegister.R
@@ -14,6 +20,7 @@ class ItemListAdapter(val items: ArrayList<ItemUpload>, val mContext: Context) :
     RecyclerView.Adapter<ItemListAdapter.ImageViewHolder>() {
 
     var listener: OnItemClickerListener? = null
+    private val STORAGE_PERMISSION_CODE: Int = 1000
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val v = LayoutInflater.from(mContext).inflate(R.layout.image_item, parent, false)

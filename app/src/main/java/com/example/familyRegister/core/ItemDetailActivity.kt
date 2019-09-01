@@ -76,10 +76,12 @@ class ItemDetailActivity() : AppCompatActivity(), ItemDetailAdapter.OnItemClicke
                     val currUpload = p0.child("").getValue(ItemUpload::class.java) as ItemUpload
                     currUpload!!.key = p0.child("").key
                     uploads.add(currUpload)
+                Log.d("upload",uploads.size.toString())
 
 
                 // It would update recycler after loading image from firebase storage
                 itemDetailAdapter.notifyDataSetChanged()
+//                Log.d("upload",uploads.size.toString())
                 progress_circular.visibility = View.INVISIBLE
             }
 
