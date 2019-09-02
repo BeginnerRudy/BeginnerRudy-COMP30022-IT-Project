@@ -1,10 +1,15 @@
 package com.example.familyRegister.core
 
+import android.Manifest
+import android.app.DownloadManager
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.ImageFormat.JPEG
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
@@ -33,6 +38,9 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
     lateinit var dbListener: ValueEventListener
     lateinit var databaseReference: DatabaseReference
     var itemUploads: ArrayList<ItemUpload> = ArrayList()
+
+    private val STORAGE_PERMISSION_CODE: Int = 1000
+    private var downloadurl :String = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,51 +101,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
         val addImageDialog = AddImageDialog(path)
         addImageDialog.show(this@ItemListActivity.supportFragmentManager, "add new item image")
     }
-    override fun onSaveClick(position: Int) {
-        toast("Save click at position $position", Toast.LENGTH_SHORT)
-        var imageurl2 = path + "/" + itemUploads[position].key.toString()
-        Log.d("URL2",imageurl2.toString())
-        var imageurl = "https://firebasestorage.googleapis.com/v0/b/fir-image-uploader-98bb7.appspot.com/o/11%2FFurniture%2F1?alt=media&token=4f48b8b8-60b6-4c3a-93bc-47ad6d8eb9a5"
-        Picasso.get().load(imageurl).into(object : Target {
-            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
 
-            }
-
-            override fun onBitmapFailed(e: java.lang.Exception?, errorDrawable: Drawable?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                //save to album
-                try {
-                    Log.d("SAVE11111111",11111111111.toString())
-                    val root = getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString() + "/Camera/"
-                    var myDir = File("$root")
-                    Log.d("SAVE22222222",myDir.toString())
-                    if (!myDir.exists()) {
-                        myDir.mkdirs()
-                    }
-                    val name = "myimage.jpg"
-                    myDir = File(myDir, name)
-                    Log.d("SAVE333333333",myDir.toString())
-                    val out = FileOutputStream(myDir)
-                    Log.d("SAVE3333333555", myDir.toString())
-                    Log.d("SAVE3333333555", bitmap.toString())
-                    bitmap?.compress(Bitmap.CompressFormat.JPEG, 90, out)
-                    Log.d("SAVE444444444444",myDir.toString())
-                    out.flush()
-                    Log.d("SAVE555555555",myDir.toString())
-                    out.close()
-                    baseContext.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(myDir.absolutePath)))
-                    Log.d("SAVE666666666666",myDir.toString())
-                    Log.d("SAVE_IMAGE",myDir.absolutePath.toString())
-                } catch (e: Exception) {
-                    // some action
-                }
-            }
-        })
-
-    }
 
     override fun onItemClick(position: Int) {
         toast("Normal click at position $position", Toast.LENGTH_SHORT)
@@ -168,6 +132,28 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
                 toast("Failed for deleting the item", Toast.LENGTH_SHORT)
             }
     }
+    override fun onDownloadClick(position: Int,item:ArrayList<ItemUpload>){
+        this.downloadurl = item[position].url
+        Log.d("SAVE333333333","")
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
+            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_DENIED){
+                //permission denied
+                Log.d("SAVEAAAAAAA","")
+                requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),STORAGE_PERMISSION_CODE)
+            }else{
+                //permission already granted
+                Log.d("SAVEBBBBBB","")
+                startDownloading();
+
+            }
+        }else{
+            //system os less than mashmallow
+            Log.d("SAVECCCCCC","")
+            startDownloading();
+        }
+
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -177,4 +163,37 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
     fun ItemListActivity.toast(msg: String, duration: Int) {
         Toast.makeText(this, msg, duration).show()
     }
+
+    //download the image to local album on the device
+    private fun startDownloading() {
+        Log.d("SAVEinging","")
+
+        //download request
+        val request = DownloadManager.Request(Uri.parse(downloadurl))
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+        request.setTitle("Download")
+        request.setDescription("The file is downloading...")
+        request.allowScanningByMediaScanner()
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"${System.currentTimeMillis()}")
+        //get download service and enqueue file
+        val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        manager.enqueue(request)
+    }
+
+    //Over Android M version, need to request EXTERNAL STORAGE permission in order to save image
+    override fun onRequestPermissionsResult(requestCode: Int,permissions: Array<out String>,grantResults: IntArray){
+        when(requestCode){
+            STORAGE_PERMISSION_CODE ->{
+                if(grantResults.isNotEmpty()&& grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    //permission from the popup was granted, perform download
+                    startDownloading()
+                }else{
+                    Toast.makeText(this,"Permission Denied",Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+
 }

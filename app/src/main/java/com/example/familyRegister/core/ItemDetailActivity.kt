@@ -33,6 +33,7 @@ class ItemDetailActivity() : AppCompatActivity(), ItemDetailAdapter.OnItemClicke
     // add
     lateinit var path: String
     private val STORAGE_PERMISSION_CODE: Int = 1000
+    private var downloadurl :String = ""
 
 
     companion object {
@@ -97,37 +98,17 @@ class ItemDetailActivity() : AppCompatActivity(), ItemDetailAdapter.OnItemClicke
 
         })
 
-//        downloadbutton.setOnClickListener{
-//            Log.d("SAVE333333333","")
-//            if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
-//                if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-//                    PackageManager.PERMISSION_DENIED){
-//                    //permission denied
-//                    Log.d("SAVEAAAAAAA","")
-//                    requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),STORAGE_PERMISSION_CODE)
-//                }else{
-//                    //permission already granted
-//                    Log.d("SAVEBBBBBB","")
-//                    startDownloading();
-//
-//                }
-//            }else{
-//                //system os less than mashmallow
-//                Log.d("SAVECCCCCC","")
-//                startDownloading();
-//            }
-//
-//        }
+
     }
 
 
     //download the image to local album on the device
     private fun startDownloading() {
         Log.d("SAVEinging","")
-        val url = "https://firebasestorage.googleapis.com/v0/b/fir-image-uploader-98bb7.appspot.com/o/1%2FFurniture%2F11?alt=media&token=3145f0e7-c552-4ecd-ae0c-a79ce0259c66"
+//        val url = "https://firebasestorage.googleapis.com/v0/b/fir-image-uploader-98bb7.appspot.com/o/1%2FFurniture%2F11?alt=media&token=3145f0e7-c552-4ecd-ae0c-a79ce0259c66"
 //        val url = urt.text.toString()
         //download request
-        val request = DownloadManager.Request(Uri.parse(url))
+        val request = DownloadManager.Request(Uri.parse(downloadurl))
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
         request.setTitle("Download")
         request.setDescription("The file is downloading...")
@@ -157,7 +138,8 @@ class ItemDetailActivity() : AppCompatActivity(), ItemDetailAdapter.OnItemClicke
         toast("Normal click at position $position", Toast.LENGTH_SHORT)
     }
 
-    override fun onDownloadClick(position: Int){
+    override fun onDownloadClick(position: Int,item:ArrayList<ItemUpload>){
+        this.downloadurl = item[position].url
         Log.d("SAVE333333333","")
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
@@ -176,7 +158,6 @@ class ItemDetailActivity() : AppCompatActivity(), ItemDetailAdapter.OnItemClicke
             Log.d("SAVECCCCCC","")
             startDownloading();
         }
-
     }
 
     override fun onDeleteClick(position: Int) {

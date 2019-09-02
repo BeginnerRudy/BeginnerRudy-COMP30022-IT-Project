@@ -38,7 +38,7 @@ class ItemDetailAdapter(val item: ArrayList<ItemUpload>, val mContext: Context, 
 
     interface OnItemClickerListener {
         fun onItemClick(position: Int)
-        fun onDownloadClick(position: Int)
+        fun onDownloadClick(position: Int,item:ArrayList<ItemUpload>)
         fun onDeleteClick(position: Int)
     }
 
@@ -59,7 +59,7 @@ class ItemDetailAdapter(val item: ArrayList<ItemUpload>, val mContext: Context, 
                 if (position != RecyclerView.NO_POSITION) {
                     when (p0?.itemId) {
                         1 -> {
-                            listener!!.onDownloadClick(position)
+                            listener!!.onDownloadClick(position,item)
                             return true
                         }
                         2 -> {

@@ -49,7 +49,7 @@ class ItemListAdapter(val items: ArrayList<ItemUpload>, val mContext: Context) :
         fun onItemClick(position: Int)
         fun onWhatEverClick(position: Int)
         fun onDeleteClick(position: Int)
-        fun onSaveClick(position: Int)
+        fun onDownloadClick(position: Int,item:ArrayList<ItemUpload>)
     }
 
     inner class ImageViewHolder(val viewItem: View) : RecyclerView.ViewHolder(viewItem), View.OnClickListener,
@@ -76,7 +76,7 @@ class ItemListAdapter(val items: ArrayList<ItemUpload>, val mContext: Context) :
                             return true
                         }
                         3 -> {
-                            listener!!.onSaveClick(position)
+                            listener!!.onDownloadClick(position,items)
                             return true
                         }
                     }
