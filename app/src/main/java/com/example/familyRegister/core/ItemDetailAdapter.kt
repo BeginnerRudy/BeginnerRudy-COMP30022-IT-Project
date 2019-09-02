@@ -38,7 +38,7 @@ class ItemDetailAdapter(val item: ArrayList<ItemUpload>, val mContext: Context, 
 
     interface OnItemClickerListener {
         fun onItemClick(position: Int)
-        fun onWhatEverClick(position: Int)
+        fun onDownloadClick(position: Int)
         fun onDeleteClick(position: Int)
     }
 
@@ -59,7 +59,7 @@ class ItemDetailAdapter(val item: ArrayList<ItemUpload>, val mContext: Context, 
                 if (position != RecyclerView.NO_POSITION) {
                     when (p0?.itemId) {
                         1 -> {
-                            listener!!.onWhatEverClick(position)
+                            listener!!.onDownloadClick(position)
                             return true
                         }
                         2 -> {
@@ -74,7 +74,7 @@ class ItemDetailAdapter(val item: ArrayList<ItemUpload>, val mContext: Context, 
 
         override fun onCreateContextMenu(p0: ContextMenu?, p1: View?, p2: ContextMenu.ContextMenuInfo?) {
             p0?.setHeaderTitle("Select Action")
-            val doWatEver = p0?.add(Menu.NONE, 1, 1, "Do Whatever: ")
+            val doWatEver = p0?.add(Menu.NONE, 1, 1, "Do Download: ")
             val delete = p0?.add(Menu.NONE, 2, 2, "Do Delete: ")
 
             doWatEver?.setOnMenuItemClickListener(this)

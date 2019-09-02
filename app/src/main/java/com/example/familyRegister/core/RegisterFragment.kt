@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_register.view.*
  * */
 
 class RegisterFragment : Fragment() {
-    private val STORAGE_PERMISSION_CODE: Int = 1000
+
     companion object {
         val defaultCategories = listOf("Letter", "Instrument", "Furniture", "Photos")
         val fakeInitialValue = "fakeInitialValue"
@@ -53,53 +53,10 @@ class RegisterFragment : Fragment() {
 
             (activity as NavigationHost).navigateTo(CategoryFragment(), false)
         }
-        view.downloadbutton.setOnClickListener{
-            if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
-                if(checkSelfPermission(context!!,Manifest.permission.WRITE_EXTERNAL_STORAGE)==
-                        PackageManager.PERMISSION_DENIED){
-                    //permission denied
-                    requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),STORAGE_PERMISSION_CODE)
-                }else{
-                    //permission already granted
-                    startDownloading();
 
-                }
-            }else{
-                //system os less than mashmallow
-                startDownloading();
-            }
-
-        }
         return view
     }
 
-    private fun startDownloading() {
-        val url = urt.text.toString()
-        //download request
-        val request = DownloadManager.Request(Uri.parse(url))
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
-        request.setTitle("Download")
-        request.setDescription("The file is downloading...")
-        request.allowScanningByMediaScanner()
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"${System.currentTimeMillis()}")
-        //get download service and enqueue file
-        val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        manager.enqueue(request)
-    }
 
-
-    override fun onRequestPermissionsResult(requestCode: Int,permissions: Array<out String>,grantResults: IntArray){
-        when(requestCode){
-            STORAGE_PERMISSION_CODE ->{
-                if(grantResults.isNotEmpty()&& grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    //permission from the popup was granted, perform download
-                    startDownloading()
-                }else{
-                    Toast.makeText(context,"Permission Denied",Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-    }
 
 }
