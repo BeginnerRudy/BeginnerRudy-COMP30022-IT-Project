@@ -51,7 +51,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_list)
 
-        path = RegisterFragment.uid + "/" + intent.getStringExtra("categoryPath") + "/"
+        path = LoginFragment.uid + "/" + intent.getStringExtra("categoryPath") + "/"
 
         databaseReference = FirebaseDatabase.getInstance().getReference(path)
         // Setting the recycler view

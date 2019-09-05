@@ -48,7 +48,7 @@ class CategoryFragment : Fragment() {
         // retrieve all the category data from the database
         val categories = ArrayList<CategoryUpload>()
 
-        val databaseReference = FirebaseDatabase.getInstance().getReference(RegisterFragment.uid + "/")
+        val databaseReference = FirebaseDatabase.getInstance().getReference(LoginFragment.uid + "/")
         val categoryAdapter = CategoryAdapter(categories, context!!)
 
         databaseReference.addValueEventListener(object : ValueEventListener {
@@ -69,7 +69,7 @@ class CategoryFragment : Fragment() {
 
                     // check the data
                     var currItemUpload: CategoryUpload?
-                    if (mValue == RegisterFragment.fakeInitialValue) {
+                    if (mValue == LoginFragment.fakeInitialValue) {
                         currItemUpload = CategoryUpload(
                             it.key.toString(),
                             PLEASE_USE_DEFAULT_COVER,
