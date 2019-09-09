@@ -52,6 +52,7 @@ class RegisterFragment : Fragment() {
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
                     Log.d("Register", "Successfully created  user with uid: ${it.result?.user?.uid}")
+                    Toast.makeText(activity,"Register Successed",Toast.LENGTH_SHORT).show()
                     (activity as NavigationHost).navigateTo(LoginFragment(), false)
                 }
 
