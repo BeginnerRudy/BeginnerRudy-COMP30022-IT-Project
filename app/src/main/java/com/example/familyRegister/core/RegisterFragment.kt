@@ -55,10 +55,11 @@ class RegisterFragment : Fragment() {
                     Toast.makeText(activity,"Register Successed",Toast.LENGTH_SHORT).show()
                     (activity as NavigationHost).navigateTo(LoginFragment(), false)
                 }
-
-                //if no successful
-                Toast.makeText(activity,"Register Failed",Toast.LENGTH_SHORT).show()
-                (activity as NavigationHost).navigateTo(RegisterFragment(), false)
+                else{
+                    //if no successful
+                    Toast.makeText(activity,"Register Failed",Toast.LENGTH_SHORT).show()
+                    (activity as NavigationHost).navigateTo(RegisterFragment(), false)
+                }
             }
 
         }
