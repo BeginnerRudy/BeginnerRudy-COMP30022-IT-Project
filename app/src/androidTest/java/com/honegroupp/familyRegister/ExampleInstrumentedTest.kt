@@ -1,4 +1,4 @@
-package com.example.familyRegister
+package com.honegroupp.familyRegister
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under category_item.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("com.example.firebaseimageuploader", appContext.packageName)
+        assertEquals("com.honegroupp.firebaseimageuploader", appContext.packageName)
     }
 }

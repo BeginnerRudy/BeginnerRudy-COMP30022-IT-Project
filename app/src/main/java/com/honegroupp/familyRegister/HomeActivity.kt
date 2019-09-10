@@ -1,4 +1,4 @@
-package com.example.familyRegister
+package com.honegroupp.familyRegister
 
 import androidx.appcompat.app.AppCompatActivity
 

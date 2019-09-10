@@ -1,4 +1,4 @@
-package com.example.familyRegister
+package com.honegroupp.familyRegister
 
 import org.junit.Test
 

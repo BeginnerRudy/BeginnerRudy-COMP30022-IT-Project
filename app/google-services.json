@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:787560592478:android:f424d8e261a1d148",
         "android_client_info": {
-          "package_name": "com.example.FamilyRegister"
+          "package_name": "com.honegroupp.FamilyRegister"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "787560592478-mamkjgnh4bgsc1sivomulitunbluglgd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.FamilyRegister",
+            "package_name": "com.honegroupp.FamilyRegister",
             "certificate_hash": "d01601d2eac06d28fbb80c4d99ce46e5e7459b46"
           }
         },
@@ -26,7 +26,7 @@
           "client_id": "787560592478-chac3k6g0egu959ftdbssjd1fqog47i7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.FamilyRegister",
+            "package_name": "com.honegroupp.FamilyRegister",
             "certificate_hash": "903381d1001fd252d05cbf0fb9480cef06f145a3"
           }
         },
@@ -34,7 +34,7 @@
           "client_id": "787560592478-he5qhkd7e3hvjlav4bo8acr8ed7qjfg5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.FamilyRegister",
+            "package_name": "com.honegroupp.FamilyRegister",
             "certificate_hash": "b655ade7873bea07910353735442d7ab80841ccd"
           }
         },
@@ -63,7 +63,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:787560592478:android:e8cefbc941c2d69a",
         "android_client_info": {
-          "package_name": "com.example.firebaseimageuploader"
+          "package_name": "com.honegroupp.firebaseimageuploader"
         }
       },
       "oauth_client": [
@@ -71,7 +71,7 @@
           "client_id": "787560592478-l7341ucfmni9du6oavt0lp04vq3ik6f9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.firebaseimageuploader",
+            "package_name": "com.honegroupp.firebaseimageuploader",
             "certificate_hash": "903381d1001fd252d05cbf0fb9480cef06f145a3"
           }
         },
