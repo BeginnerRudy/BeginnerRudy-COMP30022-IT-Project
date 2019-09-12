@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 
 import com.honegroupp.familyRegister.R
-import kotlinx.android.synthetic.main.activity_home_two.*
+import kotlinx.android.synthetic.main.activity_home.*
 import androidx.fragment.app.FragmentPagerAdapter
 import com.honegroupp.familyRegister.OneFragment
 import androidx.viewpager.widget.ViewPager
@@ -25,7 +25,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home_two)
+        setContentView(R.layout.activity_home)
 
 
 
