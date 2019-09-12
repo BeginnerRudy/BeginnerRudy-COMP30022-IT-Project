@@ -22,5 +22,6 @@ data class User(
     /*This constructor has no parameter, which is used to create CategoryUpload while retrieve data from database*/
     constructor() : this(Account())
 
+    var uid: String = ""
 
 }

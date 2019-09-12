@@ -1,6 +1,8 @@
 package com.honegroupp.familyRegister.model
 
 import com.google.firebase.database.PropertyName
+import com.honegroupp.familyRegister.backend.FirebaseAuthenticationManager
+import com.honegroupp.familyRegister.controller.AuthenticationController
 
 /**
  * This class is responsible for storing data and business logic for Account
@@ -25,7 +27,10 @@ data class Account(
     /*This constructor has no parameter, which is used to create Account while retrieve data from database*/
     constructor() : this("", "")
 
-    fun login(){
+    fun login(): String {
+        var feedback = ""
 
+        return FirebaseAuthenticationManager.login(email, password)
     }
+
 }
