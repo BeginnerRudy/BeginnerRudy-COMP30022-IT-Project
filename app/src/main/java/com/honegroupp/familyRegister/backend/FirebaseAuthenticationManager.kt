@@ -1,3 +1,7 @@
 package com.honegroupp.familyRegister.backend
 
-class FirebaseAuthenticationManager
+class FirebaseAuthenticationManager {
+    companion object{
+
+    }
+}
