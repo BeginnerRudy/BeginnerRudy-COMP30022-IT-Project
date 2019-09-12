@@ -5,10 +5,7 @@ import com.google.firebase.database.PropertyName
 /**
  * This class is responsible for storing data and business logic for User
  *
- * @param name the name for the category
- * @param url the download url for the cover image of the category
- * @param count the count of number of items in the category
- * @attribute key
+ * @param account the account of the user
  *
  *
  * @author Renjie Meng

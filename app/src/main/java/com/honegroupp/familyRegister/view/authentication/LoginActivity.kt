@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.honegroupp.familyRegister.R
-import com.google.firebase.database.FirebaseDatabase
 import com.honegroupp.familyRegister.controller.AuthenticationController
 import com.honegroupp.myapplication.HomeActivity
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -19,15 +18,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Navigate to the category fragment
         login_button_login.setOnClickListener {
-
-            val email = UserName_edit_login.text.toString()
-            val password = Password_edit_login.text.toString()
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Email or Password cannot be empty!", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                login(email, password)
-            }
+            login()
         }
 
         // Navigate to the register fragment
@@ -38,15 +29,26 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    fun login(email: String, password: String) {
-        val feedback = AuthenticationController.login(email, password)
+    private fun login() {
 
-        if (feedback == AuthenticationController.FAILURE) {
-            Toast.makeText(this, "Email or Password is incorrect", Toast.LENGTH_SHORT).show()
+        val email = UserName_edit_login.text.toString()
+        val password = Password_edit_login.text.toString()
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Email or Password cannot be empty!", Toast.LENGTH_SHORT)
+                .show()
         } else {
-            val uid = feedback
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
+            val feedback = AuthenticationController.login(email, password, this)
         }
     }
+
+    fun invalidAccountAndPassword() {
+        Toast.makeText(this, "Email or Password is incorrect", Toast.LENGTH_SHORT).show()
+    }
+
+    fun goToLogin(uid: String) {
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
+    }
 }
+
+
