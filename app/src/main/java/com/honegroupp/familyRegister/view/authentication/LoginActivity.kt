@@ -12,7 +12,7 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.myapplication.HomeActivity
 
 class LoginActivity : AppCompatActivity() {
-    var RC_SIGN_IN = 1
+    private val RC_SIGN_IN = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -14,11 +14,10 @@ import com.google.firebase.database.PropertyName
 data class User(
     @set:PropertyName("account")
     @get:PropertyName("account")
-    var account: Account
+    var uid: String
 ) {
     /*This constructor has no parameter, which is used to create CategoryUpload while retrieve data from database*/
-    constructor() : this(Account())
+    constructor() : this("")
 
-    var uid: String = ""
 
 }
