@@ -1,9 +1,6 @@
 package com.honegroupp.familyRegister.model
 
 import com.google.firebase.database.PropertyName
-import com.honegroupp.familyRegister.backend.FirebaseAuthenticationManager
-import com.honegroupp.familyRegister.controller.AuthenticationController
-import com.honegroupp.familyRegister.view.authentication.LoginActivity
 
 /**
  * This class is responsible for storing data and business logic for Account
