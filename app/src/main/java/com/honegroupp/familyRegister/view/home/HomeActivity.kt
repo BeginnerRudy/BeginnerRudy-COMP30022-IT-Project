@@ -3,7 +3,6 @@ package com.honegroupp.myapplication
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -14,12 +13,14 @@ import kotlinx.android.synthetic.main.activity_home.*
 import androidx.fragment.app.FragmentPagerAdapter
 import com.honegroupp.familyRegister.view.home.OneFragment
 import androidx.viewpager.widget.ViewPager
+import com.firebase.ui.auth.AuthUI
 
 import com.google.android.material.tabs.TabLayout
+import com.honegroupp.familyRegister.IDoubleClickToExit
+import com.honegroupp.familyRegister.view.authentication.LoginActivity
 
 
-
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
     private var toolbar: Toolbar? = null
     private var tabLayout: TabLayout? = null
@@ -28,7 +29,6 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-
 
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar?
@@ -54,6 +54,19 @@ class HomeActivity : AppCompatActivity() {
             Toast.makeText(this, "Hamburger",Toast.LENGTH_LONG).show()
         }
 
+
+        nav_view.bringToFront()
+        val btn_log_out = nav_view.menu.findItem(R.id.btn_log_out)
+        btn_log_out.setOnMenuItemClickListener {
+            Toast.makeText(this,"CLICK!!!!!!!!!!!", Toast.LENGTH_SHORT).show()
+            AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener {
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            true
+        }
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
@@ -90,22 +103,8 @@ class HomeActivity : AppCompatActivity() {
     /**
      * Click back button twice to exit app.
      * */
-    private var doubleBackToExitPressedOnce = false
     override fun onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            exitApp()
-        }
-
-        this.doubleBackToExitPressedOnce = true
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
-
-        Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+        doubleClickToExit(this)
     }
 
-    fun exitApp(){
-        val homeIntent = Intent(Intent.ACTION_MAIN)
-        homeIntent.addCategory(Intent.CATEGORY_HOME)
-        homeIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivity(homeIntent)
-    }
 }
