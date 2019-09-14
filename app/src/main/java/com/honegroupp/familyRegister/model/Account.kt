@@ -26,8 +26,8 @@ data class Account(
     /*This constructor has no parameter, which is used to create Account while retrieve data from database*/
     constructor() : this("", "")
 
-    fun login(loginActivity: LoginActivity) {
-        FirebaseAuthenticationManager.login(email, password, loginActivity)
+    fun login(): String {
+        return FirebaseAuthenticationManager.login(email, password)
     }
 
 }
