@@ -47,25 +47,15 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
             val response = IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
-                // Successfully signed in
+                // Successfully signed d
                 val user = FirebaseAuth.getInstance().currentUser
                 Log.d("UID", user!!.uid)
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
                 // ...
             } else if (response == null) {
-                finish()
-                moveTaskToBack(true)
-                exitProcess(0)
+                finishAffinity()
             }
         }
     }
-
-    /**
-     * Click back button twice to exit app.
-     * */
-    override fun onBackPressed() {
-        doubleClickToExit(this)
-    }
-
 }
