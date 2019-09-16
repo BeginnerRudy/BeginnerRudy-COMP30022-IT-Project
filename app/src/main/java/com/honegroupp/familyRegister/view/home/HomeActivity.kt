@@ -18,6 +18,7 @@ import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
 
 
+@Suppress("DEPRECATION")
 class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
     private lateinit var toolbar: Toolbar
@@ -57,13 +58,22 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         // Interaction with menuitems contained in the navigation drawer
         nav_view.bringToFront()
 
+        nav_view.menu.findItem(R.id.nav_account).setOnMenuItemClickListener {
+            toast("Clicked1")
+            true
+        }
         nav_view.menu.findItem(R.id.nav_create_family).setOnMenuItemClickListener {
-            toast("Clicked")
+            toast("Clicked2")
             true
         }
 
-        nav_view.menu.findItem(R.id.nav_account).setOnMenuItemClickListener {
-            toast("Clicked")
+        nav_view.menu.findItem(R.id.nav_join_family).setOnMenuItemClickListener {
+            toast("Clicked3")
+            true
+        }
+
+        nav_view.menu.findItem(R.id.nav_view_family).setOnMenuItemClickListener {
+            toast("Clicked4")
             true
         }
 
@@ -78,9 +88,9 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(OneFragment(), "ONE")
-        adapter.addFragment(OneFragment(), "TWO")
-        adapter.addFragment(OneFragment(), "THREE")
+        adapter.addFragment(FirstTabFragment(), "ONE")
+        adapter.addFragment(SecondTabFragment(), "TWO")
+        adapter.addFragment(ThirdTabFragment(), "THREE")
         viewPager.adapter = adapter
     }
 
@@ -114,7 +124,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         doubleClickToExit(this)
     }
 
-    fun HomeActivity.toast(msg:String){
+    private fun toast(msg:String){
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 }
