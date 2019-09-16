@@ -57,6 +57,18 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         // Interaction with menuitems contained in the navigation drawer
         nav_view.bringToFront()
 
+        nav_view.menu.findItem(R.id.nav_create_family).setOnMenuItemClickListener {
+            toast("Clicked")
+            true
+        }
+
+        nav_view.menu.findItem(R.id.nav_account).setOnMenuItemClickListener {
+            toast("Clicked")
+            true
+        }
+
+
+
         // Log out
         AuthenticationController.logout(btn_log_out, this)
 
@@ -102,4 +114,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         doubleClickToExit(this)
     }
 
+    fun HomeActivity.toast(msg:String){
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
 }
