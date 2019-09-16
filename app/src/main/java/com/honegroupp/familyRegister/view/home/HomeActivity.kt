@@ -21,6 +21,16 @@ import com.honegroupp.familyRegister.controller.AuthenticationController
 import android.widget.TextView
 import com.honegroupp.familyRegister.view.family.FamilyCreateActivity
 import com.honegroupp.familyRegister.view.family.FamilyJoinActivity
+import android.view.Gravity
+
+import androidx.appcompat.widget.SearchView
+import android.graphics.PorterDuff
+import android.R.id
+import android.graphics.Color
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.widget.ImageView
 
 
 @Suppress("DEPRECATION")
@@ -52,10 +62,13 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         tabLayout.setupWithViewPager(viewPager)
 
         // Searching Feature
-        search.setOnClickListener {
-            //            (activity as NavigationHost).navigateTo(RegisterActivity(), false)
-            Toast.makeText(this, "/aaa", Toast.LENGTH_LONG).show()
-        }
+        val search = findViewById<SearchView>(R.id.searchView)
+        //set search icon to right
+        search.layoutParams = Toolbar.LayoutParams(Gravity.RIGHT)
+        //set search close color to white
+        val searchClose = search.findViewById<ImageView>(R.id.search_close_btn)
+        searchClose.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+
 
         // Press Hamburger key to navigate to navigation drawer
         toolbar.setNavigationOnClickListener {
