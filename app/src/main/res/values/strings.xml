@@ -23,6 +23,6 @@
     <string name="type_password">Please enter password</string>
     <string name="type_family_name">Please enter family name</string>
     <string name="create">Create</string>
-    <string name="please_enter_family_id_password">Please enter family umber and password to join your family</string>
+    <string name="please_enter_family_id_password">Please enter family account number and password to join your family</string>
     <string name="confirm_join_family">Confirm to join family</string>
 </resources>
