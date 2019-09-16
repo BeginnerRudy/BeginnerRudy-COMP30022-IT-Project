@@ -10,7 +10,7 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.honegroupp.familyRegister.IDoubleClickToExit
-import com.honegroupp.myapplication.HomeActivity
+import com.honegroupp.familyRegister.view.home.HomeActivity
 
 /**
  * This class is responsible for Login functionality.

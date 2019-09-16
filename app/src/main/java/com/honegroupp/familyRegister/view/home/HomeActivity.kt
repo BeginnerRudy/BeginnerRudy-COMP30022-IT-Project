@@ -1,58 +1,59 @@
-package com.honegroupp.myapplication
+package com.honegroupp.familyRegister.view.home
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 
 import com.honegroupp.familyRegister.R
 import kotlinx.android.synthetic.main.activity_home.*
 import androidx.fragment.app.FragmentPagerAdapter
-import com.honegroupp.familyRegister.view.home.OneFragment
 import androidx.viewpager.widget.ViewPager
-import com.firebase.ui.auth.AuthUI
 
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.LogOutController
-import com.honegroupp.familyRegister.view.authentication.LoginActivity
 
 
 class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
-    private var toolbar: Toolbar? = null
-    private var tabLayout: TabLayout? = null
-    private var viewPager: ViewPager? = null
+    private lateinit var toolbar: Toolbar
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-
-        val toolbar = findViewById(R.id.toolbar) as Toolbar?
-        toolbar?.setTitle("HOME");
-        toolbar?.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+        // Configure the toolbar setting
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar?.title = "HOME"
+        toolbar?.setNavigationIcon(R.drawable.ic_menu_white_24dp)
         setSupportActionBar(toolbar)
 
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         viewPager = findViewById(R.id.viewpager)
-        setupViewPager(viewPager!!)
+        setupViewPager(viewPager)
 
         tabLayout = findViewById(R.id.tabs)
-        tabLayout!!.setupWithViewPager(viewPager)
+        tabLayout.setupWithViewPager(viewPager)
 
+        // Searching Feature
         search.setOnClickListener {
 //            (activity as NavigationHost).navigateTo(RegisterActivity(), false)
             Toast.makeText(this, "/aaa",Toast.LENGTH_LONG).show()
         }
 
+        // Hamburger icon
         toolbar?.setNavigationOnClickListener{
-            Toast.makeText(this, "Hamburger",Toast.LENGTH_LONG).show()
+            drawer_layout.openDrawer(GravityCompat.START)
         }
 
         // Interaction with menuitems contained in the navigation drawer
@@ -61,6 +62,9 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         // Log out
         val logOut = nav_view.menu.findItem(R.id.btn_log_out)
         LogOutController.logout(logOut, this)
+
+        // Press Hamburger key to navigate to navigation drawer
+
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
@@ -77,7 +81,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         private val mFragmentTitleList = mutableListOf<String>()
 
         override fun getItem(position: Int): Fragment {
-            return mFragmentList.get(position)
+            return mFragmentList[position]
         }
 
         override fun getCount(): Int {
@@ -90,7 +94,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return mFragmentTitleList.get(position)
+            return mFragmentTitleList[position]
         }
     }
 
