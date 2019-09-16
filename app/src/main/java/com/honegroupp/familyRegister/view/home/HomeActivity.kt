@@ -1,56 +1,70 @@
-package com.honegroupp.myapplication
+package com.honegroupp.familyRegister.view.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 
 import com.honegroupp.familyRegister.R
 import kotlinx.android.synthetic.main.activity_home.*
 import androidx.fragment.app.FragmentPagerAdapter
-import com.honegroupp.familyRegister.OneFragment
 import androidx.viewpager.widget.ViewPager
 
 import com.google.android.material.tabs.TabLayout
+import com.honegroupp.familyRegister.IDoubleClickToExit
+import com.honegroupp.familyRegister.controller.LogOutController
 
 
+class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
-class HomeActivity : AppCompatActivity() {
-
-    private var toolbar: Toolbar? = null
-    private var tabLayout: TabLayout? = null
-    private var viewPager: ViewPager? = null
+    private lateinit var toolbar: Toolbar
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-
-
-        val toolbar = findViewById(R.id.toolbar) as Toolbar?
-        toolbar?.setTitle("HOME");
-        toolbar?.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+        // Configure the toolbar setting
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.title = "HOME"
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp)
         setSupportActionBar(toolbar)
 
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         viewPager = findViewById(R.id.viewpager)
-        setupViewPager(viewPager!!)
+        setupViewPager(viewPager)
 
         tabLayout = findViewById(R.id.tabs)
-        tabLayout!!.setupWithViewPager(viewPager)
+        tabLayout.setupWithViewPager(viewPager)
 
+        // Searching Feature
         search.setOnClickListener {
-//            (activity as NavigationHost).navigateTo(RegisterFragment(), false)
-            Toast.makeText(this, "/aaa",Toast.LENGTH_LONG).show()
+            //            (activity as NavigationHost).navigateTo(RegisterActivity(), false)
+            Toast.makeText(this, "/aaa", Toast.LENGTH_LONG).show()
         }
 
-        toolbar?.setNavigationOnClickListener{
-            Toast.makeText(this, "Hamburger",Toast.LENGTH_LONG).show()
+        // Press Hamburger key to navigate to navigation drawer
+        toolbar.setNavigationOnClickListener {
+            drawer_layout.openDrawer(GravityCompat.START)
         }
+
+        // Interaction with menuitems contained in the navigation drawer
+        nav_view.bringToFront()
+
+        // Log out
+        LogOutController.logout(btn_log_out, this)
+
+        //
+
 
     }
 
@@ -68,7 +82,7 @@ class HomeActivity : AppCompatActivity() {
         private val mFragmentTitleList = mutableListOf<String>()
 
         override fun getItem(position: Int): Fragment {
-            return mFragmentList.get(position)
+            return mFragmentList[position]
         }
 
         override fun getCount(): Int {
@@ -81,7 +95,15 @@ class HomeActivity : AppCompatActivity() {
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return mFragmentTitleList.get(position)
+            return mFragmentTitleList[position]
         }
     }
+
+    /**
+     * Click back button twice to exit app.
+     * */
+    override fun onBackPressed() {
+        doubleClickToExit(this)
+    }
+
 }

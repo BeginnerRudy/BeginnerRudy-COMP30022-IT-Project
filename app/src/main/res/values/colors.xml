@@ -5,8 +5,8 @@
 <!--    <color name="colorAccent">#D81B60</color>-->
 <!--    <color name="blue">#3F51B5</color>-->
 
-    <color name="colorPrimary">#125688</color>
-    <color name="colorPrimaryDark">#125688</color>
+    <color name="colorPrimary">#FFB300</color>
+    <color name="colorPrimaryDark">#FFB300</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
