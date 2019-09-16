@@ -71,6 +71,7 @@ class FirebaseDatabaseManager() {
                         // Check if the family has already exists
                         if (it.key == familyId) {
                             isExist = true
+                            Log.d("TAG", "ERROR")
                         }
                     }
 
