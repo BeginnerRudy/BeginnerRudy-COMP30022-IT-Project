@@ -15,7 +15,7 @@ import androidx.viewpager.widget.ViewPager
 
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
-import com.honegroupp.familyRegister.controller.AutheticationController
+import com.honegroupp.familyRegister.controller.AuthenticationController
 
 
 class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
@@ -58,7 +58,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         nav_view.bringToFront()
 
         // Log out
-        AutheticationController.logout(btn_log_out, this)
+        AuthenticationController.logout(btn_log_out, this)
 
         //
 
