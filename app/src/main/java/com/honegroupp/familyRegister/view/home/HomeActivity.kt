@@ -3,6 +3,7 @@ package com.honegroupp.familyRegister.view.home
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -32,8 +33,8 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
         // Configure the toolbar setting
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar?.title = "HOME"
-        toolbar?.setNavigationIcon(R.drawable.ic_menu_white_24dp)
+        toolbar.title = "HOME"
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp)
         setSupportActionBar(toolbar)
 
 
@@ -47,12 +48,12 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
         // Searching Feature
         search.setOnClickListener {
-//            (activity as NavigationHost).navigateTo(RegisterActivity(), false)
-            Toast.makeText(this, "/aaa",Toast.LENGTH_LONG).show()
+            //            (activity as NavigationHost).navigateTo(RegisterActivity(), false)
+            Toast.makeText(this, "/aaa", Toast.LENGTH_LONG).show()
         }
 
-        // Hamburger icon
-        toolbar?.setNavigationOnClickListener{
+        // Press Hamburger key to navigate to navigation drawer
+        toolbar.setNavigationOnClickListener {
             drawer_layout.openDrawer(GravityCompat.START)
         }
 
@@ -60,10 +61,10 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         nav_view.bringToFront()
 
         // Log out
-        val logOut = nav_view.menu.findItem(R.id.btn_log_out)
-        LogOutController.logout(logOut, this)
+        LogOutController.logout(btn_log_out, this)
 
-        // Press Hamburger key to navigate to navigation drawer
+        //
+
 
     }
 

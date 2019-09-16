@@ -7,6 +7,11 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <string name="create_family">创建家庭</string>
+    <string name="join_family">加入家庭</string>
+    <string name="view_family">浏览家庭</string>
+    <string name="account">账户</string>
+    <string name="log_out">退出登录</string>
     <string name="menu_home">家庭</string>
     <string name="menu_gallery">相册</string>
     <string name="menu_slideshow">查看</string>
