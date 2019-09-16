@@ -63,8 +63,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         // Log out
         LogOutController.logout(btn_log_out, this)
 
-        //
-
+        // Click any item has family concepts, then navigate to FamilyActivity
 
     }
 
