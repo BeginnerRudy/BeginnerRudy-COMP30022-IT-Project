@@ -2,12 +2,9 @@ package com.honegroupp.familyRegister.view.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Gravity
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 
@@ -18,7 +15,7 @@ import androidx.viewpager.widget.ViewPager
 
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
-import com.honegroupp.familyRegister.controller.LogOutController
+import com.honegroupp.familyRegister.controller.AutheticationController
 
 
 class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
@@ -61,7 +58,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         nav_view.bringToFront()
 
         // Log out
-        LogOutController.logout(btn_log_out, this)
+        AutheticationController.logout(btn_log_out, this)
 
         //
 
