@@ -10,6 +10,8 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.honegroupp.familyRegister.IDoubleClickToExit
+import com.honegroupp.familyRegister.controller.AutheticationController
+import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.view.home.HomeActivity
 
 /**
@@ -54,7 +56,10 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed d
                 val user = FirebaseAuth.getInstance().currentUser
-                Log.d("UID", user!!.uid)
+
+                // TODO Async task here, for better performance
+                AutheticationController.storeUser(User(), user!!.uid)
+
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
             } else if (response == null) {
