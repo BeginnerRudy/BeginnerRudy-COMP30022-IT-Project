@@ -18,4 +18,5 @@
     <string name="view_family">View Family</string>
     <string name="account">Account</string>
     <string name="log_out">Log Out</string>
+    <string name="sign_out_msg">Successfully Sign Out.</string>
 </resources>
