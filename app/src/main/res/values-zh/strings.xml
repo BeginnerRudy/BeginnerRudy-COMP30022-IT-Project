@@ -19,4 +19,12 @@
     <string name="menu_tools">工具</string>
     <string name="menu_share">分享</string>
     <string name="menu_send">发送</string>
+
+    <string name="type_password_again">请重新输入密码</string>
+    <string name="type_password">请输入密码</string>
+    <string name="type_family_name">请输入家庭名称</string>
+    <string name="create">新建</string>
+    <string name="please_enter_family_id_password">请输入家庭的账号和密码来加入你的家庭</string>
+    <string name="confirm_join_family">确认加入家庭</string>
+
 </resources>

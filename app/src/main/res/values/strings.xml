@@ -19,4 +19,10 @@
     <string name="account">Account</string>
     <string name="log_out">Log Out</string>
     <string name="sign_out_msg">Successfully Sign Out.</string>
+    <string name="type_password_again">Please enter password again</string>
+    <string name="type_password">Please enter password</string>
+    <string name="type_family_name">Please enter family name</string>
+    <string name="create">Create</string>
+    <string name="please_enter_family_id_password">Please enter family umber and password to join your family</string>
+    <string name="confirm_join_family">Confirm to join family</string>
 </resources>

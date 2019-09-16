@@ -1,5 +1,6 @@
 package com.honegroupp.familyRegister.view.home
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -18,12 +19,8 @@ import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
 
 import android.widget.TextView
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
-
+import com.honegroupp.familyRegister.view.family.FamilyCreateActivity
+import com.honegroupp.familyRegister.view.family.FamilyJoinActivity
 
 
 @Suppress("DEPRECATION")
@@ -77,11 +74,22 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
             true
         }
         nav_view.menu.findItem(R.id.nav_create_family).setOnMenuItemClickListener {
+
+//            create home
+            val intent = Intent(this, FamilyCreateActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
+
             toast("Clicked2")
             true
         }
 
         nav_view.menu.findItem(R.id.nav_join_family).setOnMenuItemClickListener {
+
+            val intent = Intent(this, FamilyJoinActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
+
             toast("Clicked3")
             true
         }
