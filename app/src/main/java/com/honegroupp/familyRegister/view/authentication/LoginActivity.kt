@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                 val user = FirebaseAuth.getInstance().currentUser
 
                 // TODO Async task here, for better performance
-                AuthenticationController.storeUser(User(), user!!.uid)
+                AuthenticationController.storeUser(User(user!!.displayName as String), user!!.uid)
 
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)

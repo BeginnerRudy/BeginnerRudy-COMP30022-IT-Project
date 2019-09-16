@@ -13,6 +13,9 @@ import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
  * */
 
 data class User(
+    @set:PropertyName("username")
+    @get:PropertyName("username")
+    var username: String = "",
     @set:PropertyName("familyId")
     @get:PropertyName("familyId")
     var familyId: String = "",
