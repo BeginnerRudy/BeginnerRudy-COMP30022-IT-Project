@@ -29,4 +29,5 @@ data class User(
     fun store(uid:String){
         FirebaseDatabaseManager.uploadUser(uid,this)
     }
+
 }

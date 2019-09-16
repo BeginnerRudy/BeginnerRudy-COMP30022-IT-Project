@@ -17,6 +17,14 @@ import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
 
+import android.widget.TextView
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
+
+
 
 @Suppress("DEPRECATION")
 class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
@@ -29,12 +37,14 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        //get User ID
+        var userID: String = intent.getStringExtra("UserID")
+
         // Configure the toolbar setting
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.title = "HOME"
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp)
         setSupportActionBar(toolbar)
-
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
@@ -55,9 +65,13 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
             drawer_layout.openDrawer(GravityCompat.START)
         }
 
-        // Interaction with menuitems contained in the navigation drawer
-        nav_view.bringToFront()
+        //display User Name
+        val headerView = nav_view.getHeaderView(0)
+        val navUsername = headerView.findViewById(R.id.nav_userName) as TextView
+        navUsername.text = userID
 
+
+        // Interaction with menuitems contained in the navigation drawer
         nav_view.menu.findItem(R.id.nav_account).setOnMenuItemClickListener {
             toast("Clicked1")
             true

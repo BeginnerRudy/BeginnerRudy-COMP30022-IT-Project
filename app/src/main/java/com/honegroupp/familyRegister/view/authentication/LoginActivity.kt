@@ -60,7 +60,10 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                 // TODO Async task here, for better performance
                 AuthenticationController.storeUser(User(user!!.displayName as String), user!!.uid)
 
+//                pass user id to next activity
                 val intent = Intent(this, HomeActivity::class.java)
+                intent.putExtra("UserID", user.uid)
+
                 startActivity(intent)
             } else if (response == null) {
                 // If the user press back button, exit the app
