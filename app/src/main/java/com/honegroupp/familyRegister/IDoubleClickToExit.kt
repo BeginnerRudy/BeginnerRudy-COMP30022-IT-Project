@@ -5,14 +5,19 @@ import android.os.Handler
 import android.widget.Toast
 import kotlin.system.exitProcess
 
+/**
+ * This interface is responsible for providing a default method of double click back to exit.
+ * */
+
 interface IDoubleClickToExit {
-    /**
-     * Click back button twice to exit app.
-     * */
-    companion object{
+
+    companion object {
         var doubleBackToExitPressedOnce = false
     }
 
+    /**
+     * Click back button twice to exit app.
+     * */
     fun doubleClickToExit(mActivity: Activity) {
         if (doubleBackToExitPressedOnce) {
             exitApp(mActivity)
@@ -24,7 +29,10 @@ interface IDoubleClickToExit {
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
-    fun exitApp(mActivity: Activity){
+    /**
+     * To exit app.
+     * */
+    fun exitApp(mActivity: Activity) {
         mActivity.finish()
         mActivity.moveTaskToBack(true)
         exitProcess(0)

@@ -11,9 +11,14 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.myapplication.HomeActivity
-import kotlin.system.exitProcess
+
+/**
+ * This class is responsible for Login functionality.
+ *
+ * */
 
 class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
+    // This is the request code for sign in
     var RC_SIGN_IN = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +31,7 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
             AuthUI.IdpConfig.GoogleBuilder().build()
         )
 
-// Create and launch sign-in intent
+        // Create and launch sign-in intent
         startActivityForResult(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
@@ -52,8 +57,8 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                 Log.d("UID", user!!.uid)
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
-                // ...
             } else if (response == null) {
+                // If the user press back button, exit the app
                 finishAffinity()
             }
         }

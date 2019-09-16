@@ -17,6 +17,7 @@ import com.firebase.ui.auth.AuthUI
 
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
+import com.honegroupp.familyRegister.controller.LogOutController
 import com.honegroupp.familyRegister.view.authentication.LoginActivity
 
 
@@ -54,19 +55,12 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
             Toast.makeText(this, "Hamburger",Toast.LENGTH_LONG).show()
         }
 
-
+        // Interaction with menuitems contained in the navigation drawer
         nav_view.bringToFront()
-        val btn_log_out = nav_view.menu.findItem(R.id.btn_log_out)
-        btn_log_out.setOnMenuItemClickListener {
-            Toast.makeText(this,"CLICK!!!!!!!!!!!", Toast.LENGTH_SHORT).show()
-            AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener {
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                }
-            true
-        }
+
+        // Log out
+        val logOut = nav_view.menu.findItem(R.id.btn_log_out)
+        LogOutController.logout(logOut, this)
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
