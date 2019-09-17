@@ -25,4 +25,5 @@
     <string name="create">Create</string>
     <string name="please_enter_family_id_password">Please enter family account number and password to join your family</string>
     <string name="confirm_join_family">Confirm to join family</string>
+    <string name="family_name">Please enter a family name</string>
 </resources>

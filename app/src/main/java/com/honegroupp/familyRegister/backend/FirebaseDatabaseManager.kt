@@ -19,9 +19,10 @@ class FirebaseDatabaseManager() {
         val FAMILY_PATH = "/Family/"
 
         /**
-         * This method is responsible for uploading given object to specified path of the database.
+         * This method is responsible for uploading the given user to  the database.
          * */
         fun uploadUser(uid: String, user: User) {
+            // TODO This logic should not be exposed in controller.
             val databaseRef = FirebaseDatabase.getInstance().getReference(USER_PATH)
 
             databaseRef.addValueEventListener(object : ValueEventListener {
@@ -55,36 +56,13 @@ class FirebaseDatabaseManager() {
         /**
          * This method is responsible for uploading given object to specified path of the database.
          * */
-        fun uploadFamily(familyId: String, family: Family) {
+        fun uploadFamily(family: Family) {
             val databaseRef = FirebaseDatabase.getInstance().getReference(FAMILY_PATH)
+            val uploadKey = databaseRef.push().key.toString()
 
-            databaseRef.addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(p0: DatabaseError) {
-                    //Don't ignore errors!
-                    Log.d("TAG", p0.message)
-                }
+            family.familyId = uploadKey
 
-                override fun onDataChange(p0: DataSnapshot1) {
-                    var isExist = false
-
-                    p0.children.forEach {
-                        // Check if the family has already exists
-                        if (it.key == familyId) {
-                            isExist = true
-                            Log.d("TAG", "ERROR")
-                        }
-                    }
-
-                    // if the family hasn't been recorded ,
-                    // Use the family to construct the family's unique path on database
-                    if (!isExist){
-                        databaseRef.child(familyId).setValue(familyId)
-                    }
-
-                }
-
-
-            })
+            databaseRef.child(uploadKey).setValue(family)
         }
 
     }

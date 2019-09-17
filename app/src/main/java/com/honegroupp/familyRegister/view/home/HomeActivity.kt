@@ -88,7 +88,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         }
         nav_view.menu.findItem(R.id.nav_create_family).setOnMenuItemClickListener {
 
-//            create home
+            // Navigation to CreateFamily Activity
             val intent = Intent(this, FamilyCreateActivity::class.java)
             intent.putExtra("UserID", userID)
             startActivity(intent)
@@ -111,7 +111,6 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
             toast("Clicked4")
             true
         }
-
 
 
         // Log out
@@ -159,7 +158,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         doubleClickToExit(this)
     }
 
-    private fun toast(msg:String){
+    private fun toast(msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 }
