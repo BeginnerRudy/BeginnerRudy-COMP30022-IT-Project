@@ -42,10 +42,10 @@ data class Family(
 
         FirebaseDatabaseManager.uploadFamily(this)
 
-        FirebaseDatabaseManager.retrieve("", ::callback_add_family_to_user)
+        FirebaseDatabaseManager.retrieve("", ::callbackAddFamilyToUser)
     }
 
-    fun callback_add_family_to_user(dataSnapshot: DataSnapshot){
+    private fun callbackAddFamilyToUser(dataSnapshot: DataSnapshot){
         val owner = dataSnapshot.child("").getValue(User::class.java) as User
         //user =
         // set family id
