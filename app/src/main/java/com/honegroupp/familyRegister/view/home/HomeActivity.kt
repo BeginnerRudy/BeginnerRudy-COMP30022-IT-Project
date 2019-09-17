@@ -92,18 +92,16 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
             val intent = Intent(this, FamilyCreateActivity::class.java)
             intent.putExtra("UserID", userID)
             startActivity(intent)
-
-            toast("Clicked2")
             true
         }
 
         nav_view.menu.findItem(R.id.nav_join_family).setOnMenuItemClickListener {
 
+            // Navigation to JoinFamily Activity
             val intent = Intent(this, FamilyJoinActivity::class.java)
             intent.putExtra("UserID", userID)
             startActivity(intent)
 
-            toast("Clicked3")
             true
         }
 

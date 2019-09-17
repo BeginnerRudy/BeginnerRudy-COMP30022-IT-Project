@@ -22,7 +22,8 @@ data class User(
     @set:PropertyName("isFamilyOwner")
     @get:PropertyName("isFamilyOwner")
     var isFamilyOwner: Boolean = false
-    ) {
+    ): Retrievable {
+
     /*This constructor has no parameter, which is used to create CategoryUpload while retrieve data from database*/
     constructor() : this("")
 
@@ -30,4 +31,13 @@ data class User(
         FirebaseDatabaseManager.uploadUser(uid,this)
     }
 
+    /**
+     * This method is responsible for showing user information in view family page.
+     *
+     * */
+    fun showUserInfor(){
+
+    }
+
+    /**/
 }

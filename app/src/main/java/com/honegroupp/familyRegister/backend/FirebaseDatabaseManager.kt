@@ -10,6 +10,9 @@ import android.provider.ContactsContract.CommonDataKinds.Email
 import android.view.View
 import android.widget.Toast
 import com.honegroupp.familyRegister.model.Family
+import com.honegroupp.familyRegister.model.Retrievable
+import java.util.*
+import kotlin.reflect.KClass
 import com.google.firebase.database.DataSnapshot as DataSnapshot1
 
 
@@ -17,6 +20,28 @@ class FirebaseDatabaseManager() {
     companion object {
         val USER_PATH = "/Users/"
         val FAMILY_PATH = "/Family/"
+
+        /**
+         * This method is responsible for retrieving object from the database depends on given path
+         *
+         * */
+        // TODO should change class Any change to some Class more specific.
+        fun retrieve(path: String, obj: Retrievable){
+            val databaseRef = FirebaseDatabase.getInstance().getReference(path)
+            // retrieve data
+
+3
+            databaseRef.addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                    //Don't ignore errors!
+                    Log.d("TAG", p0.message)
+                }
+                override fun onDataChange(p0: DataSnapshot1) {
+                    obj.notifyDataRetrieveFnished(p0)
+                }
+            })
+
+        }
 
         /**
          * This method is responsible for uploading the given user to  the database.
@@ -48,9 +73,9 @@ class FirebaseDatabaseManager() {
                     }
 
                 }
-
-
             })
+
+
         }
 
         /**

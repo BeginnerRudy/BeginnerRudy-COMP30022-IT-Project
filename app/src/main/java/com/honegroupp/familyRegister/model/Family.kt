@@ -33,10 +33,21 @@ data class Family(
     /*This constructor has no parameter, which is used to create CategoryUpload while retrieve data from database*/
     constructor() : this("","", "", "", ArrayList())
 
+    /**
+     * This method is responsible for storing Family to the database.
+     *
+     * */
     fun store(){
+
         FirebaseDatabaseManager.uploadFamily(this)
+
+        FirebaseDatabaseManager.retrieve<>(path, callback)
     }
 
-
+    fun callback(){
+        //user =
+        // set family id
+        // upload user
+    }
 
 }

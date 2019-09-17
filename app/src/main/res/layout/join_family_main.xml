@@ -25,13 +25,15 @@
             android:layout_below="@id/familyJoinDescription"
             android:layout_marginTop="100dp"
             android:gravity="center_horizontal">
+
             <com.google.android.material.textfield.TextInputEditText
 
+                android:id="@+id/edit_text_family_name_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:hint="@string/type_family_name"/>
+                android:hint="@string/type_family_name"
+                android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -45,6 +47,7 @@
             app:passwordToggleTint="@color/colorAccent">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_family_password_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
