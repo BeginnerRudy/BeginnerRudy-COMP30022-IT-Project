@@ -13,7 +13,7 @@ import com.honegroupp.familyRegister.model.Family
 import com.honegroupp.familyRegister.model.Retrievable
 import java.util.*
 import kotlin.reflect.KClass
-import com.google.firebase.database.DataSnapshot as DataSnapshot1
+import com.google.firebase.database.DataSnapshot
 
 
 class FirebaseDatabaseManager() {
@@ -26,7 +26,7 @@ class FirebaseDatabaseManager() {
          *
          * */
         // TODO should change class Any change to some Class more specific.
-        fun retrieve(path: String, obj: Retrievable){
+        fun retrieve(path: String, callback: (DataSnapshot) -> Void){
             val databaseRef = FirebaseDatabase.getInstance().getReference(path)
             // retrieve data
 
@@ -36,8 +36,8 @@ class FirebaseDatabaseManager() {
                     //Don't ignore errors!
                     Log.d("TAG", p0.message)
                 }
-                override fun onDataChange(p0: DataSnapshot1) {
-                    obj.notifyDataRetrieveFnished(p0)
+                override fun onDataChange(p0: DataSnapshot) {
+                    callback(p0)
                 }
             })
 
@@ -56,7 +56,7 @@ class FirebaseDatabaseManager() {
                     Log.d("TAG", p0.message)
                 }
 
-                override fun onDataChange(p0: DataSnapshot1) {
+                override fun onDataChange(p0: DataSnapshot) {
                     var isExist = false
 
                     p0.children.forEach {

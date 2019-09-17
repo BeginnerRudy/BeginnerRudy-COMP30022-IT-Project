@@ -1,5 +1,6 @@
 package com.honegroupp.familyRegister.model
 
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.PropertyName
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 
@@ -41,13 +42,13 @@ data class Family(
 
         FirebaseDatabaseManager.uploadFamily(this)
 
-        FirebaseDatabaseManager.retrieve<>(path, callback)
+        FirebaseDatabaseManager.retrieve("", callback_add_family_to_user)
     }
 
-    fun callback(){
+    fun callback_add_family_to_user(dataSnapshot: DataSnapshot): Void{
+        val owner = dataSnapshot.child("").getValue(User::class.java) as User
         //user =
         // set family id
         // upload user
     }
-
 }
