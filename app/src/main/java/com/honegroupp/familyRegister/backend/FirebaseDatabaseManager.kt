@@ -26,7 +26,7 @@ class FirebaseDatabaseManager() {
          *
          * */
         // TODO should change class Any change to some Class more specific.
-        fun retrieve(path: String, callback: (DataSnapshot) -> Void){
+        fun retrieve(path: String, callback: (DataSnapshot) -> Unit){
             val databaseRef = FirebaseDatabase.getInstance().getReference(path)
             // retrieve data
 
