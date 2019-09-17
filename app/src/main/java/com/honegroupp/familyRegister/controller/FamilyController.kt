@@ -73,7 +73,7 @@ class FamilyController {
                          uid: String){
             val family = Family(familyname.text.toString(), password.text.toString(), uid)
             family.members.add(uid)
-            family.store()
+            family.store(uid)
 
             Toast.makeText(mContext, "Family Created Successfully", Toast.LENGTH_SHORT).show()
             // Go back to the previous activity

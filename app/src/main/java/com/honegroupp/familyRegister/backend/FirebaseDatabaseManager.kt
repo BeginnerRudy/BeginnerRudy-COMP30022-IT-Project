@@ -44,7 +44,7 @@ class FirebaseDatabaseManager() {
         }
 
         /**
-         * This method is responsible for uploading the given user to  the database.
+         * This method is responsible for uploading the given user to  the database when user login.
          * */
         fun uploadUser(uid: String, user: User) {
             // TODO This logic should not be exposed in controller.
@@ -79,7 +79,7 @@ class FirebaseDatabaseManager() {
         }
 
         /**
-         * This method is responsible for uploading given object to specified path of the database.
+         * This method is responsible for uploading given family to specified path of the database.
          * */
         fun uploadFamily(family: Family) {
             val databaseRef = FirebaseDatabase.getInstance().getReference(FAMILY_PATH)
@@ -88,6 +88,15 @@ class FirebaseDatabaseManager() {
             family.familyId = uploadKey
 
             databaseRef.child(uploadKey).setValue(family)
+        }
+
+        /**
+         * This method is responsible for uploading given object to specified path of the database.
+         * */
+        fun update(path:String, obj:Any) {
+            val databaseRef = FirebaseDatabase.getInstance().getReference(path)
+
+            databaseRef.child("").setValue(obj)
         }
 
     }

@@ -4,5 +4,5 @@ import com.google.firebase.database.DataSnapshot
 
 interface Retrievable {
     /**/
-    fun notifyDataRetrieveFnished(dataSnapshot: DataSnapshot)
+    fun notifyDataRetrieveFnished(dataSnapshot: DataSnapshot){}
 }
