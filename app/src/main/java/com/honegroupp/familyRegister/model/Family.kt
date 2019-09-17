@@ -50,6 +50,8 @@ data class Family(
         val owner = dataSnapshot.child("").getValue(User::class.java) as User
         // set family id
         owner.familyId = this.familyId
+        // set the user to be the family owner
+        owner.isFamilyOwner = true
 
         // update user in the database
         FirebaseDatabaseManager.update(ownerPath, owner)
