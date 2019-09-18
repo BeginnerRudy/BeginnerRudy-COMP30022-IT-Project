@@ -21,4 +21,6 @@
     <string name="sign_out_msg">Successfully Sign Out.</string>
 
     <string name="name">Name</string>
+    <string name="change_password">Change Password</string>
+    <string name="change_item_password">Change Item Location Password</string>
 </resources>

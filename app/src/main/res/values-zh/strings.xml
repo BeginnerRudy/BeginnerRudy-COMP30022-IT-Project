@@ -21,4 +21,6 @@
     <string name="menu_send">发送</string>
 
     <string name="name">名称</string>
+    <string name="change_password">更改密码</string>
+    <string name="change_item_password">更改查看物品地点的密码</string>
 </resources>
