@@ -1,5 +1,6 @@
 package com.honegroupp.familyRegister.view.home
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -16,6 +17,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
+import com.honegroupp.familyRegister.view.item.ItemDetail
 
 
 class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
@@ -47,6 +49,8 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         search.setOnClickListener {
             //            (activity as NavigationHost).navigateTo(RegisterActivity(), false)
             Toast.makeText(this, "/aaa", Toast.LENGTH_LONG).show()
+            val intent = Intent(this, ItemDetail::class.java)
+            startActivity(intent)
         }
 
         // Press Hamburger key to navigate to navigation drawer

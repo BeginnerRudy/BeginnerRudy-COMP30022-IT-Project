@@ -21,6 +21,7 @@
 
         <activity android:name=".view.home.HomeActivity" />
         <activity android:name=".view.authentication.RegisterActivity" />
+        <activity android:name=".view.item.ItemDetail" />
     </application>
 
 
