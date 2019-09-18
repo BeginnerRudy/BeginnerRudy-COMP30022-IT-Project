@@ -32,21 +32,23 @@ data class Family(
     var members: ArrayList<String> = ArrayList()
 ) {
     /*This constructor has no parameter, which is used to create CategoryUpload while retrieve data from database*/
-    constructor() : this("","", "", "", ArrayList())
-    var ownerPath = ""
+    constructor() : this("", "", "", "", ArrayList())
+
 
     /**
      * This method is responsible for storing Family to the database.
      *
      * */
-    fun store(uid:String){
+    fun store(uid: String) {
 
         FirebaseDatabaseManager.uploadFamily(this)
-        ownerPath = FirebaseDatabaseManager.USER_PATH + uid + "/"
-        FirebaseDatabaseManager.retrieve(ownerPath, ::callbackAddFamilyToUser)
+        val ownerPath = FirebaseDatabaseManager.USER_PATH + uid + "/"
+        FirebaseDatabaseManager.retrieve(
+            ownerPath
+        ) { d: DataSnapshot -> callbackAddFamilyToUser(ownerPath, d) }
     }
 
-    private fun callbackAddFamilyToUser(dataSnapshot: DataSnapshot){
+    private fun callbackAddFamilyToUser(ownerPath: String, dataSnapshot: DataSnapshot) {
         val owner = dataSnapshot.child("").getValue(User::class.java) as User
         // set family id
         owner.familyId = this.familyId
@@ -56,4 +58,6 @@ data class Family(
         // update user in the database
         FirebaseDatabaseManager.update(ownerPath, owner)
     }
+
+
 }

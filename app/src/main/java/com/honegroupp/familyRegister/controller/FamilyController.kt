@@ -37,7 +37,7 @@ class FamilyController {
             if (familyId.text.toString().trim() == "") {
                 Toast.makeText(
                     mContext,
-                    mContext.getString(R.string.family_name),
+                    mContext.getString(R.string.type_family_name),
                     Toast.LENGTH_SHORT
                 ).show()
                 familyId.text = null
@@ -90,12 +90,6 @@ class FamilyController {
         }
 
 
-        // TODO This should not be exposed in controller
-        private var familyIdInput = ""
-        private var familyPasswordInput = ""
-        private var currUid = ""
-        private var currActivity = AppCompatActivity()
-
         /**
          * This methods is responsible for validating family id and its password.
          * TODO This method might not be in controller.
@@ -107,18 +101,29 @@ class FamilyController {
             uid: String
         ) {
 
-            familyIdInput = familyId.text.toString()
-            familyPasswordInput = password.text.toString()
-            currUid = uid
-            currActivity = mContext
+            val familyIdInput = familyId.text.toString()
+            val familyPasswordInput = password.text.toString()
 
             FirebaseDatabaseManager.retrieve(
-                FirebaseDatabaseManager.FAMILY_PATH,
-                ::callbackJoinFamily
-            )
+                FirebaseDatabaseManager.FAMILY_PATH
+            ) { d: DataSnapshot ->
+                callbackJoinFamily(
+                    uid,
+                    familyIdInput,
+                    familyPasswordInput,
+                    mContext,
+                    d
+                )
+            }
         }
 
-        private fun callbackJoinFamily(dataSnapshot: DataSnapshot) {
+        private fun callbackJoinFamily(
+            currUid: String,
+            familyIdInput: String,
+            familyPasswordInput: String,
+            currActivity: AppCompatActivity,
+            dataSnapshot: DataSnapshot
+        ) {
             // Check whether family exist
             if (!dataSnapshot.hasChild(familyIdInput)) {
                 Toast.makeText(currActivity, "Family Id is not correct!", Toast.LENGTH_SHORT).show()
@@ -138,9 +143,14 @@ class FamilyController {
                         FirebaseDatabaseManager.update(familyPath, family)
                         // get User and add familyId to user
                         FirebaseDatabaseManager.retrieve(
-                            FirebaseDatabaseManager.USER_PATH,
-                            ::callbackAddFamilyIdToUser
-                        )
+                            FirebaseDatabaseManager.USER_PATH
+                        ) { d: DataSnapshot ->
+                            callbackAddFamilyIdToUser(
+                                currUid,
+                                familyIdInput,
+                                d
+                            )
+                        }
                     }
 
                     Toast.makeText(currActivity, "Join family successful!", Toast.LENGTH_SHORT)
@@ -150,7 +160,11 @@ class FamilyController {
             }
         }
 
-        private fun callbackAddFamilyIdToUser(dataSnapshot: DataSnapshot) {
+        private fun callbackAddFamilyIdToUser(
+            currUid: String,
+            familyIdInput: String,
+            dataSnapshot: DataSnapshot
+        ) {
             val currUser = dataSnapshot.child(currUid).getValue(User::class.java) as User
             currUser.familyId = familyIdInput
 
