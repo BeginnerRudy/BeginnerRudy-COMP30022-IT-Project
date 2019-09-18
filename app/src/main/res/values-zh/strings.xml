@@ -27,4 +27,8 @@
     <string name="please_enter_family_id_password">请输入家庭的账号和密码来加入你的家庭</string>
     <string name="confirm_join_family">确认加入家庭</string>
 
+
+    <string name="name">名称</string>
+    <string name="change_password">更改密码</string>
+    <string name="change_item_password">更改查看物品地点的密码</string>
 </resources>
