@@ -1,5 +1,6 @@
 package com.honegroupp.familyRegister.view.home
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -16,6 +17,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
+import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 
 class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
@@ -52,6 +54,9 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         // Press Hamburger key to navigate to navigation drawer
         toolbar.setNavigationOnClickListener {
             drawer_layout.openDrawer(GravityCompat.START)
+
+            //listen to click
+            setItemListener()
         }
 
         // Interaction with menuitems contained in the navigation drawer
@@ -63,6 +68,29 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         //
 
 
+    }
+
+    //set listener to responding click in navigation view
+    private fun setItemListener() {
+        nav_view.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    val intent = Intent(this, AccountActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.nav_gallery -> {
+
+                }
+                R.id.nav_slideshow -> {
+
+                }
+                R.id.nav_tools -> {
+
+                }
+            }
+            drawer_layout.closeDrawer(GravityCompat.START)
+            true
+        }
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
