@@ -30,16 +30,15 @@
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/search"
-                    android:layout_width="24sp"
-                    android:layout_height="24sp"
-                    android:layout_alignParentEnd="true"
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/searchView"
                     android:layout_alignParentRight="true"
-                    android:layout_gravity="end"
-                    android:layout_marginRight="12dp"
-                    android:background="@drawable/ic_search_white_24dp"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Button" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:queryHint="Search" />
+
+
+
             </androidx.appcompat.widget.Toolbar>
 
             <com.google.android.material.tabs.TabLayout
