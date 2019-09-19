@@ -122,9 +122,9 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(FirstTabFragment(), getString(R.string.all))
-        adapter.addFragment(SecondTabFragment(), getString(R.string.category))
-        adapter.addFragment(ThirdTabFragment(), getString(R.string.show))
+        adapter.addFragment(AllTabFragment(), getString(R.string.all))
+        adapter.addFragment(CategoriesTabFragment(), getString(R.string.category))
+        adapter.addFragment(ShowTabFragment(), getString(R.string.show))
         viewPager.adapter = adapter
     }
 
