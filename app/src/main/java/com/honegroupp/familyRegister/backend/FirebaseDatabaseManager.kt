@@ -40,7 +40,6 @@ class FirebaseDatabaseManager() {
                     callback(p0)
                 }
             })
-
         }
 
         /**
