@@ -17,6 +17,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
+import com.honegroupp.familyRegister.view.item.ItemDetail
 import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 import android.widget.TextView
@@ -63,12 +64,13 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         tabLayout.setupWithViewPager(viewPager)
 
         // Searching Feature
-        val search = findViewById<SearchView>(R.id.searchView)
-        //set search icon to right
-        search.layoutParams = Toolbar.LayoutParams(Gravity.RIGHT)
-        //set search close color to white
-        val searchClose = search.findViewById<ImageView>(R.id.search_close_btn)
-        searchClose.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+      
+        search.setOnClickListener {
+            //            (activity as NavigationHost).navigateTo(RegisterActivity(), false)
+            Toast.makeText(this, "/aaa", Toast.LENGTH_LONG).show()
+            val intent = Intent(this, ItemDetail::class.java)
+            startActivity(intent)
+        }
 
 
         // Press Hamburger key to navigate to navigation drawer
