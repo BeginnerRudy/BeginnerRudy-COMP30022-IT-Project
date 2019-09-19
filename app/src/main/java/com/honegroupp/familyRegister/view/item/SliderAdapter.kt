@@ -1,6 +1,7 @@
 package com.honegroupp.familyRegister.view.item
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
@@ -9,22 +10,13 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.model.Item
+import com.squareup.picasso.Picasso
 
-public class SliderAdapter(context: Context) : PagerAdapter() {
-    var context = context
+public class SliderAdapter(val items: ArrayList<Item>, val context: Context, val slide_images: Array<Int>, val slide_headings: Array<String>, val slide_descs: Array<String>) : PagerAdapter() {
 
-    // Arrays
-    val slide_images = arrayOf(R.mipmap.code_icon, R.mipmap.eat_icon, R.mipmap.sleep_icon)
-
-    val slide_headings = arrayOf("EAT", "SLEEP", "CODE")
-
-    val slide_descs = arrayOf(
-        "Lkcjash, sajhashcj sajdch sakjch, askjch, aschk, ascjhkjhkjhkhcskah csajk cajksh  akjchoeufq feoif asc,c asjhkjhascjkh askjhckash" + "aliqua",
-        "Lkcjash, sajhashcj sajdch sakjch, askjch, aschk, ascjhkjhkjhkhcskah csajk cajksh  akjchoeufq feoif asc,c asjhkjhascjkh askjhckash" + "aliqua",
-        "Lkcjash, sajhashcj sajdch sakjch, askjch, aschk, ascjhkjhkjhkhcskah csajk cajksh  akjchoeufq feoif asc,c asjhkjhascjkh askjhckash" + "aliqua"
-    )
     override fun getCount(): Int {
-        return slide_headings.size
+        return items.size
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
@@ -39,9 +31,16 @@ public class SliderAdapter(context: Context) : PagerAdapter() {
         var slideHeaing = view.findViewById<TextView>(R.id.slide_heading)
         var slideDescription = view.findViewById<TextView>(R.id.slide_desc)
 
-        slideImageView.setImageResource(slide_images[position])
-        slideHeaing.setText(slide_headings[position])
-        slideDescription.setText(slide_descs[position])
+        val currUpload = items[position]
+
+        // Load image to ImageView via its URL from Firebase Storage
+        Picasso.get()
+            .load(currUpload.url)
+            .placeholder(R.mipmap.ic_launcher)
+            .into(slideImageView)
+        Log.d("url", currUpload.url)
+        slideHeaing.setText(currUpload.name)
+        slideDescription.setText(currUpload.description)
 
         container.addView(view)
 
