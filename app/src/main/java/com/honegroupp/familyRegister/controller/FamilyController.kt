@@ -1,12 +1,14 @@
 package com.honegroupp.familyRegister.controller
 
 import android.content.Context
-import android.content.Intent
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DataSnapshot
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.Family
+import com.honegroupp.familyRegister.model.User
 
 
 /**
@@ -27,14 +29,18 @@ class FamilyController {
          * */
         fun validateCreateFamilyInput(
             mContext: Context,
-            familyname: EditText,
+            familyId: EditText,
             password: EditText,
             passwordAgain: EditText
         ): Boolean {
             // check if the family name is empty
-            if (familyname.text.toString().trim() == "") {
-                Toast.makeText(mContext, mContext.getString(R.string.family_name), Toast.LENGTH_SHORT).show()
-                familyname.text = null
+            if (familyId.text.toString().trim() == "") {
+                Toast.makeText(
+                    mContext,
+                    mContext.getString(R.string.type_family_name),
+                    Toast.LENGTH_SHORT
+                ).show()
+                familyId.text = null
 
                 return false
             }
@@ -47,7 +53,8 @@ class FamilyController {
 
             // check if repeated password entered
             else if (passwordAgain.text.toString() == "") {
-                Toast.makeText(mContext, "Please enter the password again", Toast.LENGTH_SHORT).show()
+                Toast.makeText(mContext, "Please enter the password again", Toast.LENGTH_SHORT)
+                    .show()
                 return false
             }
 
@@ -67,11 +74,13 @@ class FamilyController {
          * This methods is responsible for creating a family and upload it to the database.
          *
          * */
-        fun createFamily(mContext: AppCompatActivity,
-                         familyname: EditText,
-                         password: EditText,
-                         uid: String){
-            val family = Family(familyname.text.toString(), password.text.toString(), uid)
+        fun createFamily(
+            mContext: AppCompatActivity,
+            familyId: EditText,
+            password: EditText,
+            uid: String
+        ) {
+            val family = Family(familyId.text.toString(), password.text.toString(), uid)
             family.members.add(uid)
             family.store(uid)
 
@@ -79,6 +88,92 @@ class FamilyController {
             // Go back to the previous activity
             mContext.finish()
         }
+
+
+        /**
+         * This methods is responsible for validating family id and its password.
+         * TODO This method might not be in controller.
+         * */
+        fun validateJoinFamilyInput(
+            mContext: AppCompatActivity,
+            familyId: EditText,
+            password: EditText,
+            uid: String
+        ) {
+
+            val familyIdInput = familyId.text.toString()
+            val familyPasswordInput = password.text.toString()
+
+            FirebaseDatabaseManager.retrieve(
+                FirebaseDatabaseManager.FAMILY_PATH
+            ) { d: DataSnapshot ->
+                callbackJoinFamily(
+                    uid,
+                    familyIdInput,
+                    familyPasswordInput,
+                    mContext,
+                    d
+                )
+            }
+        }
+
+        private fun callbackJoinFamily(
+            currUid: String,
+            familyIdInput: String,
+            familyPasswordInput: String,
+            currActivity: AppCompatActivity,
+            dataSnapshot: DataSnapshot
+        ) {
+            // Check whether family exist
+            if (!dataSnapshot.hasChild(familyIdInput)) {
+                Toast.makeText(currActivity, "Family Id is not correct!", Toast.LENGTH_SHORT).show()
+            } else {
+                // Get family
+                val family =
+                    dataSnapshot.child(familyIdInput).getValue(Family::class.java) as Family
+                // Check password
+                if (family.password != familyPasswordInput) {
+                    Toast.makeText(currActivity, "Password is not correct!", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    // Add user to family and add family to user
+                    if (!family.members.contains(currUid)) {
+                        family.members.add(currUid)
+                        val familyPath = FirebaseDatabaseManager.FAMILY_PATH + familyIdInput + "/"
+                        FirebaseDatabaseManager.update(familyPath, family)
+                        // get User and add familyId to user
+                        FirebaseDatabaseManager.retrieve(
+                            FirebaseDatabaseManager.USER_PATH
+                        ) { d: DataSnapshot ->
+                            callbackAddFamilyIdToUser(
+                                currUid,
+                                familyIdInput,
+                                d
+                            )
+                        }
+                    }
+
+                    Toast.makeText(currActivity, "Join family successful!", Toast.LENGTH_SHORT)
+                        .show()
+                    currActivity.finish()
+                }
+            }
+        }
+
+        private fun callbackAddFamilyIdToUser(
+            currUid: String,
+            familyIdInput: String,
+            dataSnapshot: DataSnapshot
+        ) {
+            val currUser = dataSnapshot.child(currUid).getValue(User::class.java) as User
+            currUser.familyId = familyIdInput
+
+
+            // update user in the database
+            val path = FirebaseDatabaseManager.USER_PATH + currUid + "/"
+            FirebaseDatabaseManager.update(path, currUser)
+        }
+
 
     }
 }
