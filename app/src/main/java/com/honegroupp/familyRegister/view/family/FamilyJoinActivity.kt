@@ -17,5 +17,6 @@ class FamilyJoinActivity: AppCompatActivity(){
 
         // join the family
     }
+
 }
 

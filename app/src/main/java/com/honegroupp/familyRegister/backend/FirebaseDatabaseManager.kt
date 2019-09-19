@@ -30,7 +30,7 @@ class FirebaseDatabaseManager() {
             val databaseRef = FirebaseDatabase.getInstance().getReference(path)
             // retrieve data
 
-3
+
             databaseRef.addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
                     //Don't ignore errors!
