@@ -13,10 +13,22 @@
     <string name="account">账户</string>
     <string name="log_out">退出登录</string>
     <string name="menu_home">家庭</string>
-    <string name="sign_out_msg">成功退出K</string>
+    <string name="sign_out_msg">成功退出</string>
     <string name="menu_gallery">相册</string>
     <string name="menu_slideshow">查看</string>
     <string name="menu_tools">工具</string>
     <string name="menu_share">分享</string>
     <string name="menu_send">发送</string>
+
+    <string name="type_password_again">请重新输入密码</string>
+    <string name="type_password">请输入密码</string>
+    <string name="type_family_name">请输入家庭名称</string>
+    <string name="create">新建</string>
+    <string name="please_enter_family_id_password">请输入家庭的账号和密码来加入你的家庭</string>
+    <string name="confirm_join_family">确认加入家庭</string>
+
+
+    <string name="name">名称</string>
+    <string name="change_password">更改密码</string>
+    <string name="change_item_password">更改查看物品地点的密码</string>
 </resources>

@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    <color name="colorPrimary">#4CAF50</color>-->
-<!--    <color name="colorPrimaryDark">#00574B</color>-->
-<!--    <color name="colorAccent">#D81B60</color>-->
-<!--    <color name="blue">#3F51B5</color>-->
+
 
     <color name="colorPrimary">#FFB300</color>
     <color name="colorPrimaryDark">#FFB300</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
-    <color name="colorAccent">#c8e8ff</color>
-    <color name="colorWhite">#FFFFFF</color>
+
     <color name="colorTransparentWhite">#cccccc</color>
+    <color name="colorAccent">#8E24AA</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

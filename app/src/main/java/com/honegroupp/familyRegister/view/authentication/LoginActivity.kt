@@ -10,6 +10,7 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.honegroupp.familyRegister.IDoubleClickToExit
+import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.AuthenticationController
 import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.view.home.HomeActivity
@@ -38,6 +39,7 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
+                .setTheme(R.style.LoginTheme)
                 .setTosAndPrivacyPolicyUrls(
                     "https://en.wikipedia.org/wiki/SLD_resolution",
                     "https://example.com/privacy.html"
@@ -58,9 +60,12 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                 val user = FirebaseAuth.getInstance().currentUser
 
                 // TODO Async task here, for better performance
-                AuthenticationController.storeUser(User(), user!!.uid)
+                AuthenticationController.storeUser(User(user!!.displayName as String), user!!.uid)
 
+//                pass user id to next activity
                 val intent = Intent(this, HomeActivity::class.java)
+                intent.putExtra("UserID", user.uid)
+
                 startActivity(intent)
             } else if (response == null) {
                 // If the user press back button, exit the app

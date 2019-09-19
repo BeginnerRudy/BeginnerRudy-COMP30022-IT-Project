@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+        <TextView
+            android:id="@+id/familyJoinDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/please_enter_family_id_password"
+            android:textSize="24dp"
+            android:fontFamily="@font/merriweather_regular"></TextView>
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/familyJoinName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/familyJoinDescription"
+            android:layout_marginTop="100dp"
+            android:gravity="center_horizontal">
+
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:id="@+id/edit_text_family_name_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/type_family_name"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/familyJoinPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/familyJoinName"
+            app:passwordToggleEnabled = "true"
+            app:passwordToggleTint="@color/colorAccent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_family_password_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:hint="@string/type_password"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/familyJoinConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/familyJoinPassword"
+            android:layout_marginTop="50dp"
+            android:background="@color/colorAccent"
+            android:text="@string/confirm_join_family"
+            android:textColor="@color/textColorPrimary" />
+    </RelativeLayout>
+</LinearLayout>
