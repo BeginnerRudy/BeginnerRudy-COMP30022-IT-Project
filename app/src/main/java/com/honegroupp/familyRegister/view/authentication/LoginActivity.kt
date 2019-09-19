@@ -30,8 +30,8 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
         // Choose authentication providers
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.PhoneBuilder().build(),
-            AuthUI.IdpConfig.GoogleBuilder().build()
+            AuthUI.IdpConfig.PhoneBuilder().build()
+//            AuthUI.IdpConfig.GoogleBuilder().build()
         )
 
         // Create and launch sign-in intent
@@ -60,13 +60,8 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                 val user = FirebaseAuth.getInstance().currentUser
 
                 // TODO Async task here, for better performance
-                AuthenticationController.storeUser(User(user!!.displayName as String), user!!.uid)
+                AuthenticationController.storeUser(this, User(user!!.displayName as String), user!!.uid)
 
-//                pass user id to next activity
-                val intent = Intent(this, HomeActivity::class.java)
-                intent.putExtra("UserID", user.uid)
-
-                startActivity(intent)
             } else if (response == null) {
                 // If the user press back button, exit the app
                 finishAffinity()
