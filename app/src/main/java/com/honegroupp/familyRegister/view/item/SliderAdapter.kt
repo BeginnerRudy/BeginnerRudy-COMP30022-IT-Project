@@ -9,10 +9,10 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.model.Item
+import com.honegroupp.familyRegister.model.ItemU
 import com.squareup.picasso.Picasso
 
-class SliderAdapter(val items: ArrayList<Item>, val context: Context) : PagerAdapter() {
+class SliderAdapter(val items: ArrayList<ItemU>, val context: Context) : PagerAdapter() {
 
     override fun getCount(): Int {
         return items.size

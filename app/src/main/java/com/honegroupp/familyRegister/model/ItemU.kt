@@ -3,7 +3,7 @@ package com.honegroupp.familyRegister.model
 import com.google.firebase.database.Exclude
 import com.google.firebase.database.PropertyName
 
-class Item(
+class ItemU(
     @set:PropertyName("name")
     @get:PropertyName("name")
     var name: String = "",

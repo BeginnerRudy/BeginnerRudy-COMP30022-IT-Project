@@ -3,7 +3,6 @@ package com.honegroupp.familyRegister.view.item
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
@@ -12,10 +11,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.model.Item
+import com.honegroupp.familyRegister.model.ItemU
 
 class ItemSlide : AppCompatActivity() {
-    var uploads: ArrayList<Item> = ArrayList()
+    var uploads: ArrayList<ItemU> = ArrayList()
     val path = "CeShi" + "/" + "Furniture" + "/"
     val databaseReference = FirebaseDatabase.getInstance().getReference(path)
     lateinit var dbListener: ValueEventListener
@@ -43,7 +42,7 @@ class ItemSlide : AppCompatActivity() {
                 // Retrieve data from database, create an Upload object and store in the list of one ImageAdapter
                 p0.children.forEach {
                     // Retrieve data from database, create an ItemUpload object and store in the list of one ItemListAdapter
-                    val currUpload = it.getValue(Item::class.java) as Item
+                    val currUpload = it.getValue(ItemU::class.java) as ItemU
                     currUpload.key = it.key
                     uploads.add(currUpload)
                 }
