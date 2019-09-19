@@ -21,12 +21,21 @@ data class Category(
         val DEFAULT_COVER = "DEFAULT_COVER"
     }
 
+    /**
+     * This method is responsible for get cover Url for the category.
+     *
+     * */
     fun getCoverURL(): String {
         var url = DEFAULT_COVER
-        if (!itemKeys.isEmpty()) {
+        if (itemKeys.isNotEmpty()) {
             url =
                 "https://firebasestorage.googleapis.com/v0/b/fir-image-uploader-98bb7.appspot.com/o/t%2FFurniture%2Ft?alt=media&token=3d38101c-cd71-4dc2-8889-ca1b96a17dbf"
         }
         return url
     }
+
+    /**
+     * This is the call back for getting the image URl for the last item in the category.
+     *
+     * */
 }
