@@ -12,6 +12,7 @@ import com.honegroupp.familyRegister.R
 
 public class SliderAdapter(context: Context) : PagerAdapter() {
     var context = context
+
     // Arrays
     val slide_images = arrayOf(R.mipmap.code_icon, R.mipmap.eat_icon, R.mipmap.sleep_icon)
 
