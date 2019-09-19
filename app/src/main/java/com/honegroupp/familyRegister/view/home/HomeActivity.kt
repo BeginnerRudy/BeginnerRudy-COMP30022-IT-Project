@@ -46,6 +46,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+
         //get User ID
         var userID: String = intent.getStringExtra("UserID")
 
@@ -65,12 +66,11 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
 
         // Searching Feature
-      
+
+
+        var search = findViewById<SearchView>(R.id.searchView)
         search.setOnClickListener {
-            //            (activity as NavigationHost).navigateTo(RegisterActivity(), false)
-            Toast.makeText(this, "/aaa", Toast.LENGTH_LONG).show()
-            val intent = Intent(this, ItemDetail::class.java)
-            startActivity(intent)
+            //
         }
 
 
