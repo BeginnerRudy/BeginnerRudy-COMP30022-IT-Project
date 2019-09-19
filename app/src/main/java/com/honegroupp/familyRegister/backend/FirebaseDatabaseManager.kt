@@ -5,14 +5,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.honegroupp.familyRegister.model.User
-import com.google.firebase.FirebaseError
-import android.provider.ContactsContract.CommonDataKinds.Email
-import android.view.View
-import android.widget.Toast
 import com.honegroupp.familyRegister.model.Family
-import com.honegroupp.familyRegister.model.Retrievable
-import java.util.*
-import kotlin.reflect.KClass
 import com.google.firebase.database.DataSnapshot
 
 

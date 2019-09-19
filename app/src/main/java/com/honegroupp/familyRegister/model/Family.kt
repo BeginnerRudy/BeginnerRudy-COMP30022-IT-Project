@@ -29,8 +29,11 @@ data class Family(
     var familyId: String = "",
     @set:PropertyName("members")
     @get:PropertyName("members")
-    var members: ArrayList<String> = ArrayList()
-) {
+    var members: ArrayList<String> = ArrayList(),
+    @set:PropertyName("categories")
+    @get:PropertyName("categories")
+    var categories: ArrayList<Category> = ArrayList()
+    ) {
     /*This constructor has no parameter, which is used to create CategoryUpload while retrieve data from database*/
     constructor() : this("", "", "", "", ArrayList())
 
@@ -40,7 +43,10 @@ data class Family(
      *
      * */
     fun store(uid: String) {
-
+        this.categories.add(Category("Letter"))
+        this.categories.add(Category("Photo"))
+        this.categories.add(Category("Instrument"))
+        this.categories.add(Category("Others"))
         FirebaseDatabaseManager.uploadFamily(this)
         val ownerPath = FirebaseDatabaseManager.USER_PATH + uid + "/"
         FirebaseDatabaseManager.retrieve(

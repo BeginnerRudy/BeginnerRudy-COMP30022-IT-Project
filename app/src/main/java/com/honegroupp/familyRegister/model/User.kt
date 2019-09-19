@@ -22,7 +22,7 @@ data class User(
     @set:PropertyName("isFamilyOwner")
     @get:PropertyName("isFamilyOwner")
     var isFamilyOwner: Boolean = false
-    ): Retrievable {
+    ){
 
     /*This constructor has no parameter, which is used to create CategoryUpload while retrieve data from database*/
     constructor() : this("")
