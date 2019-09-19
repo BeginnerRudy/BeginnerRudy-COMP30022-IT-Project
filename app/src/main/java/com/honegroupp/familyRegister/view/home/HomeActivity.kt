@@ -63,6 +63,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         tabLayout = findViewById(R.id.tabs)
         tabLayout.setupWithViewPager(viewPager)
 
+
         // Searching Feature
       
         search.setOnClickListener {
