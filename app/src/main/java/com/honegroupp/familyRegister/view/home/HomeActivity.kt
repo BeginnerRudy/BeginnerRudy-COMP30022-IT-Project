@@ -17,6 +17,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
+import com.honegroupp.familyRegister.view.item.ItemDetail
 import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 import android.widget.TextView
@@ -49,8 +50,8 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         var userID: String = intent.getStringExtra("UserID")
 
         // Configure the toolbar setting
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar.title = "HOME"
+        toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.title = getString(R.string.home_page)
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp)
         setSupportActionBar(toolbar)
 
@@ -64,12 +65,13 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
 
         // Searching Feature
-        val search = findViewById<SearchView>(R.id.searchView)
-        //set search icon to right
-        search.layoutParams = Toolbar.LayoutParams(Gravity.RIGHT)
-        //set search close color to white
-        val searchClose = search.findViewById<ImageView>(R.id.search_close_btn)
-        searchClose.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP)
+      
+        search.setOnClickListener {
+            //            (activity as NavigationHost).navigateTo(RegisterActivity(), false)
+            Toast.makeText(this, "/aaa", Toast.LENGTH_LONG).show()
+            val intent = Intent(this, ItemDetail::class.java)
+            startActivity(intent)
+        }
 
 
         // Press Hamburger key to navigate to navigation drawer
@@ -124,9 +126,9 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(FirstTabFragment(), "ONE")
-        adapter.addFragment(SecondTabFragment(), "TWO")
-        adapter.addFragment(ThirdTabFragment(), "THREE")
+        adapter.addFragment(FirstTabFragment(), getString(R.string.all))
+        adapter.addFragment(SecondTabFragment(), getString(R.string.category))
+        adapter.addFragment(ThirdTabFragment(), getString(R.string.show))
         viewPager.adapter = adapter
     }
 
