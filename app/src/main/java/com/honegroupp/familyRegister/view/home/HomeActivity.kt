@@ -115,6 +115,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
         nav_view.menu.findItem(R.id.nav_testing).setOnMenuItemClickListener {
             val intent = Intent(this, ItemUploadActivity::class.java)
+            intent.putExtra("UserID", userID)
             startActivity(intent)
             toast("Testing")
             true

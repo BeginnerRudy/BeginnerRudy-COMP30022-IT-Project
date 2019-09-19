@@ -32,6 +32,7 @@ class FirebaseDatabaseManager() {
                 }
                 override fun onDataChange(p0: DataSnapshot) {
                     callback(p0)
+                    databaseRef.removeEventListener(this)
                 }
             })
         }
@@ -90,7 +91,8 @@ class FirebaseDatabaseManager() {
         fun uploadItem(item: Item, path: String, lastIndex :Int) {
             val databaseRef = FirebaseDatabase.getInstance().getReference(path)
 
-            databaseRef.child(lastIndex.toString()).setValue(item)
+//            databaseRef.child("item").setValue("")
+            databaseRef.child("items").child(lastIndex.toString()).setValue(item)
         }
 
         /**

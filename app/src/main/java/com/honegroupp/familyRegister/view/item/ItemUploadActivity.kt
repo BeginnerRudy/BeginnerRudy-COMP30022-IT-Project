@@ -12,16 +12,17 @@ import android.net.Uri
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
-
-
-
+import com.honegroupp.familyRegister.controller.ItemController.Companion.createItem
 
 
 class ItemUploadActivity : AppCompatActivity(){
     val GALLERY_REQUEST_CODE = 123
+    var imagePathList = ArrayList<String>()
+    lateinit var uid :String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.item_upload_page)
+        uid = intent.getStringExtra("UserID")
 
         itemChooseImage.setOnClickListener {
             selectImageInAlbum()
@@ -29,6 +30,8 @@ class ItemUploadActivity : AppCompatActivity(){
 
         addItemConfirm.setOnClickListener{
 
+//            need to CHECK empty logic
+            createItem(this,item_name_input,uid,imagePathList)
         }
     }
 
@@ -48,6 +51,9 @@ class ItemUploadActivity : AppCompatActivity(){
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 GALLERY_REQUEST_CODE -> {
+
+
+
                     //data.getData returns the content URI for the selected Image
                     val selectedImage = data!!.data
                     itemImage.setImageURI(selectedImage)
@@ -56,7 +62,10 @@ class ItemUploadActivity : AppCompatActivity(){
                     if (selectedImage != null) {
                         uploadtofirebase(selectedImage)
                     }
-                    var imagePathList = ArrayList<String>()
+
+
+
+
 
 
 //                    adding multiple image
@@ -99,6 +108,17 @@ class ItemUploadActivity : AppCompatActivity(){
         var uploadTask: StorageTask<UploadTask.TaskSnapshot>? = ref.putFile(selectedImage!!)
             .addOnSuccessListener {
                 //add item logic
+
+                ref.downloadUrl.addOnCompleteListener() { taskSnapshot ->
+
+                    var url = taskSnapshot.result
+
+                    this.imagePathList.add(url.toString())
+
+                }
             }
     }
+//    private fun uploadItem(){
+//        createItem(this,item_name_input,uid,imagePathList)
+//    }
 }
