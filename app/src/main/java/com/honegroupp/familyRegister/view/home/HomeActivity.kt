@@ -26,13 +26,8 @@ import com.honegroupp.familyRegister.view.family.FamilyJoinActivity
 import android.view.Gravity
 
 import androidx.appcompat.widget.SearchView
-import android.graphics.PorterDuff
-import android.R.id
-import android.graphics.Color
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.widget.ImageView
+
+
 
 
 @Suppress("DEPRECATION")
@@ -69,6 +64,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
 
         var search = findViewById<SearchView>(R.id.searchView)
+        search.layoutParams = Toolbar.LayoutParams(Gravity.RIGHT)
         search.setOnClickListener {
             //
         }
