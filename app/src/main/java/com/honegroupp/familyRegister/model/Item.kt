@@ -3,7 +3,7 @@ package com.honegroupp.familyRegister.model
 import com.google.firebase.database.Exclude
 import com.google.firebase.database.PropertyName
 
-class ItemU(
+class Item(
     @set:PropertyName("name")
     @get:PropertyName("name")
     var name: String = "",
@@ -13,8 +13,8 @@ class ItemU(
     @set:PropertyName("description")
     @get:PropertyName("description")
     var description: String = ""
-) {
-    /*This constructor has no parameter, which is used to create ItemUpload while retrieve data from database*/
+    ) {
+    /*This constructor has no parameter, which is used to create Itempload while retrieve data from database*/
     @Exclude
     var key: String? = null
     constructor() : this("","","")
