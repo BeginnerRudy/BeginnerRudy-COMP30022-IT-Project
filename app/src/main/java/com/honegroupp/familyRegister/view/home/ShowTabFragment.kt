@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.honegroupp.familyRegister.R
 
 
-class ThirdTabFragment : Fragment() {
+class ShowTabFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

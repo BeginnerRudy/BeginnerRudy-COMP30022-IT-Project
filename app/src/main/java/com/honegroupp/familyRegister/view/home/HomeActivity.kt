@@ -23,16 +23,8 @@ import com.honegroupp.familyRegister.view.authentication.AccountActivity
 import android.widget.TextView
 import com.honegroupp.familyRegister.view.family.FamilyCreateActivity
 import com.honegroupp.familyRegister.view.family.FamilyJoinActivity
-import android.view.Gravity
 
 import androidx.appcompat.widget.SearchView
-import android.graphics.PorterDuff
-import android.R.id
-import android.graphics.Color
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.widget.ImageView
 
 
 @Suppress("DEPRECATION")
@@ -128,9 +120,9 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(FirstTabFragment(), getString(R.string.all))
-        adapter.addFragment(SecondTabFragment(), getString(R.string.category))
-        adapter.addFragment(ThirdTabFragment(), getString(R.string.show))
+        adapter.addFragment(AllTabFragment(), getString(R.string.all))
+        adapter.addFragment(CategoriesTabFragment(), getString(R.string.category))
+        adapter.addFragment(ShowTabFragment(), getString(R.string.show))
         viewPager.adapter = adapter
     }
 
