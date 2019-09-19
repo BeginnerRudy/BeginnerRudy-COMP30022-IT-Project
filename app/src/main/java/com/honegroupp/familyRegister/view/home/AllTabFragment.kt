@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.honegroupp.familyRegister.R
 
 
-class FirstTabFragment : Fragment() {
+class AllTabFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
