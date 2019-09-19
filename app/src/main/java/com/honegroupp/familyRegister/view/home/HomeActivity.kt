@@ -62,6 +62,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         tabLayout = findViewById(R.id.tabs)
         tabLayout.setupWithViewPager(viewPager)
 
+
         // Searching Feature
         val search = findViewById<SearchView>(R.id.searchView)
         //set search icon to right
