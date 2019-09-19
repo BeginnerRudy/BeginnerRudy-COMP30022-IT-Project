@@ -1,12 +1,15 @@
 package com.honegroupp.familyRegister.backend
 
+import android.content.Intent
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.model.Family
 import com.google.firebase.database.DataSnapshot
+import com.honegroupp.familyRegister.view.home.HomeActivity
 
 
 class FirebaseDatabaseManager() {
@@ -38,7 +41,7 @@ class FirebaseDatabaseManager() {
         /**
          * This method is responsible for uploading the given user to  the database when user login.
          * */
-        fun uploadUser(uid: String, user: User) {
+        fun uploadUser(mActivity: AppCompatActivity, uid: String, user: User) {
             // TODO This logic should not be exposed in controller.
             val databaseRef = FirebaseDatabase.getInstance().getReference(USER_PATH)
 
@@ -64,6 +67,12 @@ class FirebaseDatabaseManager() {
                         databaseRef.child(uid).setValue(user)
                     }
 
+
+                    //  pass user id to next activity
+                    val intent = Intent(mActivity, HomeActivity::class.java)
+                    intent.putExtra("UserID", uid)
+
+                    mActivity.startActivity(intent)
                 }
             })
 

@@ -36,6 +36,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
     private lateinit var toolbar: Toolbar
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
+    lateinit var userID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
 
         //get User ID
-        var userID: String = intent.getStringExtra("UserID")
+        userID = intent.getStringExtra("UserID")
 
         // Configure the toolbar setting
         toolbar = findViewById<Toolbar>(R.id.toolbar)
