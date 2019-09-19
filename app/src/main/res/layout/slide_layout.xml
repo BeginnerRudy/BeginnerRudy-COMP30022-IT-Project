@@ -34,5 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/slide_heading"
         android:layout_marginTop="25dp"
-        android:text="Lkcjash, sajhashcj sajdch sakjch, askjch, aschk, ascjhkjhkjhkhcskah csajk cajksh  akjchoeufq feoif asc,c asjhkjhascjkh askjhckash" />
+        android:text="Lkcjash, sajhashcj sajdch sakjch, askjch, aschk, ascjhkjhkjhkhcskah csajk cajksh  akjchoeufq feoif asc,c asjhkjhascjkh askjhckash"
+        android:textColor="@color/colorWhite" />
 </RelativeLayout>

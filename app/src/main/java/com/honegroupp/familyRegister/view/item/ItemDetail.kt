@@ -30,6 +30,8 @@ class ItemDetail : AppCompatActivity() {
     fun click(button: Button){
         button.setOnClickListener {
             Toast.makeText(this, "Click", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, ItemSlide::class.java)
+            startActivity(intent)
         }
 
     }
