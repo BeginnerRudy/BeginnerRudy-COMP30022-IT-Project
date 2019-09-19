@@ -26,8 +26,7 @@ import com.honegroupp.familyRegister.view.family.FamilyJoinActivity
 import android.view.Gravity
 
 import androidx.appcompat.widget.SearchView
-
-
+import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 
 
 @Suppress("DEPRECATION")
@@ -111,6 +110,14 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
             val intent = Intent(this, ItemDetail::class.java)
             startActivity(intent)
             toast("Clicked4")
+            true
+        }
+
+        nav_view.menu.findItem(R.id.nav_testing).setOnMenuItemClickListener {
+            val intent = Intent(this, ItemUploadActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
+            toast("Testing")
             true
         }
 
