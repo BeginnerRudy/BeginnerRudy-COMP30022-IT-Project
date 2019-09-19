@@ -1,5 +1,6 @@
 package com.honegroupp.familyRegister.model
 
+
 import android.content.Intent
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.PropertyName
