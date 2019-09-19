@@ -112,6 +112,8 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         }
 
         nav_view.menu.findItem(R.id.nav_view_family).setOnMenuItemClickListener {
+            val intent = Intent(this, ItemDetail::class.java)
+            startActivity(intent)
             toast("Clicked4")
             true
         }
