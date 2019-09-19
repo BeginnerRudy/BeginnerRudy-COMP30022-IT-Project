@@ -57,7 +57,7 @@
         android:layout_height="100dp"
         android:gravity="center_vertical"
         android:layout_marginLeft="15dp"
-        android:text="@string/change_item_password"
+        android:text="@string/change_location_password"
         android:textSize="20dp"/>
 
     <View

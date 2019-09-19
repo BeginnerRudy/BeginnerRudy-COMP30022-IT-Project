@@ -30,4 +30,7 @@
     <string name="show">Show</string>
     <string name="home_page">Home</string>
     <string name="search">Search</string>
+    <string name="name">Name</string>
+    <string name="change_password">Change Password</string>
+    <string name="change_location_password">Change Item Location Password</string>
 </resources>
