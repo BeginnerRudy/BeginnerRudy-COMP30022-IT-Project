@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.FamilyController
 import kotlinx.android.synthetic.main.create_family_main.*
+
 
 class FamilyCreateActivity : AppCompatActivity() {
 
@@ -42,6 +44,8 @@ class FamilyCreateActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }
 
 

@@ -95,6 +95,59 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787560592478:android:7b33429097faae561a70cf",
+        "android_client_info": {
+          "package_name": "com.honegroupp.FamilyRegister"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "787560592478-s1jsfvhcci3kuf7v3bnb1oruvdrtd4va.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.honegroupp.FamilyRegister",
+            "certificate_hash": "d01601d2eac06d28fbb80c4d99ce46e5e7459b46"
+          }
+        },
+        {
+          "client_id": "787560592478-s3ts73ble22421vkioalq8p8kaampsih.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.honegroupp.FamilyRegister",
+            "certificate_hash": "903381d1001fd252d05cbf0fb9480cef06f145a3"
+          }
+        },
+        {
+          "client_id": "787560592478-9qr99pgfm5msg6r7vmneofekf9l5keqa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.honegroupp.FamilyRegister",
+            "certificate_hash": "b655ade7873bea07910353735442d7ab80841ccd"
+          }
+        },
+        {
+          "client_id": "787560592478-7kmmho1e7o39cj08n2agnedp0so0ibgn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFIzyHPL0RFiuYQ5WN14uoCxYMtc9EGF4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787560592478-7kmmho1e7o39cj08n2agnedp0so0ibgn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

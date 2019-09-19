@@ -37,4 +37,5 @@
     <string name="type_item_name">Please enter item name</string>
     <string name="choose_image">choose an image</string>
     <string name="add_item">add item</string>
+    <string name="type_item_description">Please enter item description</string>
 </resources>
