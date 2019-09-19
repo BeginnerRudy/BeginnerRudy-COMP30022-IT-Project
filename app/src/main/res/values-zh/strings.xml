@@ -36,4 +36,6 @@
     <string name="change_location_password">修改查看物品存放地点的密码</string>
     <string name="account_capital">账户信息</string>
     <string name="type_item_name">请输入物品名称</string>
+    <string name="choose_image">choose an image</string>
+    <string name="add_item">add item</string>
 </resources>

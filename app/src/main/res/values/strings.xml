@@ -35,4 +35,6 @@
     <string name="change_location_password">Change Item Location Password</string>
     <string name="account_capital">ACCOUNT</string>
     <string name="type_item_name">Please enter item name</string>
+    <string name="choose_image">choose an image</string>
+    <string name="add_item">add item</string>
 </resources>

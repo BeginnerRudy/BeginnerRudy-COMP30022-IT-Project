@@ -9,29 +9,52 @@
         android:layout_height="wrap_content"
         android:padding="15dp">
 
+        <Button
+            android:id="@+id/itemChooseImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="@string/choose_image"
+            android:textColor="@color/textColorPrimary"
+            android:background="@color/colorAccent"/>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/itemName"
+            android:layout_below="@id/itemChooseImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_text_family_password_input"
+                android:id="@+id/item_name_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
                 android:hint="@string/type_item_name"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/itemDescription"
+            android:layout_below="@id/itemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/item_description_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/type_item_name"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
 
         <Button
             android:id="@+id/addItemConfirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/itemName"
-            android:layout_marginTop="50dp"
+            android:layout_below="@id/itemDescription"
             android:background="@color/colorAccent"
-            android:text="@string/confirm_join_family"
+            android:text="@string/add_item"
             android:textColor="@color/textColorPrimary" />
     </RelativeLayout>
 </LinearLayout>
