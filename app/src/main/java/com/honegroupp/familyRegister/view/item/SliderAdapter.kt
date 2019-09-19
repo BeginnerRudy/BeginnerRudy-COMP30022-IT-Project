@@ -1,6 +1,7 @@
 package com.honegroupp.familyRegister.view.item
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.*
 import androidx.viewpager.widget.PagerAdapter
@@ -40,8 +41,12 @@ class SliderAdapter(val items: ArrayList<Item>, val context: Context) : PagerAda
         slideHeaing.setText(currUpload.name)
         slideDescription.setText(currUpload.description)
 
-        container.addView(view)
+        view.findViewById<TextView>(R.id.slide_desc).setOnClickListener{
+            val intent = Intent(context, ItemEdit::class.java)
+            context.startActivity(intent)
+        }
 
+        container.addView(view)
         return view
     }
 
