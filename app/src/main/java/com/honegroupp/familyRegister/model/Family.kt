@@ -33,10 +33,9 @@ data class Family(
     @set:PropertyName("categories")
     @get:PropertyName("categories")
     var categories: ArrayList<Category> = ArrayList()
-    ) {
+) {
     /*This constructor has no parameter, which is used to create CategoryUpload while retrieve data from database*/
     constructor() : this("", "", "", "", ArrayList())
-
 
     /**
      * This method is responsible for storing Family to the database.

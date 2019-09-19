@@ -26,8 +26,7 @@ import com.honegroupp.familyRegister.view.family.FamilyJoinActivity
 import android.view.Gravity
 
 import androidx.appcompat.widget.SearchView
-
-
+import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 
 
 @Suppress("DEPRECATION")
@@ -36,6 +35,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
     private lateinit var toolbar: Toolbar
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
+    lateinit var userID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +43,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
 
         //get User ID
-        var userID: String = intent.getStringExtra("UserID")
+        userID = intent.getStringExtra("UserID")
 
         // Configure the toolbar setting
         toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -111,6 +111,14 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
             val intent = Intent(this, ItemDetail::class.java)
             startActivity(intent)
             toast("Clicked4")
+            true
+        }
+
+        nav_view.menu.findItem(R.id.nav_testing).setOnMenuItemClickListener {
+            val intent = Intent(this, ItemUploadActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
+            toast("Testing")
             true
         }
 

@@ -19,13 +19,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".view.home.HomeActivity" />
         <activity android:name=".view.item.ItemDetail" />
         <activity android:name=".view.item.ItemSlide" />
         <activity android:name=".view.item.ItemEdit" />
         <activity android:name=".view.family.FamilyCreateActivity"/>
         <activity android:name=".view.family.FamilyJoinActivity"/>
+        <activity android:name=".view.item.ItemUploadActivity"/>
     </application>
 
 

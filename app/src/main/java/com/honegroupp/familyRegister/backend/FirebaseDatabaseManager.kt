@@ -1,12 +1,16 @@
 package com.honegroupp.familyRegister.backend
 
+import android.content.Intent
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.model.Family
 import com.google.firebase.database.DataSnapshot
+import com.honegroupp.familyRegister.view.home.HomeActivity
+import com.honegroupp.familyRegister.model.Item
 
 
 class FirebaseDatabaseManager() {
@@ -31,6 +35,7 @@ class FirebaseDatabaseManager() {
                 }
                 override fun onDataChange(p0: DataSnapshot) {
                     callback(p0)
+                    databaseRef.removeEventListener(this)
                 }
             })
         }
@@ -38,7 +43,7 @@ class FirebaseDatabaseManager() {
         /**
          * This method is responsible for uploading the given user to  the database when user login.
          * */
-        fun uploadUser(uid: String, user: User) {
+        fun uploadUser(mActivity: AppCompatActivity, uid: String, user: User) {
             // TODO This logic should not be exposed in controller.
             val databaseRef = FirebaseDatabase.getInstance().getReference(USER_PATH)
 
@@ -64,6 +69,12 @@ class FirebaseDatabaseManager() {
                         databaseRef.child(uid).setValue(user)
                     }
 
+
+                    //  pass user id to next activity
+                    val intent = Intent(mActivity, HomeActivity::class.java)
+                    intent.putExtra("UserID", uid)
+
+                    mActivity.startActivity(intent)
                 }
             })
 
@@ -77,9 +88,20 @@ class FirebaseDatabaseManager() {
             val databaseRef = FirebaseDatabase.getInstance().getReference(FAMILY_PATH)
             val uploadKey = databaseRef.push().key.toString()
 
+
             family.familyId = uploadKey
 
             databaseRef.child(uploadKey).setValue(family)
+        }
+
+        /**
+         * This method is responsible for uploading given item to specified path of the database.
+         * */
+        fun uploadItem(item: Item, path: String, lastIndex :Int) {
+            val databaseRef = FirebaseDatabase.getInstance().getReference(path)
+
+//            databaseRef.child("item").setValue("")
+            databaseRef.child("items").child(lastIndex.toString()).setValue(item)
         }
 
         /**

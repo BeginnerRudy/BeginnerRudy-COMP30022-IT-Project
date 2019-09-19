@@ -105,6 +105,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "787560592478-s1jsfvhcci3kuf7v3bnb1oruvdrtd4va.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.honegroupp.FamilyRegister",
+            "certificate_hash": "d01601d2eac06d28fbb80c4d99ce46e5e7459b46"
+          }
+        },
+        {
           "client_id": "787560592478-s3ts73ble22421vkioalq8p8kaampsih.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
