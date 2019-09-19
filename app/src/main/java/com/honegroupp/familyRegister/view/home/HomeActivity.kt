@@ -17,6 +17,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
+import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 import android.widget.TextView
 import com.honegroupp.familyRegister.view.family.FamilyCreateActivity
@@ -83,7 +84,9 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
         // Interaction with menuitems contained in the navigation drawer
         nav_view.menu.findItem(R.id.nav_account).setOnMenuItemClickListener {
-            toast("Clicked1")
+            val intent = Intent(this, AccountActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
             true
         }
         nav_view.menu.findItem(R.id.nav_create_family).setOnMenuItemClickListener {
