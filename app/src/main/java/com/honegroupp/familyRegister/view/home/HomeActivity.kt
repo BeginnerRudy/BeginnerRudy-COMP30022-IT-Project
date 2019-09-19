@@ -50,8 +50,8 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         var userID: String = intent.getStringExtra("UserID")
 
         // Configure the toolbar setting
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar.title = "HOME"
+        toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.title = getString(R.string.home_page)
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp)
         setSupportActionBar(toolbar)
 
@@ -125,9 +125,9 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(FirstTabFragment(), "ONE")
-        adapter.addFragment(SecondTabFragment(), "TWO")
-        adapter.addFragment(ThirdTabFragment(), "THREE")
+        adapter.addFragment(FirstTabFragment(), getString(R.string.all))
+        adapter.addFragment(SecondTabFragment(), getString(R.string.category))
+        adapter.addFragment(ThirdTabFragment(), getString(R.string.show))
         viewPager.adapter = adapter
     }
 

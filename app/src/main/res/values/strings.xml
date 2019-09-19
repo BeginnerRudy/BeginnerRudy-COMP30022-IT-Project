@@ -25,8 +25,9 @@
     <string name="create">Create</string>
     <string name="please_enter_family_id_password">Please enter family account number and password to join your family</string>
     <string name="confirm_join_family">Confirm to join family</string>
-
-    <string name="name">Name</string>
-    <string name="change_password">Change Password</string>
-    <string name="change_item_password">Change Item Location Password</string>
+    <string name="all">All</string>
+    <string name="category">Category</string>
+    <string name="show">Show</string>
+    <string name="home_page">Home</string>
+    <string name="search">Search</string>
 </resources>
