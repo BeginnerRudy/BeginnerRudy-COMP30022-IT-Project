@@ -20,6 +20,10 @@
             android:id="@+id/nav_view_family"
             android:icon="@drawable/ic_menu_view_family_24dp"
             android:title="@string/view_family" />
+        <item
+            android:id="@+id/nav_view_family"
+            android:icon="@drawable/ic_menu_view_family_24dp"
+            android:title="@string/view_family" />
     </group>
 
 </menu>
