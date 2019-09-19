@@ -14,6 +14,9 @@ import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 
 
+
+
+
 class ItemUploadActivity : AppCompatActivity(){
     val GALLERY_REQUEST_CODE = 123
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +34,10 @@ class ItemUploadActivity : AppCompatActivity(){
 
     //use the phone API to get thr image from the album
     private fun selectImageInAlbum() {
+
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
@@ -51,6 +56,36 @@ class ItemUploadActivity : AppCompatActivity(){
                     if (selectedImage != null) {
                         uploadtofirebase(selectedImage)
                     }
+                    var imagePathList = ArrayList<String>()
+
+
+//                    adding multiple image
+//                    if (data != null) {
+//                        if (data.getClipData() != null) {
+//
+//                            val count = data.getClipData()!!.getItemCount()
+//
+//                            Toast.makeText(this,count.toString(),Toast.LENGTH_LONG).show()
+//                            for (i in 0 until count) {
+//
+//                                val imageUri = data.getClipData()!!.getItemAt(i).uri
+//                                    if (imageUri != null) {
+//                                    uploadtofirebase(imageUri)
+//                                }
+//                            }
+//                        } else if (data.getData() != null) {
+//
+//                            val imgUri = data.getData()
+//                            if (imgUri != null) {
+//                                uploadtofirebase(imgUri)
+//                            }
+//                        }
+//                    }
+
+
+
+
+
                 }
             }
         }
