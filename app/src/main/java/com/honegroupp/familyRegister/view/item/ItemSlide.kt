@@ -27,15 +27,7 @@ class ItemSlide : AppCompatActivity() {
         var mSlideViewPager = findViewById<ViewPager>(R.id.slideViewPager)
         var mDotLayout = findViewById<LinearLayout>(R.id.dotsLayout)
 
-        val slide_images = arrayOf(R.mipmap.code_icon, R.mipmap.eat_icon, R.mipmap.sleep_icon)
-        val slide_headings = arrayOf("EAT", "SLEEP", "CODE")
-        val slide_descs = arrayOf(
-            "Lkcjash, sajhashcj sajdch sakjch, askjch, aschk, ascjhkjhkjhkhcskah csajk cajksh  akjchoeufq feoif asc,c asjhkjhascjkh askjhckash" + "aliqua",
-            "Lkcjash, sajhashcj sajdch sakjch, askjch, aschk, ascjhkjhkjhkhcskah csajk cajksh  akjchoeufq feoif asc,c asjhkjhascjkh askjhckash" + "aliqua",
-            "Lkcjash, sajhashcj sajdch sakjch, askjch, aschk, ascjhkjhkjhkhcskah csajk cajksh  akjchoeufq feoif asc,c asjhkjhascjkh askjhckash" + "aliqua"
-        )
-
-        var sliderAdapter = SliderAdapter(uploads,this, slide_images, slide_headings, slide_descs)
+        var sliderAdapter = SliderAdapter(uploads,this)
         mSlideViewPager.adapter = sliderAdapter
 
         dbListener = databaseReference.addValueEventListener(object : ValueEventListener {

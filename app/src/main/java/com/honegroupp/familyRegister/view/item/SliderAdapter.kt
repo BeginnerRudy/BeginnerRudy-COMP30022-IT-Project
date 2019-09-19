@@ -2,10 +2,8 @@ package com.honegroupp.familyRegister.view.item
 
 import android.content.Context
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.viewpager.widget.PagerAdapter
-import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -13,7 +11,7 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 
-public class SliderAdapter(val items: ArrayList<Item>, val context: Context, val slide_images: Array<Int>, val slide_headings: Array<String>, val slide_descs: Array<String>) : PagerAdapter() {
+class SliderAdapter(val items: ArrayList<Item>, val context: Context) : PagerAdapter() {
 
     override fun getCount(): Int {
         return items.size
@@ -46,6 +44,14 @@ public class SliderAdapter(val items: ArrayList<Item>, val context: Context, val
 
         return view
     }
+
+    inner class ImageViewHolder(val viewItem: View) : View.OnClickListener {
+        override fun onClick(p0: View?) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+    }
+
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         container.removeView(`object` as RelativeLayout)
