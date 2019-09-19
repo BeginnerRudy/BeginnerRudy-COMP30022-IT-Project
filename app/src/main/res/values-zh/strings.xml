@@ -34,4 +34,5 @@
     <string name="name">名称</string>
     <string name="change_password">修改密码</string>
     <string name="change_location_password">修改查看物品存放地点的密码</string>
+    <string name="account_capital">账户信息</string>
 </resources>

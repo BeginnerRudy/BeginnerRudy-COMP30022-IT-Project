@@ -33,4 +33,5 @@
     <string name="name">Name</string>
     <string name="change_password">Change Password</string>
     <string name="change_location_password">Change Item Location Password</string>
+    <string name="account_capital">ACCOUNT</string>
 </resources>
