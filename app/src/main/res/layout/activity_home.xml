@@ -77,7 +77,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/log_out"
-                android:background="@color/fui_bgEmail"/>
+                android:backgroundTint = "@color/fui_bgEmail"/>
         </LinearLayout>
 
     </RelativeLayout>
