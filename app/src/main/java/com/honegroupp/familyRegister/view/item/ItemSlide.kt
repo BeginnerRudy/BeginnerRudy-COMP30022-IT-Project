@@ -7,6 +7,7 @@ import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
@@ -34,23 +35,25 @@ class ItemSlide : AppCompatActivity() {
         var sliderAdapter = SliderAdapter(uploads,this)
         mSlideViewPager.adapter = sliderAdapter
 
-        mSlideViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                invalidateOptionsMenu()
-            }
 
-            override fun onPageSelected(position: Int) {
 
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {
-
-            }
-        })
+//        mSlideViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+//            override fun onPageScrolled(
+//                position: Int,
+//                positionOffset: Float,
+//                positionOffsetPixels: Int
+//            ) {
+//                invalidateOptionsMenu()
+//            }
+//
+//            override fun onPageSelected(position: Int) {
+//
+//            }
+//
+//            override fun onPageScrollStateChanged(state: Int) {
+//
+//            }
+//        })
 
         dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -76,21 +79,24 @@ class ItemSlide : AppCompatActivity() {
             }
 
         })
+
+        registerForContextMenu(mSlideViewPager)
     }
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.item_detail_menu, menu)
-//        if (mSlideViewPager.getCurrentItem() === 0) {
-//            menu.findItem(R.id.action_search).isVisible = true
-//        } else if (mSlideViewPager.getCurrentItem() === 1) {
-//            menu.findItem(R.id.action_search).isVisible = false
-//        } else if (mSlideViewPager.getCurrentItem() === 2) {
-//            // configure
-//        } else if (mSlideViewPager.getCurrentItem() === 3) {
-//            // configure
-//        }
-        return super.onCreateOptionsMenu(menu)
-    }
+
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        menuInflater.inflate(R.menu.item_detail_menu, menu)
+////        if (mSlideViewPager.getCurrentItem() === 0) {
+////            menu.findItem(R.id.action_search).isVisible = true
+////        } else if (mSlideViewPager.getCurrentItem() === 1) {
+////            menu.findItem(R.id.action_search).isVisible = false
+////        } else if (mSlideViewPager.getCurrentItem() === 2) {
+////            // configure
+////        } else if (mSlideViewPager.getCurrentItem() === 3) {
+////            // configure
+////        }
+//        return super.onCreateOptionsMenu(menu)
+//    }
 
     override fun onCreateContextMenu(
         menu: ContextMenu?,
