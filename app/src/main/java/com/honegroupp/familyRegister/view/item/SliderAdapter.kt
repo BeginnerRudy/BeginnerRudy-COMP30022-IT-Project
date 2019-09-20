@@ -8,11 +8,19 @@ import androidx.viewpager.widget.PagerAdapter
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.viewpager.widget.ViewPager
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.ItemU
 import com.squareup.picasso.Picasso
 
 class SliderAdapter(val items: ArrayList<ItemU>, val context: Context) : PagerAdapter() {
+    var listener: SliderAdapter.OnItemClickerListener? = null
+
+    interface OnItemClickerListener {
+        fun onItemClick(position: Int)
+        fun onDownloadClick(position: Int,item:ArrayList<ItemU>)
+        fun onDeleteClick(position: Int)
+    }
 
     override fun getCount(): Int {
         return items.size
@@ -48,11 +56,28 @@ class SliderAdapter(val items: ArrayList<ItemU>, val context: Context) : PagerAd
             context.startActivity(intent)
         }
 
+        view.findViewById<ImageView>(R.id.slide_image).setOnClickListener{
+            Log.d("dowloding",position.toString())
+            listener!!.onDownloadClick(position, items)
+        }
         container.addView(view)
         return view
     }
 
-    inner class ImageViewHolder(val viewItem: View) : View.OnClickListener {
+    inner class ImageViewHolder(val viewItem: View) : View.OnClickListener,
+        View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
+        override fun onMenuItemClick(p0: MenuItem?): Boolean {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun onCreateContextMenu(
+            p0: ContextMenu?,
+            p1: View?,
+            p2: ContextMenu.ContextMenuInfo?
+        ) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
         override fun onClick(p0: View?) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
