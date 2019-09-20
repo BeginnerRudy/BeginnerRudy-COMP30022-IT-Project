@@ -3,6 +3,10 @@ package com.honegroupp.familyRegister.view.item
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextMenu
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
@@ -14,6 +18,7 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.ItemU
 
 class ItemSlide : AppCompatActivity() {
+
     var uploads: ArrayList<ItemU> = ArrayList()
     val path = "CeShi" + "/" + "Furniture" + "/"
     val databaseReference = FirebaseDatabase.getInstance().getReference(path)
@@ -28,6 +33,24 @@ class ItemSlide : AppCompatActivity() {
 
         var sliderAdapter = SliderAdapter(uploads,this)
         mSlideViewPager.adapter = sliderAdapter
+
+        mSlideViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                invalidateOptionsMenu()
+            }
+
+            override fun onPageSelected(position: Int) {
+
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+        })
 
         dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -53,6 +76,44 @@ class ItemSlide : AppCompatActivity() {
             }
 
         })
+    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.item_detail_menu, menu)
+//        if (mSlideViewPager.getCurrentItem() === 0) {
+//            menu.findItem(R.id.action_search).isVisible = true
+//        } else if (mSlideViewPager.getCurrentItem() === 1) {
+//            menu.findItem(R.id.action_search).isVisible = false
+//        } else if (mSlideViewPager.getCurrentItem() === 2) {
+//            // configure
+//        } else if (mSlideViewPager.getCurrentItem() === 3) {
+//            // configure
+//        }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menu!!.setHeaderTitle("Choose your option");
+        getMenuInflater().inflate(R.menu.item_detail_menu, menu);
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.option_1 -> {
+                Toast.makeText(this, "Option 1 selected", Toast.LENGTH_SHORT).show()
+                return true
+            }
+            R.id.option_2 -> {
+                Toast.makeText(this, "Option 2 selected", Toast.LENGTH_SHORT).show()
+                return true
+            }
+            else -> return super.onContextItemSelected(item)
+        }
     }
 
     override fun onDestroy() {

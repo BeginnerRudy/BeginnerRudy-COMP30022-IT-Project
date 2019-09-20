@@ -22,6 +22,7 @@ class SliderAdapter(val items: ArrayList<ItemU>, val context: Context) : PagerAd
         return view == `object`
     }
 
+
     override fun instantiateItem(container: ViewGroup, position: Int): View {
         var layoutInflater:LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_layout, container, false)
@@ -31,6 +32,7 @@ class SliderAdapter(val items: ArrayList<ItemU>, val context: Context) : PagerAd
         var slideDescription = view.findViewById<TextView>(R.id.slide_desc)
 
         val currUpload = items[position]
+
 
         // Load image to ImageView via its URL from Firebase Storage
         Picasso.get()
