@@ -7,12 +7,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.os.StrictMode
 import android.provider.MediaStore
 import android.util.Log
 import android.view.ContextMenu
@@ -53,6 +56,8 @@ class ItemSlide() : AppCompatActivity(), SliderAdapter.OnItemClickerListener {
     lateinit var dbListener: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
         super.onCreate(savedInstanceState)
         setContentView(R.layout.item_slide)
 
@@ -178,32 +183,64 @@ class ItemSlide() : AppCompatActivity(), SliderAdapter.OnItemClickerListener {
 //        }
 //    }
 
-    override fun onShareClick(position: Int,item:ArrayList<ItemU>) {
+    override fun onShareClick(position: Int,item:ArrayList<ItemU>, imageView: ImageView) {
         this.downloadurl = item[position].url
-
-        var imageUri= Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), getBitmapFromURL(downloadurl), "title", "discription"));
-        var shareIntent = Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-        shareIntent.setType("image/*");
-        startActivity(Intent.createChooser(shareIntent, "sendto"));
-
-    }
-
-    fun  getBitmapFromURL(src: String ) : Bitmap? {
+        var bitmap = getBitmapFromView(imageView);
         try {
-            var url = URL(src);
-            var connection = url.openConnection() as HttpURLConnection;
-            connection.setDoInput(true);
-            connection.connect();
-            var input = connection.getInputStream();
-            var myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (e :IOException ) {
+            var file = File(this.getExternalCacheDir(),"logicchip.png");
+            var fOut = FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+            file.setReadable(true, false);
+            var intent = Intent(android.content.Intent.ACTION_SEND);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Intent.EXTRA_TEXT, "name");
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            intent.setType("image/png");
+            startActivity(Intent.createChooser(intent, "Share image via"));
+            Log.d("sharingactivity",position.toString())
+        } catch (e: Exception ) {
             e.printStackTrace();
-            return null;
+        }
     }
-}
+
+    fun getBitmapFromView(view: View ): Bitmap {
+        var returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
+        var canvas = Canvas(returnedBitmap);
+        var bgDrawable = view.getBackground();
+        if (bgDrawable!=null) {
+            bgDrawable.draw(canvas);
+        }   else{
+            canvas.drawColor(Color.WHITE);
+        }
+        view.draw(canvas);
+        return returnedBitmap;
+    }
+
+//        var imageUri= Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), getBitmapFromURL(downloadurl), "title", "discription"));
+//        var shareIntent = Intent();
+//        shareIntent.setAction(Intent.ACTION_SEND);
+//        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+//        shareIntent.setType("image/*");
+//        startActivity(Intent.createChooser(shareIntent, "sendto"));
+
+//    }
+
+//    fun  getBitmapFromURL(src: String ) : Bitmap? {
+//        try {
+//            var url = URL(src);
+//            var connection = url.openConnection() as HttpURLConnection;
+//            connection.setDoInput(true);
+//            connection.connect();
+//            var input = connection.getInputStream();
+//            var myBitmap = BitmapFactory.decodeStream(input);
+//            return myBitmap;
+//        } catch (e :IOException ) {
+//            e.printStackTrace();
+//            return null;
+//    }
+//}
 
 //        var shareIntent = Intent(Intent.ACTION_SEND);
 //        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
