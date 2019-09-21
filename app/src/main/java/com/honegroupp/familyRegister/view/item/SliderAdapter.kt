@@ -63,7 +63,7 @@ class SliderAdapter(val items: ArrayList<ItemU>, val context: Context) : PagerAd
 
         view.findViewById<TextView>(R.id.slide_heading).setOnClickListener{
             Log.d("sharing",position.toString())
-            listener!!.onShareClick(position, items, slideImageView)
+            listener!!.onShareClick(position, items)
         }
         container.addView(view)
         return view

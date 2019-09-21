@@ -178,16 +178,32 @@ class ItemSlide() : AppCompatActivity(), SliderAdapter.OnItemClickerListener {
 //        }
 //    }
 
-    override fun onShareClick(position: Int,item:ArrayList<ItemU>, content: ImageView) {
+    override fun onShareClick(position: Int,item:ArrayList<ItemU>) {
         this.downloadurl = item[position].url
 
-        content.setDrawingCacheEnabled(true);
-        var imageUri= Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), content, "title", "discription"));
-        Intent shareIntent = new Intent();
+        var imageUri= Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), getBitmapFromURL(downloadurl), "title", "discription"));
+        var shareIntent = Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
         shareIntent.setType("image/*");
-        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string
+        startActivity(Intent.createChooser(shareIntent, "sendto"));
+
+    }
+
+    fun  getBitmapFromURL(src: String ) : Bitmap? {
+        try {
+            var url = URL(src);
+            var connection = url.openConnection() as HttpURLConnection;
+            connection.setDoInput(true);
+            connection.connect();
+            var input = connection.getInputStream();
+            var myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (e :IOException ) {
+            e.printStackTrace();
+            return null;
+    }
+}
 
 //        var shareIntent = Intent(Intent.ACTION_SEND);
 //        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -211,38 +227,22 @@ class ItemSlide() : AppCompatActivity(), SliderAdapter.OnItemClickerListener {
 //        sharingIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
 //        startActivity(sharingIntent);
 
-//        val value = object : com.squareup.picasso.Target {
-//            override fun onBitmapFailed(e: java.lang.Exception?, errorDrawable: Drawable?) {
-//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//            }
 //
-//            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//            }
-//
-//            override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
-//                var i = Intent(Intent.ACTION_SEND);
-//                i.setType("image/*");
-//                i.putExtra(Intent.EXTRA_STREAM, getLocalBitmapUri(bitmap));
-//                startActivity(Intent.createChooser(i, "Share Image"));
-//            }
-//        }
-//        Picasso.get().load(downloadurl).into(value)
-    }
+//    }
 
-    fun getLocalBitmapUri(bmp: Bitmap ): Uri? {
-        lateinit var bmpUri: Uri
-        try {
-            var file =  File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
-            var out = FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.close();
-            bmpUri = Uri.fromFile(file);
-        } catch (e : IOException ) {
-            e.printStackTrace();
-        }
-        return bmpUri;
-    }
+//    fun getLocalBitmapUri(bmp: Bitmap ): Uri? {
+//        lateinit var bmpUri: Uri
+//        try {
+//            var file =  File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+//            var out = FileOutputStream(file);
+//            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+//            out.close();
+//            bmpUri = Uri.fromFile(file);
+//        } catch (e : IOException ) {
+//            e.printStackTrace();
+//        }
+//        return bmpUri;
+//    }
 
 //    fun getLocalBitmapUri(bmp: Bitmap , context: Context ): Uri? {
 //        try {
