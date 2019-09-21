@@ -19,7 +19,7 @@ class SliderAdapter(val items: ArrayList<ItemU>, val context: Context) : PagerAd
     interface OnItemClickerListener {
         fun onItemClick(position: Int)
         fun onDownloadClick(position: Int,item:ArrayList<ItemU>)
-        fun onDeleteClick(position: Int)
+        fun onShareClick(position: Int,item:ArrayList<ItemU>)
     }
 
     override fun getCount(): Int {
@@ -59,6 +59,11 @@ class SliderAdapter(val items: ArrayList<ItemU>, val context: Context) : PagerAd
         view.findViewById<ImageView>(R.id.slide_image).setOnClickListener{
             Log.d("dowloding",position.toString())
             listener!!.onDownloadClick(position, items)
+        }
+
+        view.findViewById<TextView>(R.id.slide_heading).setOnClickListener{
+            Log.d("sharing",position.toString())
+            listener!!.onShareClick(position, items, slideImageView)
         }
         container.addView(view)
         return view

@@ -3,12 +3,17 @@ package com.honegroupp.familyRegister.view.item
 import android.Manifest
 import android.app.DownloadManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.ContextMenu
 import android.view.Menu
@@ -23,10 +28,19 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.internal.Util
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.ItemU
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_slide.view.*
 import kotlinx.android.synthetic.main.slide_layout.view.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.lang.System.out
+import java.net.HttpURLConnection
+import java.net.URL
 
 class ItemSlide() : AppCompatActivity(), SliderAdapter.OnItemClickerListener {
     private val STORAGE_PERMISSION_CODE: Int = 1000
@@ -136,9 +150,112 @@ class ItemSlide() : AppCompatActivity(), SliderAdapter.OnItemClickerListener {
 //        }
 //    }
 
-    override fun onDeleteClick(position: Int) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-}
+//    override fun onShareClick(position: Int,item:ArrayList<ItemU>) {
+////        this.downloadurl = item[position].url
+//        var loadedImage = getBitmapFromURL(item[position].url)
+//        var intent = Intent(Intent.ACTION_SEND);
+//        intent.putExtra(Intent.EXTRA_TEXT, "Hey view/download this image");
+//        var path = MediaStore.Images.Media.insertImage(getContentResolver(), loadedImage, "", null);
+//        var screenshotUri = Uri.parse(path);
+//
+//        intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+//        intent.setType("image/*");
+//        startActivity(Intent.createChooser(intent, "Share image via..."));
+//    }
+//
+//    fun getBitmapFromURL (src: String) : Bitmap? {
+//        try {
+//            var url = URL(src);
+//            var connection = url.openConnection();
+//            connection.setDoInput(true);
+//            connection.connect();
+//            var input = connection.getInputStream();
+//            var myBitmap = BitmapFactory.decodeStream(input);
+//            return myBitmap;
+//        } catch (e: IOException) {
+//            // Log exception
+//            return null;
+//        }
+//    }
+
+    override fun onShareClick(position: Int,item:ArrayList<ItemU>, content: ImageView) {
+        this.downloadurl = item[position].url
+
+        content.setDrawingCacheEnabled(true);
+        var imageUri= Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), content, "title", "discription"));
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        shareIntent.setType("image/*");
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string
+
+//        var shareIntent = Intent(Intent.ACTION_SEND);
+//        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+//        shareIntent.setType("image/*");
+//
+//// For a file in shared storage.  For data in private storage, use a ContentProvider.
+//        var uri = Uri.fromFile(getFileStreamPath(downloadurl));
+//        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+//        startActivity(shareIntent)
+
+//        val shareIntent = Intent()
+//        shareIntent.action = Intent.ACTION_SEND
+//        shareIntent.type = "image/jpeg"
+//        var imageUri = Uri.parse(downloadurl)
+//        shareIntent.putExtra(Intent.EXTRA_STREAM,imageUri)
+//        startActivity(Intent.createChooser(shareIntent, ""))
+
+//        var sharingIntent = Intent(Intent.ACTION_SEND);
+//        var imageUri = Uri.parse("http://stacktoheap.com/images/stackoverflow.png");
+//        sharingIntent.setType("image/png");
+//        sharingIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+//        startActivity(sharingIntent);
+
+//        val value = object : com.squareup.picasso.Target {
+//            override fun onBitmapFailed(e: java.lang.Exception?, errorDrawable: Drawable?) {
+//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//            }
+//
+//            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//            }
+//
+//            override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
+//                var i = Intent(Intent.ACTION_SEND);
+//                i.setType("image/*");
+//                i.putExtra(Intent.EXTRA_STREAM, getLocalBitmapUri(bitmap));
+//                startActivity(Intent.createChooser(i, "Share Image"));
+//            }
+//        }
+//        Picasso.get().load(downloadurl).into(value)
+    }
+
+    fun getLocalBitmapUri(bmp: Bitmap ): Uri? {
+        lateinit var bmpUri: Uri
+        try {
+            var file =  File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+            var out = FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+            bmpUri = Uri.fromFile(file);
+        } catch (e : IOException ) {
+            e.printStackTrace();
+        }
+        return bmpUri;
+    }
+
+//    fun getLocalBitmapUri(bmp: Bitmap , context: Context ): Uri? {
+//        try {
+//            var file =  File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+//            var out = FileOutputStream(file);
+//            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+//            out.close();
+//            var bmpUri = Uri.fromFile(file) as Uri;
+//        } catch (e: IOException) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     override fun onDownloadClick(position: Int, item: ArrayList<ItemU>) {
         this.downloadurl = item[position].url
