@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btn_create_family"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/create_family"
+        app:srcCompat="@mipmap/code_icon" />
+
+    <Button
+
+        android:layout_marginTop="32dp"
+        android:id="@+id/btn_join_family"
+        android:layout_width="match_parent"
+        android:text="@string/join_family"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/eat_icon" />
+</LinearLayout>

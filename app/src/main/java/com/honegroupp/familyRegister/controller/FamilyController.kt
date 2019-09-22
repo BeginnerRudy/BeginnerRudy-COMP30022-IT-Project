@@ -1,6 +1,8 @@
 package com.honegroupp.familyRegister.controller
 
 import android.content.Context
+import android.content.Intent
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +11,8 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.Family
 import com.honegroupp.familyRegister.model.User
+import com.honegroupp.familyRegister.view.home.HomeActivity
+import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 
 
 /**
@@ -75,7 +79,7 @@ class FamilyController {
          *
          * */
         fun createFamily(
-            mContext: AppCompatActivity,
+            mActivity: Context,
             familyId: EditText,
             password: EditText,
             uid: String
@@ -84,9 +88,12 @@ class FamilyController {
             family.members.add(uid)
             family.store(uid)
 
-            Toast.makeText(mContext, "Family Created Successfully", Toast.LENGTH_SHORT).show()
-            // Go back to the previous activity
-            mContext.finish()
+            Toast.makeText(mActivity, "Family Created Successfully", Toast.LENGTH_SHORT).show()
+
+            // Go to Home page
+            val intent = Intent(mActivity, HomeActivity::class.java)
+            intent.putExtra("UserID", uid)
+            mActivity.startActivity(intent)
         }
 
 
@@ -95,7 +102,7 @@ class FamilyController {
          * TODO This method might not be in controller.
          * */
         fun validateJoinFamilyInput(
-            mContext: AppCompatActivity,
+            mActivity: AppCompatActivity,
             familyId: EditText,
             password: EditText,
             uid: String
@@ -108,16 +115,18 @@ class FamilyController {
                 FirebaseDatabaseManager.FAMILY_PATH
             ) { d: DataSnapshot ->
                 callbackJoinFamily(
+                    mActivity,
                     uid,
                     familyIdInput,
                     familyPasswordInput,
-                    mContext,
+                    mActivity,
                     d
                 )
             }
         }
 
         private fun callbackJoinFamily(
+            mActivity: AppCompatActivity,
             currUid: String,
             familyIdInput: String,
             familyPasswordInput: String,
@@ -155,7 +164,10 @@ class FamilyController {
 
                     Toast.makeText(currActivity, "Join family successful!", Toast.LENGTH_SHORT)
                         .show()
-                    currActivity.finish()
+                    // Go to Home page
+                    val intent = Intent(mActivity, HomeActivity::class.java)
+                    intent.putExtra("UserID", currUid)
+                    mActivity.startActivity(intent)
                 }
             }
         }
@@ -174,6 +186,16 @@ class FamilyController {
             FirebaseDatabaseManager.update(path, currUser)
         }
 
-
+        /**
+         * This method is to navigate button click from mActivity to destination
+         *
+         * */
+        fun buttonClick(mActivity: AppCompatActivity, button: Button, destination: Class<*>, uid: String) {
+            button.setOnClickListener {
+                val intent = Intent(mActivity, destination)
+                intent.putExtra("UserID", uid)
+                mActivity.startActivity(intent)
+            }
+        }
     }
 }
