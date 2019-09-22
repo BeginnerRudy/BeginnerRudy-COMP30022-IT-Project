@@ -35,15 +35,7 @@ class AuthenticationController {
          * */
         fun storeUser(mActivity: AppCompatActivity, user: User, uid: String) {
             // TODO Show a progress bar when start in the center
-            val circularProgressBar = ProgressBar(mActivity)
-            val rlp = RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-            )
-
-            rlp.addRule(RelativeLayout.CENTER_IN_PARENT)
-
-            mActivity.addContentView(circularProgressBar,rlp)
+            mActivity.setContentView(R.layout.circular_progress_bar)
 
             user.store(mActivity, uid)
         }
