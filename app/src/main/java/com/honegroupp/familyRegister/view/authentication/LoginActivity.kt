@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.AuthenticationController
+import com.honegroupp.familyRegister.model.EmailPathSwitch
 import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.view.home.HomeActivity
 
@@ -32,8 +33,8 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
         // Choose authentication providers
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.PhoneBuilder().build()
-//            AuthUI.IdpConfig.GoogleBuilder().build()
+            AuthUI.IdpConfig.PhoneBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
         )
 
         // Create and launch sign-in intent
@@ -41,7 +42,6 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                .setTheme(R.style.LoginTheme)
                 .setTosAndPrivacyPolicyUrls(
                     "https://en.wikipedia.org/wiki/SLD_resolution",
                     "https://example.com/privacy.html"
@@ -62,7 +62,18 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                 val user = FirebaseAuth.getInstance().currentUser
 
 
-                AuthenticationController.storeUser(this, User(user!!.displayName as String), user!!.uid)
+                var userContact : String = "D_ERROR"
+                if (user != null) {
+                    if (user.email != null)
+                        userContact = user.email.toString()
+                    else if (user.phoneNumber != null) {
+                        userContact = user.email.toString()
+                    }
+                }
+
+                val relativePath = EmailPathSwitch.emailToPath(userContact)
+
+                AuthenticationController.storeUser(this, User(username =  user!!.displayName as String), relativePath)
 
             } else if (response == null) {
                 // If the user press back button, exit the app

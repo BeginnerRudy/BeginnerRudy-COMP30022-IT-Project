@@ -22,7 +22,8 @@
         <activity android:name=".view.home.HomeActivity" />
         <activity android:name=".view.family.FamilyActivity" />
         <activity android:name=".view.item.ItemDetail" />
-        <activity android:name=".view.item.ItemSlide" />
+        <activity android:name=".view.item.DetailSlide" />
+        <activity android:name=".view.item.DImageSlide" />
         <activity android:name=".view.item.ItemEdit" />
         <activity android:name=".view.family.FamilyCreateActivity"/>
         <activity android:name=".view.family.FamilyJoinActivity"/>

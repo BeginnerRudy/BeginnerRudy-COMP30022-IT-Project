@@ -3,13 +3,16 @@ package com.honegroupp.familyRegister.controller
 import android.content.Context
 import android.content.Intent
 import android.widget.Button
+import android.provider.ContactsContract
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.model.EmailPathSwitch
 import com.honegroupp.familyRegister.model.Family
+import com.honegroupp.familyRegister.model.Hash
 import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
@@ -84,7 +87,9 @@ class FamilyController {
             password: EditText,
             uid: String
         ) {
-            val family = Family(familyId.text.toString(), password.text.toString(), uid)
+            //The password is encrypted using SHA256
+            val hashValue :String = Hash.applyHash(password.text.toString())
+            val family = Family(familyId.text.toString(), hashValue, uid)
             family.members.add(uid)
             family.store(mActivity, uid)
 
@@ -105,8 +110,13 @@ class FamilyController {
             uid: String
         ) {
 
+            //email
             val familyIdInput = familyId.text.toString()
+
+            //convert email to path
+            val familyRelativePath = EmailPathSwitch.emailToPath(familyIdInput)
             val familyPasswordInput = password.text.toString()
+            val inputHashValue = Hash.applyHash(familyPasswordInput)
 
             Family.validateJoinFamilyInput(mActivity, familyIdInput, familyPasswordInput, uid)
         }

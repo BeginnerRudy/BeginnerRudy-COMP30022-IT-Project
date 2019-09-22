@@ -18,6 +18,7 @@ import com.honegroupp.familyRegister.controller.ItemController.Companion.createI
 class ItemUploadActivity : AppCompatActivity(){
     val GALLERY_REQUEST_CODE = 123
     var imagePathList = ArrayList<String>()
+    var numberOfImages = 0
     lateinit var uid :String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,13 +32,24 @@ class ItemUploadActivity : AppCompatActivity(){
         addItemConfirm.setOnClickListener{
 
 //            need to CHECK empty logic
-            createItem(this,item_name_input,uid,imagePathList)
+            if(item_name_input.text.toString() == ""){
+                Toast.makeText(this,"Item name should not leave blank",Toast.LENGTH_SHORT).show()
+            }else if(numberOfImages == 0) {
+                Toast.makeText(this, "Please select at least one image", Toast.LENGTH_SHORT).show()
+            }else if(numberOfImages != imagePathList.size){
+//                Toast.makeText(this, numberOfImages.toString() +" " + imagePathList.size.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please wait for uploading image", Toast.LENGTH_SHORT).show()
+            }else {
+                createItem(this, item_name_input, uid, imagePathList)
+            }
         }
     }
 
     //use the phone API to get thr image from the album
     private fun selectImageInAlbum() {
 
+        //reset the image url list
+        imagePathList.clear()
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -53,15 +65,15 @@ class ItemUploadActivity : AppCompatActivity(){
                 GALLERY_REQUEST_CODE -> {
 
 
-
-                    //data.getData returns the content URI for the selected Image
-                    val selectedImage = data!!.data
-                    itemImage.setImageURI(selectedImage)
-
-                    //upload image to firebase storage
-                    if (selectedImage != null) {
-                        uploadtofirebase(selectedImage)
-                    }
+                    //add one image
+//                    //data.getData returns the content URI for the selected Image
+//                    val selectedImage = data!!.data
+//                    itemImage.setImageURI(selectedImage)
+//
+//                    //upload image to firebase storage
+//                    if (selectedImage != null) {
+//                        uploadtofirebase(selectedImage)
+//                    }
 
 
 
@@ -69,27 +81,33 @@ class ItemUploadActivity : AppCompatActivity(){
 
 
 //                    adding multiple image
-//                    if (data != null) {
-//                        if (data.getClipData() != null) {
-//
-//                            val count = data.getClipData()!!.getItemCount()
-//
-//                            Toast.makeText(this,count.toString(),Toast.LENGTH_LONG).show()
-//                            for (i in 0 until count) {
-//
-//                                val imageUri = data.getClipData()!!.getItemAt(i).uri
-//                                    if (imageUri != null) {
-//                                    uploadtofirebase(imageUri)
-//                                }
-//                            }
-//                        } else if (data.getData() != null) {
-//
-//                            val imgUri = data.getData()
-//                            if (imgUri != null) {
-//                                uploadtofirebase(imgUri)
-//                            }
-//                        }
-//                    }
+                    if (data != null) {
+                        if (data.getClipData() != null) {
+
+                            //handle multiple images
+                            val count = data.getClipData()!!.getItemCount()
+                            numberOfImages = count
+
+
+                            for (i in 0 until count) {
+                                val uri = data.getClipData()!!.getItemAt(i).uri
+                                    if (uri != null) {
+                                    uploadtofirebase(uri)
+                                }
+                            }
+                        } else if (data.getData() != null) {
+                            //handle single image
+                            numberOfImages = 1
+
+                            val uri = data.getData()
+                            if (uri != null) {
+                                uploadtofirebase(uri)
+                            }
+                        }
+                        Toast.makeText(this,numberOfImages.toString(),Toast.LENGTH_LONG).show()
+                    }else{
+                        Toast.makeText(this,"Error",Toast.LENGTH_SHORT).show()
+                    }
 
 
 

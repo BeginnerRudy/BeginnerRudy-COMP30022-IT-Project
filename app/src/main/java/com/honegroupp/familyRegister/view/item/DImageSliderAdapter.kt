@@ -4,15 +4,24 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.*
+import android.widget.ImageButton
 import androidx.viewpager.widget.PagerAdapter
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.viewpager.widget.ViewPager
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.model.ItemU
+import com.honegroupp.familyRegister.model.ItemDImage
 import com.squareup.picasso.Picasso
 
-class SliderAdapter(val items: ArrayList<ItemU>, val context: Context) : PagerAdapter() {
+class DImageSliderAdapter(val items: ArrayList<ItemDImage>, val context: Context) : PagerAdapter() {
+    var listener: DImageSliderAdapter.OnItemClickerListener? = null
+
+    interface OnItemClickerListener {
+        fun onItemClick(position: Int)
+        fun onDownloadClick(position: Int,item:ArrayList<ItemDImage>)
+        fun onShareClick(position: Int,item:ArrayList<ItemDImage>, imageView: ImageView)
+    }
 
     override fun getCount(): Int {
         return items.size
@@ -22,13 +31,12 @@ class SliderAdapter(val items: ArrayList<ItemU>, val context: Context) : PagerAd
         return view == `object`
     }
 
+
     override fun instantiateItem(container: ViewGroup, position: Int): View {
         var layoutInflater:LayoutInflater = LayoutInflater.from(context)
-        val view: View = layoutInflater.inflate(R.layout.slide_layout, container, false)
+        val view: View = layoutInflater.inflate(R.layout.slide_dimage_layout, container, false)
 
-        var slideImageView = view.findViewById<ImageView>(R.id.slide_image)
-        var slideHeaing = view.findViewById<TextView>(R.id.slide_heading)
-        var slideDescription = view.findViewById<TextView>(R.id.slide_desc)
+        var slideImageView = view.findViewById<ImageView>(R.id.dimage_image)
 
         val currUpload = items[position]
 
@@ -38,23 +46,19 @@ class SliderAdapter(val items: ArrayList<ItemU>, val context: Context) : PagerAd
             .placeholder(R.mipmap.ic_launcher)
             .into(slideImageView)
         Log.d("url", currUpload.url)
-        slideHeaing.setText(currUpload.name)
-        slideDescription.setText(currUpload.description)
 
-        view.findViewById<TextView>(R.id.slide_desc).setOnClickListener{
-            val intent = Intent(context, ItemEdit::class.java)
-            context.startActivity(intent)
+        view.findViewById<ImageButton>(R.id.dimage_download).setOnClickListener{
+            Log.d("dowloding",position.toString())
+            listener!!.onDownloadClick(position, items)
+        }
+
+        view.findViewById<ImageButton>(R.id.dimage_share).setOnClickListener{
+            Log.d("sharing",position.toString())
+            listener!!.onShareClick(position, items, slideImageView)
         }
 
         container.addView(view)
         return view
-    }
-
-    inner class ImageViewHolder(val viewItem: View) : View.OnClickListener {
-        override fun onClick(p0: View?) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
     }
 
 
