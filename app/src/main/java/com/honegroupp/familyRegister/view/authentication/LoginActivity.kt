@@ -30,8 +30,8 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
         // Choose authentication providers
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.PhoneBuilder().build()
-//            AuthUI.IdpConfig.GoogleBuilder().build()
+            AuthUI.IdpConfig.PhoneBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
         )
 
         // Create and launch sign-in intent
@@ -39,7 +39,6 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                .setTheme(R.style.LoginTheme)
                 .setTosAndPrivacyPolicyUrls(
                     "https://en.wikipedia.org/wiki/SLD_resolution",
                     "https://example.com/privacy.html"

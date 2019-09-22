@@ -16,6 +16,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
+            android:background="#07000000"
             android:scaleType="centerCrop" />
 
         <androidx.core.widget.ContentLoadingProgressBar
@@ -31,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/progress_bar"
-            android:background="@color/colorAccent"
+            android:backgroundTint="@color/colorAccent"
             android:text="@string/choose_image"
             android:textColor="@color/textColorPrimary" />
 
@@ -70,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/itemDescription"
-            android:background="@color/colorAccent"
+            android:backgroundTint="@color/colorAccent"
             android:text="@string/add_item"
             android:textColor="@color/textColorPrimary" />
     </RelativeLayout>
