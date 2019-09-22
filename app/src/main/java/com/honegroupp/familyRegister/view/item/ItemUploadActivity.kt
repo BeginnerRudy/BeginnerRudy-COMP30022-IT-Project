@@ -40,7 +40,7 @@ class ItemUploadActivity : AppCompatActivity(){
 //                Toast.makeText(this, numberOfImages.toString() +" " + imagePathList.size.toString(),Toast.LENGTH_SHORT).show()
                 Toast.makeText(this, "Please wait for uploading image", Toast.LENGTH_SHORT).show()
             }else {
-                createItem(this, item_name_input, uid, imagePathList)
+                createItem(this, item_name_input,item_description_input, uid, imagePathList)
             }
         }
     }

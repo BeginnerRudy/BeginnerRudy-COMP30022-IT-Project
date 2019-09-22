@@ -15,6 +15,9 @@ data class Item(
     var itemId: String = "",
     @set:PropertyName("itemName")
     @get:PropertyName("itemName")
+    var itemDescription: String = "",
+    @set:PropertyName("itemDescription")
+    @get:PropertyName("itemDescription")
     var itemName: String = "",
     @set:PropertyName("itemOwnerUID")
     @get:PropertyName("itemOwnerUID")
@@ -24,7 +27,8 @@ data class Item(
     var imageURLs: ArrayList<String> = ArrayList()
 ) {
     /*This is the primary constructor to create an item instance*/
-    constructor(itemName: String, itemOwnerUID: String, imageURLs: ArrayList<String>) : this() {
+    constructor(itemName: String, itemDescription: String, itemOwnerUID: String, imageURLs: ArrayList<String>) : this() {
+        this.itemDescription = itemDescription
         this.itemName = itemName
         this.itemOwnerUID = itemOwnerUID
         this.imageURLs = imageURLs
