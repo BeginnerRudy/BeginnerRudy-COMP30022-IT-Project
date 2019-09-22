@@ -106,8 +106,10 @@ class FamilyController {
             uid: String
         ) {
 
+            //email
             val familyIdInput = familyId.text.toString()
 
+            //convert email to path
             val familyRelativePath = EmailPathSwitch.emailToPath(familyIdInput)
             val familyPasswordInput = password.text.toString()
             val inputHashValue = Hash.applyHash(familyPasswordInput)
