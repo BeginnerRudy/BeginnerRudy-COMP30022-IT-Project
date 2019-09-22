@@ -117,7 +117,7 @@ data class Family(
             dataSnapshot: DataSnapshot
         ) {
             // Check whether family exist
-            if (!dataSnapshot.hasChild(familyIdInput)) {
+            if (!dataSnapshot.hasChild(familyIdInput) || familyIdInput.trim() == "") {
                 Toast.makeText(currActivity, "Family Id is not correct!", Toast.LENGTH_SHORT).show()
             } else {
                 // Get family
