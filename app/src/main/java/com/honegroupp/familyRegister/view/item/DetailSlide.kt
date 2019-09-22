@@ -127,18 +127,16 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_DENIED){
+
                 //permission denied
-                Log.d("SAVEAAAAAAA","")
                 requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),STORAGE_PERMISSION_CODE)
             }else{
                 //permission already granted
-                Log.d("SAVEBBBBBB","")
                 startDownloading();
 
             }
         }else{
             //system os less than mashmallow
-            Log.d("SAVECCCCCC","")
             startDownloading();
         }
     }
@@ -154,7 +152,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
 
         //path of file
-        request.setDestinationInExternalPublicDir("/storage/DCIM/FamilyRegister","${System.currentTimeMillis()}")
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DCIM+"/FamilyRegister","${System.currentTimeMillis()}")
 
         //get download service and enqueue file
         val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -185,6 +183,6 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
     }
 
     fun toast(msg: String, duration: Int) {
-        android.widget.Toast.makeText(this, msg, duration).show()
+        Toast.makeText(this, msg, duration).show()
     }
 }

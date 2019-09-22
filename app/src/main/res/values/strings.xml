@@ -38,4 +38,10 @@
     <string name="choose_image">choose an image</string>
     <string name="add_item">add item</string>
     <string name="type_item_description">Please enter item description</string>
+
+    <string-array name="privacy_options">
+        <item>Private</item>
+        <item>Public</item>
+    </string-array>
+
 </resources>

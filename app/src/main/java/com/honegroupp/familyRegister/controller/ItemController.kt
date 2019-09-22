@@ -16,7 +16,7 @@ import com.honegroupp.familyRegister.model.User
  * There are create, join and view a family.
  *
  * */
-class   ItemController {
+class ItemController {
     companion object {
 
         //TODO 1 user could create one item each time
@@ -30,12 +30,19 @@ class   ItemController {
             itemName: EditText,
             itemDescription: EditText,
             uid: String,
-            imageURLs: ArrayList<String>
+            imageURLs: ArrayList<String>,
+            itemPrivacy: String
         ) {
-            val item = Item(itemName.text.toString(),itemDescription.text.toString(), uid, imageURLs)
+            val item = Item(
+                itemName = itemName.text.toString(),
+                itemDescription = itemDescription.text.toString(),
+                itemOwnerUID = uid,
+                imageURLs = imageURLs,
+                itemPrivacy = itemPrivacy
+            )
             item.store(uid)
 
-            Toast.makeText(mContext, "Family Created Successfully", Toast.LENGTH_SHORT).show()
+            Toast.makeText(mContext, "Item Stored successfully", Toast.LENGTH_SHORT).show()
             // Go back to the previous activity
             mContext.finish()
         }

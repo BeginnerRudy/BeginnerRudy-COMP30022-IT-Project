@@ -39,4 +39,9 @@
     <string name="choose_image">choose an image</string>
     <string name="add_item">add item</string>
     <string name="type_item_description">请输入物品描述</string>
+
+    <string-array name="privacy_options">
+        <item>仅自己可见</item>
+        <item>公开</item>
+    </string-array>
 </resources>

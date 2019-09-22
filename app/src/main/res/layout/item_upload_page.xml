@@ -36,9 +36,17 @@
             android:text="@string/choose_image"
             android:textColor="@color/textColorPrimary" />
 
+        <Spinner
+            android:id="@+id/privacy_spinner"
+            android:layout_width="383dp"
+            android:layout_height="43dp"
+            android:layout_below="@id/itemChooseImage"
+            android:spinnerMode="dropdown"
+            android:visibility="visible" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/itemName"
-            android:layout_below="@id/itemChooseImage"
+            android:layout_below="@id/privacy_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
