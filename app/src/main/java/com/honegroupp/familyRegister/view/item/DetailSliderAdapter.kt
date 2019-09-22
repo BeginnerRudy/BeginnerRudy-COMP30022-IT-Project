@@ -9,16 +9,16 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.model.ItemU
+import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 
-class DetailSliderAdapter(val items: ArrayList<ItemU>, val context: Context) : PagerAdapter() {
+class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : PagerAdapter() {
     var listener: DetailSliderAdapter.OnItemClickerListener? = null
 
     interface OnItemClickerListener {
         fun onItemClick(position: Int)
-        fun onDownloadClick(position: Int,item:ArrayList<ItemU>)
-        fun onShareClick(position: Int,item:ArrayList<ItemU>, imageView: ImageView)
+        fun onDownloadClick(position: Int,item:ArrayList<Item>)
+        fun onShareClick(position: Int, item:ArrayList<Item>, imageView: ImageView)
     }
 
     override fun getCount(): Int {
@@ -43,12 +43,12 @@ class DetailSliderAdapter(val items: ArrayList<ItemU>, val context: Context) : P
 
         // Load image to ImageView via its URL from Firebase Storage
         Picasso.get()
-            .load(currUpload.url)
+            .load(currUpload.imageURLs[0])
             .placeholder(R.mipmap.ic_launcher)
             .into(slideImageView)
-        Log.d("url", currUpload.url)
-        slideHeaing.setText(currUpload.name)
-        slideDescription.setText(currUpload.description)
+        Log.d("url", currUpload.imageURLs[0])
+        slideHeaing.setText(currUpload.itemName)
+        slideDescription.setText(currUpload.itemDescription)
 
         view.findViewById<TextView>(R.id.detail_desc).setOnClickListener{
             val intent = Intent(context, ItemEdit::class.java)
@@ -68,7 +68,7 @@ class DetailSliderAdapter(val items: ArrayList<ItemU>, val context: Context) : P
         view.findViewById<TextView>(R.id.detail_heading).setOnClickListener{
             Log.d("sharing",position.toString())
             Picasso.get()
-                .load(currUpload.url)
+                .load(currUpload.imageURLs[0])
                 .placeholder(R.mipmap.ic_launcher)
                 .into(slideImageView)
             listener!!.onShareClick(position, items, slideImageView)

@@ -12,7 +12,6 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.os.StrictMode
 import android.util.Log
 import android.view.View
@@ -24,7 +23,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.model.ItemU
+import com.honegroupp.familyRegister.model.Category
+import com.honegroupp.familyRegister.model.Item
 import java.io.File
 import java.io.FileOutputStream
 
@@ -34,12 +34,16 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
 
     lateinit var mSlideViewPager : ViewPager
 
+    var uploads: ArrayList<Item> = ArrayList()
+    var categoryUploads: ArrayList<Category> = ArrayList()
 
-
-    var uploads: ArrayList<ItemU> = ArrayList()
-    val path = "CeShi" + "/" + "Furniture" + "/"
+    val userId = "zengbinz@student=unimelb=edu=au"
+    val path = "Family" + "/" + userId + "/" + "items"
+    val path_category = "Family" + "/" + userId + "/" + "categories"
     val databaseReference = FirebaseDatabase.getInstance().getReference(path)
+    val databaseReference_category = FirebaseDatabase.getInstance().getReference(path_category)
     lateinit var dbListener: ValueEventListener
+    lateinit var dbListener_category: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val builder = StrictMode.VmPolicy.Builder()
@@ -53,7 +57,30 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         mSlideViewPager.adapter = sliderAdapter
         sliderAdapter.listener = this@DetailSlide
 
+        dbListener_category = databaseReference_category.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                toast(p0.message, Toast.LENGTH_SHORT)
+            }
 
+            override fun onDataChange(p0: DataSnapshot) {
+                Log.d("excution flag", "sadfasfsdgdfhdfhfg")
+                // clear it before filling it
+                categoryUploads.clear()
+
+                // Retrieve data from database, create an Upload object and store in the list of one ImageAdapter
+                p0.children.forEach {
+                    // Retrieve data from database, create an ItemUpload object and store in the list of one ItemListAdapter
+                    val currUpload = it.getValue(Category::class.java) as Category
+
+                    categoryUploads.add(currUpload)
+                    Log.d("category keys", currUpload.itemKeys.toString())
+                }
+                Log.d("uploadcategory",categoryUploads.size.toString())
+
+                // It would update recycler after loading image from firebase storage
+                sliderAdapter.notifyDataSetChanged()
+            }
+        })
 
         dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -68,9 +95,24 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
                 // Retrieve data from database, create an Upload object and store in the list of one ImageAdapter
                 p0.children.forEach {
                     // Retrieve data from database, create an ItemUpload object and store in the list of one ItemListAdapter
-                    val currUpload = it.getValue(ItemU::class.java) as ItemU
-                    currUpload.key = it.key
-                    uploads.add(currUpload)
+                    val currUpload = it.getValue(Item::class.java) as Item
+
+                    // add to view if user has access
+                    if (categoryUploads.size != 0){
+                        if (currUpload.itemName in categoryUploads[0].itemKeys){
+                            if (currUpload.visibility) {
+                                uploads.add(currUpload)
+                            } else if (currUpload.itemOwnerUID == userId){
+                                uploads.add(currUpload)
+                            }
+                        }
+                        toast(categoryUploads[0].itemKeys.toString(), Toast.LENGTH_SHORT)
+                        Log.d("category keys", categoryUploads[0].itemKeys.toString())
+                    } else {
+                        toast(0.toString(), Toast.LENGTH_SHORT)
+                        Log.d("category keys", 55555555.toString())
+                    }
+
                 }
                 Log.d("upload",uploads.size.toString())
 
@@ -85,8 +127,8 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
 
 
 
-    override fun onShareClick(position: Int,item:ArrayList<ItemU>, imageView: ImageView) {
-        this.downloadurl = item[position].url
+    override fun onShareClick(position: Int, item:ArrayList<Item>, imageView: ImageView) {
+        this.downloadurl = item[position].imageURLs[0]
         var bitmap = getBitmapFromView(imageView);
         try {
             var file = File(this.getExternalCacheDir(),"logicchip.png");
@@ -113,7 +155,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         var bgDrawable = view.getBackground();
         if (bgDrawable!=null) {
             bgDrawable.draw(canvas);
-        }   else{
+        } else {
             canvas.drawColor(Color.WHITE);
         }
         view.draw(canvas);
@@ -121,8 +163,8 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
     }
 
 
-    override fun onDownloadClick(position: Int, item: ArrayList<ItemU>) {
-        this.downloadurl = item[position].url
+    override fun onDownloadClick(position: Int, item: ArrayList<Item>) {
+        this.downloadurl = item[position].imageURLs[0]
         Log.d("dowloding1111","")
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
@@ -182,6 +224,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
     override fun onDestroy() {
         super.onDestroy()
         databaseReference.removeEventListener(dbListener)
+        databaseReference_category.removeEventListener(dbListener_category)
     }
 
     fun toast(msg: String, duration: Int) {
