@@ -48,6 +48,28 @@ class FirebaseDatabaseManager() {
         }
 
         /**
+         * This method is responsible for retrieving object from the database depends on given path.
+         * This would be called whenever the dataSnapshot is changed
+         * */
+        // TODO should change class Any change to some Class more specific.
+        fun retrieveLive(path: String, callback: (DataSnapshot) -> Unit) {
+            val databaseRef = FirebaseDatabase.getInstance().getReference(path)
+            // retrieve data
+
+
+            databaseRef.addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                    //Don't ignore errors!
+                    Log.d("TAG", p0.message)
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    callback(p0)
+                }
+            })
+        }
+
+        /**
          * This method is responsible for uploading the given user to  the database when user login.
          * */
         fun uploadUser(mActivity: AppCompatActivity, uid: String, user: User) {
@@ -144,7 +166,7 @@ class FirebaseDatabaseManager() {
                     val category = p0.child("").getValue(Category::class.java) as Category
                     // add new item key to category and update counts
                     category.itemKeys.add(itemKey)
-                    category.count = items.size
+                    category.count = category.itemKeys.size
 
                     // update category to Firebase
                     update(categoryPath, category)

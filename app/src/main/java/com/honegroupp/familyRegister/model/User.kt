@@ -67,7 +67,7 @@ data class User(
          * */
         fun showCategories(uid: String, view: View, mActivity: AppCompatActivity) {
             val rootPath = "/"
-            FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
+            FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
                 callbackShowCategories(
                     uid,
                     view,
