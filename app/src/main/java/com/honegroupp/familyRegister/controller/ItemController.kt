@@ -10,6 +10,8 @@ import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.Family
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.model.User
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * This class is responsible for controller the event related to family.
@@ -31,14 +33,15 @@ class ItemController {
             itemDescription: EditText,
             uid: String,
             imageURLs: ArrayList<String>,
-            itemPrivacy: String
+            isPublic: Boolean
         ) {
+
             val item = Item(
                 itemName = itemName.text.toString(),
                 itemDescription = itemDescription.text.toString(),
                 itemOwnerUID = uid,
                 imageURLs = imageURLs,
-                itemPrivacy = itemPrivacy
+                isPublic = isPublic
             )
             item.store(uid)
 

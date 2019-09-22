@@ -40,8 +40,9 @@
     <string name="type_item_description">Please enter item description</string>
 
     <string-array name="privacy_options">
-        <item>Private</item>
-        <item>Public</item>
+        <item>Visible by family</item>
+        <item>Keep it private</item>
+
     </string-array>
 
 </resources>

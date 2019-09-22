@@ -31,9 +31,9 @@ data class Item(
     @get:PropertyName("imageURLs")
     var imageURLs: ArrayList<String> = ArrayList(),
 
-    @set:PropertyName("itemPrivacy")
-    @get:PropertyName("itemPrivacy")
-    var itemPrivacy: String = ""
+    @set:PropertyName("isPublic")
+    @get:PropertyName("isPublic")
+    var isPublic: Boolean = false
 ) {
     /*This is the primary constructor to create an item instance*/
 //    constructor(itemName: String, itemDescription: String, itemOwnerUID: String, imageURLs: ArrayList<String>, itemPrivacy: String) : this() {

@@ -29,6 +29,7 @@ class ItemUploadActivity : AppCompatActivity(){
 
         //set up the spinner (select public and privacy)
         val spinner: Spinner = findViewById(R.id.privacy_spinner)
+
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
             this,
@@ -57,10 +58,12 @@ class ItemUploadActivity : AppCompatActivity(){
 //                Toast.makeText(this, numberOfImages.toString() +" " + imagePathList.size.toString(),Toast.LENGTH_SHORT).show()
                 Toast.makeText(this, "Please wait for uploading image", Toast.LENGTH_SHORT).show()
             }else {
-                createItem(this, item_name_input,item_description_input, uid, imagePathList, spinner.selectedItem.toString())
+                createItem(this, item_name_input,item_description_input, uid, imagePathList, spinner.selectedItemPosition == 0)
             }
         }
     }
+
+
 
     //use the phone API to get thr image from the album
     private fun selectImageInAlbum() {
