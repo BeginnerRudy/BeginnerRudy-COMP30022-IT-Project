@@ -8,6 +8,8 @@ import com.honegroupp.familyRegister.R
 import kotlinx.android.synthetic.main.item_upload_page.*
 import android.app.Activity
 import android.net.Uri
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
@@ -25,6 +27,22 @@ class ItemUploadActivity : AppCompatActivity(){
         uid = intent.getStringExtra("UserID")
         val categoryName = intent.getStringExtra("categoryPath").toString()
 
+        //set up the spinner (select public and privacy)
+        val spinner: Spinner = findViewById(R.id.privacy_spinner)
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.privacy_options,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+        }
+
+
         itemChooseImage.setOnClickListener {
             selectImageInAlbum()
         }
@@ -40,10 +58,12 @@ class ItemUploadActivity : AppCompatActivity(){
 //                Toast.makeText(this, numberOfImages.toString() +" " + imagePathList.size.toString(),Toast.LENGTH_SHORT).show()
                 Toast.makeText(this, "Please wait for uploading image", Toast.LENGTH_SHORT).show()
             }else {
-                createItem(this, item_name_input, uid, categoryName, imagePathList)
+                createItem(this, item_name_input,item_description_input, uid, categoryName, imagePathList, spinner.selectedItemPosition == 0)
             }
         }
     }
+
+
 
     //use the phone API to get thr image from the album
     private fun selectImageInAlbum() {
@@ -77,7 +97,7 @@ class ItemUploadActivity : AppCompatActivity(){
                             for (i in 0 until count) {
                                 val uri = data.getClipData()!!.getItemAt(i).uri
                                     if (uri != null) {
-                                    uploadToFirebase(uri)
+                                    uploadtofirebase(uri)
                                 }
                             }
                         } else if (data.getData() != null) {
@@ -86,7 +106,7 @@ class ItemUploadActivity : AppCompatActivity(){
 
                             val uri = data.getData()
                             if (uri != null) {
-                                uploadToFirebase(uri)
+                                uploadtofirebase(uri)
                             }
                         }
                         Toast.makeText(this,numberOfImages.toString(),Toast.LENGTH_LONG).show()
@@ -98,7 +118,7 @@ class ItemUploadActivity : AppCompatActivity(){
         }
     }
 
-    private fun uploadToFirebase(selectedImage: Uri) {
+    private fun uploadtofirebase(selectedImage: Uri) {
         val uploadPath = " "
         val firebaseStore = FirebaseStorage.getInstance()
         val ref =

@@ -9,25 +9,41 @@ data class Item(
     @set:PropertyName("familyId")
     @get:PropertyName("familyId")
     var familyId: String = "",
+
     @set:PropertyName("itemId")
     @get:PropertyName("itemId")
     var itemId: String = "",
+
     @set:PropertyName("itemName")
     @get:PropertyName("itemName")
     var itemName: String = "",
+
+    @set:PropertyName("itemDescription")
+    @get:PropertyName("itemDescription")
+    var itemDescription: String = "",
+
     @set:PropertyName("itemOwnerUID")
     @get:PropertyName("itemOwnerUID")
     var itemOwnerUID: String = "",
+
     @set:PropertyName("imageURLs")
     @get:PropertyName("imageURLs")
-    var imageURLs: ArrayList<String> = ArrayList()
+    var imageURLs: ArrayList<String> = ArrayList(),
+
+
+    @set:PropertyName("isPublic")
+    @get:PropertyName("isPublic")
+    var isPublic: Boolean = false
+
 ) {
     /*This is the primary constructor to create an item instance*/
-    constructor(itemName: String, itemOwnerUID: String, imageURLs: ArrayList<String>) : this() {
-        this.itemName = itemName
-        this.itemOwnerUID = itemOwnerUID
-        this.imageURLs = imageURLs
-    }
+//    constructor(itemName: String, itemDescription: String, itemOwnerUID: String, imageURLs: ArrayList<String>, itemPrivacy: String) : this() {
+//        this.itemName = "itemName"
+//        this.itemDescription = "itemDescription"
+//        this.itemOwnerUID = itemOwnerUID
+//        this.imageURLs = imageURLs
+//        this.itemPrivacy = itemPrivacy
+//    }
 
     /**
      * this function is used to store new item into item list of a family
