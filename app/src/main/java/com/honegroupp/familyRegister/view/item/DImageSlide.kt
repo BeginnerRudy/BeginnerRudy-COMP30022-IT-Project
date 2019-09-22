@@ -6,47 +6,29 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
-import android.provider.MediaStore
 import android.util.Log
-import android.view.ContextMenu
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.internal.Util
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.ItemDImage
-import com.honegroupp.familyRegister.model.ItemU
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_slide.view.*
-import kotlinx.android.synthetic.main.slide_layout.view.*
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.lang.System.out
-import java.net.HttpURLConnection
-import java.net.URL
 
-class ItemImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListener {
+class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListener {
     private val STORAGE_PERMISSION_CODE: Int = 1000
     private var downloadurl :String = ""
 
@@ -66,7 +48,7 @@ class ItemImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerL
 
         var DImageSliderAdapter = DImageSliderAdapter(uploads,this)
         mSlideViewPager.adapter = DImageSliderAdapter
-        DImageSliderAdapter.listener = this@ItemImageSlide
+        DImageSliderAdapter.listener = this@DImageSlide
 
         dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {

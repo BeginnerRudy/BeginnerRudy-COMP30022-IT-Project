@@ -15,9 +15,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
 import android.util.Log
-import android.view.ContextMenu
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -32,18 +29,15 @@ import com.honegroupp.familyRegister.model.ItemU
 import java.io.File
 import java.io.FileOutputStream
 
-class ItemDetailSlide() : AppCompatActivity(), SliderAdapter.OnItemClickerListener {
+class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener {
     private val STORAGE_PERMISSION_CODE: Int = 1000
     private var downloadurl :String = ""
 
     lateinit var mSlideViewPager : ViewPager
-    lateinit var sliderAdapter : SliderAdapter
     var uploads: ArrayList<ItemU> = ArrayList()
     val path = "CeShi" + "/" + "Furniture" + "/"
     val databaseReference = FirebaseDatabase.getInstance().getReference(path)
     lateinit var dbListener: ValueEventListener
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val builder = StrictMode.VmPolicy.Builder()
@@ -54,29 +48,9 @@ class ItemDetailSlide() : AppCompatActivity(), SliderAdapter.OnItemClickerListen
         mSlideViewPager = findViewById<ViewPager>(R.id.slideViewPager)
         var mDotLayout = findViewById<LinearLayout>(R.id.dotsLayout)
 
-        sliderAdapter = SliderAdapter(uploads,this)
+        var sliderAdapter = DetailSliderAdapter(uploads,this)
         mSlideViewPager.adapter = sliderAdapter
-        sliderAdapter.listener = this@ItemDetailSlide
-
-
-
-//        mSlideViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-//            override fun onPageScrolled(
-//                position: Int,
-//                positionOffset: Float,
-//                positionOffsetPixels: Int
-//            ) {
-//                invalidateOptionsMenu()
-//            }
-//
-//            override fun onPageSelected(position: Int) {
-//
-//            }
-//
-//            override fun onPageScrollStateChanged(state: Int) {
-//
-//            }
-//        })
+        sliderAdapter.listener = this@DetailSlide
 
         dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -103,86 +77,8 @@ class ItemDetailSlide() : AppCompatActivity(), SliderAdapter.OnItemClickerListen
 
         })
 
-//        registerForContextMenu(mSlideViewPager.slideViewPager.slide_image)
     }
 
-    override fun onCreateContextMenu(
-        menu: ContextMenu?,
-        v: View?,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        menu!!.setHeaderTitle("Choose your option");
-        getMenuInflater().inflate(R.menu.item_detail_menu, menu);
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.option_1 -> {
-                onDownloadClick(sliderAdapter.currposion, sliderAdapter.items)
-
-                Toast.makeText(this, sliderAdapter.currposion.toString(), Toast.LENGTH_SHORT).show()
-                return true
-            }
-            R.id.option_2 -> {
-                Toast.makeText(this, "Option 2 selected", Toast.LENGTH_SHORT).show()
-                return true
-            }
-            else -> return super.onContextItemSelected(item)
-        }
-    }
-
-//    override fun onCreateContextMenu(
-//        menu: ContextMenu?,
-//        v: View?,
-//        menuInfo: ContextMenu.ContextMenuInfo?
-//    ) {
-//        super.onCreateContextMenu(menu, v, menuInfo)
-//        menu!!.setHeaderTitle("Choose your option");
-//        getMenuInflater().inflate(R.menu.item_detail_menu, menu);
-//    }
-//
-//    override fun onContextItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.option_1 -> {
-//                Toast.makeText(this, "Option 1 selected", Toast.LENGTH_SHORT).show()
-//                return true
-//            }
-//            R.id.option_2 -> {
-//                Toast.makeText(this, "Option 2 selected", Toast.LENGTH_SHORT).show()
-//                return true
-//            }
-//            else -> return super.onContextItemSelected(item)
-//        }
-//    }
-
-//    override fun onShareClick(position: Int,item:ArrayList<ItemU>) {
-////        this.downloadurl = item[position].url
-//        var loadedImage = getBitmapFromURL(item[position].url)
-//        var intent = Intent(Intent.ACTION_SEND);
-//        intent.putExtra(Intent.EXTRA_TEXT, "Hey view/download this image");
-//        var path = MediaStore.Images.Media.insertImage(getContentResolver(), loadedImage, "", null);
-//        var screenshotUri = Uri.parse(path);
-//
-//        intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
-//        intent.setType("image/*");
-//        startActivity(Intent.createChooser(intent, "Share image via..."));
-//    }
-//
-//    fun getBitmapFromURL (src: String) : Bitmap? {
-//        try {
-//            var url = URL(src);
-//            var connection = url.openConnection();
-//            connection.setDoInput(true);
-//            connection.connect();
-//            var input = connection.getInputStream();
-//            var myBitmap = BitmapFactory.decodeStream(input);
-//            return myBitmap;
-//        } catch (e: IOException) {
-//            // Log exception
-//            return null;
-//        }
-//    }
 
     override fun onShareClick(position: Int,item:ArrayList<ItemU>, imageView: ImageView) {
         this.downloadurl = item[position].url
@@ -219,81 +115,6 @@ class ItemDetailSlide() : AppCompatActivity(), SliderAdapter.OnItemClickerListen
         return returnedBitmap;
     }
 
-//        var imageUri= Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), getBitmapFromURL(downloadurl), "title", "discription"));
-//        var shareIntent = Intent();
-//        shareIntent.setAction(Intent.ACTION_SEND);
-//        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-//        shareIntent.setType("image/*");
-//        startActivity(Intent.createChooser(shareIntent, "sendto"));
-
-//    }
-
-//    fun  getBitmapFromURL(src: String ) : Bitmap? {
-//        try {
-//            var url = URL(src);
-//            var connection = url.openConnection() as HttpURLConnection;
-//            connection.setDoInput(true);
-//            connection.connect();
-//            var input = connection.getInputStream();
-//            var myBitmap = BitmapFactory.decodeStream(input);
-//            return myBitmap;
-//        } catch (e :IOException ) {
-//            e.printStackTrace();
-//            return null;
-//    }
-//}
-
-//        var shareIntent = Intent(Intent.ACTION_SEND);
-//        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-//        shareIntent.setType("image/*");
-//
-//// For a file in shared storage.  For data in private storage, use a ContentProvider.
-//        var uri = Uri.fromFile(getFileStreamPath(downloadurl));
-//        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-//        startActivity(shareIntent)
-
-//        val shareIntent = Intent()
-//        shareIntent.action = Intent.ACTION_SEND
-//        shareIntent.type = "image/jpeg"
-//        var imageUri = Uri.parse(downloadurl)
-//        shareIntent.putExtra(Intent.EXTRA_STREAM,imageUri)
-//        startActivity(Intent.createChooser(shareIntent, ""))
-
-//        var sharingIntent = Intent(Intent.ACTION_SEND);
-//        var imageUri = Uri.parse("http://stacktoheap.com/images/stackoverflow.png");
-//        sharingIntent.setType("image/png");
-//        sharingIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-//        startActivity(sharingIntent);
-
-//
-//    }
-
-//    fun getLocalBitmapUri(bmp: Bitmap ): Uri? {
-//        lateinit var bmpUri: Uri
-//        try {
-//            var file =  File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
-//            var out = FileOutputStream(file);
-//            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-//            out.close();
-//            bmpUri = Uri.fromFile(file);
-//        } catch (e : IOException ) {
-//            e.printStackTrace();
-//        }
-//        return bmpUri;
-//    }
-
-//    fun getLocalBitmapUri(bmp: Bitmap , context: Context ): Uri? {
-//        try {
-//            var file =  File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
-//            var out = FileOutputStream(file);
-//            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-//            out.close();
-//            var bmpUri = Uri.fromFile(file) as Uri;
-//        } catch (e: IOException) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 
     override fun onDownloadClick(position: Int, item: ArrayList<ItemU>) {
         this.downloadurl = item[position].url

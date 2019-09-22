@@ -8,17 +8,12 @@ import androidx.viewpager.widget.PagerAdapter
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
-import androidx.viewpager.widget.ViewPager
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.ItemU
 import com.squareup.picasso.Picasso
 
-class SliderAdapter(val items: ArrayList<ItemU>, val mActivity: AppCompatActivity) : PagerAdapter() {
-    var listener: SliderAdapter.OnItemClickerListener? = null
-    var currposion = 0
+class DetailSliderAdapter(val items: ArrayList<ItemU>, val context: Context) : PagerAdapter() {
+    var listener: DetailSliderAdapter.OnItemClickerListener? = null
 
     interface OnItemClickerListener {
         fun onItemClick(position: Int)
@@ -36,18 +31,15 @@ class SliderAdapter(val items: ArrayList<ItemU>, val mActivity: AppCompatActivit
 
 
     override fun instantiateItem(container: ViewGroup, position: Int): View {
-        currposion = position - 1
-        var layoutInflater:LayoutInflater = LayoutInflater.from(mActivity)
+        var layoutInflater:LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_layout, container, false)
-
 
         var slideImageView = view.findViewById<ImageView>(R.id.slide_image)
         var slideHeaing = view.findViewById<TextView>(R.id.slide_heading)
         var slideDescription = view.findViewById<TextView>(R.id.slide_desc)
 
         val currUpload = items[position]
-//        slideImageView.setOnCreateContextMenuListener(mActivity)
-        mActivity.registerForContextMenu(slideImageView)
+
 
         // Load image to ImageView via its URL from Firebase Storage
         Picasso.get()
@@ -59,14 +51,14 @@ class SliderAdapter(val items: ArrayList<ItemU>, val mActivity: AppCompatActivit
         slideDescription.setText(currUpload.description)
 
         view.findViewById<TextView>(R.id.slide_desc).setOnClickListener{
-            val intent = Intent(mActivity, ItemEdit::class.java)
-            mActivity.startActivity(intent)
+            val intent = Intent(context, ItemEdit::class.java)
+            context.startActivity(intent)
         }
 
-//        view.findViewById<ImageView>(R.id.slide_image).setOnClickListener{
-//            val intent = Intent(context, ItemImageSlide::class.java)
-//            context.startActivity(intent)
-//        }
+        view.findViewById<ImageView>(R.id.slide_image).setOnClickListener{
+            val intent = Intent(context, DImageSlide::class.java)
+            context.startActivity(intent)
+        }
 
         view.findViewById<TextView>(R.id.slider_download).setOnClickListener{
             Log.d("dowloding",position.toString())
