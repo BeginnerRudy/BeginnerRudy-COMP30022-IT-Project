@@ -28,10 +28,11 @@ class   ItemController {
         fun createItem(
             mContext: AppCompatActivity,
             itemName: EditText,
+            itemDescription: EditText,
             uid: String,
             imageURLs: ArrayList<String>
         ) {
-            val item = Item(itemName.text.toString(), uid, imageURLs)
+            val item = Item(itemName.text.toString(),itemDescription.text.toString(), uid, imageURLs)
             item.store(uid)
 
             Toast.makeText(mContext, "Family Created Successfully", Toast.LENGTH_SHORT).show()

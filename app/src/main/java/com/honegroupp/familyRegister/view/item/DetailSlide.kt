@@ -143,19 +143,19 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         }
     }
 
-    //download the image to local album on the device
+    //download the image to local album of the device
     private fun startDownloading() {
-        Log.d("SAVEinging","")
-//        val url = "https://firebasestorage.googleapis.com/v0/b/fir-image-uploader-98bb7.appspot.com/o/1%2FFurniture%2F11?alt=media&token=3145f0e7-c552-4ecd-ae0c-a79ce0259c66"
-//        val url = urt.text.toString()
-        //download request
+
+        //Download request
         val request = DownloadManager.Request(Uri.parse(downloadurl))
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
         request.setTitle("Download")
         request.setDescription("The file is downloading...")
-        request.allowScanningByMediaScanner()
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"${System.currentTimeMillis()}")
+
+        //path of file
+        request.setDestinationInExternalPublicDir("/storage/DCIM/FamilyRegister","${System.currentTimeMillis()}")
+
         //get download service and enqueue file
         val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         manager.enqueue(request)
