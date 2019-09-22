@@ -1,31 +1,14 @@
 package com.honegroupp.familyRegister.view.itemList
 
-import android.Manifest
-import android.app.DownloadManager
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.ImageFormat.JPEG
-import android.graphics.drawable.Drawable
-import android.net.Uri
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
-import android.os.Environment.*
-import android.util.Log
-import android.view.View
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 
 import com.honegroupp.familyRegister.R
 import com.google.firebase.storage.FirebaseStorage
-import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.controller.ItemListController
 import com.honegroupp.familyRegister.model.Item
-import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlin.collections.ArrayList
 
 class ItemListActivity : AppCompatActivity() {
@@ -49,12 +32,8 @@ class ItemListActivity : AppCompatActivity() {
         val categoryName = intent.getStringExtra("categoryPath")
 
         // get category by its name
-        ItemListController.showItems(uid, categoryName, this)
+        ItemListController.addItem(uid, categoryName, this)
 
-        // setting for the btn_add
-        btn_add.setOnClickListener {
-//            openDialog()
-        }
     }
 
 

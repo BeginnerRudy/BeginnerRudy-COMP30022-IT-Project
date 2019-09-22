@@ -5,8 +5,8 @@ import com.honegroupp.familyRegister.model.Family
 
 class ItemListController{
     companion object{
-        fun showItems(uid: String, categoryName: String, mActivity: AppCompatActivity){
-            Family.showItems(uid, categoryName, mActivity)
+        fun addItem(uid: String, categoryName: String, mActivity: AppCompatActivity){
+            Family.addItem(uid, categoryName, mActivity)
         }
     }
 }

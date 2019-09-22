@@ -1,9 +1,6 @@
 package com.honegroupp.familyRegister.model
 
 import android.content.Intent
-import android.util.Log
-import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,10 +41,13 @@ data class Family(
     var members: ArrayList<String> = ArrayList(),
     @set:PropertyName("categories")
     @get:PropertyName("categories")
-    var categories: ArrayList<Category> = ArrayList()
+    var categories: ArrayList<Category> = ArrayList(),
+    @set:PropertyName("items")
+    @get:PropertyName("items")
+    var items: HashMap<String, Item> = HashMap()
 ) {
     /*This constructor has no parameter, which is used to create CategoryUpload while retrieve data from database*/
-    constructor() : this("", "", "", "", ArrayList())
+    constructor() : this("", "", "", "", ArrayList(), ArrayList(), HashMap<String, Item>())
 
     /**
      * This method is responsible for storing Family to the database.
@@ -58,7 +58,7 @@ data class Family(
         this.categories.add(Category("Photo"))
         this.categories.add(Category("Instrument"))
         this.categories.add(Category("Others"))
-        FirebaseDatabaseManager.uploadFamily(this,uid)
+        FirebaseDatabaseManager.uploadFamily(this, uid)
         val ownerPath = FirebaseDatabaseManager.USER_PATH + uid + "/"
         FirebaseDatabaseManager.retrieve(
             ownerPath
@@ -151,16 +151,28 @@ data class Family(
          * This method is responsible for showing the items in the item list
          *
          * */
-        fun showItems(uid: String, categoryName: String, mActivity: AppCompatActivity){
+        fun addItem(uid: String, categoryName: String, mActivity: AppCompatActivity) {
             val rootPath = "/"
-            FirebaseDatabaseManager.retrieve(rootPath){ d-> callbackShowItems(uid, categoryName, mActivity, d) }
+            FirebaseDatabaseManager.retrieve(rootPath) { d ->
+                callbackAddItems(
+                    uid,
+                    categoryName,
+                    mActivity,
+                    d
+                )
+            }
         }
 
         /**
          * This method is the callback for showItem
          *
          * */
-        private fun callbackShowItems(uid: String, categoryName: String, mActivity: AppCompatActivity, dataSnapshot: DataSnapshot){
+        private fun callbackAddItems(
+            uid: String,
+            categoryName: String,
+            mActivity: AppCompatActivity,
+            dataSnapshot: DataSnapshot
+        ) {
             //get Family ID
 
 
@@ -182,6 +194,7 @@ data class Family(
             addButton.setOnClickListener {
                 val intent = Intent(mActivity, ItemUploadActivity::class.java)
                 intent.putExtra("UserID", uid)
+                intent.putExtra("categoryPath", categoryName)
                 mActivity.startActivity(intent)
             }
 //            itemListAdapter.listener = mA@ItemListActivity

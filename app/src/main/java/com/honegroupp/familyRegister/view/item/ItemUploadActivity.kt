@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.honegroupp.familyRegister.R
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_upload_page.*
 import android.app.Activity
 import android.net.Uri
@@ -24,6 +23,7 @@ class ItemUploadActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.item_upload_page)
         uid = intent.getStringExtra("UserID")
+        val categoryName = intent.getStringExtra("categoryPath").toString()
 
         itemChooseImage.setOnClickListener {
             selectImageInAlbum()
@@ -40,7 +40,7 @@ class ItemUploadActivity : AppCompatActivity(){
 //                Toast.makeText(this, numberOfImages.toString() +" " + imagePathList.size.toString(),Toast.LENGTH_SHORT).show()
                 Toast.makeText(this, "Please wait for uploading image", Toast.LENGTH_SHORT).show()
             }else {
-                createItem(this, item_name_input, uid, imagePathList)
+                createItem(this, item_name_input, uid, categoryName, imagePathList)
             }
         }
     }
@@ -52,33 +52,18 @@ class ItemUploadActivity : AppCompatActivity(){
         imagePathList.clear()
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        // ask for multiple images picker
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
         super.onActivityResult(requestCode, resultCode, data)
 
         // Result code is RESULT_OK only if the user selects an Image
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 GALLERY_REQUEST_CODE -> {
-
-
-                    //add one image
-//                    //data.getData returns the content URI for the selected Image
-//                    val selectedImage = data!!.data
-//                    itemImage.setImageURI(selectedImage)
-//
-//                    //upload image to firebase storage
-//                    if (selectedImage != null) {
-//                        uploadtofirebase(selectedImage)
-//                    }
-
-
-
-
-
 
 //                    adding multiple image
                     if (data != null) {
@@ -92,7 +77,7 @@ class ItemUploadActivity : AppCompatActivity(){
                             for (i in 0 until count) {
                                 val uri = data.getClipData()!!.getItemAt(i).uri
                                     if (uri != null) {
-                                    uploadtofirebase(uri)
+                                    uploadToFirebase(uri)
                                 }
                             }
                         } else if (data.getData() != null) {
@@ -101,24 +86,19 @@ class ItemUploadActivity : AppCompatActivity(){
 
                             val uri = data.getData()
                             if (uri != null) {
-                                uploadtofirebase(uri)
+                                uploadToFirebase(uri)
                             }
                         }
                         Toast.makeText(this,numberOfImages.toString(),Toast.LENGTH_LONG).show()
                     }else{
                         Toast.makeText(this,"Error",Toast.LENGTH_SHORT).show()
                     }
-
-
-
-
-
                 }
             }
         }
     }
 
-    private fun uploadtofirebase(selectedImage: Uri) {
+    private fun uploadToFirebase(selectedImage: Uri) {
         val uploadPath = " "
         val firebaseStore = FirebaseStorage.getInstance()
         val ref =
@@ -136,7 +116,4 @@ class ItemUploadActivity : AppCompatActivity(){
                 }
             }
     }
-//    private fun uploadItem(){
-//        createItem(this,item_name_input,uid,imagePathList)
-//    }
 }

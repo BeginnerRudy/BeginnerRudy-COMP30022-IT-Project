@@ -29,10 +29,11 @@ class   ItemController {
             mContext: AppCompatActivity,
             itemName: EditText,
             uid: String,
+            categoryName: String,
             imageURLs: ArrayList<String>
         ) {
             val item = Item(itemName.text.toString(), uid, imageURLs)
-            item.store(uid)
+            item.store(uid, categoryName)
 
             Toast.makeText(mContext, "Family Created Successfully", Toast.LENGTH_SHORT).show()
             // Go back to the previous activity

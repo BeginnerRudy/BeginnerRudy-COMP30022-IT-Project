@@ -54,7 +54,7 @@ class CategoryAdapter(val uid: String, val items: ArrayList<Category>, val mCont
             //  pass user id to next activity
             goToItemListActivity.putExtra("UserID", uid)
             // pass category path to goToItemListActivity
-            goToItemListActivity.putExtra("categoryPath", holder.textViewName.text.toString())
+            goToItemListActivity.putExtra("categoryPath", position.toString())
             mContext.startActivity(goToItemListActivity)
         }
     }

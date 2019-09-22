@@ -12,6 +12,7 @@ import com.google.firebase.database.ValueEventListener
 import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.model.Family
 import com.google.firebase.database.DataSnapshot
+import com.honegroupp.familyRegister.model.Category
 import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.view.family.FamilyActivity
@@ -39,8 +40,9 @@ class FirebaseDatabaseManager() {
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
-                    callback(p0)
+                    // remove this listener, since we only need to use DataSnapshot once
                     databaseRef.removeEventListener(this)
+                    callback(p0)
                 }
             })
         }
@@ -114,11 +116,45 @@ class FirebaseDatabaseManager() {
         /**
          * This method is responsible for uploading given item to specified path of the database.
          * */
-        fun uploadItem(item: Item, path: String, lastIndex: Int) {
+        fun uploadItem(
+            item: Item,
+            path: String,
+            items: HashMap<String, Item>,
+            categoryPath: String
+        ) {
             val databaseRef = FirebaseDatabase.getInstance().getReference(path)
+            val itemKey = databaseRef.push().key.toString()
 
-//            databaseRef.child("item").setValue("")
-            databaseRef.child("items").child(lastIndex.toString()).setValue(item)
+            // add current item to the items Hashmap
+            items[itemKey] = item
+
+            // add current's key to the corresponding category
+            val categoryDatabaseReference =
+                FirebaseDatabase.getInstance().getReference(categoryPath)
+            categoryDatabaseReference.addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                    //Don't ignore errors!
+                    Log.d("TAG", p0.message)
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    // remove listener, since we only want to call this listener once.
+                    categoryDatabaseReference.removeEventListener(this)
+
+                    val category = p0.child("").getValue(Category::class.java) as Category
+                    // add new item key to category and update counts
+                    category.itemKeys.add(itemKey)
+                    category.count = items.size
+
+                    // update category to Firebase
+                    update(categoryPath, category)
+
+                }
+            })
+
+
+            // upload items to the Firebase
+            databaseRef.child("items").setValue(items)
         }
 
         /**
