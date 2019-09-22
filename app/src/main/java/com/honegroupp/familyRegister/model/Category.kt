@@ -1,6 +1,7 @@
 package com.honegroupp.familyRegister.model
 
 import android.content.Intent
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.PropertyName
@@ -51,6 +52,19 @@ data class Category(
                     d
                 )
             }
+        }else{
+// TODO too much duplication
+            holder.imageView.setImageResource(R.drawable.fui_ic_googleg_color_24dp)
+            holder.imageView.setOnClickListener {
+                // Snippet from navigate to the ItemListActivity along with the category path
+                val goToItemListActivity = Intent(mActivity, ItemListActivity::class.java)
+
+                //  pass user id to next activity
+                goToItemListActivity.putExtra("UserID", uid)
+                // pass category path to goToItemListActivity
+                goToItemListActivity.putExtra("categoryPath", position.toString())
+                mActivity.startActivity(goToItemListActivity)
+            }
         }
     }
 
@@ -82,17 +96,12 @@ data class Category(
                 .last()
                 .getValue(String::class.java) as String
 
-        if (url == DEFAULT_COVER) {
-            holder.imageView.setImageResource(R.drawable.fui_ic_googleg_color_24dp)
-        } else {
-
             Picasso.get()
                 .load(url)
                 .placeholder(R.mipmap.ic_launcher)
                 .fit()
                 .centerCrop()
                 .into(holder.imageView)
-        }
 
         holder.imageView.setOnClickListener {
             // Snippet from navigate to the ItemListActivity along with the category path
