@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -59,7 +61,6 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                 // Successfully signed d
                 val user = FirebaseAuth.getInstance().currentUser
 
-                // TODO Async task here, for better performance
 
                 var userContact : String = "D_ERROR"
                 if (user != null) {

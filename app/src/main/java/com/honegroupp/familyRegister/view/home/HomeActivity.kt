@@ -88,24 +88,6 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
             startActivity(intent)
             true
         }
-        nav_view.menu.findItem(R.id.nav_create_family).setOnMenuItemClickListener {
-
-            // Navigation to CreateFamily Activity
-            val intent = Intent(this, FamilyCreateActivity::class.java)
-            intent.putExtra("UserID", userID)
-            startActivity(intent)
-            true
-        }
-
-        nav_view.menu.findItem(R.id.nav_join_family).setOnMenuItemClickListener {
-
-            // Navigation to JoinFamily Activity
-            val intent = Intent(this, FamilyJoinActivity::class.java)
-            intent.putExtra("UserID", userID)
-            startActivity(intent)
-
-            true
-        }
 
         nav_view.menu.findItem(R.id.nav_view_family).setOnMenuItemClickListener {
             val intent = Intent(this, ItemDetail::class.java)

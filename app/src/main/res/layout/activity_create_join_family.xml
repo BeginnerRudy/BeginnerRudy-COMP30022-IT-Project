@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background2"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="16dp"
+        android:fontFamily="@font/merriweather_regular"
+        android:gravity="center_horizontal"
+        android:text="Please create or join a family before using the app"
+        android:textSize="24dp" />
+
+    <Button
+        android:id="@+id/btn_create_family"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btn_join_family"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_round"
+        android:text="@string/create_family"
+        app:srcCompat="@mipmap/code_icon" />
+
+    <Button
+        android:id="@+id/btn_join_family"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="170dp"
+        android:background="@drawable/button_round_join"
+        android:textColor="@color/textColorPrimary"
+        android:text="@string/join_family"
+        app:srcCompat="@mipmap/code_icon" />
+
+</RelativeLayout>

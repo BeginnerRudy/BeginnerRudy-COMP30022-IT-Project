@@ -1,8 +1,13 @@
 package com.honegroupp.familyRegister.model
 
+import android.content.Intent
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.PropertyName
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.view.home.HomeActivity
 
 /**
  * This class is responsible for storing data and business logic for Family
@@ -41,7 +46,7 @@ data class Family(
      * This method is responsible for storing Family to the database.
      *
      * */
-    fun store(uid: String) {
+    fun store(mActivity: AppCompatActivity, uid: String) {
         this.categories.add(Category("Letter"))
         this.categories.add(Category("Photo"))
         this.categories.add(Category("Instrument"))
@@ -50,10 +55,15 @@ data class Family(
         val ownerPath = FirebaseDatabaseManager.USER_PATH + uid + "/"
         FirebaseDatabaseManager.retrieve(
             ownerPath
-        ) { d: DataSnapshot -> callbackAddFamilyToUser(ownerPath, d) }
+        ) { d: DataSnapshot -> callbackAddFamilyToUser(mActivity, uid, ownerPath, d) }
     }
 
-    private fun callbackAddFamilyToUser(ownerPath: String, dataSnapshot: DataSnapshot) {
+    private fun callbackAddFamilyToUser(
+        mActivity: AppCompatActivity,
+        uid: String,
+        ownerPath: String,
+        dataSnapshot: DataSnapshot
+    ) {
         val owner = dataSnapshot.child("").getValue(User::class.java) as User
         // set family id
         owner.familyId = this.familyId
@@ -62,7 +72,74 @@ data class Family(
 
         // update user in the database
         FirebaseDatabaseManager.update(ownerPath, owner)
+
+        // Go to Home page
+        val intent = Intent(mActivity, HomeActivity::class.java)
+        intent.putExtra("UserID", uid)
+        mActivity.startActivity(intent)
     }
 
+    companion object {
+        /**
+         * This methods is responsible for validating family id and its password.
+         * TODO This method might not be in controller.
+         * */
+        fun validateJoinFamilyInput(
+            mActivity: AppCompatActivity,
+            familyIdInput: String,
+            familyPasswordInput: String,
+            uid: String
+        ) {
+
+            FirebaseDatabaseManager.retrieve(
+                FirebaseDatabaseManager.FAMILY_PATH
+            ) { d: DataSnapshot ->
+                callbackJoinFamily(
+                    mActivity,
+                    uid,
+                    familyIdInput,
+                    familyPasswordInput,
+                    mActivity,
+                    d
+                )
+            }
+        }
+
+        /**
+         * This family is responsible for joining the User to the family.
+         * */
+        private fun callbackJoinFamily(
+            mActivity: AppCompatActivity,
+            currUid: String,
+            familyIdInput: String,
+            familyPasswordInput: String,
+            currActivity: AppCompatActivity,
+            dataSnapshot: DataSnapshot
+        ) {
+            // Check whether family exist
+            if (!dataSnapshot.hasChild(familyIdInput)) {
+                Toast.makeText(currActivity, "Family Id is not correct!", Toast.LENGTH_SHORT).show()
+            } else {
+                // Get family
+                val family =
+                    dataSnapshot.child(familyIdInput).getValue(Family::class.java) as Family
+                // Check password
+                if (family.password != familyPasswordInput) {
+                    Toast.makeText(currActivity, "Password is not correct!", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    // Add user to family and add family to user
+                    if (!family.members.contains(currUid)) {
+                        family.members.add(currUid)
+                        family.store(mActivity, currUid)
+                    }
+
+                    Toast.makeText(currActivity, "Join family successful!", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
+
+    }
 
 }
