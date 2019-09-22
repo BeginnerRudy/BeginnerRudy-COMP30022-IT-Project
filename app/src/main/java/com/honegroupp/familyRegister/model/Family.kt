@@ -46,7 +46,7 @@ data class Family(
         this.categories.add(Category("Photo"))
         this.categories.add(Category("Instrument"))
         this.categories.add(Category("Others"))
-        FirebaseDatabaseManager.uploadFamily(this)
+        FirebaseDatabaseManager.uploadFamily(this,uid)
         val ownerPath = FirebaseDatabaseManager.USER_PATH + uid + "/"
         FirebaseDatabaseManager.retrieve(
             ownerPath
