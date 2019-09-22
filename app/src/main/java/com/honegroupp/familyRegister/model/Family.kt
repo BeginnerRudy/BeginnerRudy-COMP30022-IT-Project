@@ -3,15 +3,18 @@ package com.honegroupp.familyRegister.model
 import android.content.Intent
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListAdapter
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 
 /**
  * This class is responsible for storing data and business logic for Family
@@ -173,6 +176,14 @@ data class Family(
             // setting one ItemListAdapter
             val itemListAdapter = ItemListAdapter(items, mActivity)
             recyclerView.adapter = itemListAdapter
+
+            // go to upload new item
+            val addButton = mActivity.findViewById<FloatingActionButton>(R.id.btn_add)
+            addButton.setOnClickListener {
+                val intent = Intent(mActivity, ItemUploadActivity::class.java)
+                intent.putExtra("UserID", uid)
+                mActivity.startActivity(intent)
+            }
 //            itemListAdapter.listener = mA@ItemListActivity
 
 
