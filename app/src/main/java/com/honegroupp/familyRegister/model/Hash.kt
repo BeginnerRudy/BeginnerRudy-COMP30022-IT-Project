@@ -7,7 +7,7 @@ import java.security.MessageDigest
 class Hash{
     companion object {
 
-        val salt: String = "A3JKsTlk"
+        val salt: String = "BAILLIEU"
         val algorithm = "SHA-256"
 
         fun applyHash(text: String):String {
@@ -32,6 +32,7 @@ class Hash{
         fun checkHash(text: String, hash: String):Boolean{
             return applyHash(text+ salt) == hash
         }
+
 
     }
 }
