@@ -1,13 +1,17 @@
 package com.honegroupp.familyRegister.model
 
 import android.content.Intent
-import android.widget.EditText
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.PropertyName
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.view.home.HomeActivity
+import com.honegroupp.familyRegister.view.itemList.ItemListAdapter
+import com.honegroupp.familyRegister.R
 
 /**
  * This class is responsible for storing data and business logic for Family
@@ -138,6 +142,64 @@ data class Family(
                         .show()
                 }
             }
+        }
+
+        /**
+         * This method is responsible for showing the items in the item list
+         *
+         * */
+        fun showItems(uid: String, categoryName: String, mActivity: AppCompatActivity){
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieve(rootPath){ d-> callbackShowItems(uid, categoryName, mActivity, d) }
+        }
+
+        /**
+         * This method is the callback for showItem
+         *
+         * */
+        private fun callbackShowItems(uid: String, categoryName: String, mActivity: AppCompatActivity, dataSnapshot: DataSnapshot){
+            //get Family ID
+
+
+            // get items of that category
+            val items = ArrayList<Item>()
+
+            val recyclerView = mActivity.findViewById<RecyclerView>(R.id.recycler_view)
+
+            // Setting the recycler view
+            recyclerView.setHasFixedSize(true)
+            recyclerView.layoutManager = LinearLayoutManager(mActivity)
+
+            // setting one ItemListAdapter
+            val itemListAdapter = ItemListAdapter(items, mActivity)
+            recyclerView.adapter = itemListAdapter
+//            itemListAdapter.listener = mA@ItemListActivity
+
+
+//            dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
+//                override fun onCancelled(p0: DatabaseError) {
+//                    toast(p0.message, Toast.LENGTH_SHORT)
+//                    progress_circular.visibility = View.INVISIBLE
+//                }
+//
+//                override fun onDataChange(p0: DataSnapshot) {
+//                    // clear it before filling it
+//                    itemUploads.clear()
+//
+//                    p0.children.forEach {
+//                        // Retrieve data from database, create an Item object and store in the list of one ItemListAdapter
+//                        val currUpload = it.getValue(Item::class.java) as Item
+//                        currUpload.key = it.key
+//                        itemUploads.add(currUpload)
+//                    }
+//
+//                    // It would update recycler after loading image from firebase storage
+//                    itemListAdapter.notifyDataSetChanged()
+//                    progress_circular.visibility = View.INVISIBLE
+//                }
+//
+//
+//            })
         }
 
     }

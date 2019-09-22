@@ -21,8 +21,6 @@ import com.honegroupp.familyRegister.view.item.ItemDetail
 import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 import android.widget.TextView
-import com.honegroupp.familyRegister.view.family.FamilyCreateActivity
-import com.honegroupp.familyRegister.view.family.FamilyJoinActivity
 import android.view.Gravity
 
 import androidx.appcompat.widget.SearchView

@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Category
+import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 import com.squareup.picasso.Picasso
 
 /**
@@ -17,7 +18,7 @@ import com.squareup.picasso.Picasso
  *
  * */
 
-class CategoryAdapter(val items: ArrayList<Category>, val mContext: Context) :
+class CategoryAdapter(val uid: String, val items: ArrayList<Category>, val mContext: Context) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     var listener: OnItemClickerListener? = null
@@ -47,13 +48,14 @@ class CategoryAdapter(val items: ArrayList<Category>, val mContext: Context) :
         }
 
         holder.imageView.setOnClickListener {
-//            // Snippet from navigate to the ItemListActivity along with the category path
-//            val goToItemListActivity = Intent(mContext, ItemListActivity::class.java)
-//            // pass category path to goToItemListActivity
-//            goToItemListActivity.putExtra("categoryPath", holder.textViewName.text.toString())
-//            mContext.startActivity(goToItemListActivity)
+            // Snippet from navigate to the ItemListActivity along with the category path
+            val goToItemListActivity = Intent(mContext, ItemListActivity::class.java)
 
-            Toast.makeText(mContext, "Clicked", Toast.LENGTH_SHORT).show()
+            //  pass user id to next activity
+            goToItemListActivity.putExtra("UserID", uid)
+            // pass category path to goToItemListActivity
+            goToItemListActivity.putExtra("categoryPath", holder.textViewName.text.toString())
+            mContext.startActivity(goToItemListActivity)
         }
     }
 

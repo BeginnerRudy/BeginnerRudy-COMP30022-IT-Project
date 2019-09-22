@@ -28,6 +28,7 @@
         <activity android:name=".view.family.FamilyCreateActivity"/>
         <activity android:name=".view.family.FamilyJoinActivity"/>
         <activity android:name=".view.item.ItemUploadActivity"/>
+        <activity android:name=".view.itemList.ItemListActivity"/>
     </application>
 
 
