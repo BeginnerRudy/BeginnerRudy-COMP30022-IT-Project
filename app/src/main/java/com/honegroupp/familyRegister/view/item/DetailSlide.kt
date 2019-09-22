@@ -34,29 +34,35 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
 
     lateinit var mSlideViewPager : ViewPager
 
-    var uploads: ArrayList<Item> = ArrayList()
-    var categoryUploads: ArrayList<Category> = ArrayList()
-
     val userId = "zengbinz@student=unimelb=edu=au"
     val path = "Family" + "/" + userId + "/" + "items"
     val path_category = "Family" + "/" + userId + "/" + "categories"
+
+    var uploads: ArrayList<Item> = ArrayList()
+    var categoryUploads: ArrayList<Category> = ArrayList()
+
     val databaseReference = FirebaseDatabase.getInstance().getReference(path)
     val databaseReference_category = FirebaseDatabase.getInstance().getReference(path_category)
+
     lateinit var dbListener: ValueEventListener
     lateinit var dbListener_category: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val builder = StrictMode.VmPolicy.Builder()
-        StrictMode.setVmPolicy(builder.build())
         super.onCreate(savedInstanceState)
         setContentView(R.layout.slide_background)
 
-        mSlideViewPager = findViewById<ViewPager>(R.id.detail_slideViewPager)
+        // StrictMode for share
+        val builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
 
+        mSlideViewPager = findViewById<ViewPager>(R.id.detail_slideViewPager)
         var sliderAdapter = DetailSliderAdapter(uploads,this)
         mSlideViewPager.adapter = sliderAdapter
+
+        // set adapter listener for click action
         sliderAdapter.listener = this@DetailSlide
 
+        // listener for category on firebase, realtime change
         dbListener_category = databaseReference_category.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 toast(p0.message, Toast.LENGTH_SHORT)
@@ -82,6 +88,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
             }
         })
 
+        // listener for items on firebase, realtime change
         dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 toast(p0.message, Toast.LENGTH_SHORT)
@@ -118,15 +125,12 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
 
                 // It would update recycler after loading image from firebase storage
                 sliderAdapter.notifyDataSetChanged()
-
             }
-
         })
-
     }
 
 
-
+    // share when click
     override fun onShareClick(position: Int, item:ArrayList<Item>, imageView: ImageView) {
         this.downloadurl = item[position].imageURLs[0]
         var bitmap = getBitmapFromView(imageView);
@@ -149,6 +153,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         }
     }
 
+    // share use Bitmap from ImageVIew
     fun getBitmapFromView(view: View ): Bitmap {
         var returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
         var canvas = Canvas(returnedBitmap);
@@ -162,7 +167,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         return returnedBitmap;
     }
 
-
+    // download when click
     override fun onDownloadClick(position: Int, item: ArrayList<Item>) {
         this.downloadurl = item[position].imageURLs[0]
         Log.d("dowloding1111","")
