@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.os.StrictMode
 import android.util.Log
 import android.view.View
@@ -107,7 +108,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
                     // add to view if user has access
                     if (categoryUploads.size != 0){
                         if (currUpload.itemName in categoryUploads[0].itemKeys){
-                            if (currUpload.visibility) {
+                            if (currUpload.isPublic) {
                                 uploads.add(currUpload)
                             } else if (currUpload.itemOwnerUID == userId){
                                 uploads.add(currUpload)

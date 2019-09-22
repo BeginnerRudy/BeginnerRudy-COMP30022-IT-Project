@@ -1,29 +1,26 @@
 package com.honegroupp.familyRegister.view.home
 
 
-import android.content.Context
-import android.content.Intent
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Category
-import com.squareup.picasso.Picasso
 
 /**
  * This class is the Adapter for the recycler view with id -> category_recycler_view in the activity_category
  *
  * */
 
-class CategoryAdapter(val items: ArrayList<Category>, val mContext: Context) :
+class CategoryAdapter(val uid: String, private val items: ArrayList<Category>, val mActivity: AppCompatActivity) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     var listener: OnItemClickerListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val v = LayoutInflater.from(mContext).inflate(R.layout.category_item, parent, false)
+        val v = LayoutInflater.from(mActivity).inflate(R.layout.category_item, parent, false)
         return CategoryViewHolder(v)
     }
 
@@ -33,28 +30,7 @@ class CategoryAdapter(val items: ArrayList<Category>, val mContext: Context) :
         holder.textViewCount.text = currCategory.count.toString()
 
         // Load image to ImageView via its URL from Firebase Storage
-        val url = currCategory.getCoverURL()
-        if (url == Category.DEFAULT_COVER) {
-            holder.imageView.setImageResource(R.drawable.fui_ic_googleg_color_24dp)
-        } else {
-
-            Picasso.get()
-                .load(url)
-                .placeholder(R.mipmap.ic_launcher)
-                .fit()
-                .centerCrop()
-                .into(holder.imageView)
-        }
-
-        holder.imageView.setOnClickListener {
-//            // Snippet from navigate to the ItemListActivity along with the category path
-//            val goToItemListActivity = Intent(mContext, ItemListActivity::class.java)
-//            // pass category path to goToItemListActivity
-//            goToItemListActivity.putExtra("categoryPath", holder.textViewName.text.toString())
-//            mContext.startActivity(goToItemListActivity)
-
-            Toast.makeText(mContext, "Clicked", Toast.LENGTH_SHORT).show()
-        }
+        currCategory.setCoverURL(holder,mActivity, position, uid)
     }
 
     override fun getItemCount(): Int {
