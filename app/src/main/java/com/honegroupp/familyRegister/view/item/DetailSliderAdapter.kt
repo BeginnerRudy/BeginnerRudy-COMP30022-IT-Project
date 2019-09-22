@@ -34,9 +34,9 @@ class DetailSliderAdapter(val items: ArrayList<ItemU>, val context: Context) : P
         var layoutInflater:LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_detail_layout, container, false)
 
-        var slideImageView = view.findViewById<ImageView>(R.id.slide_image)
-        var slideHeaing = view.findViewById<TextView>(R.id.slide_heading)
-        var slideDescription = view.findViewById<TextView>(R.id.slide_desc)
+        var slideImageView = view.findViewById<ImageView>(R.id.detail_image)
+        var slideHeaing = view.findViewById<TextView>(R.id.detail_heading)
+        var slideDescription = view.findViewById<TextView>(R.id.detail_desc)
 
         val currUpload = items[position]
 
@@ -50,22 +50,22 @@ class DetailSliderAdapter(val items: ArrayList<ItemU>, val context: Context) : P
         slideHeaing.setText(currUpload.name)
         slideDescription.setText(currUpload.description)
 
-        view.findViewById<TextView>(R.id.slide_desc).setOnClickListener{
+        view.findViewById<TextView>(R.id.detail_desc).setOnClickListener{
             val intent = Intent(context, ItemEdit::class.java)
             context.startActivity(intent)
         }
 
-        view.findViewById<ImageView>(R.id.slide_image).setOnClickListener{
+        view.findViewById<ImageView>(R.id.detail_image).setOnClickListener{
             val intent = Intent(context, DImageSlide::class.java)
             context.startActivity(intent)
         }
 
-        view.findViewById<TextView>(R.id.slider_download).setOnClickListener{
+        view.findViewById<TextView>(R.id.detail_download).setOnClickListener{
             Log.d("dowloding",position.toString())
             listener!!.onDownloadClick(position, items)
         }
 
-        view.findViewById<TextView>(R.id.slide_heading).setOnClickListener{
+        view.findViewById<TextView>(R.id.detail_heading).setOnClickListener{
             Log.d("sharing",position.toString())
             Picasso.get()
                 .load(currUpload.url)

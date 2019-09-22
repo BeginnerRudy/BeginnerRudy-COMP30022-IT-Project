@@ -14,12 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
-import android.text.Html
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.google.firebase.database.DataSnapshot
@@ -50,7 +47,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.slide_background)
 
-        mSlideViewPager = findViewById<ViewPager>(R.id.slideViewPager)
+        mSlideViewPager = findViewById<ViewPager>(R.id.detail_slideViewPager)
 
         var sliderAdapter = DetailSliderAdapter(uploads,this)
         mSlideViewPager.adapter = sliderAdapter

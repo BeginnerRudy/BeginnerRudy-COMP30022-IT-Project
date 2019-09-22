@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.*
+import android.widget.ImageButton
 import androidx.viewpager.widget.PagerAdapter
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -35,11 +36,9 @@ class DImageSliderAdapter(val items: ArrayList<ItemDImage>, val context: Context
         var layoutInflater:LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_dimage_layout, container, false)
 
-        var slideImageView = view.findViewById<ImageView>(R.id.image_slide_image)
+        var slideImageView = view.findViewById<ImageView>(R.id.dimage_image)
 
         val currUpload = items[position]
-
-
 
         // Load image to ImageView via its URL from Firebase Storage
         Picasso.get()
@@ -48,9 +47,14 @@ class DImageSliderAdapter(val items: ArrayList<ItemDImage>, val context: Context
             .into(slideImageView)
         Log.d("url", currUpload.url)
 
-        view.findViewById<ImageView>(R.id.image_slide_image).setOnClickListener{
+        view.findViewById<ImageButton>(R.id.dimage_download).setOnClickListener{
             Log.d("dowloding",position.toString())
             listener!!.onDownloadClick(position, items)
+        }
+
+        view.findViewById<ImageButton>(R.id.dimage_share).setOnClickListener{
+            Log.d("sharing",position.toString())
+            listener!!.onShareClick(position, items, slideImageView)
         }
 
         container.addView(view)

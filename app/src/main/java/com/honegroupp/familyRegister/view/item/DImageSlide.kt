@@ -50,10 +50,10 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
         val builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.slide_background)
+        setContentView(R.layout.slide_dimage_background)
 
-        mSlideViewPager = findViewById<ViewPager>(R.id.slideViewPager)
-        mDotLayout = findViewById<LinearLayout>(R.id.dotsLayout)
+        mSlideViewPager = findViewById<ViewPager>(R.id.dimage_slideViewPager)
+        mDotLayout = findViewById<LinearLayout>(R.id.dimage_dotsLayout)
 
         var DImageSliderAdapter = DImageSliderAdapter(uploads,this)
         mSlideViewPager.adapter = DImageSliderAdapter
