@@ -14,10 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
+import android.text.Html
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.google.firebase.database.DataSnapshot
@@ -34,6 +36,9 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
     private var downloadurl :String = ""
 
     lateinit var mSlideViewPager : ViewPager
+
+
+
     var uploads: ArrayList<ItemU> = ArrayList()
     val path = "CeShi" + "/" + "Furniture" + "/"
     val databaseReference = FirebaseDatabase.getInstance().getReference(path)
@@ -43,14 +48,15 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         val builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.item_slide)
+        setContentView(R.layout.slide_background)
 
         mSlideViewPager = findViewById<ViewPager>(R.id.slideViewPager)
-        var mDotLayout = findViewById<LinearLayout>(R.id.dotsLayout)
 
         var sliderAdapter = DetailSliderAdapter(uploads,this)
         mSlideViewPager.adapter = sliderAdapter
         sliderAdapter.listener = this@DetailSlide
+
+
 
         dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -73,11 +79,13 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
 
                 // It would update recycler after loading image from firebase storage
                 sliderAdapter.notifyDataSetChanged()
+
             }
 
         })
 
     }
+
 
 
     override fun onShareClick(position: Int,item:ArrayList<ItemU>, imageView: ImageView) {

@@ -32,7 +32,7 @@ class DetailSliderAdapter(val items: ArrayList<ItemU>, val context: Context) : P
 
     override fun instantiateItem(container: ViewGroup, position: Int): View {
         var layoutInflater:LayoutInflater = LayoutInflater.from(context)
-        val view: View = layoutInflater.inflate(R.layout.slide_layout, container, false)
+        val view: View = layoutInflater.inflate(R.layout.slide_detail_layout, container, false)
 
         var slideImageView = view.findViewById<ImageView>(R.id.slide_image)
         var slideHeaing = view.findViewById<TextView>(R.id.slide_heading)

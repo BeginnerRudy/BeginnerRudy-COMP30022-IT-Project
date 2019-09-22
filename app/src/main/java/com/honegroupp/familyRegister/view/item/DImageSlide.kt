@@ -14,9 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
+import android.text.Html
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.google.firebase.database.DataSnapshot
@@ -33,6 +36,11 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
     private var downloadurl :String = ""
 
     lateinit var mSlideViewPager : ViewPager
+    lateinit var mDotLayout: LinearLayout
+
+    lateinit var mDots: Array<TextView?>
+    var numDots: Int = 0
+
     var uploads: ArrayList<ItemDImage> = ArrayList()
     val path = "CeShi" + "/" + "Furniture" + "/" + "-Lp8AH9y17j-WiTjZVIv" + "/" + "dimages"
     val databaseReference = FirebaseDatabase.getInstance().getReference(path)
@@ -42,13 +50,16 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
         val builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.item_slide)
+        setContentView(R.layout.slide_background)
 
         mSlideViewPager = findViewById<ViewPager>(R.id.slideViewPager)
+        mDotLayout = findViewById<LinearLayout>(R.id.dotsLayout)
 
         var DImageSliderAdapter = DImageSliderAdapter(uploads,this)
         mSlideViewPager.adapter = DImageSliderAdapter
         DImageSliderAdapter.listener = this@DImageSlide
+
+
 
         dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -71,11 +82,47 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
 
                 // It would update recycler after loading image from firebase storage
                 DImageSliderAdapter.notifyDataSetChanged()
+
+                // set number of dots
+                numDots = uploads.size
             }
 
         })
 
-//        registerForContextMenu(mSlideViewPager.slideViewPager.slide_image)
+        addDotsIndicator(0)
+
+        mSlideViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+            }
+            override fun onPageSelected(position: Int) {
+                addDotsIndicator(position)
+            }
+
+        })
+}
+
+    fun addDotsIndicator(position: Int){
+        mDots = arrayOfNulls<TextView>(numDots)
+        mDotLayout.removeAllViews()
+        if (numDots > 0) {
+            for (i in 0..numDots-1) {
+                mDots[i] = TextView(this)
+                mDots[i]?.setText(Html.fromHtml("&#8226;"))
+                mDots[i]?.setTextColor(getResources().getColor(R.color.colorTransparentWhite))
+
+                mDotLayout.addView(mDots[i])
+
+            }
+
+            if(mDots.size > 0){
+                mDots[position]?.setTextColor(getResources().getColor(R.color.colorWhite))
+            }
+        }
     }
 
 
@@ -132,7 +179,7 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
 //        }
 //    }
 
-    override fun onShareClick(position: Int,item:ArrayList<ItemDImage>, imageView: ImageView) {
+    override fun onShareClick(position: Int, item:ArrayList<ItemDImage>, imageView: ImageView) {
         this.downloadurl = item[position].url
         var bitmap = getBitmapFromView(imageView);
         try {
