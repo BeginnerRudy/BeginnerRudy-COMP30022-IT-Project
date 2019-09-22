@@ -79,21 +79,18 @@ class FamilyController {
          *
          * */
         fun createFamily(
-            mActivity: Context,
+            mActivity: AppCompatActivity,
             familyId: EditText,
             password: EditText,
             uid: String
         ) {
             val family = Family(familyId.text.toString(), password.text.toString(), uid)
             family.members.add(uid)
-            family.store(uid)
+            family.store(mActivity, uid)
 
             Toast.makeText(mActivity, "Family Created Successfully", Toast.LENGTH_SHORT).show()
 
-            // Go to Home page
-            val intent = Intent(mActivity, HomeActivity::class.java)
-            intent.putExtra("UserID", uid)
-            mActivity.startActivity(intent)
+
         }
 
 
@@ -155,6 +152,7 @@ class FamilyController {
                             FirebaseDatabaseManager.USER_PATH
                         ) { d: DataSnapshot ->
                             callbackAddFamilyIdToUser(
+                                mActivity,
                                 currUid,
                                 familyIdInput,
                                 d
@@ -164,15 +162,12 @@ class FamilyController {
 
                     Toast.makeText(currActivity, "Join family successful!", Toast.LENGTH_SHORT)
                         .show()
-                    // Go to Home page
-                    val intent = Intent(mActivity, HomeActivity::class.java)
-                    intent.putExtra("UserID", currUid)
-                    mActivity.startActivity(intent)
                 }
             }
         }
 
         private fun callbackAddFamilyIdToUser(
+            mActivity: AppCompatActivity,
             currUid: String,
             familyIdInput: String,
             dataSnapshot: DataSnapshot
@@ -184,6 +179,11 @@ class FamilyController {
             // update user in the database
             val path = FirebaseDatabaseManager.USER_PATH + currUid + "/"
             FirebaseDatabaseManager.update(path, currUser)
+
+            // Go to Home page
+            val intent = Intent(mActivity, HomeActivity::class.java)
+            intent.putExtra("UserID", currUid)
+            mActivity.startActivity(intent)
         }
 
         /**

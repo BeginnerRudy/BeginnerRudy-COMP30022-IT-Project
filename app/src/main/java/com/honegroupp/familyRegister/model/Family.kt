@@ -1,8 +1,11 @@
 package com.honegroupp.familyRegister.model
 
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.PropertyName
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.view.home.HomeActivity
 
 /**
  * This class is responsible for storing data and business logic for Family
@@ -41,7 +44,7 @@ data class Family(
      * This method is responsible for storing Family to the database.
      *
      * */
-    fun store(uid: String) {
+    fun store(mActivity: AppCompatActivity, uid: String) {
         this.categories.add(Category("Letter"))
         this.categories.add(Category("Photo"))
         this.categories.add(Category("Instrument"))
@@ -50,10 +53,10 @@ data class Family(
         val ownerPath = FirebaseDatabaseManager.USER_PATH + uid + "/"
         FirebaseDatabaseManager.retrieve(
             ownerPath
-        ) { d: DataSnapshot -> callbackAddFamilyToUser(ownerPath, d) }
+        ) { d: DataSnapshot -> callbackAddFamilyToUser(mActivity, uid, ownerPath, d) }
     }
 
-    private fun callbackAddFamilyToUser(ownerPath: String, dataSnapshot: DataSnapshot) {
+    private fun callbackAddFamilyToUser(mActivity: AppCompatActivity, uid: String, ownerPath: String, dataSnapshot: DataSnapshot) {
         val owner = dataSnapshot.child("").getValue(User::class.java) as User
         // set family id
         owner.familyId = this.familyId
@@ -62,6 +65,11 @@ data class Family(
 
         // update user in the database
         FirebaseDatabaseManager.update(ownerPath, owner)
+
+        // Go to Home page
+        val intent = Intent(mActivity, HomeActivity::class.java)
+        intent.putExtra("UserID", uid)
+        mActivity.startActivity(intent)
     }
 
 
