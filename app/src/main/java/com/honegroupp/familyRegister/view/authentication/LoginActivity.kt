@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.AuthenticationController
+import com.honegroupp.familyRegister.model.EmailPathSwitch
 import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.view.home.HomeActivity
 
@@ -59,7 +60,19 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                 val user = FirebaseAuth.getInstance().currentUser
 
                 // TODO Async task here, for better performance
-                AuthenticationController.storeUser(this, User(user!!.displayName as String), user!!.uid)
+
+                var userContact : String = "D_ERROR"
+                if (user != null) {
+                    if (user.email != null)
+                        userContact = user.email.toString()
+                    else if (user.phoneNumber != null) {
+                        userContact = user.email.toString()
+                    }
+                }
+
+                val relativePath = EmailPathSwitch.emailToPath(userContact)
+
+                AuthenticationController.storeUser(this, User(username =  user!!.displayName as String), relativePath)
 
             } else if (response == null) {
                 // If the user press back button, exit the app

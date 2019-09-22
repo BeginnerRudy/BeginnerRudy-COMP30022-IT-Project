@@ -84,9 +84,11 @@ class FirebaseDatabaseManager() {
         /**
          * This method is responsible for uploading given family to specified path of the database.
          * */
-        fun uploadFamily(family: Family) {
+        fun uploadFamily(family: Family, uid: String) {
             val databaseRef = FirebaseDatabase.getInstance().getReference(FAMILY_PATH)
-            val uploadKey = databaseRef.push().key.toString()
+
+            //TODO
+            val uploadKey = uid
 
 
             family.familyId = uploadKey
