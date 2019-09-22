@@ -58,16 +58,6 @@ class FirebaseDatabaseManager() {
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
-                    // TODO Show a progress bar when start
-//                    val layout = RelativeLayout(mActivity)
-//                    val circularProgressBar = ProgressBar(mActivity)
-//                    val rlp = RelativeLayout.LayoutParams(
-//                        RelativeLayout.LayoutParams.FILL_PARENT,
-//                        RelativeLayout.LayoutParams.FILL_PARENT
-//                    )
-
-
-//                    mActivity.addContentView(circularProgressBar,rlp)
 
                     var isExist = false
                     var intent = Intent(mActivity, FamilyActivity::class.java)
