@@ -6,17 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
-import android.provider.MediaStore
 import android.util.Log
 import android.view.ContextMenu
 import android.view.Menu
@@ -25,35 +22,28 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.internal.Util
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.ItemU
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_slide.view.*
-import kotlinx.android.synthetic.main.slide_layout.view.*
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.lang.System.out
-import java.net.HttpURLConnection
-import java.net.URL
 
-class ItemSlide() : AppCompatActivity(), SliderAdapter.OnItemClickerListener {
+class ItemDetailSlide() : AppCompatActivity(), SliderAdapter.OnItemClickerListener {
     private val STORAGE_PERMISSION_CODE: Int = 1000
     private var downloadurl :String = ""
 
     lateinit var mSlideViewPager : ViewPager
+    lateinit var sliderAdapter : SliderAdapter
     var uploads: ArrayList<ItemU> = ArrayList()
     val path = "CeShi" + "/" + "Furniture" + "/"
     val databaseReference = FirebaseDatabase.getInstance().getReference(path)
     lateinit var dbListener: ValueEventListener
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val builder = StrictMode.VmPolicy.Builder()
@@ -64,29 +54,29 @@ class ItemSlide() : AppCompatActivity(), SliderAdapter.OnItemClickerListener {
         mSlideViewPager = findViewById<ViewPager>(R.id.slideViewPager)
         var mDotLayout = findViewById<LinearLayout>(R.id.dotsLayout)
 
-        var sliderAdapter = SliderAdapter(uploads,this)
+        sliderAdapter = SliderAdapter(uploads,this)
         mSlideViewPager.adapter = sliderAdapter
-        sliderAdapter.listener = this@ItemSlide
+        sliderAdapter.listener = this@ItemDetailSlide
 
 
 
-        mSlideViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                invalidateOptionsMenu()
-            }
-
-            override fun onPageSelected(position: Int) {
-
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {
-
-            }
-        })
+//        mSlideViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+//            override fun onPageScrolled(
+//                position: Int,
+//                positionOffset: Float,
+//                positionOffsetPixels: Int
+//            ) {
+//                invalidateOptionsMenu()
+//            }
+//
+//            override fun onPageSelected(position: Int) {
+//
+//            }
+//
+//            override fun onPageScrollStateChanged(state: Int) {
+//
+//            }
+//        })
 
         dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -116,19 +106,30 @@ class ItemSlide() : AppCompatActivity(), SliderAdapter.OnItemClickerListener {
 //        registerForContextMenu(mSlideViewPager.slideViewPager.slide_image)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.item_detail_menu, menu)
-        if (mSlideViewPager.getCurrentItem() === 0) {
-            // configure
-        } else if (mSlideViewPager.getCurrentItem() === 1) {
-            // configure
-        } else if (mSlideViewPager.getCurrentItem() === 2) {
-            // configure
-        } else if (mSlideViewPager.getCurrentItem() === 3) {
-            // configure
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menu!!.setHeaderTitle("Choose your option");
+        getMenuInflater().inflate(R.menu.item_detail_menu, menu);
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.option_1 -> {
+                onDownloadClick(sliderAdapter.currposion, sliderAdapter.items)
+
+                Toast.makeText(this, sliderAdapter.currposion.toString(), Toast.LENGTH_SHORT).show()
+                return true
+            }
+            R.id.option_2 -> {
+                Toast.makeText(this, "Option 2 selected", Toast.LENGTH_SHORT).show()
+                return true
+            }
+            else -> return super.onContextItemSelected(item)
         }
-        return super.onCreateOptionsMenu(menu)
     }
 
 //    override fun onCreateContextMenu(

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/main_background"
-    tools:context=".view.item.ItemSlide">
+    tools:context=".view.item.ItemDetailSlide">
 
     <LinearLayout
         android:id="@+id/dotsLayout"
