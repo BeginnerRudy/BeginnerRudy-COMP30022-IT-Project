@@ -108,83 +108,9 @@ class FamilyController {
             val familyIdInput = familyId.text.toString()
             val familyPasswordInput = password.text.toString()
 
-            FirebaseDatabaseManager.retrieve(
-                FirebaseDatabaseManager.FAMILY_PATH
-            ) { d: DataSnapshot ->
-                callbackJoinFamily(
-                    mActivity,
-                    uid,
-                    familyIdInput,
-                    familyPasswordInput,
-                    mActivity,
-                    d
-                )
-            }
+            Family.validateJoinFamilyInput(mActivity, familyIdInput, familyPasswordInput, uid)
         }
 
-        private fun callbackJoinFamily(
-            mActivity: AppCompatActivity,
-            currUid: String,
-            familyIdInput: String,
-            familyPasswordInput: String,
-            currActivity: AppCompatActivity,
-            dataSnapshot: DataSnapshot
-        ) {
-            // Check whether family exist
-            if (!dataSnapshot.hasChild(familyIdInput)) {
-                Toast.makeText(currActivity, "Family Id is not correct!", Toast.LENGTH_SHORT).show()
-            } else {
-                // Get family
-                val family =
-                    dataSnapshot.child(familyIdInput).getValue(Family::class.java) as Family
-                // Check password
-                if (family.password != familyPasswordInput) {
-                    Toast.makeText(currActivity, "Password is not correct!", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    // Add user to family and add family to user
-                    if (!family.members.contains(currUid)) {
-                        family.members.add(currUid)
-                        val familyPath = FirebaseDatabaseManager.FAMILY_PATH + familyIdInput + "/"
-                        FirebaseDatabaseManager.update(familyPath, family)
-                        // get User and add familyId to user
-                        FirebaseDatabaseManager.retrieve(
-                            FirebaseDatabaseManager.USER_PATH
-                        ) { d: DataSnapshot ->
-                            callbackAddFamilyIdToUser(
-                                mActivity,
-                                currUid,
-                                familyIdInput,
-                                d
-                            )
-                        }
-                    }
-
-                    Toast.makeText(currActivity, "Join family successful!", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
-        }
-
-        private fun callbackAddFamilyIdToUser(
-            mActivity: AppCompatActivity,
-            currUid: String,
-            familyIdInput: String,
-            dataSnapshot: DataSnapshot
-        ) {
-            val currUser = dataSnapshot.child(currUid).getValue(User::class.java) as User
-            currUser.familyId = familyIdInput
-
-
-            // update user in the database
-            val path = FirebaseDatabaseManager.USER_PATH + currUid + "/"
-            FirebaseDatabaseManager.update(path, currUser)
-
-            // Go to Home page
-            val intent = Intent(mActivity, HomeActivity::class.java)
-            intent.putExtra("UserID", currUid)
-            mActivity.startActivity(intent)
-        }
 
         /**
          * This method is to navigate button click from mActivity to destination

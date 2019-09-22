@@ -1,6 +1,8 @@
 package com.honegroupp.familyRegister.model
 
 import android.content.Intent
+import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.PropertyName
@@ -56,7 +58,12 @@ data class Family(
         ) { d: DataSnapshot -> callbackAddFamilyToUser(mActivity, uid, ownerPath, d) }
     }
 
-    private fun callbackAddFamilyToUser(mActivity: AppCompatActivity, uid: String, ownerPath: String, dataSnapshot: DataSnapshot) {
+    private fun callbackAddFamilyToUser(
+        mActivity: AppCompatActivity,
+        uid: String,
+        ownerPath: String,
+        dataSnapshot: DataSnapshot
+    ) {
         val owner = dataSnapshot.child("").getValue(User::class.java) as User
         // set family id
         owner.familyId = this.familyId
@@ -72,5 +79,67 @@ data class Family(
         mActivity.startActivity(intent)
     }
 
+    companion object {
+        /**
+         * This methods is responsible for validating family id and its password.
+         * TODO This method might not be in controller.
+         * */
+        fun validateJoinFamilyInput(
+            mActivity: AppCompatActivity,
+            familyIdInput: String,
+            familyPasswordInput: String,
+            uid: String
+        ) {
+
+            FirebaseDatabaseManager.retrieve(
+                FirebaseDatabaseManager.FAMILY_PATH
+            ) { d: DataSnapshot ->
+                callbackJoinFamily(
+                    mActivity,
+                    uid,
+                    familyIdInput,
+                    familyPasswordInput,
+                    mActivity,
+                    d
+                )
+            }
+        }
+
+        /**
+         * This family is responsible for joining the User to the family.
+         * */
+        private fun callbackJoinFamily(
+            mActivity: AppCompatActivity,
+            currUid: String,
+            familyIdInput: String,
+            familyPasswordInput: String,
+            currActivity: AppCompatActivity,
+            dataSnapshot: DataSnapshot
+        ) {
+            // Check whether family exist
+            if (!dataSnapshot.hasChild(familyIdInput)) {
+                Toast.makeText(currActivity, "Family Id is not correct!", Toast.LENGTH_SHORT).show()
+            } else {
+                // Get family
+                val family =
+                    dataSnapshot.child(familyIdInput).getValue(Family::class.java) as Family
+                // Check password
+                if (family.password != familyPasswordInput) {
+                    Toast.makeText(currActivity, "Password is not correct!", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    // Add user to family and add family to user
+                    if (!family.members.contains(currUid)) {
+                        family.members.add(currUid)
+                        family.store(mActivity, currUid)
+                    }
+
+                    Toast.makeText(currActivity, "Join family successful!", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
+
+    }
 
 }

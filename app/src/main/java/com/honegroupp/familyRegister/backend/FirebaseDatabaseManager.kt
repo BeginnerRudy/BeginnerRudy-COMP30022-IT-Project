@@ -2,6 +2,9 @@ package com.honegroupp.familyRegister.backend
 
 import android.content.Intent
 import android.util.Log
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -46,7 +49,6 @@ class FirebaseDatabaseManager() {
          * This method is responsible for uploading the given user to  the database when user login.
          * */
         fun uploadUser(mActivity: AppCompatActivity, uid: String, user: User) {
-            // TODO This logic should not be exposed in controller.
             val databaseRef = FirebaseDatabase.getInstance().getReference(USER_PATH)
 
             databaseRef.addValueEventListener(object : ValueEventListener {
@@ -56,6 +58,17 @@ class FirebaseDatabaseManager() {
                 }
 
                 override fun onDataChange(p0: DataSnapshot) {
+                    // TODO Show a progress bar when start
+//                    val layout = RelativeLayout(mActivity)
+//                    val circularProgressBar = ProgressBar(mActivity)
+//                    val rlp = RelativeLayout.LayoutParams(
+//                        RelativeLayout.LayoutParams.FILL_PARENT,
+//                        RelativeLayout.LayoutParams.FILL_PARENT
+//                    )
+
+
+//                    mActivity.addContentView(circularProgressBar,rlp)
+
                     var isExist = false
                     var intent = Intent(mActivity, FamilyActivity::class.java)
 
