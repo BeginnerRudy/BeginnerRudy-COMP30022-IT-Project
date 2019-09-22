@@ -34,7 +34,6 @@ class AuthenticationController {
          * This method is responsible for upload user to the database
          * */
         fun storeUser(mActivity: AppCompatActivity, user: User, uid: String) {
-            // TODO Show a progress bar when start in the center
             mActivity.setContentView(R.layout.circular_progress_bar)
 
             user.store(mActivity, uid)
