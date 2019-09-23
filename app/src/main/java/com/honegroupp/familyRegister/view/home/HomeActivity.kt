@@ -27,6 +27,7 @@ import android.view.Gravity
 
 import androidx.appcompat.widget.SearchView
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
+import com.honegroupp.familyRegister.view.utility.SearchActivity
 
 
 @Suppress("DEPRECATION")
@@ -63,10 +64,11 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         // Searching Feature
 
 
-        var search = findViewById<SearchView>(R.id.searchView)
-        search.layoutParams = Toolbar.LayoutParams(Gravity.RIGHT)
-        search.setOnClickListener {
-            //
+        search_icon.setOnClickListener {
+            val intent = Intent(this,SearchActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
+            true
         }
 
 

@@ -12,8 +12,7 @@ import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.model.User
 
 /**
- * This class is responsible for controller the event related to family.
- * There are create, join and view a family.
+ * This class is responsible for controller the event related to item.
  *
  * */
 class   ItemController {

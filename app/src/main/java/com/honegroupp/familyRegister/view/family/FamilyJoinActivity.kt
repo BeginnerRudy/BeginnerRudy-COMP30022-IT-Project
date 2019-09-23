@@ -34,6 +34,7 @@ class FamilyJoinActivity : AppCompatActivity() {
                 edit_text_family_password_input,
                 currUid
             )
+
         }
     }
 }

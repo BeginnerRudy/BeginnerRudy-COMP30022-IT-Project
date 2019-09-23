@@ -38,4 +38,6 @@
     <string name="choose_image">choose an image</string>
     <string name="add_item">add item</string>
     <string name="type_item_description">Please enter item description</string>
+
+    <string name="query_hints">name/age</string>
 </resources>
