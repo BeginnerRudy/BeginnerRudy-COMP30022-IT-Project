@@ -258,7 +258,7 @@ data class Family(
                 // the item keys is empty
                 ArrayList()
             }else{
-                itemKeysSnapshot.child("itemKeys").value as ArrayList<String>
+                itemKeysSnapshot.value as ArrayList<String>
             }
 
             // clear items once retrieve item from the database
