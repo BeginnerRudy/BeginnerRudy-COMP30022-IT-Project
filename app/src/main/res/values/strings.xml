@@ -45,4 +45,6 @@
 
     </string-array>
 
+
+    <string name="query_hints">name/age</string>
 </resources>

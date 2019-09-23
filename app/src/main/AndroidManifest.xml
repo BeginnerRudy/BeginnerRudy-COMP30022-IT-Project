@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
-        <activity android:name=".view.authentication.AccountActivity"></activity>
+        <activity android:name=".view.utility.SearchActivity"></activity>
+        <activity android:name=".view.authentication.AccountActivity" />
         <activity
             android:name=".view.authentication.LoginActivity"
             android:screenOrientation="portrait">
@@ -38,6 +39,7 @@
 
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 

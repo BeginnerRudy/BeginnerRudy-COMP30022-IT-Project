@@ -6,8 +6,7 @@
     android:fitsSystemWindows="true">
 
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -30,13 +29,12 @@
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark">
 
-                <androidx.appcompat.widget.SearchView
-                    android:id="@+id/searchView"
-                    android:layout_alignParentRight="true"
+                <TextView
+                    android:id="@+id/search_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:queryHint="@string/search" />
-
+                    android:drawableRight="@drawable/ic_search_white_24dp"
+                    />
 
 
             </androidx.appcompat.widget.Toolbar>
@@ -47,6 +45,7 @@
                 android:layout_height="wrap_content"
                 app:tabGravity="fill"
                 app:tabMode="fixed" />
+
         </com.google.android.material.appbar.AppBarLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
