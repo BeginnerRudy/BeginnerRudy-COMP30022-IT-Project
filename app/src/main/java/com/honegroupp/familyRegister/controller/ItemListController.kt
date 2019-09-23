@@ -8,5 +8,12 @@ class ItemListController{
         fun addItem(uid: String, categoryName: String, mActivity: AppCompatActivity){
             Family.addItem(uid, categoryName, mActivity)
         }
+
+        /**
+         * This method is responsible for showing all the items in the given category
+         * */
+        fun showItems(uid: String, categoryName: String, mActivity: AppCompatActivity){
+            Family.showItems(uid, categoryName, mActivity)
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.honegroupp.familyRegister.model
 
 import android.content.Intent
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -56,7 +58,7 @@ data class Family(
      * */
     fun store(mActivity: AppCompatActivity, uid: String) {
         // If there is no category. initializeK it.
-        if (this.categories.isEmpty()){
+        if (this.categories.isEmpty()) {
             this.categories.add(Category("Letter"))
             this.categories.add(Category("Photo"))
             this.categories.add(Category("Instrument"))
@@ -190,21 +192,6 @@ data class Family(
             mActivity: AppCompatActivity,
             dataSnapshot: DataSnapshot
         ) {
-            //get Family ID
-
-
-            // get items of that category
-            val items = ArrayList<Item>()
-
-            val recyclerView = mActivity.findViewById<RecyclerView>(R.id.recycler_view)
-
-            // Setting the recycler view
-            recyclerView.setHasFixedSize(true)
-            recyclerView.layoutManager = LinearLayoutManager(mActivity)
-
-            // setting one ItemListAdapter
-            val itemListAdapter = ItemListAdapter(items, mActivity)
-            recyclerView.adapter = itemListAdapter
 
             // go to upload new item
             val addButton = mActivity.findViewById<FloatingActionButton>(R.id.btn_add)
@@ -214,35 +201,84 @@ data class Family(
                 intent.putExtra("categoryPath", categoryName)
                 mActivity.startActivity(intent)
             }
-//            itemListAdapter.listener = mA@ItemListActivity
-
-
-//            dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
-//                override fun onCancelled(p0: DatabaseError) {
-//                    toast(p0.message, Toast.LENGTH_SHORT)
-//                    progress_circular.visibility = View.INVISIBLE
-//                }
-//
-//                override fun onDataChange(p0: DataSnapshot) {
-//                    // clear it before filling it
-//                    itemUploads.clear()
-//
-//                    p0.children.forEach {
-//                        // Retrieve data from database, create an Item object and store in the list of one ItemListAdapter
-//                        val currUpload = it.getValue(Item::class.java) as Item
-//                        currUpload.key = it.key
-//                        itemUploads.add(currUpload)
-//                    }
-//
-//                    // It would update recycler after loading image from firebase storage
-//                    itemListAdapter.notifyDataSetChanged()
-//                    progress_circular.visibility = View.INVISIBLE
-//                }
-//
-//
-//            })
         }
 
+        /**
+         * This function is responsible for showing all the items in the category
+         *
+         * */
+        fun showItems(uid: String, categoryName: String, mActivity: AppCompatActivity) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
+                callbackShowItems(
+                    uid,
+                    categoryName,
+                    mActivity,
+                    d
+                )
+            }
+        }
+
+        /**
+         * This method is the callback for the show items
+         * */
+        private fun callbackShowItems(
+            uid: String,
+            categoryName: String,
+            mActivity: AppCompatActivity,
+            dataSnapshot: DataSnapshot
+        ) {
+
+            // get items of that category
+            val items = ArrayList<Item>()
+
+            val recyclerView = mActivity.findViewById<RecyclerView>(R.id.item_list_recycler_view)
+
+            // Setting the recycler view
+            recyclerView.setHasFixedSize(true)
+            recyclerView.layoutManager = LinearLayoutManager(mActivity)
+
+            // setting one ItemListAdapter
+            val itemListAdapter = ItemListAdapter(items, mActivity)
+            recyclerView.adapter = itemListAdapter
+//            itemListAdapter.listener = mA@ItemListActivity
+
+            // get user's family ID
+            val currFamilyId =
+                dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).child("familyId").getValue(
+                    String::class.java
+                ) as String
+
+            // get item keys for the given category as an ArrayList
+            val itemKeys =
+                dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId)
+                    .child("categories").child(categoryName).child("itemKeys").value as ArrayList<String>
+
+            // clear items once retrieve item from the database
+            items.clear()
+            for (key in itemKeys) {
+                Log.d("item keys", key)
+
+                // get item by each key
+                val currItem =
+                    dataSnapshot
+                        .child(FirebaseDatabaseManager.FAMILY_PATH)
+                        .child(currFamilyId)
+                        .child("items")
+                        .child(key)
+                        .getValue(Item::class.java) as Item
+
+                currItem.key = key
+                // add it to the items
+                items.add(currItem)
+
+                // notify the adapter to update
+                itemListAdapter.notifyDataSetChanged()
+                // Make the progress bar invisible
+                mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
+                    View.INVISIBLE
+            }
+        }
     }
 
 }

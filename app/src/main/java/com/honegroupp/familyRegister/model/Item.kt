@@ -45,6 +45,8 @@ data class Item(
 //        this.itemPrivacy = itemPrivacy
 //    }
 
+    var key: String? = null
+
     /**
      * this function is used to store new item into item list of a family
      * */
@@ -83,7 +85,8 @@ data class Item(
         }
 
         val path = FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/"
-        val categoryPath = FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/" + "categories/" + categoryName + "/"
+        val categoryPath =
+            FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/" + "categories/" + categoryName + "/"
         FirebaseDatabaseManager.uploadItem(this, path, items, categoryPath)
     }
 }

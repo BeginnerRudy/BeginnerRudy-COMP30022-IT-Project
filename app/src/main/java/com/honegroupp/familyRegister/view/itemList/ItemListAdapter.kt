@@ -22,16 +22,17 @@ class ItemListAdapter(val items: ArrayList<Item>, val mContext: Context) :
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        val currUpload = items[position]
-//        holder.textViewName.text = currUpload.name
-//        // Load image to ImageView via its URL from Firebase Storage
-//        Picasso.get()
-//            .load(currUpload.url)
-//            .placeholder(R.mipmap.ic_launcher)
-//            .fit()
-//            .centerCrop()
-//            .into(holder.imageView)
-//        Log.d("url", currUpload.url)
+        val currItem = items[position]
+
+        holder.textViewName.text = currItem.itemName
+        // Load image to ImageView via its URL from Firebase Storage
+        Picasso.get()
+            .load(currItem.imageURLs[0])
+            .placeholder(R.mipmap.ic_launcher)
+            .fit()
+            .centerCrop()
+            .into(holder.imageView)
+        Log.d("url000", currItem.imageURLs[0])
     }
 
     override fun getItemCount(): Int {
