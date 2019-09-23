@@ -58,27 +58,34 @@ data class Family(
         this.categories.add(Category("Photo"))
         this.categories.add(Category("Instrument"))
         this.categories.add(Category("Others"))
+
+        // upload family first
         FirebaseDatabaseManager.uploadFamily(this, uid)
-        val ownerPath = FirebaseDatabaseManager.USER_PATH + uid + "/"
+
+        // update User
+        val userPath = FirebaseDatabaseManager.USER_PATH + uid + "/"
         FirebaseDatabaseManager.retrieve(
-            ownerPath
-        ) { d: DataSnapshot -> callbackAddFamilyToUser(mActivity, uid, ownerPath, d) }
+            userPath
+        ) { d: DataSnapshot -> callbackAddFamilyToUser(this, mActivity, uid, userPath, d) }
     }
 
     private fun callbackAddFamilyToUser(
+        family: Family,
         mActivity: AppCompatActivity,
         uid: String,
-        ownerPath: String,
+        userPath: String,
         dataSnapshot: DataSnapshot
     ) {
-        val owner = dataSnapshot.child("").getValue(User::class.java) as User
+        val user = dataSnapshot.child("").getValue(User::class.java) as User
         // set family id
-        owner.familyId = this.familyId
-        // set the user to be the family owner
-        owner.isFamilyOwner = true
+        user.familyId = this.familyId
+        // set the user to be the family owner if there is no owner
+        if (family.familyOwnerUID.isEmpty()){
+            user.isFamilyOwner = true
+        }
 
         // update user in the database
-        FirebaseDatabaseManager.update(ownerPath, owner)
+        FirebaseDatabaseManager.update(userPath, user)
 
         // Go to Home page
         val intent = Intent(mActivity, HomeActivity::class.java)
@@ -97,7 +104,6 @@ data class Family(
             familyPasswordInput: String,
             uid: String
         ) {
-
             FirebaseDatabaseManager.retrieve(
                 FirebaseDatabaseManager.FAMILY_PATH
             ) { d: DataSnapshot ->
@@ -123,15 +129,19 @@ data class Family(
             currActivity: AppCompatActivity,
             dataSnapshot: DataSnapshot
         ) {
+
+            // Convert familyiD to th format it stored on firebase
+            val familyIdInputModified = familyIdInput.replace(".", "=", true)
+
             // Check whether family exist
-            if (!dataSnapshot.hasChild(familyIdInput) || familyIdInput.trim() == "") {
+            if (!dataSnapshot.hasChild(familyIdInputModified) || familyIdInput.trim() == "") {
                 Toast.makeText(currActivity, "Family Id is not correct!", Toast.LENGTH_SHORT).show()
             } else {
                 // Get family
                 val family =
-                    dataSnapshot.child(familyIdInput).getValue(Family::class.java) as Family
+                    dataSnapshot.child(familyIdInputModified).getValue(Family::class.java) as Family
                 // Check password
-                if (family.password != familyPasswordInput) {
+                if (family.password != Hash.applyHash(familyPasswordInput)) {
                     Toast.makeText(currActivity, "Password is not correct!", Toast.LENGTH_SHORT)
                         .show()
                 } else {
