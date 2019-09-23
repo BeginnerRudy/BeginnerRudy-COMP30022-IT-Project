@@ -30,6 +30,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
     override fun onItemClick(position: Int) {
         val intent = Intent(this, DetailSlide::class.java)
         intent.putExtra("UserID", uid)
+        intent.putExtra("PositionList", position.toString())
         startActivity(intent)
         toast("Normal click at position $position", Toast.LENGTH_SHORT)
     }
