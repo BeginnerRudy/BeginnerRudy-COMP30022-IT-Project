@@ -1,6 +1,7 @@
 package com.honegroupp.familyRegister.model
 
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -80,9 +81,12 @@ data class Family(
         // set family id
         user.familyId = this.familyId
         // set the user to be the family owner if there is no owner
-        if (family.familyOwnerUID.isEmpty()){
+
+        if (family.familyOwnerUID == "") {
             user.isFamilyOwner = true
         }
+
+        Log.d("DEBUG000", "S${family.familyOwnerUID}")
 
         // update user in the database
         FirebaseDatabaseManager.update(userPath, user)
