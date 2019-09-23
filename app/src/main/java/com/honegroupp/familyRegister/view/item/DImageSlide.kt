@@ -39,12 +39,10 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
     var numDots: Int = 0
 
     var uploads: ArrayList<String> = ArrayList()
-    var path_DImage_userId = "q@qq=com"
-    var path_DImage_itemKey = ""
-//    var path = "CeShi" + "/" + "Furniture" + "/" + "-Lp8AH9y17j-WiTjZVIv" + "/" + "dimages"
-    lateinit var path: String
 
-//    val databaseReference = FirebaseDatabase.getInstance().getReference(path)
+    lateinit var path_DImage_familyId: String
+    lateinit var path_DImage_itemKey: String
+    lateinit var path: String
     lateinit var databaseReference: DatabaseReference
     lateinit var dbListener: ValueEventListener
 
@@ -52,13 +50,13 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
         val builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
         super.onCreate(savedInstanceState)
-
-        path_DImage_itemKey= intent.getStringExtra("ItemKey")
-        path = "Family" + "/" + "q@qq=com" + "/" + "items"
-        databaseReference = FirebaseDatabase.getInstance().getReference(path)
-
         setContentView(R.layout.slide_dimage_background)
 
+        // set database reference for items
+        path_DImage_familyId= intent.getStringExtra("FamilyId")
+        path_DImage_itemKey= intent.getStringExtra("ItemKey")
+        path = "Family" + "/" + path_DImage_familyId + "/" + "items"
+        databaseReference = FirebaseDatabase.getInstance().getReference(path)
 
 
         mSlideViewPager = findViewById<ViewPager>(R.id.dimage_slideViewPager)

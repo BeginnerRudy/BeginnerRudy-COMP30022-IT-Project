@@ -19,10 +19,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Category
 import com.honegroupp.familyRegister.model.Item
@@ -35,16 +32,15 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
 
     lateinit var mSlideViewPager : ViewPager
 
-    val userId = "q@qq=com"
-    val familyId = "q@qq=com"
-    val path = "Family" + "/" + familyId + "/" + "items"
-    val path_category = "Family" + "/" + familyId + "/" + "categories"
-
     var uploads: ArrayList<Item> = ArrayList()
     var categoryUploads: ArrayList<Category> = ArrayList()
 
-    val databaseReference = FirebaseDatabase.getInstance().getReference(path)
-    val databaseReference_category = FirebaseDatabase.getInstance().getReference(path_category)
+    lateinit var path_Detail_userId: String
+    lateinit var path_Detail_familyId: String
+    lateinit var path: String
+    lateinit var path_category: String
+    lateinit var databaseReference: DatabaseReference
+    lateinit var databaseReference_category: DatabaseReference
 
     lateinit var dbListener: ValueEventListener
     lateinit var dbListener_category: ValueEventListener
@@ -52,6 +48,14 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.slide_background)
+
+        // set database reference for items and categories
+        path_Detail_userId = "zengbinz@student=unimelb=edu=au"
+        path_Detail_familyId = "zengbinz@student=unimelb=edu=au"
+        path = "Family" + "/" + path_Detail_familyId + "/" + "items"
+        path_category = "Family" + "/" + path_Detail_familyId + "/" + "categories"
+        databaseReference = FirebaseDatabase.getInstance().getReference(path)
+        databaseReference_category = FirebaseDatabase.getInstance().getReference(path_category)
 
         // StrictMode for share
         val builder = StrictMode.VmPolicy.Builder()
@@ -120,14 +124,13 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
                             if (currUpload.isPublic) {
                                 Log.d("categggg isPublic", currUpload.isPublic.toString())
                                 uploads.add(currUpload)
-                            } else if (currUpload.itemOwnerUID == userId){
+                            } else if (currUpload.itemOwnerUID == path_Detail_userId){
                                 Log.d("categgggnotPublicisOwn", currUpload.itemOwnerUID)
                                 uploads.add(currUpload)
                             } else {
                                 Log.d("categggg notPublicOwner", currUpload.itemOwnerUID)
                             }
                         }
-                        toast(categoryUploads[0].itemKeys.toString(), Toast.LENGTH_SHORT)
                         Log.d("category keys", categoryUploads[0].itemKeys.toString())
                     } else {
                         toast(0.toString(), Toast.LENGTH_SHORT)
@@ -204,17 +207,17 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
 
     //download the image to local album of the device
     private fun startDownloading() {
-
-        //Download request
+        Log.d("SAVEinging","")
+//        val url = "https://firebasestorage.googleapis.com/v0/b/fir-image-uploader-98bb7.appspot.com/o/1%2FFurniture%2F11?alt=media&token=3145f0e7-c552-4ecd-ae0c-a79ce0259c66"
+//        val url = urt.text.toString()
+        //download request
         val request = DownloadManager.Request(Uri.parse(downloadurl))
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
         request.setTitle("Download")
         request.setDescription("The file is downloading...")
+        request.allowScanningByMediaScanner()
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-
-        //path of file
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DCIM+"/FamilyRegister","${System.currentTimeMillis()}")
-
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"${System.currentTimeMillis()}")
         //get download service and enqueue file
         val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         manager.enqueue(request)
@@ -237,6 +240,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
     override fun onItemClick(position: Int, items:ArrayList<Item>) {
         val intent = Intent(this, DImageSlide::class.java)
         intent.putExtra("ItemKey", items[position].key)
+        intent.putExtra("FamilyId", path_Detail_familyId)
         this.startActivity(intent)
     }
 
