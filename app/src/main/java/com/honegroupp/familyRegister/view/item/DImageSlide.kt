@@ -22,10 +22,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Item
 import java.io.File
@@ -45,17 +42,24 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
     var path_DImage_userId = "q@qq=com"
     var path_DImage_itemKey = ""
 //    var path = "CeShi" + "/" + "Furniture" + "/" + "-Lp8AH9y17j-WiTjZVIv" + "/" + "dimages"
-    var path = "Family" + "/" + "q@qq=com" + "/" + "items"
-    val databaseReference = FirebaseDatabase.getInstance().getReference(path)
+    lateinit var path: String
+
+//    val databaseReference = FirebaseDatabase.getInstance().getReference(path)
+    lateinit var databaseReference: DatabaseReference
     lateinit var dbListener: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.slide_dimage_background)
 
         path_DImage_itemKey= intent.getStringExtra("ItemKey")
+        path = "Family" + "/" + "q@qq=com" + "/" + "items"
+        databaseReference = FirebaseDatabase.getInstance().getReference(path)
+
+        setContentView(R.layout.slide_dimage_background)
+
+
 
         mSlideViewPager = findViewById<ViewPager>(R.id.dimage_slideViewPager)
         mDotLayout = findViewById<LinearLayout>(R.id.dimage_dotsLayout)
