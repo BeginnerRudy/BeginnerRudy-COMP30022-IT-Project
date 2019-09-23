@@ -36,8 +36,9 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
     lateinit var mSlideViewPager : ViewPager
 
     val userId = "zengbinz@student=unimelb=edu=au"
-    val path = "Family" + "/" + userId + "/" + "items"
-    val path_category = "Family" + "/" + userId + "/" + "categories"
+    val familyId = "zengbinz@student=unimelb=edu=au"
+    val path = "Family" + "/" + familyId + "/" + "items"
+    val path_category = "Family" + "/" + familyId + "/" + "categories"
 
     var uploads: ArrayList<Item> = ArrayList()
     var categoryUploads: ArrayList<Category> = ArrayList()
@@ -106,12 +107,23 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
                     val currUpload = it.getValue(Item::class.java) as Item
 
                     // add to view if user has access
+                    Log.d("categgggcategoryUple", categoryUploads.size.toString())
+                    Log.d("categgggitkey", it.key)
+                    Log.d("categgggcurrUploaitme", currUpload.itemName.toString())
+                    Log.d("categgggcategoryUeys", categoryUploads[0].itemKeys.toString())
+                    Log.d("categgggcurrUplblic", currUpload.isPublic.toString())
                     if (categoryUploads.size != 0){
-                        if (currUpload.itemName in categoryUploads[0].itemKeys){
+                        Log.d("categggg sizeOK", categoryUploads.size.toString())
+                        if (it.key in categoryUploads[0].itemKeys){
+                            Log.d("categggg keyOK", it.key)
                             if (currUpload.isPublic) {
+                                Log.d("categggg isPublic", currUpload.isPublic.toString())
                                 uploads.add(currUpload)
                             } else if (currUpload.itemOwnerUID == userId){
+                                Log.d("categgggnotPublicisOwn", currUpload.itemOwnerUID)
                                 uploads.add(currUpload)
+                            } else {
+                                Log.d("categggg notPublicOwner", currUpload.itemOwnerUID)
                             }
                         }
                         toast(categoryUploads[0].itemKeys.toString(), Toast.LENGTH_SHORT)
@@ -120,7 +132,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
                         toast(0.toString(), Toast.LENGTH_SHORT)
                         Log.d("category keys", 55555555.toString())
                     }
-
+//                    uploads.add(currUpload)
                 }
                 Log.d("upload",uploads.size.toString())
 
