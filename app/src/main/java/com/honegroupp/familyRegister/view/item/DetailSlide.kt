@@ -35,8 +35,8 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
 
     lateinit var mSlideViewPager : ViewPager
 
-    val userId = "zengbinz@student=unimelb=edu=au"
-    val familyId = "zengbinz@student=unimelb=edu=au"
+    val userId = "q@qq=com"
+    val familyId = "q@qq=com"
     val path = "Family" + "/" + familyId + "/" + "items"
     val path_category = "Family" + "/" + familyId + "/" + "categories"
 
@@ -105,17 +105,18 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
                 p0.children.forEach {
                     // Retrieve data from database, create an ItemUpload object and store in the list of one ItemListAdapter
                     val currUpload = it.getValue(Item::class.java) as Item
+                    currUpload.key = it.key
 
                     // add to view if user has access
                     Log.d("categgggcategoryUple", categoryUploads.size.toString())
-                    Log.d("categgggitkey", it.key)
+                    Log.d("categgggcurkey", currUpload.key)
                     Log.d("categgggcurrUploaitme", currUpload.itemName.toString())
                     Log.d("categgggcategoryUeys", categoryUploads[0].itemKeys.toString())
                     Log.d("categgggcurrUplblic", currUpload.isPublic.toString())
                     if (categoryUploads.size != 0){
                         Log.d("categggg sizeOK", categoryUploads.size.toString())
-                        if (it.key in categoryUploads[0].itemKeys){
-                            Log.d("categggg keyOK", it.key)
+                        if (currUpload.key in categoryUploads[0].itemKeys){
+                            Log.d("categggg curkeyOK", currUpload.key)
                             if (currUpload.isPublic) {
                                 Log.d("categggg isPublic", currUpload.isPublic.toString())
                                 uploads.add(currUpload)
@@ -144,8 +145,8 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
 
 
     // share when click
-    override fun onShareClick(position: Int, item:ArrayList<Item>, imageView: ImageView) {
-        this.downloadurl = item[position].imageURLs[0]
+    override fun onShareClick(position: Int, items:ArrayList<Item>, imageView: ImageView) {
+        this.downloadurl = items[position].imageURLs[0]
         var bitmap = getBitmapFromView(imageView);
         try {
             var file = File(this.getExternalCacheDir(),"logicchip.png");
@@ -181,8 +182,8 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
     }
 
     // download when click
-    override fun onDownloadClick(position: Int, item: ArrayList<Item>) {
-        this.downloadurl = item[position].imageURLs[0]
+    override fun onDownloadClick(position: Int, items: ArrayList<Item>) {
+        this.downloadurl = items[position].imageURLs[0]
         Log.d("dowloding1111","")
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
@@ -233,8 +234,10 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         }
     }
 
-    override fun onItemClick(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onItemClick(position: Int, items:ArrayList<Item>) {
+        val intent = Intent(this, DImageSlide::class.java)
+        intent.putExtra("ItemKey", items[position].key)
+        this.startActivity(intent)
     }
 
     override fun onDestroy() {

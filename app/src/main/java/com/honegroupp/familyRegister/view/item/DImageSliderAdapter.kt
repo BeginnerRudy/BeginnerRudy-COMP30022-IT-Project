@@ -11,19 +11,19 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.model.ItemDImage
 import com.squareup.picasso.Picasso
 
-class DImageSliderAdapter(val items: ArrayList<ItemDImage>, val context: Context) : PagerAdapter() {
+class DImageSliderAdapter(val items: ArrayList<String>, val context: Context) : PagerAdapter() {
     var listener: DImageSliderAdapter.OnItemClickerListener? = null
 
     interface OnItemClickerListener {
         fun onItemClick(position: Int)
-        fun onDownloadClick(position: Int,item:ArrayList<ItemDImage>)
-        fun onShareClick(position: Int,item:ArrayList<ItemDImage>, imageView: ImageView)
+        fun onDownloadClick(position: Int,item:ArrayList<String>)
+        fun onShareClick(position: Int,item:ArrayList<String>, imageView: ImageView)
     }
 
     override fun getCount(): Int {
+        Log.d("dimageitemssize", items.size.toString())
         return items.size
     }
 
@@ -42,10 +42,10 @@ class DImageSliderAdapter(val items: ArrayList<ItemDImage>, val context: Context
 
         // Load image to ImageView via its URL from Firebase Storage
         Picasso.get()
-            .load(currUpload.url)
+            .load(currUpload)
             .placeholder(R.mipmap.ic_launcher)
             .into(slideImageView)
-        Log.d("url", currUpload.url)
+        Log.d("url", currUpload)
 
         view.findViewById<ImageButton>(R.id.dimage_download).setOnClickListener{
             Log.d("dowloding",position.toString())
