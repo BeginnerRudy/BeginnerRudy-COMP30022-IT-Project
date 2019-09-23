@@ -55,10 +55,13 @@ data class Family(
      *
      * */
     fun store(mActivity: AppCompatActivity, uid: String) {
-        this.categories.add(Category("Letter"))
-        this.categories.add(Category("Photo"))
-        this.categories.add(Category("Instrument"))
-        this.categories.add(Category("Others"))
+        // If there is no category. initializeK it.
+        if (this.categories.isEmpty()){
+            this.categories.add(Category("Letter"))
+            this.categories.add(Category("Photo"))
+            this.categories.add(Category("Instrument"))
+            this.categories.add(Category("Others"))
+        }
 
         // upload family first
         FirebaseDatabaseManager.uploadFamily(this, uid)
