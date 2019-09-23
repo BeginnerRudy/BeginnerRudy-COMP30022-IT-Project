@@ -31,9 +31,11 @@ class ItemListActivity : AppCompatActivity() {
         uid = intent.getStringExtra("UserID")
         val categoryName = intent.getStringExtra("categoryPath")
 
-        // get category by its name
+        // add item logic
         ItemListController.addItem(uid, categoryName, this)
 
+        // show items in the category logic
+        ItemListController.showItems(uid, categoryName, this)
     }
 
 

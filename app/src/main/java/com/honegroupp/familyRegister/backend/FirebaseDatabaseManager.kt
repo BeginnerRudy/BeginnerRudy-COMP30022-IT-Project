@@ -2,9 +2,6 @@ package com.honegroupp.familyRegister.backend
 
 import android.content.Intent
 import android.util.Log
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -126,13 +123,12 @@ class FirebaseDatabaseManager() {
         fun uploadFamily(family: Family, uid: String) {
             val databaseRef = FirebaseDatabase.getInstance().getReference(FAMILY_PATH)
 
-            //TODO
-            val uploadKey = uid
+            //TODO When the family is created for the first time
+            if (family.familyId.isEmpty()){
+                family.familyId = uid
+            }
 
-
-            family.familyId = uploadKey
-
-            databaseRef.child(uploadKey).setValue(family)
+            databaseRef.child(family.familyId).setValue(family)
         }
 
         /**
