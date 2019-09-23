@@ -89,7 +89,7 @@ class FamilyController {
         ) {
             //The password is encrypted using SHA256
             val hashValue :String = Hash.applyHash(password.text.toString())
-            val family = Family(familyId.text.toString(), hashValue, uid)
+            val family = Family(familyId.text.toString(), hashValue)
             family.members.add(uid)
 
             family.store(mActivity, uid)
