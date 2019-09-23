@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Item
@@ -13,7 +14,7 @@ import com.squareup.picasso.Picasso
 class ItemListAdapter(val items: ArrayList<Item>, val mContext: Context) :
     RecyclerView.Adapter<ItemListAdapter.ImageViewHolder>() {
 
-//    var listener: OnItemClickerListener? = null
+    var listener: OnItemClickerListener? = null
     private val STORAGE_PERMISSION_CODE: Int = 1000
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
@@ -40,23 +41,22 @@ class ItemListAdapter(val items: ArrayList<Item>, val mContext: Context) :
     }
 
 
-//    interface OnItemClickerListener {
-//        fun onItemClick(position: Int)
+    interface OnItemClickerListener {
+        fun onItemClick(position: Int)
 //        fun onWhatEverClick(position: Int)
 //        fun onDeleteClick(position: Int)
 //        fun onDownloadClick(position: Int,item:ArrayList<ItemUpload>)
-//    }
+    }
 
-    inner class ImageViewHolder(val viewItem: View) : RecyclerView.ViewHolder(viewItem)
+    inner class ImageViewHolder(val viewItem: View) : RecyclerView.ViewHolder(viewItem), View.OnClickListener
 //        , View.OnClickListener, View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener
     {
         val textViewName: TextView = viewItem.findViewById(R.id.txt_name)
         val imageView: ImageView = viewItem.findViewById(R.id.img_upload)
 
-//        init {
-//            viewItem.setOnClickListener(this)
-//            viewItem.setOnCreateContextMenuListener(this)
-//        }
+        init {
+            viewItem.setOnClickListener(this)
+        }
 
 //        override fun onMenuItemClick(p0: MenuItem?): Boolean {
 //            if (listener != null) {
@@ -94,13 +94,14 @@ class ItemListAdapter(val items: ArrayList<Item>, val mContext: Context) :
 //            save?.setOnMenuItemClickListener(this)
 //        }
 //
-//        override fun onClick(p0: View?) {
-//            if (listener != null) {
-//                val position = adapterPosition
-//                if (position != RecyclerView.NO_POSITION) {
-//                    listener!!.onItemClick(position)
-//                }
-//            }
-//        }
+        override fun onClick(p0: View?) {
+            if (listener != null) {
+                Log.d("AAAdapterOnclick",adapterPosition.toString())
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener!!.onItemClick(position)
+                }
+            }
+        }
     }
 }

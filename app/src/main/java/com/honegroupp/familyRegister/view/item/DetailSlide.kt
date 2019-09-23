@@ -50,7 +50,8 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         setContentView(R.layout.slide_background)
 
         // set database reference for items and categories
-        path_Detail_userId = "zengbinz@student=unimelb=edu=au"
+        path_Detail_userId= intent.getStringExtra("UserID")
+//        path_Detail_userId = "zengbinz@student=unimelb=edu=au"
         path_Detail_familyId = "zengbinz@student=unimelb=edu=au"
         path = "Family" + "/" + path_Detail_familyId + "/" + "items"
         path_category = "Family" + "/" + path_Detail_familyId + "/" + "categories"
