@@ -39,5 +39,12 @@
     <string name="add_item">add item</string>
     <string name="type_item_description">Please enter item description</string>
 
+    <string-array name="privacy_options">
+        <item>Visible by family</item>
+        <item>Keep it private</item>
+
+    </string-array>
+
+
     <string name="query_hints">name/age</string>
 </resources>

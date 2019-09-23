@@ -21,16 +21,18 @@ class SearchActivity : AppCompatActivity() {
         currUid= intent.getStringExtra("UserID")
         val listView: ListView = findViewById(R.id.list_view)
 
-        initView();
+        initView(listView, currUid);
         setListener(listView);
     }
 
     /*
-     * this function used to set view of search page
+     * this function used to initialize search view
      *
      */
-    private fun initView(){
-        view_search.onActionViewExpanded();
+    private fun initView(listView: ListView, uid: String){
+        //the style of search view
+        view_search.onActionViewExpanded()
+        SearchController.init(this, listView, uid)
     }
 
     private fun setListener(listView: ListView){

@@ -16,7 +16,20 @@ import com.honegroupp.familyRegister.utility.SearchMethod
 class   SearchController {
     companion object {
 
+        val searchMethod: SearchMethod = SearchMethod()
+
         //TODO 1 user could create one item each time
+        /**
+         * This function is respnsible to create initial view for search
+         * */
+        fun init(
+            mActivity: AppCompatActivity,
+            listView: ListView,
+            uid: String
+        ){
+            //actual logic function for init function
+            searchMethod.init(mActivity,listView, uid)
+        }
 
         /**
          * This methods is responsible for make a search.
@@ -28,13 +41,10 @@ class   SearchController {
             uid: String,
             listView: ListView
         ) {
+            //actual logic function for doSearch function
+            searchMethod.doSearch(mActivity, listView, uid, queryText);
 
-            val searchMethod: SearchMethod = SearchMethod()
-            searchMethod.doSearch(mActivity, uid, queryText, listView);
-
-            Toast.makeText(mActivity, "Family Created Successfully", Toast.LENGTH_SHORT).show()
-            // Go back to the previous activity
-            mActivity.finish()
+            //Toast.makeText(mActivity, "Search Finished", Toast.LENGTH_SHORT).show()
         }
 
     }

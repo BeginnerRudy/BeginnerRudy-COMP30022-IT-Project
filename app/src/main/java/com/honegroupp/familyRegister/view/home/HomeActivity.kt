@@ -21,8 +21,6 @@ import com.honegroupp.familyRegister.view.item.ItemDetail
 import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 import android.widget.TextView
-import com.honegroupp.familyRegister.view.family.FamilyCreateActivity
-import com.honegroupp.familyRegister.view.family.FamilyJoinActivity
 import android.view.Gravity
 
 import androidx.appcompat.widget.SearchView
@@ -90,37 +88,11 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
             startActivity(intent)
             true
         }
-        nav_view.menu.findItem(R.id.nav_create_family).setOnMenuItemClickListener {
-
-            // Navigation to CreateFamily Activity
-            val intent = Intent(this, FamilyCreateActivity::class.java)
-            intent.putExtra("UserID", userID)
-            startActivity(intent)
-            true
-        }
-
-        nav_view.menu.findItem(R.id.nav_join_family).setOnMenuItemClickListener {
-
-            // Navigation to JoinFamily Activity
-            val intent = Intent(this, FamilyJoinActivity::class.java)
-            intent.putExtra("UserID", userID)
-            startActivity(intent)
-
-            true
-        }
 
         nav_view.menu.findItem(R.id.nav_view_family).setOnMenuItemClickListener {
             val intent = Intent(this, ItemDetail::class.java)
             startActivity(intent)
             toast("Clicked4")
-            true
-        }
-
-        nav_view.menu.findItem(R.id.nav_testing).setOnMenuItemClickListener {
-            val intent = Intent(this, ItemUploadActivity::class.java)
-            intent.putExtra("UserID", userID)
-            startActivity(intent)
-            toast("Testing")
             true
         }
 

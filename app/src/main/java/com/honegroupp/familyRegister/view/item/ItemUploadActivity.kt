@@ -5,10 +5,11 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.honegroupp.familyRegister.R
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_upload_page.*
 import android.app.Activity
 import android.net.Uri
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
@@ -24,6 +25,23 @@ class ItemUploadActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.item_upload_page)
         uid = intent.getStringExtra("UserID")
+        val categoryName = intent.getStringExtra("categoryPath").toString()
+
+        //set up the spinner (select public and privacy)
+        val spinner: Spinner = findViewById(R.id.privacy_spinner)
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.privacy_options,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+        }
+
 
         itemChooseImage.setOnClickListener {
             selectImageInAlbum()
@@ -40,10 +58,12 @@ class ItemUploadActivity : AppCompatActivity(){
 //                Toast.makeText(this, numberOfImages.toString() +" " + imagePathList.size.toString(),Toast.LENGTH_SHORT).show()
                 Toast.makeText(this, "Please wait for uploading image", Toast.LENGTH_SHORT).show()
             }else {
-                createItem(this, item_name_input, uid, imagePathList)
+                createItem(this, item_name_input,item_description_input, uid, categoryName, imagePathList, spinner.selectedItemPosition == 0)
             }
         }
     }
+
+
 
     //use the phone API to get thr image from the album
     private fun selectImageInAlbum() {
@@ -52,33 +72,18 @@ class ItemUploadActivity : AppCompatActivity(){
         imagePathList.clear()
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        // ask for multiple images picker
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
         super.onActivityResult(requestCode, resultCode, data)
 
         // Result code is RESULT_OK only if the user selects an Image
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 GALLERY_REQUEST_CODE -> {
-
-
-                    //add one image
-//                    //data.getData returns the content URI for the selected Image
-//                    val selectedImage = data!!.data
-//                    itemImage.setImageURI(selectedImage)
-//
-//                    //upload image to firebase storage
-//                    if (selectedImage != null) {
-//                        uploadtofirebase(selectedImage)
-//                    }
-
-
-
-
-
 
 //                    adding multiple image
                     if (data != null) {
@@ -108,11 +113,6 @@ class ItemUploadActivity : AppCompatActivity(){
                     }else{
                         Toast.makeText(this,"Error",Toast.LENGTH_SHORT).show()
                     }
-
-
-
-
-
                 }
             }
         }
@@ -136,7 +136,4 @@ class ItemUploadActivity : AppCompatActivity(){
                 }
             }
     }
-//    private fun uploadItem(){
-//        createItem(this,item_name_input,uid,imagePathList)
-//    }
 }

@@ -1,8 +1,17 @@
 package com.honegroupp.familyRegister.model
 
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.PropertyName
+import android.content.Intent
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.view.home.HomeActivity
+import com.honegroupp.familyRegister.view.itemList.ItemListAdapter
+import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 
 /**
  * This class is responsible for storing data and business logic for Family
@@ -32,28 +41,36 @@ data class Family(
     var members: ArrayList<String> = ArrayList(),
     @set:PropertyName("categories")
     @get:PropertyName("categories")
-    var categories: ArrayList<Category> = ArrayList()
+    var categories: ArrayList<Category> = ArrayList(),
+    @set:PropertyName("items")
+    @get:PropertyName("items")
+    var items: HashMap<String, Item> = HashMap()
 ) {
     /*This constructor has no parameter, which is used to create CategoryUpload while retrieve data from database*/
-    constructor() : this("", "", "", "", ArrayList())
+    constructor() : this("", "", "", "", ArrayList(), ArrayList(), HashMap<String, Item>())
 
     /**
      * This method is responsible for storing Family to the database.
      *
      * */
-    fun store(uid: String) {
+    fun store(mActivity: AppCompatActivity, uid: String) {
         this.categories.add(Category("Letter"))
         this.categories.add(Category("Photo"))
         this.categories.add(Category("Instrument"))
         this.categories.add(Category("Others"))
-        FirebaseDatabaseManager.uploadFamily(this)
+        FirebaseDatabaseManager.uploadFamily(this, uid)
         val ownerPath = FirebaseDatabaseManager.USER_PATH + uid + "/"
         FirebaseDatabaseManager.retrieve(
             ownerPath
-        ) { d: DataSnapshot -> callbackAddFamilyToUser(ownerPath, d) }
+        ) { d: DataSnapshot -> callbackAddFamilyToUser(mActivity, uid, ownerPath, d) }
     }
 
-    private fun callbackAddFamilyToUser(ownerPath: String, dataSnapshot: DataSnapshot) {
+    private fun callbackAddFamilyToUser(
+        mActivity: AppCompatActivity,
+        uid: String,
+        ownerPath: String,
+        dataSnapshot: DataSnapshot
+    ) {
         val owner = dataSnapshot.child("").getValue(User::class.java) as User
         // set family id
         owner.familyId = this.familyId
@@ -62,7 +79,153 @@ data class Family(
 
         // update user in the database
         FirebaseDatabaseManager.update(ownerPath, owner)
+
+        // Go to Home page
+        val intent = Intent(mActivity, HomeActivity::class.java)
+        intent.putExtra("UserID", uid)
+        mActivity.startActivity(intent)
     }
 
+    companion object {
+        /**
+         * This methods is responsible for validating family id and its password.
+         * TODO This method might not be in controller.
+         * */
+        fun validateJoinFamilyInput(
+            mActivity: AppCompatActivity,
+            familyIdInput: String,
+            familyPasswordInput: String,
+            uid: String
+        ) {
+
+            FirebaseDatabaseManager.retrieve(
+                FirebaseDatabaseManager.FAMILY_PATH
+            ) { d: DataSnapshot ->
+                callbackJoinFamily(
+                    mActivity,
+                    uid,
+                    familyIdInput,
+                    familyPasswordInput,
+                    mActivity,
+                    d
+                )
+            }
+        }
+
+        /**
+         * This family is responsible for joining the User to the family.
+         * */
+        private fun callbackJoinFamily(
+            mActivity: AppCompatActivity,
+            currUid: String,
+            familyIdInput: String,
+            familyPasswordInput: String,
+            currActivity: AppCompatActivity,
+            dataSnapshot: DataSnapshot
+        ) {
+            // Check whether family exist
+            if (!dataSnapshot.hasChild(familyIdInput) || familyIdInput.trim() == "") {
+                Toast.makeText(currActivity, "Family Id is not correct!", Toast.LENGTH_SHORT).show()
+            } else {
+                // Get family
+                val family =
+                    dataSnapshot.child(familyIdInput).getValue(Family::class.java) as Family
+                // Check password
+                if (family.password != familyPasswordInput) {
+                    Toast.makeText(currActivity, "Password is not correct!", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    // Add user to family and add family to user
+                    if (!family.members.contains(currUid)) {
+                        family.members.add(currUid)
+                        family.store(mActivity, currUid)
+                    }
+
+                    Toast.makeText(currActivity, "Join family successful!", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
+
+        /**
+         * This method is responsible for showing the items in the item list
+         *
+         * */
+        fun addItem(uid: String, categoryName: String, mActivity: AppCompatActivity) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieve(rootPath) { d ->
+                callbackAddItems(
+                    uid,
+                    categoryName,
+                    mActivity,
+                    d
+                )
+            }
+        }
+
+        /**
+         * This method is the callback for showItem
+         *
+         * */
+        private fun callbackAddItems(
+            uid: String,
+            categoryName: String,
+            mActivity: AppCompatActivity,
+            dataSnapshot: DataSnapshot
+        ) {
+            //get Family ID
+
+
+            // get items of that category
+            val items = ArrayList<Item>()
+
+            val recyclerView = mActivity.findViewById<RecyclerView>(R.id.recycler_view)
+
+            // Setting the recycler view
+            recyclerView.setHasFixedSize(true)
+            recyclerView.layoutManager = LinearLayoutManager(mActivity)
+
+            // setting one ItemListAdapter
+            val itemListAdapter = ItemListAdapter(items, mActivity)
+            recyclerView.adapter = itemListAdapter
+
+            // go to upload new item
+            val addButton = mActivity.findViewById<FloatingActionButton>(R.id.btn_add)
+            addButton.setOnClickListener {
+                val intent = Intent(mActivity, ItemUploadActivity::class.java)
+                intent.putExtra("UserID", uid)
+                intent.putExtra("categoryPath", categoryName)
+                mActivity.startActivity(intent)
+            }
+//            itemListAdapter.listener = mA@ItemListActivity
+
+
+//            dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
+//                override fun onCancelled(p0: DatabaseError) {
+//                    toast(p0.message, Toast.LENGTH_SHORT)
+//                    progress_circular.visibility = View.INVISIBLE
+//                }
+//
+//                override fun onDataChange(p0: DataSnapshot) {
+//                    // clear it before filling it
+//                    itemUploads.clear()
+//
+//                    p0.children.forEach {
+//                        // Retrieve data from database, create an Item object and store in the list of one ItemListAdapter
+//                        val currUpload = it.getValue(Item::class.java) as Item
+//                        currUpload.key = it.key
+//                        itemUploads.add(currUpload)
+//                    }
+//
+//                    // It would update recycler after loading image from firebase storage
+//                    itemListAdapter.notifyDataSetChanged()
+//                    progress_circular.visibility = View.INVISIBLE
+//                }
+//
+//
+//            })
+        }
+
+    }
 
 }
