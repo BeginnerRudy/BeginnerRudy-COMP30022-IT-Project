@@ -1,5 +1,6 @@
 package com.honegroupp.familyRegister.view.itemList
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -9,9 +10,12 @@ import com.honegroupp.familyRegister.R
 import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.controller.ItemListController
 import com.honegroupp.familyRegister.model.Item
+import com.honegroupp.familyRegister.view.item.DetailSlide
 import kotlin.collections.ArrayList
 
-class ItemListActivity : AppCompatActivity() {
+class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListener {
+
+
     lateinit var itemListAdapter: ItemListAdapter
     lateinit var uid: String
     lateinit var path: String
@@ -23,6 +27,12 @@ class ItemListActivity : AppCompatActivity() {
     private val STORAGE_PERMISSION_CODE: Int = 1000
     private var downloadurl: String = ""
 
+    override fun onItemClick(position: Int) {
+        val intent = Intent(this, DetailSlide::class.java)
+        intent.putExtra("UserID", uid)
+        startActivity(intent)
+        toast("Normal click at position $position", Toast.LENGTH_SHORT)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

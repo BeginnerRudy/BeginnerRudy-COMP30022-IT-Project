@@ -15,6 +15,7 @@ import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListAdapter
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
+import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 
 /**
  * This class is responsible for storing data and business logic for Family
@@ -207,7 +208,7 @@ data class Family(
          * This function is responsible for showing all the items in the category
          *
          * */
-        fun showItems(uid: String, categoryName: String, mActivity: AppCompatActivity) {
+        fun showItems(uid: String, categoryName: String, mActivity: ItemListActivity) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
                 callbackShowItems(
@@ -225,7 +226,7 @@ data class Family(
         private fun callbackShowItems(
             uid: String,
             categoryName: String,
-            mActivity: AppCompatActivity,
+            mActivity: ItemListActivity,
             dataSnapshot: DataSnapshot
         ) {
 
@@ -241,7 +242,7 @@ data class Family(
             // setting one ItemListAdapter
             val itemListAdapter = ItemListAdapter(items, mActivity)
             recyclerView.adapter = itemListAdapter
-//            itemListAdapter.listener = mA@ItemListActivity
+            itemListAdapter.listener = mActivity
 
             // get user's family ID
             val currFamilyId =

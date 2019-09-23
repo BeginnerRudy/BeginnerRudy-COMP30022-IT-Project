@@ -16,12 +16,13 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
     var listener: DetailSliderAdapter.OnItemClickerListener? = null
 
     interface OnItemClickerListener {
-        fun onItemClick(position: Int)
-        fun onDownloadClick(position: Int,item:ArrayList<Item>)
-        fun onShareClick(position: Int, item:ArrayList<Item>, imageView: ImageView)
+        fun onItemClick(position: Int, items:ArrayList<Item>)
+        fun onDownloadClick(position: Int, items:ArrayList<Item>)
+        fun onShareClick(position: Int, items:ArrayList<Item>, imageView: ImageView)
     }
 
     override fun getCount(): Int {
+        Log.d("detailitemssize", items.size.toString())
         return items.size
     }
 
@@ -56,17 +57,17 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         }
 
         view.findViewById<ImageView>(R.id.detail_image).setOnClickListener{
-            val intent = Intent(context, DImageSlide::class.java)
-            context.startActivity(intent)
+            Log.d("detailonitemclick",position.toString())
+            listener!!.onItemClick(position, items)
         }
 
         view.findViewById<TextView>(R.id.detail_download).setOnClickListener{
-            Log.d("dowloding",position.toString())
+            Log.d("detaildowloding",position.toString())
             listener!!.onDownloadClick(position, items)
         }
 
         view.findViewById<TextView>(R.id.detail_heading).setOnClickListener{
-            Log.d("sharing",position.toString())
+            Log.d("detailsharing",position.toString())
             Picasso.get()
                 .load(currUpload.imageURLs[0])
                 .placeholder(R.mipmap.ic_launcher)
