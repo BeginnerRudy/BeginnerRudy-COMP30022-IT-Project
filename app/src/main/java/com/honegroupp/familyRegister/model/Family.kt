@@ -250,9 +250,16 @@ data class Family(
                 ) as String
 
             // get item keys for the given category as an ArrayList
-            val itemKeys =
+            val itemKeysSnapshot =
                 dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId)
-                    .child("categories").child(categoryName).child("itemKeys").value as ArrayList<String>
+                    .child("categories").child(categoryName).child("itemKeys")
+
+            val itemKeys = if (!itemKeysSnapshot.hasChildren()){
+                // the item keys is empty
+                ArrayList()
+            }else{
+                itemKeysSnapshot.child("itemKeys").value as ArrayList<String>
+            }
 
             // clear items once retrieve item from the database
             items.clear()
