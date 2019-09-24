@@ -71,6 +71,11 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         // get userID for setting firbase database reference for items and categories
         detailUserId= intent.getStringExtra("UserID")
 
+
+        val categoryIndexList= intent.getStringExtra("CategoryNameList").toInt()
+        Log.d("deeetailpathlist", categoryIndexList.toString())
+
+
         // initialise database References, Item and Categories path cannot be get before the family id is get
         pathUser = "Users"
         databaseReferenceUser = FirebaseDatabase.getInstance().getReference(pathUser)
@@ -150,11 +155,11 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                                     Log.d("categgggcategoryUple", categoryUploads.size.toString())
                                     Log.d("categgggcurkey", currUpload.key)
                                     Log.d("categgggcurrUploaitme", currUpload.itemName.toString())
-                                    Log.d("categgggcategoryUeys", categoryUploads[0].itemKeys.toString())
+                                    Log.d("categgggcategoryUeys", categoryUploads[categoryIndexList].itemKeys.toString())
                                     Log.d("categgggcurrUplblic", currUpload.isPublic.toString())
                                     if (categoryUploads.size != 0){
                                         Log.d("categggg sizeOK", categoryUploads.size.toString())
-                                        if (currUpload.key in categoryUploads[0].itemKeys){
+                                        if (currUpload.key in categoryUploads[categoryIndexList].itemKeys){
                                             Log.d("categggg curkeyOK", currUpload.key)
                                             if (currUpload.isPublic) {
                                                 Log.d("categggg isPublic", currUpload.isPublic.toString())
@@ -166,7 +171,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                                                 Log.d("categggg notPublicOwner", currUpload.itemOwnerUID)
                                             }
                                         }
-                                        Log.d("category keys", categoryUploads[0].itemKeys.toString())
+                                        Log.d("category keys", categoryUploads[categoryIndexList].itemKeys.toString())
                                     } else {
                                         toast(0.toString(), Toast.LENGTH_SHORT)
                                         Log.d("category keys", 55555555.toString())
