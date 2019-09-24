@@ -1,20 +1,17 @@
 package com.honegroupp.familyRegister.view.item
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.*
 import android.widget.ImageButton
 import androidx.viewpager.widget.PagerAdapter
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import android.widget.TextView
-import androidx.viewpager.widget.ViewPager
 import com.honegroupp.familyRegister.R
 import com.squareup.picasso.Picasso
 
 class DImageSliderAdapter(val items: ArrayList<String>, val context: Context) : PagerAdapter() {
-    var listener: DImageSliderAdapter.OnItemClickerListener? = null
+    var listener: OnItemClickerListener? = null
 
     interface OnItemClickerListener {
         fun onItemClick(position: Int)
@@ -23,7 +20,6 @@ class DImageSliderAdapter(val items: ArrayList<String>, val context: Context) : 
     }
 
     override fun getCount(): Int {
-        Log.d("dimageitemssize", items.size.toString())
         return items.size
     }
 
@@ -31,29 +27,26 @@ class DImageSliderAdapter(val items: ArrayList<String>, val context: Context) : 
         return view == `object`
     }
 
-
     override fun instantiateItem(container: ViewGroup, position: Int): View {
-        var layoutInflater:LayoutInflater = LayoutInflater.from(context)
+        val layoutInflater:LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_dimage_layout, container, false)
 
-        var slideImageView = view.findViewById<ImageView>(R.id.dimage_image)
+        val slideImageView = view.findViewById<ImageView>(R.id.dimage_image)
 
-        val currUpload = items[position]
+        val currItemUrls = items[position]
 
         // Load image to ImageView via its URL from Firebase Storage
         Picasso.get()
-            .load(currUpload)
+            .load(currItemUrls)
             .placeholder(R.mipmap.ic_launcher)
             .into(slideImageView)
-        Log.d("url", currUpload)
 
+        // set on click listeners
         view.findViewById<ImageButton>(R.id.dimage_download).setOnClickListener{
-            Log.d("dowloding",position.toString())
             listener!!.onDownloadClick(position, items)
         }
 
         view.findViewById<ImageButton>(R.id.dimage_share).setOnClickListener{
-            Log.d("sharing",position.toString())
             listener!!.onShareClick(position, items, slideImageView)
         }
 

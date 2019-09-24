@@ -20,6 +20,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
     lateinit var itemListAdapter: ItemListAdapter
     lateinit var uid: String
     lateinit var path: String
+    lateinit var categoryName: String
     var storage: FirebaseStorage = FirebaseStorage.getInstance()
     lateinit var dbListener: ValueEventListener
     lateinit var databaseReference: DatabaseReference
@@ -32,6 +33,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
         val intent = Intent(this, DetailSlide::class.java)
         intent.putExtra("UserID", uid)
         intent.putExtra("PositionList", position.toString())
+        intent.putExtra("CategoryNameList", categoryName)
         startActivity(intent)
     }
 
@@ -40,7 +42,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
         setContentView(R.layout.activity_item_list)
         //get User ID
         uid = intent.getStringExtra("UserID")
-        val categoryName = intent.getStringExtra("categoryPath")
+        categoryName = intent.getStringExtra("categoryPath")
 
         // add item logic
         ItemListController.addItem(uid, categoryName, this)

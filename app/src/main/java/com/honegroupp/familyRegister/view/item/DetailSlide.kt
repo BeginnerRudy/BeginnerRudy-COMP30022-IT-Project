@@ -27,28 +27,28 @@ import com.honegroupp.familyRegister.model.User
 import java.io.File
 import java.io.FileOutputStream
 
-class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener {
+class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener {
     private val STORAGE_PERMISSION_CODE: Int = 1000
-    private var downloadurl :String = ""
+    private var downloadUrl :String = ""
 
     lateinit var mSlideViewPager : ViewPager
 
-    var uploads: ArrayList<Item> = ArrayList()
+    lateinit var detailUserId: String
+    lateinit var detailFamilyId: String
+
+    lateinit var pathItem: String
+    lateinit var pathCategory: String
+    private lateinit var pathUser: String
+
+    lateinit var databaseReferenceItem: DatabaseReference
+    lateinit var databaseReferenceCategory: DatabaseReference
+    lateinit var databaseReferenceUser: DatabaseReference
+    lateinit var dbListenerItem: ValueEventListener
+    lateinit var dbListenerCategory: ValueEventListener
+    lateinit var dbListenerUser: ValueEventListener
+
+    var itemUploads: ArrayList<Item> = ArrayList()
     var categoryUploads: ArrayList<Category> = ArrayList()
-    var userUploads: ArrayList<User> = ArrayList()
-
-    lateinit var Detail_userId: String
-    lateinit var Detail_familyId: String
-    lateinit var path: String
-    lateinit var path_category: String
-    lateinit var path_user: String
-    lateinit var databaseReference: DatabaseReference
-    lateinit var databaseReference_category: DatabaseReference
-    lateinit var databaseReference_user: DatabaseReference
-
-    lateinit var dbListener: ValueEventListener
-    lateinit var dbListener_category: ValueEventListener
-    lateinit var dbListener_user: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,143 +58,118 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         val builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
 
+        // adapter of items for ViewPager, set listener in adapter for listening click action
         mSlideViewPager = findViewById<ViewPager>(R.id.detail_slideViewPager)
-        var sliderAdapter = DetailSliderAdapter(uploads,this)
+        var sliderAdapter = DetailSliderAdapter(itemUploads,this)
         mSlideViewPager.adapter = sliderAdapter
-
-        //set Current page
-        val position_list = intent.getStringExtra("PositionList").toInt()
-        mSlideViewPager.setCurrentItem(position_list)
-
-        // set adapter listener for click action
         sliderAdapter.listener = this@DetailSlide
 
-        // set database reference for items and categories
-        Detail_userId= intent.getStringExtra("UserID")
+        // get position of item clicked in item list for setting Current page item
+        val positionList = intent.getStringExtra("PositionList").toInt()
 
-        Log.d("gootUserId", Detail_userId)
+        // get userID for setting firbase database reference for items and categories
+        detailUserId= intent.getStringExtra("UserID")
 
-        path_user = "Users"
-        databaseReference_user = FirebaseDatabase.getInstance().getReference(path_user)
+        // get position of current category for setting Current page item
+        val categoryIndexList= intent.getStringExtra("CategoryNameList").toInt()
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("")
-        databaseReference_category = FirebaseDatabase.getInstance().getReference("")
 
-        // set current Item position
+        // initialise database References, Item and Categories path cannot be get before the family id is get
+        pathUser = "Users"
+        databaseReferenceUser = FirebaseDatabase.getInstance().getReference(pathUser)
+        databaseReferenceItem = FirebaseDatabase.getInstance().getReference("")
+        databaseReferenceCategory = FirebaseDatabase.getInstance().getReference("")
+
+        // whether item position is already set, View Pager pages cannot be set until it is ready
         var alreadySet = false
 
-        // listener for user on firebase, realtime change
-        dbListener_user = databaseReference_user.addValueEventListener(object : ValueEventListener {
+        // listener for user on firebase, realtime change familyID(detailFamilyId)
+        dbListenerUser = databaseReferenceUser.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 toast(p0.message, Toast.LENGTH_SHORT)
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                Log.d("excution flag", "sadfasfsdgdfhdfhfg")
-                // clear it before filling it
-                userUploads.clear()
 
-                // Retrieve data from database, create an Upload object and store in the list of one ImageAdapter
+                // Retrieve each User from database from pathUser
                 p0.children.forEach {
-                    // Retrieve data from database, create an ItemUpload object and store in the list of one ItemListAdapter
-                    val currUpload = it.getValue(User::class.java) as User
-                    Log.d("uploaduuuserkey", it.key)
-                    Log.d("uploaduuuseruserid", Detail_userId)
-                    if (it.key == Detail_userId){
-                        Log.d("uploaduuuserOK", it.key)
-                        Detail_familyId = currUpload.familyId
-                        path = "Family" + "/" + Detail_familyId + "/" + "items"
-                        path_category = "Family" + "/" + Detail_familyId + "/" + "categories"
-                        databaseReference = FirebaseDatabase.getInstance().getReference(path)
-                        databaseReference_category = FirebaseDatabase.getInstance().getReference(path_category)
-                        // listener for category on firebase, realtime change
-                        dbListener_category = databaseReference_category.addValueEventListener(object : ValueEventListener {
+                    val currUserUpload = it.getValue(User::class.java) as User
+                    
+                    // find the user by UserId
+                    // , get all detail url into itemUrls
+                    if (it.key == detailUserId){
+                        // get familyID to produce path of Item & path of Category
+                        detailFamilyId = currUserUpload.familyId
+                        pathItem = "Family" + "/" + detailFamilyId + "/" + "items"
+                        pathCategory = "Family" + "/" + detailFamilyId + "/" + "categories"
+
+                        // database Reference for Item & Category
+                        databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
+                        databaseReferenceCategory = FirebaseDatabase.getInstance().getReference(pathCategory)
+
+                        // listener for category on firebase, realtime change categories(categoryUploads)
+                        dbListenerCategory = databaseReferenceCategory.addValueEventListener(object : ValueEventListener {
                             override fun onCancelled(p0: DatabaseError) {
                                 toast(p0.message, Toast.LENGTH_SHORT)
                             }
 
                             override fun onDataChange(p0: DataSnapshot) {
-                                Log.d("excution flag", "sadfasfsdgdfhdfhfg")
-                                // clear it before filling it
                                 categoryUploads.clear()
 
-                                // Retrieve data from database, create an Upload object and store in the list of one ImageAdapter
+                                // get all categories and put into categories(categoryUploads)
                                 p0.children.forEach {
-                                    // Retrieve data from database, create an ItemUpload object and store in the list of one ItemListAdapter
-                                    val currUpload = it.getValue(Category::class.java) as Category
-
-                                    categoryUploads.add(currUpload)
-                                    Log.d("category keys", currUpload.itemKeys.toString())
+                                    val currCategoryUpload = it.getValue(Category::class.java) as Category
+                                    categoryUploads.add(currCategoryUpload)
                                 }
-                                Log.d("uploadcategory",categoryUploads.size.toString())
 
-                                // It would update recycler after loading image from firebase storage
+                                // Notify ViewPager to update
                                 sliderAdapter.notifyDataSetChanged()
                             }
                         })
 
-                        // listener for items on firebase, realtime change
-                        dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
+                        // listener for items on firebase, realtime change items(itemUploads)
+                        dbListenerItem = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
                             override fun onCancelled(p0: DatabaseError) {
                                 toast(p0.message, Toast.LENGTH_SHORT)
                             }
 
                             override fun onDataChange(p0: DataSnapshot) {
-                                Log.d("excution flag", "sadfasfsdgdfhdfhfg")
-                                // clear it before filling it
-                                uploads.clear()
+                                itemUploads.clear()
 
-                                // Retrieve data from database, create an Upload object and store in the list of one ImageAdapter
+                                // get all items and put into items(itemUploads) if user has access
                                 p0.children.forEach {
-                                    // Retrieve data from database, create an ItemUpload object and store in the list of one ItemListAdapter
-                                    val currUpload = it.getValue(Item::class.java) as Item
-                                    currUpload.key = it.key
+                                    val currItemUpload = it.getValue(Item::class.java) as Item
+                                    currItemUpload.key = it.key
 
-                                    // add to view if user has access
-                                    Log.d("categgggcategoryUple", categoryUploads.size.toString())
-                                    Log.d("categgggcurkey", currUpload.key)
-                                    Log.d("categgggcurrUploaitme", currUpload.itemName.toString())
-                                    Log.d("categgggcategoryUeys", categoryUploads[0].itemKeys.toString())
-                                    Log.d("categgggcurrUplblic", currUpload.isPublic.toString())
                                     if (categoryUploads.size != 0){
-                                        Log.d("categggg sizeOK", categoryUploads.size.toString())
-                                        if (currUpload.key in categoryUploads[0].itemKeys){
-                                            Log.d("categggg curkeyOK", currUpload.key)
-                                            if (currUpload.isPublic) {
-                                                Log.d("categggg isPublic", currUpload.isPublic.toString())
-                                                uploads.add(currUpload)
-                                            } else if (currUpload.itemOwnerUID == Detail_userId){
-                                                Log.d("categgggnotPublicisOwn", currUpload.itemOwnerUID)
-                                                uploads.add(currUpload)
-                                            } else {
-                                                Log.d("categggg notPublicOwner", currUpload.itemOwnerUID)
+                                        // check item in current category
+                                        if (currItemUpload.key in categoryUploads[categoryIndexList].itemKeys){
+                                            // check item is visible, if not check user is owner
+                                            if (currItemUpload.isPublic) {
+                                                itemUploads.add(currItemUpload)
+                                            } else if (currItemUpload.itemOwnerUID == detailUserId){
+                                                itemUploads.add(currItemUpload)
                                             }
                                         }
-                                        Log.d("category keys", categoryUploads[0].itemKeys.toString())
                                     } else {
-                                        toast(0.toString(), Toast.LENGTH_SHORT)
-                                        Log.d("category keys", 55555555.toString())
+                                        // wait for categories(categoryUploads) is get from database
                                     }
-//                    uploads.add(currUpload)
                                 }
-                                Log.d("upload",uploads.size.toString())
 
-                                // It would update recycler after loading image from firebase storage
+                                // Notify ViewPager to update
                                 sliderAdapter.notifyDataSetChanged()
 
-                                // set Current Item Position in View Page
-                                if (uploads.size > 0) {
+                                // set Item to be seen first in View Page when items(itemUploads) is ready
+                                if (itemUploads.size > 0) {
                                     if (!alreadySet){
-                                        mSlideViewPager.setCurrentItem(position_list)
+                                        mSlideViewPager.setCurrentItem(positionList)
                                         alreadySet = true
                                     }
                                 }
                             }
                         })
                     }
-                    userUploads.add(currUpload)
                 }
-                Log.d("uploaduuuser",userUploads.size.toString())
 
                 // It would update recycler after loading image from firebase storage
                 sliderAdapter.notifyDataSetChanged()
@@ -202,18 +177,13 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         })
     }
 
-//    fun setCurrentItemPosition(position: Int, alreadySet: Boolean) : Boolean{
-//        if (!alreadySet){
-//            mSlideViewPager.setCurrentItem(position)
-//            return true
-//        }
-//        return true
-//    }
-
-
-    // share when click
+    /**
+     * share use Bitmap from ImageVIew
+     * code change from:
+     * https://www.youtube.com/watch?v=1tpc3fyEObI&t=2s
+     */
     override fun onShareClick(position: Int, items:ArrayList<Item>, imageView: ImageView) {
-        this.downloadurl = items[position].imageURLs[0]
+        this.downloadUrl = items[position].imageURLs[0]
         var bitmap = getBitmapFromView(imageView);
         try {
             var file = File(this.getExternalCacheDir(),"fml_rgst_share.png");
@@ -228,13 +198,16 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
             intent.setType("image/png");
             startActivity(Intent.createChooser(intent, "Share image via"));
-            Log.d("sharingactivity",position.toString())
         } catch (e: Exception ) {
             e.printStackTrace();
         }
     }
 
-    // share use Bitmap from ImageVIew
+    /**
+     * share use Bitmap from ImageVIew
+     * code change from:
+     * https://stackoverflow.com/questions/14492354/create-bitmap-from-view-makes-view-disappear-how-to-get-view-canvas
+     */
     fun getBitmapFromView(view: View ): Bitmap {
         var returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
         var canvas = Canvas(returnedBitmap);
@@ -250,8 +223,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
 
     // download when click
     override fun onDownloadClick(position: Int, items: ArrayList<Item>) {
-        this.downloadurl = items[position].imageURLs[0]
-        Log.d("dowloding1111","")
+        this.downloadUrl = items[position].imageURLs[0]
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_DENIED){
@@ -272,10 +244,8 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
     //download the image to local album of the device
     private fun startDownloading() {
         Log.d("SAVEinging","")
-//        val url = "https://firebasestorage.googleapis.com/v0/b/fir-image-uploader-98bb7.appspot.com/o/1%2FFurniture%2F11?alt=media&token=3145f0e7-c552-4ecd-ae0c-a79ce0259c66"
-//        val url = urt.text.toString()
         //download request
-        val request = DownloadManager.Request(Uri.parse(downloadurl))
+        val request = DownloadManager.Request(Uri.parse(downloadUrl))
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
         request.setTitle("Download")
         request.setDescription("The file is downloading...")
@@ -301,17 +271,18 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         }
     }
 
+    // open Detail Image page when image is clicked
     override fun onItemClick(position: Int, items:ArrayList<Item>) {
         val intent = Intent(this, DImageSlide::class.java)
         intent.putExtra("ItemKey", items[position].key)
-        intent.putExtra("FamilyId", Detail_familyId)
+        intent.putExtra("FamilyId", detailFamilyId)
         this.startActivity(intent)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        databaseReference.removeEventListener(dbListener)
-        databaseReference_category.removeEventListener(dbListener_category)
+        databaseReferenceItem.removeEventListener(dbListenerItem)
+        databaseReferenceCategory.removeEventListener(dbListenerCategory)
     }
 
     fun toast(msg: String, duration: Int) {

@@ -30,87 +30,88 @@ import java.io.FileOutputStream
 
 class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListener {
     private val STORAGE_PERMISSION_CODE: Int = 1000
-    private var downloadurl :String = ""
+    private var downloadUrl :String = ""
 
     lateinit var mSlideViewPager : ViewPager
+    
     lateinit var mDotLayout: LinearLayout
-
     lateinit var mDots: Array<TextView?>
     var numDots: Int = 0
 
-    var uploads: ArrayList<String> = ArrayList()
+    lateinit var dImageFamilyId: String
+    lateinit var dImageItemKey: String
+    
+    lateinit var pathItem: String
+    
+    lateinit var databaseReferenceItem: DatabaseReference
+    lateinit var dbListenerItem: ValueEventListener
 
-    lateinit var path_DImage_familyId: String
-    lateinit var path_DImage_itemKey: String
-    lateinit var path: String
-    lateinit var databaseReference: DatabaseReference
-    lateinit var dbListener: ValueEventListener
+    var itemUrls: ArrayList<String> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val builder = StrictMode.VmPolicy.Builder()
-        StrictMode.setVmPolicy(builder.build())
         super.onCreate(savedInstanceState)
         setContentView(R.layout.slide_dimage_background)
 
-        // set database reference for items
-        path_DImage_familyId= intent.getStringExtra("FamilyId")
-        path_DImage_itemKey= intent.getStringExtra("ItemKey")
-        path = "Family" + "/" + path_DImage_familyId + "/" + "items"
-        databaseReference = FirebaseDatabase.getInstance().getReference(path)
+        // StrictMode for share
+        val builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
 
+        // set database reference for itemUrls
+        dImageFamilyId= intent.getStringExtra("FamilyId")
+        dImageItemKey= intent.getStringExtra("ItemKey")
+        pathItem = "Family" + "/" + dImageFamilyId + "/" + "items"
+        databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
 
+        // adapter of itemUrls for ViewPager, set listener in adapter for listening click action
         mSlideViewPager = findViewById<ViewPager>(R.id.dimage_slideViewPager)
-        mDotLayout = findViewById<LinearLayout>(R.id.dimage_dotsLayout)
-
-        var DImageSliderAdapter = DImageSliderAdapter(uploads,this)
+        var DImageSliderAdapter = DImageSliderAdapter(itemUrls,this)
         mSlideViewPager.adapter = DImageSliderAdapter
         DImageSliderAdapter.listener = this@DImageSlide
 
+        // layout for bottom dots
+        mDotLayout = findViewById<LinearLayout>(R.id.dimage_dotsLayout)
 
+        // whether bottom dots are already set, View Pager pages cannot be set until it is ready
         var alreadySet = false
 
-        dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
+        // listener for items on database, realtime change itemUrls
+        dbListenerItem = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 toast(p0.message, Toast.LENGTH_SHORT)
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                Log.d("excution flag", "sadfasfsdgdfhdfhfg")
-                // clear it before filling it
-                uploads.clear()
-
-                // Retrieve data from database, create an Upload object and store in the list of one ImageAdapter
+                itemUrls.clear()
+                
+                // Retrieve each Item from database from pathItem
                 p0.children.forEach {
-                    // Retrieve data from database, create an Item object and store in the list of one ItemListAdapter
                     val currUpload = it.getValue(Item::class.java) as Item
-                    currUpload.key = it.key
 
-                    if (it.key == path_DImage_itemKey){
+                    // find the item by Item Key, put all detail url into itemUrls
+                    if (it.key == dImageItemKey){
                         for (currUrl in currUpload.imageURLs){
-                            uploads.add(currUrl)
+                            itemUrls.add(currUrl)
                         }
                     }
-
                 }
-                Log.d("upload",uploads.size.toString())
 
-                // It would update recycler after loading image from firebase storage
+                // Notify ViewPager to update
                 DImageSliderAdapter.notifyDataSetChanged()
 
-                // set number of dots
-                numDots = uploads.size
+                // set number of dots to be appeared at bottom
+                numDots = itemUrls.size
 
-                if (uploads.size > 0){
+                // only need to set initial dot indicator one time once the itemUrls(urls) is got from database
+                if (itemUrls.size > 0){
                     if (!alreadySet){
-                        Log.d("ddddiimageadddot",uploads.size.toString())
                         addDotsIndicator(0)
                         alreadySet = true
                     }
                 }
             }
-
         })
 
+        // mSlideViewPager page change listener
         var listener = mSlideViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -126,6 +127,11 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
         })
 }
 
+    /**
+     * add dots on page in mDotLayout according to position
+     * code change from:
+     * https://www.youtube.com/watch?v=byLKoPgB7yA&t=847s
+     */
     fun addDotsIndicator(position: Int){
         mDots = arrayOfNulls<TextView>(numDots)
         mDotLayout.removeAllViews()
@@ -145,8 +151,13 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
         }
     }
 
+    /**
+     * share use Bitmap from ImageVIew
+     * code change from:
+     * https://www.youtube.com/watch?v=1tpc3fyEObI&t=2s
+     */
     override fun onShareClick(position: Int, item:ArrayList<String>, imageView: ImageView) {
-        this.downloadurl = item[position]
+        this.downloadUrl = item[position]
         var bitmap = getBitmapFromView(imageView);
         try {
             var file = File(this.getExternalCacheDir(),"fml_rgst_share.png");
@@ -161,12 +172,16 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
             intent.setType("image/png");
             startActivity(Intent.createChooser(intent, "Share image via"));
-            Log.d("sharingactivity",position.toString())
         } catch (e: Exception ) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * code from:
+     * https://stackoverflow.com/questions/14492354/create-bitmap-from-view-makes-view-disappear-how-to-get-view-canvas
+     */
+    // share use Bitmap from ImageVIew
     fun getBitmapFromView(view: View ): Bitmap {
         var returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
         var canvas = Canvas(returnedBitmap);
@@ -181,40 +196,34 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
     }
 
     override fun onDownloadClick(position: Int, item: ArrayList<String>) {
-        this.downloadurl = item[position]
-        Log.d("dowloding1111","")
+        this.downloadUrl = item[position]
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_DENIED){
                 //permission denied
-                Log.d("SAVEAAAAAAA","")
                 requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),STORAGE_PERMISSION_CODE)
             }else{
                 //permission already granted
-                Log.d("SAVEBBBBBB","")
                 startDownloading();
 
             }
         }else{
             //system os less than mashmallow
-            Log.d("SAVECCCCCC","")
             startDownloading();
         }
     }
 
     //download the image to local album on the device
     private fun startDownloading() {
-        Log.d("SAVEinging","")
-//        val url = "https://firebasestorage.googleapis.com/v0/b/fir-image-uploader-98bb7.appspot.com/o/1%2FFurniture%2F11?alt=media&token=3145f0e7-c552-4ecd-ae0c-a79ce0259c66"
-//        val url = urt.text.toString()
         //download request
-        val request = DownloadManager.Request(Uri.parse(downloadurl))
+        val request = DownloadManager.Request(Uri.parse(downloadUrl))
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
         request.setTitle("Download")
         request.setDescription("The file is downloading...")
         request.allowScanningByMediaScanner()
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"${System.currentTimeMillis()}")
+
         //get download service and enqueue file
         val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         manager.enqueue(request)
@@ -225,6 +234,7 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
         when(requestCode){
             STORAGE_PERMISSION_CODE ->{
                 if(grantResults.isNotEmpty()&& grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
                     //permission from the popup was granted, perform download
                     startDownloading()
                 }else{
@@ -235,12 +245,11 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
     }
 
     override fun onItemClick(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        databaseReference.removeEventListener(dbListener)
+        databaseReferenceItem.removeEventListener(dbListenerItem)
     }
 
     fun toast(msg: String, duration: Int) {
