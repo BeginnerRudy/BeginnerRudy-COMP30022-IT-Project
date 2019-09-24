@@ -17,14 +17,10 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
-import com.honegroupp.familyRegister.view.item.ItemDetail
 import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 import android.widget.TextView
-import android.view.Gravity
 
-import androidx.appcompat.widget.SearchView
-import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.honegroupp.familyRegister.view.utility.SearchActivity
 
 
@@ -90,9 +86,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         }
 
         nav_view.menu.findItem(R.id.nav_view_family).setOnMenuItemClickListener {
-            val intent = Intent(this, ItemDetail::class.java)
-            startActivity(intent)
-            toast("Clicked4")
+            toast("Clicked view family")
             true
         }
 

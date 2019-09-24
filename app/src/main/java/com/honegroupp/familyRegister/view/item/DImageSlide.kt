@@ -30,7 +30,7 @@ import java.io.FileOutputStream
 
 class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListener {
     private val STORAGE_PERMISSION_CODE: Int = 1000
-    private var downloadurl :String = ""
+    private var downloadUrl :String = ""
 
     lateinit var mSlideViewPager : ViewPager
     lateinit var mDotLayout: LinearLayout
@@ -38,13 +38,13 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
     lateinit var mDots: Array<TextView?>
     var numDots: Int = 0
 
-    var uploads: ArrayList<String> = ArrayList()
+    var itemUploads: ArrayList<String> = ArrayList()
 
-    lateinit var path_DImage_familyId: String
-    lateinit var path_DImage_itemKey: String
-    lateinit var path: String
-    lateinit var databaseReference: DatabaseReference
-    lateinit var dbListener: ValueEventListener
+    lateinit var dImageFamilyId: String
+    lateinit var dImageItemKey: String
+    lateinit var pathItem: String
+    lateinit var databaseReferenceItem: DatabaseReference
+    lateinit var dbListenerItem: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val builder = StrictMode.VmPolicy.Builder()
@@ -53,23 +53,23 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
         setContentView(R.layout.slide_dimage_background)
 
         // set database reference for items
-        path_DImage_familyId= intent.getStringExtra("FamilyId")
-        path_DImage_itemKey= intent.getStringExtra("ItemKey")
-        path = "Family" + "/" + path_DImage_familyId + "/" + "items"
-        databaseReference = FirebaseDatabase.getInstance().getReference(path)
+        dImageFamilyId= intent.getStringExtra("FamilyId")
+        dImageItemKey= intent.getStringExtra("ItemKey")
+        pathItem = "Family" + "/" + dImageFamilyId + "/" + "items"
+        databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
 
 
         mSlideViewPager = findViewById<ViewPager>(R.id.dimage_slideViewPager)
         mDotLayout = findViewById<LinearLayout>(R.id.dimage_dotsLayout)
 
-        var DImageSliderAdapter = DImageSliderAdapter(uploads,this)
+        var DImageSliderAdapter = DImageSliderAdapter(itemUploads,this)
         mSlideViewPager.adapter = DImageSliderAdapter
         DImageSliderAdapter.listener = this@DImageSlide
 
 
         var alreadySet = false
 
-        dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
+        dbListenerItem = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 toast(p0.message, Toast.LENGTH_SHORT)
             }
@@ -77,7 +77,7 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
             override fun onDataChange(p0: DataSnapshot) {
                 Log.d("excution flag", "sadfasfsdgdfhdfhfg")
                 // clear it before filling it
-                uploads.clear()
+                itemUploads.clear()
 
                 // Retrieve data from database, create an Upload object and store in the list of one ImageAdapter
                 p0.children.forEach {
@@ -85,24 +85,24 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
                     val currUpload = it.getValue(Item::class.java) as Item
                     currUpload.key = it.key
 
-                    if (it.key == path_DImage_itemKey){
+                    if (it.key == dImageItemKey){
                         for (currUrl in currUpload.imageURLs){
-                            uploads.add(currUrl)
+                            itemUploads.add(currUrl)
                         }
                     }
 
                 }
-                Log.d("upload",uploads.size.toString())
+                Log.d("upload",itemUploads.size.toString())
 
                 // It would update recycler after loading image from firebase storage
                 DImageSliderAdapter.notifyDataSetChanged()
 
                 // set number of dots
-                numDots = uploads.size
+                numDots = itemUploads.size
 
-                if (uploads.size > 0){
+                if (itemUploads.size > 0){
                     if (!alreadySet){
-                        Log.d("ddddiimageadddot",uploads.size.toString())
+                        Log.d("ddddiimageadddot",itemUploads.size.toString())
                         addDotsIndicator(0)
                         alreadySet = true
                     }
@@ -146,7 +146,7 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
     }
 
     override fun onShareClick(position: Int, item:ArrayList<String>, imageView: ImageView) {
-        this.downloadurl = item[position]
+        this.downloadUrl = item[position]
         var bitmap = getBitmapFromView(imageView);
         try {
             var file = File(this.getExternalCacheDir(),"fml_rgst_share.png");
@@ -181,7 +181,7 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
     }
 
     override fun onDownloadClick(position: Int, item: ArrayList<String>) {
-        this.downloadurl = item[position]
+        this.downloadUrl = item[position]
         Log.d("dowloding1111","")
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
@@ -208,7 +208,7 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
 //        val url = "https://firebasestorage.googleapis.com/v0/b/fir-image-uploader-98bb7.appspot.com/o/1%2FFurniture%2F11?alt=media&token=3145f0e7-c552-4ecd-ae0c-a79ce0259c66"
 //        val url = urt.text.toString()
         //download request
-        val request = DownloadManager.Request(Uri.parse(downloadurl))
+        val request = DownloadManager.Request(Uri.parse(downloadUrl))
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
         request.setTitle("Download")
         request.setDescription("The file is downloading...")
@@ -240,7 +240,7 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
 
     override fun onDestroy() {
         super.onDestroy()
-        databaseReference.removeEventListener(dbListener)
+        databaseReferenceItem.removeEventListener(dbListenerItem)
     }
 
     fun toast(msg: String, duration: Int) {

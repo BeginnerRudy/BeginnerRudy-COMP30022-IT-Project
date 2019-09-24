@@ -29,7 +29,7 @@ import java.io.FileOutputStream
 
 class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener {
     private val STORAGE_PERMISSION_CODE: Int = 1000
-    private var downloadurl :String = ""
+    private var downloadUrl :String = ""
 
     lateinit var mSlideViewPager : ViewPager
 
@@ -46,9 +46,9 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     lateinit var databaseReferenceCategory: DatabaseReference
     lateinit var databaseReferenceUser: DatabaseReference
 
-    lateinit var dbListener_item: ValueEventListener
-    lateinit var dbListener_category: ValueEventListener
-    lateinit var dbListener_user: ValueEventListener
+    lateinit var dbListenerItem: ValueEventListener
+    lateinit var dbListenerCategory: ValueEventListener
+    lateinit var dbListenerUser: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +84,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         var alreadySet = false
 
         // listener for user on firebase, realtime change
-        dbListener_user = databaseReferenceUser.addValueEventListener(object : ValueEventListener {
+        dbListenerUser = databaseReferenceUser.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 toast(p0.message, Toast.LENGTH_SHORT)
             }
@@ -108,7 +108,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                         databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
                         databaseReferenceCategory = FirebaseDatabase.getInstance().getReference(pathCategory)
                         // listener for category on firebase, realtime change
-                        dbListener_category = databaseReferenceCategory.addValueEventListener(object : ValueEventListener {
+                        dbListenerCategory = databaseReferenceCategory.addValueEventListener(object : ValueEventListener {
                             override fun onCancelled(p0: DatabaseError) {
                                 toast(p0.message, Toast.LENGTH_SHORT)
                             }
@@ -134,7 +134,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                         })
 
                         // listener for items on firebase, realtime change
-                        dbListener_item = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
+                        dbListenerItem = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
                             override fun onCancelled(p0: DatabaseError) {
                                 toast(p0.message, Toast.LENGTH_SHORT)
                             }
@@ -213,7 +213,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
     // share when click
     override fun onShareClick(position: Int, items:ArrayList<Item>, imageView: ImageView) {
-        this.downloadurl = items[position].imageURLs[0]
+        this.downloadUrl = items[position].imageURLs[0]
         var bitmap = getBitmapFromView(imageView);
         try {
             var file = File(this.getExternalCacheDir(),"fml_rgst_share.png");
@@ -250,7 +250,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
     // download when click
     override fun onDownloadClick(position: Int, items: ArrayList<Item>) {
-        this.downloadurl = items[position].imageURLs[0]
+        this.downloadUrl = items[position].imageURLs[0]
         Log.d("dowloding1111","")
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
@@ -275,7 +275,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 //        val url = "https://firebasestorage.googleapis.com/v0/b/fir-image-uploader-98bb7.appspot.com/o/1%2FFurniture%2F11?alt=media&token=3145f0e7-c552-4ecd-ae0c-a79ce0259c66"
 //        val url = urt.text.toString()
         //download request
-        val request = DownloadManager.Request(Uri.parse(downloadurl))
+        val request = DownloadManager.Request(Uri.parse(downloadUrl))
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
         request.setTitle("Download")
         request.setDescription("The file is downloading...")
@@ -310,8 +310,8 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
     override fun onDestroy() {
         super.onDestroy()
-        databaseReferenceItem.removeEventListener(dbListener_item)
-        databaseReferenceCategory.removeEventListener(dbListener_category)
+        databaseReferenceItem.removeEventListener(dbListenerItem)
+        databaseReferenceCategory.removeEventListener(dbListenerCategory)
     }
 
     fun toast(msg: String, duration: Int) {
