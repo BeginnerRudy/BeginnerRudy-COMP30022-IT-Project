@@ -87,14 +87,14 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
                 p0.children.forEach {
                     val currUpload = it.getValue(Item::class.java) as Item
 
-                    // find the item by detail Image Item Key, get all detail url into itemUrls
+                    // find the item by Item Key, put all detail url into itemUrls
                     if (it.key == dImageItemKey){
                         for (currUrl in currUpload.imageURLs){
                             itemUrls.add(currUrl)
                         }
                     }
                 }
-                
+
                 // Notify ViewPager to update
                 DImageSliderAdapter.notifyDataSetChanged()
 
@@ -161,7 +161,6 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
             intent.setType("image/png");
             startActivity(Intent.createChooser(intent, "Share image via"));
-            Log.d("sharingactivity",position.toString())
         } catch (e: Exception ) {
             e.printStackTrace();
         }
@@ -182,31 +181,24 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
 
     override fun onDownloadClick(position: Int, item: ArrayList<String>) {
         this.downloadUrl = item[position]
-        Log.d("dowloding1111","")
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_DENIED){
                 //permission denied
-                Log.d("SAVEAAAAAAA","")
                 requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),STORAGE_PERMISSION_CODE)
             }else{
                 //permission already granted
-                Log.d("SAVEBBBBBB","")
                 startDownloading();
 
             }
         }else{
             //system os less than mashmallow
-            Log.d("SAVECCCCCC","")
             startDownloading();
         }
     }
 
     //download the image to local album on the device
     private fun startDownloading() {
-        Log.d("SAVEinging","")
-//        val url = "https://firebasestorage.googleapis.com/v0/b/fir-image-uploader-98bb7.appspot.com/o/1%2FFurniture%2F11?alt=media&token=3145f0e7-c552-4ecd-ae0c-a79ce0259c66"
-//        val url = urt.text.toString()
         //download request
         val request = DownloadManager.Request(Uri.parse(downloadUrl))
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
@@ -215,6 +207,7 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
         request.allowScanningByMediaScanner()
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"${System.currentTimeMillis()}")
+
         //get download service and enqueue file
         val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         manager.enqueue(request)
@@ -225,6 +218,7 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
         when(requestCode){
             STORAGE_PERMISSION_CODE ->{
                 if(grantResults.isNotEmpty()&& grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
                     //permission from the popup was granted, perform download
                     startDownloading()
                 }else{
@@ -235,7 +229,6 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
     }
 
     override fun onItemClick(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onDestroy() {

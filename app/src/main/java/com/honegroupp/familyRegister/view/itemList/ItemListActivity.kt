@@ -33,7 +33,6 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
         val intent = Intent(this, DetailSlide::class.java)
         intent.putExtra("UserID", uid)
         intent.putExtra("PositionList", position.toString())
-        Log.d("deeetailpathlist", categoryName)
         intent.putExtra("CategoryNameList", categoryName)
         startActivity(intent)
     }
