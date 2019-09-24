@@ -177,7 +177,11 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         })
     }
 
-    // share when click
+    /**
+     * share use Bitmap from ImageVIew
+     * code change from:
+     * https://www.youtube.com/watch?v=1tpc3fyEObI&t=2s
+     */
     override fun onShareClick(position: Int, items:ArrayList<Item>, imageView: ImageView) {
         this.downloadUrl = items[position].imageURLs[0]
         var bitmap = getBitmapFromView(imageView);
@@ -200,10 +204,10 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     }
 
     /**
-     * code from:
+     * share use Bitmap from ImageVIew
+     * code change from:
      * https://stackoverflow.com/questions/14492354/create-bitmap-from-view-makes-view-disappear-how-to-get-view-canvas
      */
-    // share use Bitmap from ImageVIew
     fun getBitmapFromView(view: View ): Bitmap {
         var returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
         var canvas = Canvas(returnedBitmap);
@@ -267,6 +271,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         }
     }
 
+    // open Detail Image page when image is clicked
     override fun onItemClick(position: Int, items:ArrayList<Item>) {
         val intent = Intent(this, DImageSlide::class.java)
         intent.putExtra("ItemKey", items[position].key)

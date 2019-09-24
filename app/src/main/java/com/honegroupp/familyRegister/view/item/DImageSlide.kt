@@ -111,6 +111,7 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
             }
         })
 
+        // mSlideViewPager page change listener
         var listener = mSlideViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -126,6 +127,11 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
         })
 }
 
+    /**
+     * add dots on page in mDotLayout according to position
+     * code change from:
+     * https://www.youtube.com/watch?v=byLKoPgB7yA&t=847s
+     */
     fun addDotsIndicator(position: Int){
         mDots = arrayOfNulls<TextView>(numDots)
         mDotLayout.removeAllViews()
@@ -145,6 +151,11 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
         }
     }
 
+    /**
+     * share use Bitmap from ImageVIew
+     * code change from:
+     * https://www.youtube.com/watch?v=1tpc3fyEObI&t=2s
+     */
     override fun onShareClick(position: Int, item:ArrayList<String>, imageView: ImageView) {
         this.downloadUrl = item[position]
         var bitmap = getBitmapFromView(imageView);
@@ -166,6 +177,11 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
         }
     }
 
+    /**
+     * code from:
+     * https://stackoverflow.com/questions/14492354/create-bitmap-from-view-makes-view-disappear-how-to-get-view-canvas
+     */
+    // share use Bitmap from ImageVIew
     fun getBitmapFromView(view: View ): Bitmap {
         var returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
         var canvas = Canvas(returnedBitmap);
