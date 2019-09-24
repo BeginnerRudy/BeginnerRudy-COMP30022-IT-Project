@@ -3,19 +3,13 @@ package com.honegroupp.familyRegister.controller
 import android.content.Context
 import android.content.Intent
 import android.widget.Button
-import android.provider.ContactsContract
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.DataSnapshot
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
-import com.honegroupp.familyRegister.model.EmailPathSwitch
+import com.honegroupp.familyRegister.model.Category
 import com.honegroupp.familyRegister.model.Family
 import com.honegroupp.familyRegister.model.Hash
-import com.honegroupp.familyRegister.model.User
-import com.honegroupp.familyRegister.view.home.HomeActivity
-import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 
 
 /**
@@ -25,10 +19,6 @@ import com.honegroupp.familyRegister.view.item.ItemUploadActivity
  * */
 class FamilyController {
     companion object {
-
-        //TODO 1 user could only create one family
-
-        //TODO user currently in family has no right to create family
 
         /**
          * This method is responsible for validating user input for creating a family
@@ -83,43 +73,46 @@ class FamilyController {
          * */
         fun createFamily(
             mActivity: AppCompatActivity,
-            familyId: EditText,
+            familyName: EditText,
             password: EditText,
             uid: String
         ) {
             //The password is encrypted using SHA256
-            val hashValue :String = Hash.applyHash(password.text.toString())
-            val family = Family(familyId.text.toString(), hashValue)
+            val hashValue: String = Hash.applyHash(password.text.toString())
+            val family = Family(familyName = familyName.text.toString(), familyId = uid, password = hashValue)
+
+            // Add the user to the family members
             family.members.add(uid)
 
+            // Initialize the default categories for the new family
+            family.categories.add(Category("Letter"))
+            family.categories.add(Category("Photo"))
+            family.categories.add(Category("Instrument"))
+            family.categories.add(Category("Others"))
+
+            // Store the family to the database
             family.store(mActivity, uid)
 
+            // Show a toast to remind the user
             Toast.makeText(mActivity, "Family Created Successfully", Toast.LENGTH_SHORT).show()
-
-
         }
 
 
         /**
-         * This methods is responsible for validating family id and its password.
-         * TODO This method might not be in controller.
+         * This methods is responsible for joining family.
          * */
-        fun validateJoinFamilyInput(
+        fun joinFamily(
             mActivity: AppCompatActivity,
             familyId: EditText,
             password: EditText,
             uid: String
         ) {
-
-            //email
+            // Extract input as String
             val familyIdInput = familyId.text.toString()
-
-            //convert email to path
-            val familyRelativePath = EmailPathSwitch.emailToPath(familyIdInput)
             val familyPasswordInput = password.text.toString()
-            val inputHashValue = Hash.applyHash(familyPasswordInput)
 
-            Family.validateJoinFamilyInput(mActivity, familyIdInput, familyPasswordInput, uid)
+            // Join family
+            Family.joinFamily(mActivity, familyIdInput, familyPasswordInput, uid)
         }
 
 
@@ -127,7 +120,12 @@ class FamilyController {
          * This method is to navigate button click from mActivity to destination
          *
          * */
-        fun buttonClick(mActivity: AppCompatActivity, button: Button, destination: Class<*>, uid: String) {
+        fun buttonClick(
+            mActivity: AppCompatActivity,
+            button: Button,
+            destination: Class<*>,
+            uid: String
+        ) {
             button.setOnClickListener {
                 val intent = Intent(mActivity, destination)
                 intent.putExtra("UserID", uid)

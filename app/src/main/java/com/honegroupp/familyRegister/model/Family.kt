@@ -34,9 +34,6 @@ data class Family(
     @set:PropertyName("password")
     @get:PropertyName("password")
     var password: String = "",
-    @set:PropertyName("familyOwnerUID")
-    @get:PropertyName("familyOwnerUID")
-    var familyOwnerUID: String = "",
     @set:PropertyName("familyId")
     @get:PropertyName("familyId")
     var familyId: String = "",
@@ -51,21 +48,13 @@ data class Family(
     var items: HashMap<String, Item> = HashMap()
 ) {
     /*This constructor has no parameter, which is used to create CategoryUpload while retrieve data from database*/
-    constructor() : this("", "", "", "", ArrayList(), ArrayList(), HashMap<String, Item>())
+    constructor() : this("", "", "", ArrayList(), ArrayList(), HashMap<String, Item>())
 
     /**
      * This method is responsible for storing Family to the database.
      *
      * */
     fun store(mActivity: AppCompatActivity, uid: String) {
-        // If there is no category. initializeK it.
-        if (this.categories.isEmpty()) {
-            this.categories.add(Category("Letter"))
-            this.categories.add(Category("Photo"))
-            this.categories.add(Category("Instrument"))
-            this.categories.add(Category("Others"))
-        }
-
         // upload family first
         FirebaseDatabaseManager.uploadFamily(this, uid)
 
@@ -76,6 +65,10 @@ data class Family(
         ) { d: DataSnapshot -> callbackAddFamilyToUser(this, mActivity, uid, userPath, d) }
     }
 
+    /**
+     * This method is the callback for add family ID to teh given user and update user on the Database.
+     *
+     * */
     private fun callbackAddFamilyToUser(
         family: Family,
         mActivity: AppCompatActivity,
@@ -83,16 +76,17 @@ data class Family(
         userPath: String,
         dataSnapshot: DataSnapshot
     ) {
+        // get user
         val user = dataSnapshot.child("").getValue(User::class.java) as User
+
         // set family id
         user.familyId = this.familyId
-        // set the user to be the family owner if there is no owner
 
-        if (family.familyOwnerUID == "") {
+        // family ID is the owner's id, so if the uid is same as the family id
+        // This user is the owner of the family, otherwise not.
+        if (family.familyId == uid) {
             user.isFamilyOwner = true
         }
-
-        Log.d("DEBUG000", "S${family.familyOwnerUID}")
 
         // update user in the database
         FirebaseDatabaseManager.update(userPath, user)
@@ -105,10 +99,9 @@ data class Family(
 
     companion object {
         /**
-         * This methods is responsible for validating family id and its password.
-         * TODO This method might not be in controller.
+         * This method is responsible for joining the user to the given family
          * */
-        fun validateJoinFamilyInput(
+        fun joinFamily(
             mActivity: AppCompatActivity,
             familyIdInput: String,
             familyPasswordInput: String,
@@ -129,7 +122,7 @@ data class Family(
         }
 
         /**
-         * This family is responsible for joining the User to the family.
+         * This method is responsible for joining the User to the family.
          * */
         private fun callbackJoinFamily(
             mActivity: AppCompatActivity,
@@ -255,10 +248,10 @@ data class Family(
                 dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId)
                     .child("categories").child(categoryName).child("itemKeys")
 
-            val itemKeys = if (!itemKeysSnapshot.hasChildren()){
+            val itemKeys = if (!itemKeysSnapshot.hasChildren()) {
                 // the item keys is empty
                 ArrayList()
-            }else{
+            } else {
                 itemKeysSnapshot.value as ArrayList<String>
             }
 
