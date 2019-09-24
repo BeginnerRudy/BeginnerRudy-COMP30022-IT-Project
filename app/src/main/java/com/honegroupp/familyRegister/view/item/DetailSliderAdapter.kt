@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.*
+import android.widget.Button
 import androidx.viewpager.widget.PagerAdapter
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -51,7 +52,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         slideHeaing.setText(currUpload.itemName)
         slideDescription.setText(currUpload.itemDescription)
 
-        view.findViewById<TextView>(R.id.detail_desc).setOnClickListener{
+        view.findViewById<Button>(R.id.detail_edit).setOnClickListener{
             val intent = Intent(context, ItemEdit::class.java)
             context.startActivity(intent)
         }
@@ -61,12 +62,12 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
             listener!!.onItemClick(position, items)
         }
 
-        view.findViewById<TextView>(R.id.detail_download).setOnClickListener{
+        view.findViewById<Button>(R.id.detail_download).setOnClickListener{
             Log.d("detaildowloding",position.toString())
             listener!!.onDownloadClick(position, items)
         }
 
-        view.findViewById<TextView>(R.id.detail_heading).setOnClickListener{
+        view.findViewById<Button>(R.id.detail_share).setOnClickListener{
             Log.d("detailsharing",position.toString())
             Picasso.get()
                 .load(currUpload.imageURLs[0])

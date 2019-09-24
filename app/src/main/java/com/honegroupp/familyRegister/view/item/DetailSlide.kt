@@ -216,7 +216,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         this.downloadurl = items[position].imageURLs[0]
         var bitmap = getBitmapFromView(imageView);
         try {
-            var file = File(this.getExternalCacheDir(),"logicchip.png");
+            var file = File(this.getExternalCacheDir(),"fml_rgst_share.png");
             var fOut = FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
             fOut.flush();
