@@ -59,7 +59,7 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
         // set database reference for itemUrls
         dImageFamilyId= intent.getStringExtra("FamilyId")
         dImageItemKey= intent.getStringExtra("ItemKey")
-        pathItem = "Family" + "/" + dImageFamilyId + "/" + "itemUrls"
+        pathItem = "Family" + "/" + dImageFamilyId + "/" + "items"
         databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
 
         // adapter of itemUrls for ViewPager, set listener in adapter for listening click action
