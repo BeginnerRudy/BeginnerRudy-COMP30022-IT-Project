@@ -27,26 +27,26 @@ import com.honegroupp.familyRegister.model.User
 import java.io.File
 import java.io.FileOutputStream
 
-class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener {
+class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener {
     private val STORAGE_PERMISSION_CODE: Int = 1000
     private var downloadurl :String = ""
 
     lateinit var mSlideViewPager : ViewPager
 
-    var uploads: ArrayList<Item> = ArrayList()
+    var itemUploads: ArrayList<Item> = ArrayList()
     var categoryUploads: ArrayList<Category> = ArrayList()
     var userUploads: ArrayList<User> = ArrayList()
 
-    lateinit var Detail_userId: String
-    lateinit var Detail_familyId: String
-    lateinit var path: String
-    lateinit var path_category: String
-    lateinit var path_user: String
-    lateinit var databaseReference: DatabaseReference
-    lateinit var databaseReference_category: DatabaseReference
-    lateinit var databaseReference_user: DatabaseReference
+    lateinit var detailUserId: String
+    lateinit var detailFamilyId: String
+    lateinit var pathItem: String
+    lateinit var pathCategory: String
+    lateinit var pathUser: String
+    lateinit var databaseReferenceItem: DatabaseReference
+    lateinit var databaseReferenceCategory: DatabaseReference
+    lateinit var databaseReferenceUser: DatabaseReference
 
-    lateinit var dbListener: ValueEventListener
+    lateinit var dbListener_item: ValueEventListener
     lateinit var dbListener_category: ValueEventListener
     lateinit var dbListener_user: ValueEventListener
 
@@ -59,7 +59,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         StrictMode.setVmPolicy(builder.build())
 
         mSlideViewPager = findViewById<ViewPager>(R.id.detail_slideViewPager)
-        var sliderAdapter = DetailSliderAdapter(uploads,this)
+        var sliderAdapter = DetailSliderAdapter(itemUploads,this)
         mSlideViewPager.adapter = sliderAdapter
 
         //set Current page
@@ -70,21 +70,21 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         sliderAdapter.listener = this@DetailSlide
 
         // set database reference for items and categories
-        Detail_userId= intent.getStringExtra("UserID")
+        detailUserId= intent.getStringExtra("UserID")
 
-        Log.d("gootUserId", Detail_userId)
+        Log.d("gootUserId", detailUserId)
 
-        path_user = "Users"
-        databaseReference_user = FirebaseDatabase.getInstance().getReference(path_user)
+        pathUser = "Users"
+        databaseReferenceUser = FirebaseDatabase.getInstance().getReference(pathUser)
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("")
-        databaseReference_category = FirebaseDatabase.getInstance().getReference("")
+        databaseReferenceItem = FirebaseDatabase.getInstance().getReference("")
+        databaseReferenceCategory = FirebaseDatabase.getInstance().getReference("")
 
         // set current Item position
         var alreadySet = false
 
         // listener for user on firebase, realtime change
-        dbListener_user = databaseReference_user.addValueEventListener(object : ValueEventListener {
+        dbListener_user = databaseReferenceUser.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 toast(p0.message, Toast.LENGTH_SHORT)
             }
@@ -99,16 +99,16 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
                     // Retrieve data from database, create an ItemUpload object and store in the list of one ItemListAdapter
                     val currUpload = it.getValue(User::class.java) as User
                     Log.d("uploaduuuserkey", it.key)
-                    Log.d("uploaduuuseruserid", Detail_userId)
-                    if (it.key == Detail_userId){
+                    Log.d("uploaduuuseruserid", detailUserId)
+                    if (it.key == detailUserId){
                         Log.d("uploaduuuserOK", it.key)
-                        Detail_familyId = currUpload.familyId
-                        path = "Family" + "/" + Detail_familyId + "/" + "items"
-                        path_category = "Family" + "/" + Detail_familyId + "/" + "categories"
-                        databaseReference = FirebaseDatabase.getInstance().getReference(path)
-                        databaseReference_category = FirebaseDatabase.getInstance().getReference(path_category)
+                        detailFamilyId = currUpload.familyId
+                        pathItem = "Family" + "/" + detailFamilyId + "/" + "items"
+                        pathCategory = "Family" + "/" + detailFamilyId + "/" + "categories"
+                        databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
+                        databaseReferenceCategory = FirebaseDatabase.getInstance().getReference(pathCategory)
                         // listener for category on firebase, realtime change
-                        dbListener_category = databaseReference_category.addValueEventListener(object : ValueEventListener {
+                        dbListener_category = databaseReferenceCategory.addValueEventListener(object : ValueEventListener {
                             override fun onCancelled(p0: DatabaseError) {
                                 toast(p0.message, Toast.LENGTH_SHORT)
                             }
@@ -134,7 +134,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
                         })
 
                         // listener for items on firebase, realtime change
-                        dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
+                        dbListener_item = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
                             override fun onCancelled(p0: DatabaseError) {
                                 toast(p0.message, Toast.LENGTH_SHORT)
                             }
@@ -142,7 +142,7 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
                             override fun onDataChange(p0: DataSnapshot) {
                                 Log.d("excution flag", "sadfasfsdgdfhdfhfg")
                                 // clear it before filling it
-                                uploads.clear()
+                                itemUploads.clear()
 
                                 // Retrieve data from database, create an Upload object and store in the list of one ImageAdapter
                                 p0.children.forEach {
@@ -162,10 +162,10 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
                                             Log.d("categggg curkeyOK", currUpload.key)
                                             if (currUpload.isPublic) {
                                                 Log.d("categggg isPublic", currUpload.isPublic.toString())
-                                                uploads.add(currUpload)
-                                            } else if (currUpload.itemOwnerUID == Detail_userId){
+                                                itemUploads.add(currUpload)
+                                            } else if (currUpload.itemOwnerUID == detailUserId){
                                                 Log.d("categgggnotPublicisOwn", currUpload.itemOwnerUID)
-                                                uploads.add(currUpload)
+                                                itemUploads.add(currUpload)
                                             } else {
                                                 Log.d("categggg notPublicOwner", currUpload.itemOwnerUID)
                                             }
@@ -175,15 +175,15 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
                                         toast(0.toString(), Toast.LENGTH_SHORT)
                                         Log.d("category keys", 55555555.toString())
                                     }
-//                    uploads.add(currUpload)
+//                    itemUploads.add(currUpload)
                                 }
-                                Log.d("upload",uploads.size.toString())
+                                Log.d("upload",itemUploads.size.toString())
 
                                 // It would update recycler after loading image from firebase storage
                                 sliderAdapter.notifyDataSetChanged()
 
                                 // set Current Item Position in View Page
-                                if (uploads.size > 0) {
+                                if (itemUploads.size > 0) {
                                     if (!alreadySet){
                                         mSlideViewPager.setCurrentItem(position_list)
                                         alreadySet = true
@@ -304,14 +304,14 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
     override fun onItemClick(position: Int, items:ArrayList<Item>) {
         val intent = Intent(this, DImageSlide::class.java)
         intent.putExtra("ItemKey", items[position].key)
-        intent.putExtra("FamilyId", Detail_familyId)
+        intent.putExtra("FamilyId", detailFamilyId)
         this.startActivity(intent)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        databaseReference.removeEventListener(dbListener)
-        databaseReference_category.removeEventListener(dbListener_category)
+        databaseReferenceItem.removeEventListener(dbListener_item)
+        databaseReferenceCategory.removeEventListener(dbListener_category)
     }
 
     fun toast(msg: String, duration: Int) {
