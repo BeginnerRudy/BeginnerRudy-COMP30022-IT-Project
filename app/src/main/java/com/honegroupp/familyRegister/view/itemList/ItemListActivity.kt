@@ -31,10 +31,8 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
     override fun onItemClick(position: Int) {
         val intent = Intent(this, DetailSlide::class.java)
         intent.putExtra("UserID", uid)
-        Log.d("ItttemListputtoUid", uid)
         intent.putExtra("PositionList", position.toString())
         startActivity(intent)
-        toast("Normal click at position $position", Toast.LENGTH_SHORT)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +40,6 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
         setContentView(R.layout.activity_item_list)
         //get User ID
         uid = intent.getStringExtra("UserID")
-        Log.d("ItttemListUid", uid)
         val categoryName = intent.getStringExtra("categoryPath")
 
         // add item logic

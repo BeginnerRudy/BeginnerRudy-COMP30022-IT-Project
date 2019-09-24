@@ -67,6 +67,7 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
         DImageSliderAdapter.listener = this@DImageSlide
 
 
+        var alreadySet = false
 
         dbListener = databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -98,13 +99,19 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
 
                 // set number of dots
                 numDots = uploads.size
+
+                if (uploads.size > 0){
+                    if (!alreadySet){
+                        Log.d("ddddiimageadddot",uploads.size.toString())
+                        addDotsIndicator(0)
+                        alreadySet = true
+                    }
+                }
             }
 
         })
 
-        addDotsIndicator(0)
-
-        mSlideViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        var listener = mSlideViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
             override fun onPageScrollStateChanged(state: Int) {
             }
