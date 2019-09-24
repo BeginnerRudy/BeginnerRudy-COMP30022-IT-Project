@@ -62,12 +62,16 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
         var sliderAdapter = DetailSliderAdapter(uploads,this)
         mSlideViewPager.adapter = sliderAdapter
 
+        //set Current page
+        val position_list = intent.getStringExtra("PositionList").toInt()
+        mSlideViewPager.setCurrentItem(position_list)
+
         // set adapter listener for click action
         sliderAdapter.listener = this@DetailSlide
 
         // set database reference for items and categories
         Detail_userId= intent.getStringExtra("UserID")
-        val position_list = intent.getStringExtra("PositionList").toInt()
+
         Log.d("gootUserId", Detail_userId)
 
         path_user = "Users"
@@ -75,6 +79,9 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
 
         databaseReference = FirebaseDatabase.getInstance().getReference("")
         databaseReference_category = FirebaseDatabase.getInstance().getReference("")
+
+        // set current Item position
+        var alreadySet = false
 
         // listener for user on firebase, realtime change
         dbListener_user = databaseReference_user.addValueEventListener(object : ValueEventListener {
@@ -174,6 +181,14 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
 
                                 // It would update recycler after loading image from firebase storage
                                 sliderAdapter.notifyDataSetChanged()
+
+                                // set Current Item Position in View Page
+                                if (uploads.size > 0) {
+                                    if (!alreadySet){
+                                        mSlideViewPager.setCurrentItem(position_list)
+                                        alreadySet = true
+                                    }
+                                }
                             }
                         })
                     }
@@ -185,9 +200,15 @@ class DetailSlide() : AppCompatActivity(), DetailSliderAdapter.OnItemClickerList
                 sliderAdapter.notifyDataSetChanged()
             }
         })
-
-        mSlideViewPager.setCurrentItem(position_list)
     }
+
+//    fun setCurrentItemPosition(position: Int, alreadySet: Boolean) : Boolean{
+//        if (!alreadySet){
+//            mSlideViewPager.setCurrentItem(position)
+//            return true
+//        }
+//        return true
+//    }
 
 
     // share when click

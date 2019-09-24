@@ -3,6 +3,7 @@ package com.honegroupp.familyRegister.view.itemList
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.google.firebase.database.*
 
@@ -30,6 +31,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
     override fun onItemClick(position: Int) {
         val intent = Intent(this, DetailSlide::class.java)
         intent.putExtra("UserID", uid)
+        Log.d("ItttemListputtoUid", uid)
         intent.putExtra("PositionList", position.toString())
         startActivity(intent)
         toast("Normal click at position $position", Toast.LENGTH_SHORT)
@@ -40,6 +42,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
         setContentView(R.layout.activity_item_list)
         //get User ID
         uid = intent.getStringExtra("UserID")
+        Log.d("ItttemListUid", uid)
         val categoryName = intent.getStringExtra("categoryPath")
 
         // add item logic
