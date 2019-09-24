@@ -1,6 +1,7 @@
 package com.honegroupp.familyRegister.view.item
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -59,8 +60,8 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         StrictMode.setVmPolicy(builder.build())
 
         // adapter of items for ViewPager, set listener in adapter for listening click action
-        mSlideViewPager = findViewById<ViewPager>(R.id.detail_slideViewPager)
-        var sliderAdapter = DetailSliderAdapter(itemUploads,this)
+        mSlideViewPager = findViewById(R.id.detail_slideViewPager)
+        val sliderAdapter = DetailSliderAdapter(itemUploads,this)
         mSlideViewPager.adapter = sliderAdapter
         sliderAdapter.listener = this@DetailSlide
 
@@ -92,7 +93,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
             override fun onDataChange(p0: DataSnapshot) {
 
                 // Retrieve each User from database from pathUser
-                p0.children.forEach {
+                p0.children.forEach { it ->
                     val currUserUpload = it.getValue(User::class.java) as User
                     
                     // find the user by UserId
@@ -100,8 +101,8 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                     if (it.key == detailUserId){
                         // get familyID to produce path of Item & path of Category
                         detailFamilyId = currUserUpload.familyId
-                        pathItem = "Family" + "/" + detailFamilyId + "/" + "items"
-                        pathCategory = "Family" + "/" + detailFamilyId + "/" + "categories"
+                        pathItem = "Family/$detailFamilyId/items"
+                        pathCategory = "Family/$detailFamilyId/categories"
 
                         // database Reference for Item & Category
                         databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
@@ -141,6 +142,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                                     val currItemUpload = it.getValue(Item::class.java) as Item
                                     currItemUpload.key = it.key
 
+                                    // wait for categories(categoryUploads) is get from database
                                     if (categoryUploads.size != 0){
                                         // check item in current category
                                         if (currItemUpload.key in categoryUploads[categoryIndexList].itemKeys){
@@ -151,8 +153,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                                                 itemUploads.add(currItemUpload)
                                             }
                                         }
-                                    } else {
-                                        // wait for categories(categoryUploads) is get from database
                                     }
                                 }
 
@@ -162,7 +162,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                                 // set Item to be seen first in View Page when items(itemUploads) is ready
                                 if (itemUploads.size > 0) {
                                     if (!alreadySet){
-                                        mSlideViewPager.setCurrentItem(positionList)
+                                        mSlideViewPager.currentItem = positionList
                                         alreadySet = true
                                     }
                                 }
@@ -182,24 +182,25 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
      * code change from:
      * https://www.youtube.com/watch?v=1tpc3fyEObI&t=2s
      */
+    @SuppressLint("SetWorldReadable")
     override fun onShareClick(position: Int, items:ArrayList<Item>, imageView: ImageView) {
         this.downloadUrl = items[position].imageURLs[0]
-        var bitmap = getBitmapFromView(imageView);
+        val bitmap = getBitmapFromView(imageView)
         try {
-            var file = File(this.getExternalCacheDir(),"fml_rgst_share.png");
-            var fOut = FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-            fOut.flush();
-            fOut.close();
-            file.setReadable(true, false);
-            var intent = Intent(android.content.Intent.ACTION_SEND);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Intent.EXTRA_TEXT, "name");
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-            intent.setType("image/png");
-            startActivity(Intent.createChooser(intent, "Share image via"));
+            val file = File(this.externalCacheDir,"fml_rgst_share.png")
+            val fOut = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut)
+            fOut.flush()
+            fOut.close()
+            file.setReadable(true, false)
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.putExtra(Intent.EXTRA_TEXT, "name")
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file))
+            intent.type = "image/png"
+            startActivity(Intent.createChooser(intent, "Share image via"))
         } catch (e: Exception ) {
-            e.printStackTrace();
+            e.printStackTrace()
         }
     }
 
@@ -208,17 +209,17 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
      * code change from:
      * https://stackoverflow.com/questions/14492354/create-bitmap-from-view-makes-view-disappear-how-to-get-view-canvas
      */
-    fun getBitmapFromView(view: View ): Bitmap {
-        var returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
-        var canvas = Canvas(returnedBitmap);
-        var bgDrawable = view.getBackground();
+    private fun getBitmapFromView(view: View ): Bitmap {
+        val returnedBitmap: Bitmap = Bitmap.createBitmap(view.width, view.height,Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(returnedBitmap)
+        val bgDrawable = view.background
         if (bgDrawable!=null) {
-            bgDrawable.draw(canvas);
+            bgDrawable.draw(canvas)
         } else {
-            canvas.drawColor(Color.WHITE);
+            canvas.drawColor(Color.WHITE)
         }
-        view.draw(canvas);
-        return returnedBitmap;
+        view.draw(canvas)
+        return returnedBitmap
     }
 
     // download when click
@@ -232,12 +233,12 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                 requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),STORAGE_PERMISSION_CODE)
             }else{
                 //permission already granted
-                startDownloading();
+                startDownloading()
 
             }
         }else{
             //system os less than mashmallow
-            startDownloading();
+            startDownloading()
         }
     }
 
