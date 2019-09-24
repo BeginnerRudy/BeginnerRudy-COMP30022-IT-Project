@@ -122,12 +122,6 @@ class FirebaseDatabaseManager() {
          * */
         fun uploadFamily(family: Family, uid: String) {
             val databaseRef = FirebaseDatabase.getInstance().getReference(FAMILY_PATH)
-
-            //TODO When the family is created for the first time
-            if (family.familyId.isEmpty()){
-                family.familyId = uid
-            }
-
             databaseRef.child(family.familyId).setValue(family)
         }
 
