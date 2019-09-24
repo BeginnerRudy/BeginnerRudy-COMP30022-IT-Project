@@ -33,82 +33,82 @@ class DImageSlide() : AppCompatActivity(), DImageSliderAdapter.OnItemClickerList
     private var downloadUrl :String = ""
 
     lateinit var mSlideViewPager : ViewPager
+    
     lateinit var mDotLayout: LinearLayout
-
     lateinit var mDots: Array<TextView?>
     var numDots: Int = 0
 
-    var itemUploads: ArrayList<String> = ArrayList()
-
     lateinit var dImageFamilyId: String
     lateinit var dImageItemKey: String
+    
     lateinit var pathItem: String
+    
     lateinit var databaseReferenceItem: DatabaseReference
     lateinit var dbListenerItem: ValueEventListener
 
+    var itemUrls: ArrayList<String> = ArrayList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        val builder = StrictMode.VmPolicy.Builder()
-        StrictMode.setVmPolicy(builder.build())
         super.onCreate(savedInstanceState)
         setContentView(R.layout.slide_dimage_background)
 
-        // set database reference for items
+        // StrictMode for share
+        val builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
+
+        // set database reference for itemUrls
         dImageFamilyId= intent.getStringExtra("FamilyId")
         dImageItemKey= intent.getStringExtra("ItemKey")
-        pathItem = "Family" + "/" + dImageFamilyId + "/" + "items"
+        pathItem = "Family" + "/" + dImageFamilyId + "/" + "itemUrls"
         databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
 
-
+        // adapter of itemUrls for ViewPager, set listener in adapter for listening click action
         mSlideViewPager = findViewById<ViewPager>(R.id.dimage_slideViewPager)
-        mDotLayout = findViewById<LinearLayout>(R.id.dimage_dotsLayout)
-
-        var DImageSliderAdapter = DImageSliderAdapter(itemUploads,this)
+        var DImageSliderAdapter = DImageSliderAdapter(itemUrls,this)
         mSlideViewPager.adapter = DImageSliderAdapter
         DImageSliderAdapter.listener = this@DImageSlide
 
+        // layout for bottom dots
+        mDotLayout = findViewById<LinearLayout>(R.id.dimage_dotsLayout)
 
+        // whether bottom dots are already set, View Pager pages cannot be set until it is ready
         var alreadySet = false
 
+        // listener for items on database, realtime change itemUrls
         dbListenerItem = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 toast(p0.message, Toast.LENGTH_SHORT)
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                Log.d("excution flag", "sadfasfsdgdfhdfhfg")
-                // clear it before filling it
-                itemUploads.clear()
-
-                // Retrieve data from database, create an Upload object and store in the list of one ImageAdapter
+                itemUrls.clear()
+                
+                // Retrieve each Item from database from pathItem
                 p0.children.forEach {
-                    // Retrieve data from database, create an Item object and store in the list of one ItemListAdapter
                     val currUpload = it.getValue(Item::class.java) as Item
-                    currUpload.key = it.key
 
+                    // find the item by detail Image Item Key, get all detail url into itemUrls
                     if (it.key == dImageItemKey){
                         for (currUrl in currUpload.imageURLs){
-                            itemUploads.add(currUrl)
+                            itemUrls.add(currUrl)
                         }
                     }
-
                 }
-                Log.d("upload",itemUploads.size.toString())
-
-                // It would update recycler after loading image from firebase storage
+                
+                // Notify ViewPager to update
                 DImageSliderAdapter.notifyDataSetChanged()
 
-                // set number of dots
-                numDots = itemUploads.size
+                // set number of dots to be appeared at bottom
+                numDots = itemUrls.size
 
-                if (itemUploads.size > 0){
+                // only need to set initial dot indicator one time once the itemUrls(urls) is got from database
+                if (itemUrls.size > 0){
                     if (!alreadySet){
-                        Log.d("ddddiimageadddot",itemUploads.size.toString())
                         addDotsIndicator(0)
                         alreadySet = true
                     }
                 }
             }
-
         })
 
         var listener = mSlideViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {

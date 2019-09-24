@@ -33,22 +33,23 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
     lateinit var mSlideViewPager : ViewPager
 
-    var itemUploads: ArrayList<Item> = ArrayList()
-    var categoryUploads: ArrayList<Category> = ArrayList()
-    var userUploads: ArrayList<User> = ArrayList()
-
     lateinit var detailUserId: String
     lateinit var detailFamilyId: String
+
     lateinit var pathItem: String
     lateinit var pathCategory: String
     lateinit var pathUser: String
+
     lateinit var databaseReferenceItem: DatabaseReference
     lateinit var databaseReferenceCategory: DatabaseReference
     lateinit var databaseReferenceUser: DatabaseReference
-
     lateinit var dbListenerItem: ValueEventListener
     lateinit var dbListenerCategory: ValueEventListener
     lateinit var dbListenerUser: ValueEventListener
+
+    var itemUploads: ArrayList<Item> = ArrayList()
+    var categoryUploads: ArrayList<Category> = ArrayList()
+    var userUploads: ArrayList<User> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,29 +59,25 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         val builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
 
+        // adapter of items for ViewPager, set listener in adapter for listening click action
         mSlideViewPager = findViewById<ViewPager>(R.id.detail_slideViewPager)
         var sliderAdapter = DetailSliderAdapter(itemUploads,this)
         mSlideViewPager.adapter = sliderAdapter
-
-        //set Current page
-        val position_list = intent.getStringExtra("PositionList").toInt()
-        mSlideViewPager.setCurrentItem(position_list)
-
-        // set adapter listener for click action
         sliderAdapter.listener = this@DetailSlide
 
-        // set database reference for items and categories
+        // get position of item clicked in item list for setting Current page item
+        val positionList = intent.getStringExtra("PositionList").toInt()
+
+        // get userID for setting firbase database reference for items and categories
         detailUserId= intent.getStringExtra("UserID")
 
-        Log.d("gootUserId", detailUserId)
-
+        // initialise database References, Item and Categories path cannot be get before the family id is get
         pathUser = "Users"
         databaseReferenceUser = FirebaseDatabase.getInstance().getReference(pathUser)
-
         databaseReferenceItem = FirebaseDatabase.getInstance().getReference("")
         databaseReferenceCategory = FirebaseDatabase.getInstance().getReference("")
 
-        // set current Item position
+        // whether item position is already set, View Pager pages cannot be set until it is ready
         var alreadySet = false
 
         // listener for user on firebase, realtime change
@@ -90,7 +87,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                Log.d("excution flag", "sadfasfsdgdfhdfhfg")
                 // clear it before filling it
                 userUploads.clear()
 
@@ -185,7 +181,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                                 // set Current Item Position in View Page
                                 if (itemUploads.size > 0) {
                                     if (!alreadySet){
-                                        mSlideViewPager.setCurrentItem(position_list)
+                                        mSlideViewPager.setCurrentItem(positionList)
                                         alreadySet = true
                                     }
                                 }
