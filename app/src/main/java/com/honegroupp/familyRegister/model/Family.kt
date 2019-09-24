@@ -270,8 +270,13 @@ data class Family(
                         .getValue(Item::class.java) as Item
 
                 currItem.key = key
-                // add it to the items
-                items.add(currItem)
+
+                // add it to the items, check item is visible, if not check user is owner
+                if (currItem.isPublic) {
+                    items.add(currItem)
+                } else if (currItem.itemOwnerUID == mActivity.uid){
+                    items.add(currItem)
+                }
 
                 // notify the adapter to update
                 itemListAdapter.notifyDataSetChanged()
