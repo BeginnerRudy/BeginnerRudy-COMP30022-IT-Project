@@ -12,7 +12,8 @@
         <activity
             android:name=".view.utility.SearchActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.authentication.AccountActivity" />
+        <activity android:name=".view.authentication.AccountActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.authentication.LoginActivity"
             android:screenOrientation="portrait">
