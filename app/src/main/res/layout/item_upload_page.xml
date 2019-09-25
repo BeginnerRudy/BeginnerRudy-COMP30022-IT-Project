@@ -21,27 +21,19 @@
 
 
         <GridView
-            android:id="@+id/item_grid_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:numColumns = "3"
-            android:verticalSpacing="10dp"
-            android:horizontalSpacing="10dp"
-            android:gravity="center" />
-
-        <androidx.core.widget.ContentLoadingProgressBar
-            android:id="@+id/progress_bar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:id="@+id/itemGridView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/itemImage"
-            android:layout_alignParentLeft="true" />
+            android:numColumns = "3"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"/>
+
 
         <Button
             android:id="@+id/itemChooseImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/progress_bar"
+            android:layout_below="@+id/itemGridView"
             android:backgroundTint="@color/colorAccent"
             android:text="@string/choose_image"
             android:textColor="@color/textColorPrimary" />

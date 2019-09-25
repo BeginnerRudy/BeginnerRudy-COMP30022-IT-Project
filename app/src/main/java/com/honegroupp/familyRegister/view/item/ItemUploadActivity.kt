@@ -110,8 +110,7 @@ class ItemUploadActivity : AppCompatActivity(){
                                     val adapter = ItemGridAdapter(this,allUris)
 
                                     // Set the grid view adapter
-//                                    val gridview = findViewById<GridView>(R.layout.item_grid_view)
-                                    item_grid_view.adapter = adapter
+                                    itemGridView.adapter = adapter
                                 }
                             }
 
