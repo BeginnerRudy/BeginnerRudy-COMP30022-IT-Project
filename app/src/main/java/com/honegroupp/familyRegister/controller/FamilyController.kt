@@ -75,11 +75,16 @@ class FamilyController {
             mActivity: AppCompatActivity,
             familyName: EditText,
             password: EditText,
-            uid: String
+            uid: String,
+            username: String
         ) {
             //The password is encrypted using SHA256
             val hashValue: String = Hash.applyHash(password.text.toString())
-            val family = Family(familyName = familyName.text.toString(), familyId = uid, password = hashValue)
+            val family = Family(
+                familyName = familyName.text.toString(),
+                familyId = uid,
+                password = hashValue
+            )
 
             // Add the user to the family members
             family.members.add(uid)
@@ -91,7 +96,7 @@ class FamilyController {
             family.categories.add(Category("Others"))
 
             // Store the family to the database
-            family.store(mActivity, uid)
+            family.store(mActivity, uid, username)
 
             // Show a toast to remind the user
             Toast.makeText(mActivity, "Family Created Successfully", Toast.LENGTH_SHORT).show()
@@ -105,14 +110,15 @@ class FamilyController {
             mActivity: AppCompatActivity,
             familyId: EditText,
             password: EditText,
-            uid: String
+            uid: String,
+            username:String
         ) {
             // Extract input as String
             val familyIdInput = familyId.text.toString()
             val familyPasswordInput = password.text.toString()
 
             // Join family
-            Family.joinFamily(mActivity, familyIdInput, familyPasswordInput, uid)
+            Family.joinFamily(mActivity, familyIdInput, familyPasswordInput, uid, username)
         }
 
 
@@ -124,11 +130,13 @@ class FamilyController {
             mActivity: AppCompatActivity,
             button: Button,
             destination: Class<*>,
-            uid: String
+            uid: String,
+            username: String
         ) {
             button.setOnClickListener {
                 val intent = Intent(mActivity, destination)
                 intent.putExtra("UserID", uid)
+                intent.putExtra("UserName", username)
                 mActivity.startActivity(intent)
             }
         }

@@ -12,6 +12,15 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
+    <TextView
+        android:id="@+id/text_view_empty_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:hint="@string/there_is_no_item_in_this_category"
+        android:textSize="24sp"
+        android:visibility="invisible" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/item_list_recycler_view"
         android:layout_width="match_parent"
@@ -27,6 +36,7 @@
         android:layout_marginBottom="8dp"
         android:clickable="true"
         android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="#009688" />
+        app:backgroundTint="#009688"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.honegroupp.familyRegister.controller
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI

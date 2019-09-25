@@ -45,6 +45,7 @@
     <string name="detail_share">分享</string>
 
     <string name="query_hints">物品名称/收藏时间</string>
+    <string name="there_is_no_item_in_this_category">此分类为空</string>
 
     <string-array name="privacy_options">
         <item>家庭可见</item>

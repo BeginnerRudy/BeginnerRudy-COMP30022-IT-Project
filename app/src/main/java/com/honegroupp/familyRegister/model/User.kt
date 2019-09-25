@@ -1,6 +1,7 @@
 package com.honegroupp.familyRegister.model
 
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
