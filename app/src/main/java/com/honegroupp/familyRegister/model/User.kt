@@ -67,7 +67,7 @@ data class User(
          * */
         fun showCategories(uid: String, view: View, mActivity: AppCompatActivity) {
             val rootPath = "/"
-            FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
+            FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
                 callbackShowCategories(
                     uid,
                     view,
@@ -105,7 +105,7 @@ data class User(
                 val categories = family.categories
 
                 // Bind it to adapter of the recycler view
-                val categoryAdapter = CategoryAdapter(categories, mActivity)
+                val categoryAdapter = CategoryAdapter(uid, categories, mActivity)
                 // It would update recycler after loading image from firebase storage
                 categoryAdapter.notifyDataSetChanged()
 

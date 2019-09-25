@@ -7,16 +7,16 @@
     <ImageView
         android:id="@+id/detail_image"
         android:layout_width="match_parent"
-        android:layout_height="482dp"
+        android:layout_height="match_parent"
         android:layout_above="@+id/detail_heading"
+        android:layout_below="@+id/detail_download"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="37dp"
+        android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginBottom="0dp"
@@ -49,11 +49,37 @@
         android:text="Lkcjash, sajhashcj sajdch sakjch, askjch, aschk, ascjhkjhkjhkhcskah csajk cajksh  akjchoeufq feoif asc,c asjhkjhascjkh askjhckash"
         android:textColor="@color/colorWhite" />
 
-    <TextView
+    <Button
         android:id="@+id/detail_download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Download"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_toEndOf="@+id/detail_share"
+        android:layout_toRightOf="@+id/detail_share"
+        android:background="@null"
+        android:text="@string/detail_download"
+        android:textColor="@color/colorWhite" />
+
+    <Button
+        android:id="@+id/detail_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@null"
+        android:text="@string/detail_share"
+        android:textColor="@color/colorWhite" />
+
+    <Button
+        android:id="@+id/detail_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@null"
+        android:text="@string/detail_edit"
         android:textColor="@color/colorWhite" />
 
 </RelativeLayout>

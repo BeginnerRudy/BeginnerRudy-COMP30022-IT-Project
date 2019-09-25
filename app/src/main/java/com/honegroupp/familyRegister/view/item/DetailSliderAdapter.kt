@@ -4,21 +4,22 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.*
+import android.widget.Button
 import androidx.viewpager.widget.PagerAdapter
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.model.ItemU
+import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 
-class DetailSliderAdapter(val items: ArrayList<ItemU>, val context: Context) : PagerAdapter() {
-    var listener: DetailSliderAdapter.OnItemClickerListener? = null
+class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : PagerAdapter() {
+    var listener: OnItemClickerListener? = null
 
     interface OnItemClickerListener {
-        fun onItemClick(position: Int)
-        fun onDownloadClick(position: Int,item:ArrayList<ItemU>)
-        fun onShareClick(position: Int,item:ArrayList<ItemU>, imageView: ImageView)
+        fun onItemClick(position: Int, items:ArrayList<Item>)
+        fun onDownloadClick(position: Int, items:ArrayList<Item>)
+        fun onShareClick(position: Int, items:ArrayList<Item>, imageView: ImageView)
     }
 
     override fun getCount(): Int {
@@ -29,74 +30,50 @@ class DetailSliderAdapter(val items: ArrayList<ItemU>, val context: Context) : P
         return view == `object`
     }
 
-
     override fun instantiateItem(container: ViewGroup, position: Int): View {
-        var layoutInflater:LayoutInflater = LayoutInflater.from(context)
+        val layoutInflater:LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_detail_layout, container, false)
 
-        var slideImageView = view.findViewById<ImageView>(R.id.detail_image)
-        var slideHeaing = view.findViewById<TextView>(R.id.detail_heading)
-        var slideDescription = view.findViewById<TextView>(R.id.detail_desc)
+        val slideImageView = view.findViewById<ImageView>(R.id.detail_image)
+        val slideHeaing = view.findViewById<TextView>(R.id.detail_heading)
+        val slideDescription = view.findViewById<TextView>(R.id.detail_desc)
 
-        val currUpload = items[position]
+        val currItemUploads = items[position]
 
 
         // Load image to ImageView via its URL from Firebase Storage
         Picasso.get()
-            .load(currUpload.url)
+            .load(currItemUploads.imageURLs[0])
             .placeholder(R.mipmap.ic_launcher)
             .into(slideImageView)
-        Log.d("url", currUpload.url)
-        slideHeaing.setText(currUpload.name)
-        slideDescription.setText(currUpload.description)
+        slideHeaing.setText(currItemUploads.itemName)
+        slideDescription.setText(currItemUploads.itemDescription)
 
-        view.findViewById<TextView>(R.id.detail_desc).setOnClickListener{
+        view.findViewById<Button>(R.id.detail_edit).setOnClickListener{
             val intent = Intent(context, ItemEdit::class.java)
             context.startActivity(intent)
         }
 
+        // set on click listeners
         view.findViewById<ImageView>(R.id.detail_image).setOnClickListener{
-            val intent = Intent(context, DImageSlide::class.java)
-            context.startActivity(intent)
+            listener!!.onItemClick(position, items)
         }
 
-        view.findViewById<TextView>(R.id.detail_download).setOnClickListener{
-            Log.d("dowloding",position.toString())
+        view.findViewById<Button>(R.id.detail_download).setOnClickListener{
             listener!!.onDownloadClick(position, items)
         }
 
-        view.findViewById<TextView>(R.id.detail_heading).setOnClickListener{
-            Log.d("sharing",position.toString())
+        view.findViewById<Button>(R.id.detail_share).setOnClickListener{
             Picasso.get()
-                .load(currUpload.url)
+                .load(currItemUploads.imageURLs[0])
                 .placeholder(R.mipmap.ic_launcher)
                 .into(slideImageView)
             listener!!.onShareClick(position, items, slideImageView)
         }
+
         container.addView(view)
         return view
     }
-
-    inner class ImageViewHolder(val viewItem: View) : View.OnClickListener,
-        View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
-        override fun onMenuItemClick(p0: MenuItem?): Boolean {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
-        override fun onCreateContextMenu(
-            p0: ContextMenu?,
-            p1: View?,
-            p2: ContextMenu.ContextMenuInfo?
-        ) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
-        override fun onClick(p0: View?) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
-    }
-
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         container.removeView(`object` as RelativeLayout)

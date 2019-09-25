@@ -7,6 +7,13 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.FamilyController
 import kotlinx.android.synthetic.main.activity_create_join_family.*
 
+/**
+ * This class is responsible for asking user choose to join or create a family for the first time
+ * the user logs in.
+ *
+ * User click back button twice would exits the app when he/she is in this activity.
+ * @author Renjie Meng
+ * */
 class FamilyActivity: AppCompatActivity(), IDoubleClickToExit{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
-        <activity android:name=".view.authentication.AccountActivity"></activity>
+        <activity android:name=".view.utility.SearchActivity"></activity>
+        <activity android:name=".view.authentication.AccountActivity" />
         <activity
             android:name=".view.authentication.LoginActivity"
             android:screenOrientation="portrait">
@@ -21,13 +22,13 @@
         </activity>
         <activity android:name=".view.home.HomeActivity" />
         <activity android:name=".view.family.FamilyActivity" />
-        <activity android:name=".view.item.ItemDetail" />
         <activity android:name=".view.item.DetailSlide" />
         <activity android:name=".view.item.DImageSlide" />
         <activity android:name=".view.item.ItemEdit" />
         <activity android:name=".view.family.FamilyCreateActivity"/>
         <activity android:name=".view.family.FamilyJoinActivity"/>
         <activity android:name=".view.item.ItemUploadActivity"/>
+        <activity android:name=".view.itemList.ItemListActivity"/>
     </application>
 
 
@@ -37,6 +38,7 @@
 
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 

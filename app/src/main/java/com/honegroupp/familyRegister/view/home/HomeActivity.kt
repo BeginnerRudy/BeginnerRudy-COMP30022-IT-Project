@@ -17,16 +17,11 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
-import com.honegroupp.familyRegister.view.item.ItemDetail
 import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 import android.widget.TextView
-import com.honegroupp.familyRegister.view.family.FamilyCreateActivity
-import com.honegroupp.familyRegister.view.family.FamilyJoinActivity
-import android.view.Gravity
 
-import androidx.appcompat.widget.SearchView
-import com.honegroupp.familyRegister.view.item.ItemUploadActivity
+import com.honegroupp.familyRegister.view.utility.SearchActivity
 
 
 @Suppress("DEPRECATION")
@@ -63,10 +58,11 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         // Searching Feature
 
 
-        var search = findViewById<SearchView>(R.id.searchView)
-        search.layoutParams = Toolbar.LayoutParams(Gravity.RIGHT)
-        search.setOnClickListener {
-            //
+        search_icon.setOnClickListener {
+            val intent = Intent(this,SearchActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
+            true
         }
 
 
@@ -90,17 +86,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         }
 
         nav_view.menu.findItem(R.id.nav_view_family).setOnMenuItemClickListener {
-            val intent = Intent(this, ItemDetail::class.java)
-            startActivity(intent)
-            toast("Clicked4")
-            true
-        }
-
-        nav_view.menu.findItem(R.id.nav_testing).setOnMenuItemClickListener {
-            val intent = Intent(this, ItemUploadActivity::class.java)
-            intent.putExtra("UserID", userID)
-            startActivity(intent)
-            toast("Testing")
+            toast("Clicked view family")
             true
         }
 

@@ -14,8 +14,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 /**
- * This class is responsible for controller the event related to family.
- * There are create, join and view a family.
+ * This class is responsible for controller the event related to item.
  *
  * */
 class ItemController {
@@ -32,6 +31,7 @@ class ItemController {
             itemName: EditText,
             itemDescription: EditText,
             uid: String,
+            categoryName: String,
             imageURLs: ArrayList<String>,
             isPublic: Boolean
         ) {
@@ -43,7 +43,7 @@ class ItemController {
                 imageURLs = imageURLs,
                 isPublic = isPublic
             )
-            item.store(uid)
+            item.store(uid, categoryName)
 
             Toast.makeText(mContext, "Item Stored successfully", Toast.LENGTH_SHORT).show()
             // Go back to the previous activity

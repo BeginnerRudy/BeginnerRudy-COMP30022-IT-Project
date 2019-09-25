@@ -1,7 +1,6 @@
 package com.honegroupp.familyRegister.model
 
 
-import android.content.Intent
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.PropertyName
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
@@ -31,9 +30,11 @@ data class Item(
     @get:PropertyName("imageURLs")
     var imageURLs: ArrayList<String> = ArrayList(),
 
+
     @set:PropertyName("isPublic")
     @get:PropertyName("isPublic")
     var isPublic: Boolean = false
+
 ) {
     /*This is the primary constructor to create an item instance*/
 //    constructor(itemName: String, itemDescription: String, itemOwnerUID: String, imageURLs: ArrayList<String>, itemPrivacy: String) : this() {
@@ -44,40 +45,48 @@ data class Item(
 //        this.itemPrivacy = itemPrivacy
 //    }
 
+    var key: String? = null
+
     /**
      * this function is used to store new item into item list of a family
      * */
-    fun store(uid: String) {
+    fun store(uid: String, categoryName: String) {
 
         val rootPath = "/"
         FirebaseDatabaseManager.retrieve(
             rootPath
-        ) { d: DataSnapshot -> callbackStore(uid, d) }
+        ) { d: DataSnapshot -> callbackStore(uid, categoryName, d) }
     }
 
     /**
      * this is the help callback function of store item, use to get current index of item list and upload new item
      * */
-    private fun callbackStore(uid: String, dataSnapshot: DataSnapshot) {
+    private fun callbackStore(uid: String, categoryName: String, dataSnapshot: DataSnapshot) {
         // get user's family ID
         val currFamilyId =
             dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).child("familyId").getValue(
                 String::class.java
             ) as String
 
-        var lastIndex: Int
-
         //get last index
-        val familyItemDataSnapshot =
-            dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId).child("items")
+        val familyItemsDataSnapshot =
+            dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId)
+                .child("items")
 
-        lastIndex = if (familyItemDataSnapshot.hasChildren()) {
-            familyItemDataSnapshot.children.last().key.toString().toInt()
+        // if there has item in the family
+
+
+        var items: HashMap<String, Item>
+
+        items = if (familyItemsDataSnapshot.hasChildren()) {
+            familyItemsDataSnapshot.value as HashMap<String, Item>
         } else {
-            -1
+            HashMap()
         }
 
         val path = FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/"
-        FirebaseDatabaseManager.uploadItem(this, path, lastIndex + 1)
+        val categoryPath =
+            FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/" + "categories/" + categoryName + "/"
+        FirebaseDatabaseManager.uploadItem(this, path, items, categoryPath)
     }
 }
