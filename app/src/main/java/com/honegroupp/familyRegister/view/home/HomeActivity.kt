@@ -23,6 +23,7 @@ import com.honegroupp.familyRegister.view.authentication.AccountActivity
 import android.widget.TextView
 
 import com.honegroupp.familyRegister.view.utility.SearchActivity
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 
 @Suppress("DEPRECATION")
@@ -78,6 +79,10 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         val headerView = nav_view.getHeaderView(0)
         val navUsername = headerView.findViewById(R.id.nav_userName) as TextView
         navUsername.text = username
+
+        // display the user id
+        val navUserEmail = headerView.findViewById(R.id.nav_userEmail) as TextView
+        navUserEmail.text = userID.replace("=", ".")
 
 
         // Interaction with menuitems contained in the navigation drawer
