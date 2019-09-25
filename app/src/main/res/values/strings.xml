@@ -51,4 +51,5 @@
 
 
     <string name="query_hints">name/age</string>
+    <string name="there_is_no_item_in_this_category">There is no item in this category</string>
 </resources>
