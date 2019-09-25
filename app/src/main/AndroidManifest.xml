@@ -9,8 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
-        <activity android:name=".view.utility.SearchActivity"></activity>
-        <activity android:name=".view.authentication.AccountActivity" />
+        <activity
+            android:name=".view.utility.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".view.authentication.AccountActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.authentication.LoginActivity"
             android:screenOrientation="portrait">
@@ -20,15 +23,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.home.HomeActivity" />
-        <activity android:name=".view.family.FamilyActivity" />
-        <activity android:name=".view.item.DetailSlide" />
-        <activity android:name=".view.item.DImageSlide" />
-        <activity android:name=".view.item.ItemEdit" />
-        <activity android:name=".view.family.FamilyCreateActivity"/>
-        <activity android:name=".view.family.FamilyJoinActivity"/>
-        <activity android:name=".view.item.ItemUploadActivity"/>
-        <activity android:name=".view.itemList.ItemListActivity"/>
+        <activity android:name=".view.home.HomeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.family.FamilyActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.item.DetailSlide"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.item.DImageSlide"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.item.ItemEdit"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.family.FamilyCreateActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.family.FamilyJoinActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.item.ItemUploadActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.itemList.ItemListActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 

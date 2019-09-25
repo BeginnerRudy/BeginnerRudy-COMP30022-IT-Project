@@ -21,11 +21,12 @@ class FamilyActivity: AppCompatActivity(), IDoubleClickToExit{
 
         //get User ID
         val currUid= intent.getStringExtra("UserID")
+        val username = intent.getStringExtra("UserName")
 
         // navigate to FamilyCreateActivity if click brn_create
-        FamilyController.buttonClick(this, btn_create_family, FamilyCreateActivity::class.java, currUid)
+        FamilyController.buttonClick(this, btn_create_family, FamilyCreateActivity::class.java, currUid, username)
         // navigate to FamilyJoinActivity if click brn_join
-        FamilyController.buttonClick(this, btn_join_family, FamilyJoinActivity::class.java, currUid)
+        FamilyController.buttonClick(this, btn_join_family, FamilyJoinActivity::class.java, currUid, username)
     }
 
     /**

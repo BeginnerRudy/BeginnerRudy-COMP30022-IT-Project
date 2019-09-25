@@ -1,6 +1,9 @@
 package com.honegroupp.familyRegister.utility
 
+import android.R
+import android.util.Log
 import android.widget.ArrayAdapter
+import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +11,7 @@ import com.google.firebase.database.DataSnapshot
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.model.User
+import com.honegroupp.familyRegister.view.utility.ListViewAapter
 
 class SearchMethod{
 
@@ -50,7 +54,7 @@ class SearchMethod{
         }
 
         //set adapter to show items
-        listView.adapter = ArrayAdapter<Item>(mActivity, android.R.layout.simple_list_item_1, itemList);
+        listView.adapter = ListViewAapter(itemList, mActivity)
     }
 
     /**
@@ -96,7 +100,7 @@ class SearchMethod{
         newList = search(queryText, itemList)
 
         //set adapter to show items
-        listView.adapter = ArrayAdapter<Item>(mActivity, android.R.layout.simple_list_item_1, newList);
+        listView.adapter = ListViewAapter(newList, mActivity)
     }
 
     //a search function depending on item Name

@@ -22,16 +22,19 @@ class FamilyCreateActivity : AppCompatActivity() {
 
         //get User ID
         currUid= intent.getStringExtra("UserID")
+        val username = intent.getStringExtra("UserName")
 
         // Define the logic when the user click the button for creating family
-        clickConfirm(familyCreateConfirm)
+        clickConfirm(familyCreateConfirm, username)
 
     }
 
     /**
      * This function is responsible for defining the logic of the confirm creating family button.
      * */
-    private fun clickConfirm(buttonConfirm: Button) {
+    private fun clickConfirm(buttonConfirm: Button, username:String) {
+
+
         buttonConfirm.setOnClickListener {
             // First, check whether the user input is valid
             val isValid = FamilyController.validateCreateFamilyInput(
@@ -47,7 +50,8 @@ class FamilyCreateActivity : AppCompatActivity() {
                     this,
                     edit_text_family_name,
                     edit_text_family_password,
-                    currUid
+                    currUid,
+                    username
                 )
 
             }
