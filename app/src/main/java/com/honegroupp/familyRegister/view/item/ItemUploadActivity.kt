@@ -1,5 +1,6 @@
 package com.honegroupp.familyRegister.view.item
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -9,11 +10,13 @@ import kotlinx.android.synthetic.main.item_upload_page.*
 import android.app.Activity
 import android.net.Uri
 import android.widget.ArrayAdapter
+import android.widget.GridView
 import android.widget.Spinner
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.honegroupp.familyRegister.controller.ItemController.Companion.createItem
+import com.honegroupp.familyRegister.view.itemList.ItemGridAdapter
 
 
 class ItemUploadActivity : AppCompatActivity(){
@@ -77,6 +80,7 @@ class ItemUploadActivity : AppCompatActivity(){
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
+    @SuppressLint("ResourceType")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -93,13 +97,27 @@ class ItemUploadActivity : AppCompatActivity(){
                             val count = data.getClipData()!!.getItemCount()
                             numberOfImages = count
 
-
+                            var allUris : ArrayList<Uri> = arrayListOf()
                             for (i in 0 until count) {
                                 val uri = data.getClipData()!!.getItemAt(i).uri
-                                    if (uri != null) {
+                                if (uri != null) {
+
+                                    //add into Uri List
+                                    allUris.add(uri)
                                     uploadtofirebase(uri)
+
+                                    // Get an instance of base adapter
+                                    val adapter = ItemGridAdapter(this,allUris)
+
+                                    // Set the grid view adapter
+//                                    val gridview = findViewById<GridView>(R.layout.item_grid_view)
+                                    item_grid_view.adapter = adapter
                                 }
                             }
+
+
+
+
                         } else if (data.getData() != null) {
                             //handle single image
                             numberOfImages = 1
@@ -109,6 +127,9 @@ class ItemUploadActivity : AppCompatActivity(){
                                 uploadtofirebase(uri)
                             }
                         }
+
+
+
                         Toast.makeText(this,numberOfImages.toString(),Toast.LENGTH_LONG).show()
                     }else{
                         Toast.makeText(this,"Error",Toast.LENGTH_SHORT).show()
