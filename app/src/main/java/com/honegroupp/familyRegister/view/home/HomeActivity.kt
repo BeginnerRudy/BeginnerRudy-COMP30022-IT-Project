@@ -3,6 +3,7 @@ package com.honegroupp.familyRegister.view.home
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -39,6 +40,8 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
 
         //get User ID
         userID = intent.getStringExtra("UserID")
+        val username = intent.getStringExtra("UserName") as String
+        Log.d("Username", username)
 
         // Configure the toolbar setting
         toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -74,7 +77,7 @@ class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
         //display User Name
         val headerView = nav_view.getHeaderView(0)
         val navUsername = headerView.findViewById(R.id.nav_userName) as TextView
-        navUsername.text = userID
+        navUsername.text = username
 
 
         // Interaction with menuitems contained in the navigation drawer

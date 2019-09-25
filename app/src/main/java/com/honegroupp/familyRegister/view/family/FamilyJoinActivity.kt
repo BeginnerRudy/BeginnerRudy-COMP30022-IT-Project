@@ -20,22 +20,25 @@ class FamilyJoinActivity : AppCompatActivity() {
 
         //get User ID
         val currUid = intent.getStringExtra("UserID")
+        val username = intent.getStringExtra("UserName")
+
 
         // Apply the function to define the logic of user join a family
-        joinFamily(familyJoinConfirm, currUid)
+        joinFamily(familyJoinConfirm, currUid, username)
     }
 
     /**
      * This function defines the high-level logic of user joins a family
      *
      * */
-    private fun joinFamily(button: Button, currUid: String) {
+    private fun joinFamily(button: Button, currUid: String, username: String) {
         button.setOnClickListener {
             FamilyController.joinFamily(
                 this,
                 edit_text_family_name_input,
                 edit_text_family_password_input,
-                currUid
+                currUid,
+                username
             )
 
         }

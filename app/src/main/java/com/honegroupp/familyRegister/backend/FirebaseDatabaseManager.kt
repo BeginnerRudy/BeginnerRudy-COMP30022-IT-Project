@@ -82,6 +82,7 @@ class FirebaseDatabaseManager() {
 
                     var isExist = false
                     var intent = Intent(mActivity, FamilyActivity::class.java)
+                    var username = user.username
 
                     p0.children.forEach {
                         // Check if the user has already exists
@@ -93,6 +94,7 @@ class FirebaseDatabaseManager() {
                             // otherwise go to HomeActivity
                             if (currUser.hasFamily()) {
                                 intent = Intent(mActivity, HomeActivity::class.java)
+                                username = currUser.username
                             }
                         }
                     }
@@ -108,7 +110,7 @@ class FirebaseDatabaseManager() {
 
                     //  pass user id to next activity
                     intent.putExtra("UserID", uid)
-
+                    intent.putExtra("UserName", user.username)
 
                     mActivity.startActivity(intent)
                 }

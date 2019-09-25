@@ -54,7 +54,7 @@ data class Family(
      * This method is responsible for storing Family to the database.
      *
      * */
-    fun store(mActivity: AppCompatActivity, uid: String) {
+    fun store(mActivity: AppCompatActivity, uid: String, username: String) {
         // upload family first
         FirebaseDatabaseManager.uploadFamily(this, uid)
 
@@ -62,7 +62,16 @@ data class Family(
         val userPath = FirebaseDatabaseManager.USER_PATH + uid + "/"
         FirebaseDatabaseManager.retrieve(
             userPath
-        ) { d: DataSnapshot -> callbackAddFamilyToUser(this, mActivity, uid, userPath, d) }
+        ) { d: DataSnapshot ->
+            callbackAddFamilyToUser(
+                this,
+                mActivity,
+                uid,
+                username,
+                userPath,
+                d
+            )
+        }
     }
 
     /**
@@ -73,6 +82,7 @@ data class Family(
         family: Family,
         mActivity: AppCompatActivity,
         uid: String,
+        username: String,
         userPath: String,
         dataSnapshot: DataSnapshot
     ) {
@@ -94,6 +104,7 @@ data class Family(
         // Go to Home page
         val intent = Intent(mActivity, HomeActivity::class.java)
         intent.putExtra("UserID", uid)
+        intent.putExtra("UserName", username)
         mActivity.startActivity(intent)
     }
 
@@ -105,7 +116,8 @@ data class Family(
             mActivity: AppCompatActivity,
             familyIdInput: String,
             familyPasswordInput: String,
-            uid: String
+            uid: String,
+            username: String
         ) {
             FirebaseDatabaseManager.retrieve(
                 FirebaseDatabaseManager.FAMILY_PATH
@@ -113,6 +125,7 @@ data class Family(
                 callbackJoinFamily(
                     mActivity,
                     uid,
+                    username,
                     familyIdInput,
                     familyPasswordInput,
                     mActivity,
@@ -127,6 +140,7 @@ data class Family(
         private fun callbackJoinFamily(
             mActivity: AppCompatActivity,
             currUid: String,
+            username: String,
             familyIdInput: String,
             familyPasswordInput: String,
             currActivity: AppCompatActivity,
@@ -151,7 +165,7 @@ data class Family(
                     // Add user to family and add family to user
                     if (!family.members.contains(currUid)) {
                         family.members.add(currUid)
-                        family.store(mActivity, currUid)
+                        family.store(mActivity, currUid, username)
                     }
 
                     Toast.makeText(currActivity, "Join family successful!", Toast.LENGTH_SHORT)
@@ -274,7 +288,7 @@ data class Family(
                 // add it to the items, check item is visible, if not check user is owner
                 if (currItem.isPublic) {
                     items.add(currItem)
-                } else if (currItem.itemOwnerUID == mActivity.uid){
+                } else if (currItem.itemOwnerUID == mActivity.uid) {
                     items.add(currItem)
                 }
 
