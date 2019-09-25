@@ -3,15 +3,12 @@ package com.honegroupp.familyRegister.view.item
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.honegroupp.familyRegister.R
 import kotlinx.android.synthetic.main.item_upload_page.*
 import android.app.Activity
 import android.net.Uri
-import android.widget.ArrayAdapter
-import android.widget.GridView
-import android.widget.Spinner
+import android.widget.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask

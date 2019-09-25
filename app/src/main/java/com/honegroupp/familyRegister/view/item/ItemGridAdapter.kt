@@ -1,17 +1,21 @@
 package com.honegroupp.familyRegister.view.itemList
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.*
 import android.widget.*
-import com.honegroupp.familyRegister.R
 import android.view.LayoutInflater
 import android.net.Uri
+import android.widget.Toast.*
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.squareup.picasso.Picasso
 
+import androidx.appcompat.app.AppCompatActivity
+import com.honegroupp.familyRegister.R
+
 
 class ItemGridAdapter:BaseAdapter{
-    private var context : Context? = null
+    private var context : AppCompatActivity? = null
     private var allUris: ArrayList<Uri>? = null
 
 
@@ -20,23 +24,28 @@ class ItemGridAdapter:BaseAdapter{
         this.allUris = allUris
     }
 
-    override fun getView(position:Int, convertView: View?, parent: ViewGroup?):View{
-        // Inflate the custom view
+    override fun getView(position:Int, convertView: View?, parent: ViewGroup?): View {
+
+        // Inflate the view
         val inflater = parent?.context?.
             getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(com.honegroupp.familyRegister.R.layout.upload_image,null)
 
-        val view = inflater.inflate(R.layout.upload_image,null)
-//        view.setBackgroundResource(allElementDetails[position])
-//        Picasso.get().load(allElementDetails?.get(position)).into(convertView.)
 
+        //set imageView size
         val imageView = view.findViewById<ImageView>(R.id.upload_image)
+        val linearLayout = RelativeLayout.LayoutParams(330, 310)
+        imageView.layoutParams = linearLayout
 
+
+        //load the image to view
         Picasso.get().load(allUris?.get(position)).into(imageView)
 
 
         // Set a click listener for card view
-//        card.setOnClickListener{
-//            // Show selected color in a toast message
+//
+//        imageView.setOnClickListener{
+            //            // Show selected color in a toast message
 //            Toast.makeText(parent.context,
 //                "Clicked : ${list[position].first}",Toast.LENGTH_SHORT).show()
 //
@@ -50,8 +59,19 @@ class ItemGridAdapter:BaseAdapter{
 //            // Change the root layout background color
 //            viewGroup.setBackgroundColor(list[position].second)
 //        }
+        imageView.setOnLongClickListener {
+            Toast.makeText(context, "Long click detected" + position.toString(), Toast.LENGTH_SHORT).show()
 
-        // Finally, return the view
+            //set background of cancel button
+            val cancelBackground = view.findViewById<ImageView>(R.id.upload_image_cancel_background)
+            cancelBackground.setImageResource(R.drawable.ic_circle_white_24dp)
+
+            //set cancal button
+            val cancelButton = view.findViewById<ImageView>(R.id.upload_image_cancel_button)
+            cancelButton.setImageResource(R.drawable.ic_cancel_red_24dp)
+            true
+        }
+
         return view
     }
 
