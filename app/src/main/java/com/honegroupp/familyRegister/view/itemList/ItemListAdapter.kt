@@ -29,7 +29,7 @@ class ItemListAdapter(val items: ArrayList<Item>, val mContext: Context) :
         // Load image to ImageView via its URL from Firebase Storage
         Picasso.get()
             .load(currItem.imageURLs[0])
-            .placeholder(R.mipmap.ic_launcher)
+            .placeholder(R.drawable.loading_jewellery)
             .fit()
             .centerCrop()
             .into(holder.imageView)

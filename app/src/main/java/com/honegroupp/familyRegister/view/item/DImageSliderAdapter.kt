@@ -38,7 +38,7 @@ class DImageSliderAdapter(val items: ArrayList<String>, val context: Context) : 
         // Load image to ImageView via its URL from Firebase Storage
         Picasso.get()
             .load(currItemUrls)
-            .placeholder(R.mipmap.ic_launcher)
+            .placeholder(R.drawable.loading_jewellery)
             .into(slideImageView)
 
         // set on click listeners
