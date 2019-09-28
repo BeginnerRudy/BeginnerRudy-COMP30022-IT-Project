@@ -26,7 +26,7 @@ import org.junit.Assert.assertEquals
 
 
 /**
- * This class is responsible for unit test the FamilyActivity class
+ * This class is responsible for unit test the FamilyJoinActivity class
  *
  *
  * @author Renjie Meng

@@ -27,7 +27,7 @@ import com.honegroupp.utility.ThreadController
 
 
 /**
- * This class is responsible for unit test the FamilyActivity class
+ * This class is responsible for unit test the FamilyCreateActivity class
  *
  *
  * @author Renjie Meng
