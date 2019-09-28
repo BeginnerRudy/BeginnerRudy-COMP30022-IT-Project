@@ -50,5 +50,33 @@ class ItemController {
             mContext.finish()
         }
 
+        /**
+         * This methods is responsible for creating a item and upload it to the database.
+         *
+         * */
+        fun editItem(
+            mContext: AppCompatActivity,
+            itemName: EditText,
+            itemDescription: EditText,
+            uid: String,
+            imageURLs: ArrayList<String>,
+            isPublic: Boolean,
+            categoryName: String
+        ) {
+
+            val item = Item(
+                itemName = itemName.text.toString(),
+                itemDescription = itemDescription.text.toString(),
+                itemOwnerUID = uid,
+                imageURLs = imageURLs,
+                isPublic = isPublic
+            )
+            item.edit(uid, categoryName)
+
+            Toast.makeText(mContext, "Item Stored successfully", Toast.LENGTH_SHORT).show()
+            // Go back to the previous activity
+            mContext.finish()
+        }
+
     }
 }

@@ -51,13 +51,34 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     var itemUploads: ArrayList<Item> = ArrayList()
     var categoryUploads: ArrayList<Category> = ArrayList()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+    // start editing
+    override fun onEditClick(itemKey: String?) {
+        val intent = Intent(this, ItemEdit::class.java)
+        intent.putExtra("ItemKey", itemKey)
+        intent.putExtra("FamilyId", detailFamilyId)
+
+        this.startActivity(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
         // Hide the status bar.
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         // Remember that you should never show the action bar if the
         // status bar is hidden, so hide that too if necessary.
         actionBar?.hide()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Hide the status bar.
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        actionBar?.hide()
+
         setContentView(R.layout.slide_background)
 
         // StrictMode for share
@@ -79,6 +100,9 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         // get position of current category for setting Current page item
         val categoryIndexList= intent.getStringExtra("CategoryNameList").toInt()
 
+        // get position of current category for setting Current page item
+        detailFamilyId= intent.getStringExtra("FamilyId")
+
 
         // initialise database References, Item and Categories path cannot be get before the family id is get
         pathUser = "Users"
@@ -89,95 +113,73 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         // whether item position is already set, View Pager pages cannot be set until it is ready
         var alreadySet = false
 
-        // listener for user on firebase, realtime change familyID(detailFamilyId)
-        dbListenerUser = databaseReferenceUser.addValueEventListener(object : ValueEventListener {
+        pathItem = "Family/$detailFamilyId/items"
+        pathCategory = "Family/$detailFamilyId/categories"
+
+        // database Reference for Item & Category
+        databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
+        databaseReferenceCategory = FirebaseDatabase.getInstance().getReference(pathCategory)
+
+        // listener for category on firebase, realtime change categories(categoryUploads)
+        dbListenerCategory = databaseReferenceCategory.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 toast(p0.message, Toast.LENGTH_SHORT)
             }
 
             override fun onDataChange(p0: DataSnapshot) {
+                categoryUploads.clear()
 
-                // Retrieve each User from database from pathUser
-                p0.children.forEach { it ->
-                    val currUserUpload = it.getValue(User::class.java) as User
-                    
-                    // find the user by UserId
-                    // , get all detail url into itemUrls
-                    if (it.key == detailUserId){
-                        // get familyID to produce path of Item & path of Category
-                        detailFamilyId = currUserUpload.familyId
-                        pathItem = "Family/$detailFamilyId/items"
-                        pathCategory = "Family/$detailFamilyId/categories"
+                // get all categories and put into categories(categoryUploads)
+                p0.children.forEach {
+                    val currCategoryUpload = it.getValue(Category::class.java) as Category
+                    categoryUploads.add(currCategoryUpload)
+                }
+            }
+        })
 
-                        // database Reference for Item & Category
-                        databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
-                        databaseReferenceCategory = FirebaseDatabase.getInstance().getReference(pathCategory)
+        // listener for items on firebase, realtime change items(itemUploads)
+        dbListenerItem = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                toast(p0.message, Toast.LENGTH_SHORT)
+            }
 
-                        // listener for category on firebase, realtime change categories(categoryUploads)
-                        dbListenerCategory = databaseReferenceCategory.addValueEventListener(object : ValueEventListener {
-                            override fun onCancelled(p0: DatabaseError) {
-                                toast(p0.message, Toast.LENGTH_SHORT)
+            override fun onDataChange(p0: DataSnapshot) {
+                Log.d("ooonDataChange","cccccgne")
+                itemUploads.clear()
+                sliderAdapter.notifyDataSetChanged()
+
+                // get all items and put into items(itemUploads) if user has access
+                p0.children.forEach {
+                    val currItemUpload = it.getValue(Item::class.java) as Item
+                    currItemUpload.key = it.key
+
+                    // wait for categories(categoryUploads) is get from database
+                    if (categoryUploads.size != 0){
+                        // check item in current category
+                        if (currItemUpload.key in categoryUploads[categoryIndexList].itemKeys){
+                            // check item is visible, if not check user is owner
+                            if (currItemUpload.isPublic) {
+                                Log.d("ooonDataChangeItem",currItemUpload.itemName)
+                                itemUploads.add(currItemUpload)
+                            } else if (currItemUpload.itemOwnerUID == detailUserId){
+                                Log.d("ooonDataChangeItem",currItemUpload.itemName)
+                                itemUploads.add(currItemUpload)
                             }
-
-                            override fun onDataChange(p0: DataSnapshot) {
-                                categoryUploads.clear()
-
-                                // get all categories and put into categories(categoryUploads)
-                                p0.children.forEach {
-                                    val currCategoryUpload = it.getValue(Category::class.java) as Category
-                                    categoryUploads.add(currCategoryUpload)
-                                }
-
-                                // Notify ViewPager to update
-                                sliderAdapter.notifyDataSetChanged()
-                            }
-                        })
-
-                        // listener for items on firebase, realtime change items(itemUploads)
-                        dbListenerItem = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
-                            override fun onCancelled(p0: DatabaseError) {
-                                toast(p0.message, Toast.LENGTH_SHORT)
-                            }
-
-                            override fun onDataChange(p0: DataSnapshot) {
-                                itemUploads.clear()
-
-                                // get all items and put into items(itemUploads) if user has access
-                                p0.children.forEach {
-                                    val currItemUpload = it.getValue(Item::class.java) as Item
-                                    currItemUpload.key = it.key
-
-                                    // wait for categories(categoryUploads) is get from database
-                                    if (categoryUploads.size != 0){
-                                        // check item in current category
-                                        if (currItemUpload.key in categoryUploads[categoryIndexList].itemKeys){
-                                            // check item is visible, if not check user is owner
-                                            if (currItemUpload.isPublic) {
-                                                itemUploads.add(currItemUpload)
-                                            } else if (currItemUpload.itemOwnerUID == detailUserId){
-                                                itemUploads.add(currItemUpload)
-                                            }
-                                        }
-                                    }
-                                }
-
-                                // Notify ViewPager to update
-                                sliderAdapter.notifyDataSetChanged()
-
-                                // set Item to be seen first in View Page when items(itemUploads) is ready
-                                if (itemUploads.size > 0) {
-                                    if (!alreadySet){
-                                        mSlideViewPager.currentItem = positionList
-                                        alreadySet = true
-                                    }
-                                }
-                            }
-                        })
+                        }
                     }
                 }
 
-                // It would update recycler after loading image from firebase storage
+                // Notify ViewPager to update
+                Log.d("ooonDataChangeNotifyyy","NOty")
                 sliderAdapter.notifyDataSetChanged()
+
+                // set Item to be seen first in View Page when items(itemUploads) is ready
+                if (itemUploads.size > 0) {
+                    if (!alreadySet){
+                        mSlideViewPager.currentItem = positionList
+                        alreadySet = true
+                    }
+                }
             }
         })
     }

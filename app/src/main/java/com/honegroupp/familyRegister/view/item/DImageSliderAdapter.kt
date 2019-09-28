@@ -28,6 +28,7 @@ class DImageSliderAdapter(val items: ArrayList<String>, val context: Context) : 
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): View {
+        Log.d("ooonSlider",items[position])
         val layoutInflater:LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_dimage_layout, container, false)
 

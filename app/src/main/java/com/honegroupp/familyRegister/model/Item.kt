@@ -89,4 +89,47 @@ data class Item(
             FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/" + "categories/" + categoryName + "/"
         FirebaseDatabaseManager.uploadItem(this, path, items, categoryPath)
     }
+
+    /**
+     * this function is used to edit item
+     * */
+    fun edit(uid: String, categoryName: String) {
+
+        val rootPath = "/"
+        FirebaseDatabaseManager.retrieve(
+            rootPath
+        ) { d: DataSnapshot -> callbackEdit(uid, categoryName, d) }
+    }
+
+    /**
+     * this is the help callback function of edit item, use to get current index of item list and edit item
+     * */
+    private fun callbackEdit(uid: String, categoryName: String, dataSnapshot: DataSnapshot) {
+        // get user's family ID
+        val currFamilyId =
+            dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).child("familyId").getValue(
+                String::class.java
+            ) as String
+
+        //get last index
+        val familyItemsDataSnapshot =
+            dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId)
+                .child("items")
+
+        // if there has item in the family
+
+
+        var items: HashMap<String, Item>
+
+        items = if (familyItemsDataSnapshot.hasChildren()) {
+            familyItemsDataSnapshot.value as HashMap<String, Item>
+        } else {
+            HashMap()
+        }
+
+        val path = FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/"
+        val categoryPath =
+            FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/" + "categories/" + categoryName + "/"
+        FirebaseDatabaseManager.UeditItem(this, path, items, categoryPath)
+    }
 }

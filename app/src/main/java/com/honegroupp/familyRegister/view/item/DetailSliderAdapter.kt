@@ -20,6 +20,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         fun onItemClick(position: Int, items:ArrayList<Item>)
         fun onDownloadClick(position: Int, items:ArrayList<Item>)
         fun onShareClick(position: Int, items:ArrayList<Item>, imageView: ImageView)
+        fun onEditClick(itemKey: String?)
     }
 
     override fun getCount(): Int {
@@ -50,8 +51,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         slideDescription.setText(currItemUploads.itemDescription)
 
         view.findViewById<Button>(R.id.detail_edit).setOnClickListener{
-            val intent = Intent(context, ItemEdit::class.java)
-            context.startActivity(intent)
+            listener!!.onEditClick(items[position].key)
         }
 
         // set on click listeners
