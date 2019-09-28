@@ -98,7 +98,7 @@ data class Category(
 
             Picasso.get()
                 .load(url)
-                .placeholder(R.mipmap.ic_launcher)
+                .placeholder(R.drawable.loading_jewellery)
                 .fit()
                 .centerCrop()
                 .into(holder.imageView)

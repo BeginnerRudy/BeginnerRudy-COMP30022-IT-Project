@@ -4,6 +4,8 @@ import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -275,6 +277,8 @@ data class Family(
                 // Make the progress bar invisible
                 mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
                     View.INVISIBLE
+                mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
+                    View.INVISIBLE
             }
 
             if (itemKeys.isEmpty()){
@@ -282,7 +286,8 @@ data class Family(
                 mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
                     View.INVISIBLE
 
-                Toast.makeText(mActivity, "This category is empty", Toast.LENGTH_LONG).show()
+                mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
+                    View.VISIBLE
             }
         }
     }
