@@ -40,7 +40,6 @@ class FamilyJoinActivity : AppCompatActivity() {
                 currUid,
                 username
             )
-
         }
     }
 }
