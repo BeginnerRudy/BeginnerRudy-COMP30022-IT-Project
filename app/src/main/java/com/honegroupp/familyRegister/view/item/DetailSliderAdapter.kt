@@ -44,7 +44,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         // Load image to ImageView via its URL from Firebase Storage
         Picasso.get()
             .load(currItemUploads.imageURLs[0])
-            .placeholder(R.drawable.loading_jewellery)
+            .placeholder(R.mipmap.loading_jewellery)
             .into(slideImageView)
         slideHeaing.setText(currItemUploads.itemName)
         slideDescription.setText(currItemUploads.itemDescription)
@@ -66,7 +66,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         view.findViewById<Button>(R.id.detail_share).setOnClickListener{
             Picasso.get()
                 .load(currItemUploads.imageURLs[0])
-                .placeholder(R.drawable.loading_jewellery)
+                .placeholder(R.mipmap.loading_jewellery)
                 .into(slideImageView)
             listener!!.onShareClick(position, items, slideImageView)
         }

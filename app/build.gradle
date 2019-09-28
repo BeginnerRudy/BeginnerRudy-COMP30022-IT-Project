@@ -71,14 +71,14 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
 
     // Add dependency for testing
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
     androidTestImplementation 'androidx.test:rules:1.1.1'
     androidTestImplementation 'androidx.test.ext:truth:1.1.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
 }
 
 android.defaultConfig{
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 }
