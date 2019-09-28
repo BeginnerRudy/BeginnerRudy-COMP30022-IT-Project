@@ -52,4 +52,8 @@
 
     <string name="query_hints">name/age</string>
     <string name="there_is_no_item_in_this_category">There is no item in this category</string>
+    <string name="please_enter_the_password">Please enter the password</string>
+    <string name="please_enter_the_password_again">Please enter the password again</string>
+    <string name="two_password_are_not_same">Two passwords are not same</string>
+    <string name="family_created_successfully">Family Created Successfully</string>
 </resources>

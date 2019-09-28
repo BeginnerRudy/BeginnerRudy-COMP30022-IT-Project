@@ -76,8 +76,12 @@ dependencies {
 
     androidTestImplementation 'androidx.test:rules:1.1.1'
     androidTestImplementation 'androidx.test.ext:truth:1.1.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+
+
+    androidTestImplementation 'org.mockito:mockito-android:2.7.22'
+    testImplementation 'org.mockito:mockito-core:2.7.22'
 }
 
 android.defaultConfig{

@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.view
+package com.honegroupp.familyRegister.view.family
 
 import android.content.Intent
 import androidx.test.espresso.Espresso.*
@@ -12,9 +12,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.view.family.FamilyActivity
-import com.honegroupp.familyRegister.view.family.FamilyCreateActivity
-import com.honegroupp.familyRegister.view.family.FamilyJoinActivity
 import org.junit.*
 import org.junit.runner.RunWith
 

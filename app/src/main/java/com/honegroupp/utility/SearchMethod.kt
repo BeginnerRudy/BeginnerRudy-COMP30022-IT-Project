@@ -1,16 +1,10 @@
-package com.honegroupp.familyRegister.utility
+package com.honegroupp.utility
 
-import android.R
-import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.BaseAdapter
 import android.widget.ListView
-import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.Item
-import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.view.utility.ListViewAapter
 
 class SearchMethod{
