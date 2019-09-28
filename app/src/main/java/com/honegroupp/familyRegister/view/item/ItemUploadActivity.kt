@@ -49,6 +49,12 @@ class ItemUploadActivity : AppCompatActivity(){
             spinner.adapter = adapter
         }
 
+        //set up the grid view
+        // Get an instance of base adapter
+        val adapter = ItemGridAdapter(this,allImageUri)
+        // Set the grid view adapter
+        itemGridView.adapter = adapter
+
 
         itemChooseImage.setOnClickListener {
             selectImageInAlbum()
@@ -73,7 +79,7 @@ class ItemUploadActivity : AppCompatActivity(){
 
 
     //use the phone API to get thr image from the album
-    private fun selectImageInAlbum() {
+    fun selectImageInAlbum() {
 
         //reset the image url list
         val intent = Intent(Intent.ACTION_GET_CONTENT)
