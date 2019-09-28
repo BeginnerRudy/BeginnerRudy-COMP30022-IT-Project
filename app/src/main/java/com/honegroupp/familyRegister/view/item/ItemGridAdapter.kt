@@ -42,7 +42,7 @@ class ItemGridAdapter:BaseAdapter{
         if (isAddButton(position)){
 
             //load the the add sign to the imagView
-            imageView.setImageResource(R.drawable.ic_add_black_24dp)
+            imageView.setImageResource(R.drawable.ic_add_grey_24dp)
         }else{
 
             //load the image to view

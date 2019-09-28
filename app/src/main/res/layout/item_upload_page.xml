@@ -33,6 +33,35 @@
 
             </androidx.cardview.widget.CardView>
 
+<!--            <ProgressBar-->
+<!--                android:id="@+id/uploadProgressBar"-->
+<!--                style="?android:attr/progressBarStyleHorizontal"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:max="100" />-->
+            <LinearLayout
+                android:layout_margin = "5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation = "horizontal">
+
+                <ProgressBar
+                    android:id="@+id/progressBarRound"
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:max="100" />
+
+
+                <TextView
+                    android:id="@+id/progressBarText"
+                    android:layout_margin = "5dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
 
 
             <ScrollView
@@ -43,26 +72,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <Button
-                        android:id="@+id/itemChooseImage"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/itemGridView"
-                        android:backgroundTint="@color/colorAccent"
-                        android:text="@string/choose_image"
-                        android:textColor="@color/textColorPrimary" />
+<!--                    <Button-->
+<!--                        android:id="@+id/itemChooseImage"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_below="@+id/itemGridView"-->
+<!--                        android:backgroundTint="@color/colorAccent"-->
+<!--                        android:text="@string/choose_image"-->
+<!--                        android:textColor="@color/textColorPrimary" />-->
 
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/spinner"
-                        android:layout_below="@id/itemChooseImage"
+                        android:layout_below="@id/itemGridView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <Spinner
                             android:id="@+id/privacy_spinner"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_below="@id/itemChooseImage"
                             android:spinnerMode="dropdown"
                             android:visibility="visible" />
                     </com.google.android.material.textfield.TextInputLayout>
