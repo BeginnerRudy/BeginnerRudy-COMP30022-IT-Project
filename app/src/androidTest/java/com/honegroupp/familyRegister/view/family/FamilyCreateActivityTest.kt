@@ -15,12 +15,14 @@ import org.junit.*
 import org.junit.runner.RunWith
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.intent.matcher.IntentMatchers
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.Hash
+import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.utility.ThreadController
 
 
@@ -233,8 +235,12 @@ class FamilyCreateActivityTest {
             }
         })
 
-
         // wait until the toast message disappear
         ThreadController.stopForNMilliseconds(ThreadController.SHORT_TOAST_WAITING)
+
+        // Check if intent with FamilyJoinActivity it's been launched
+        Intents.intended(IntentMatchers.hasComponent(HomeActivity::class.java.name))
+
+
     }
 }
