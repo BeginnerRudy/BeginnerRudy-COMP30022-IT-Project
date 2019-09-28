@@ -56,4 +56,7 @@
     <string name="please_enter_the_password_again">Please enter the password again</string>
     <string name="two_password_are_not_same">Two passwords are not same</string>
     <string name="family_created_successfully">Family Created Successfully</string>
+    <string name="family_id_not_exist">Family Id is not correct!</string>
+    <string name="password_is_incorrect">Password is not correct!</string>
+    <string name="join_family_successfully">Join family successful!</string>
 </resources>

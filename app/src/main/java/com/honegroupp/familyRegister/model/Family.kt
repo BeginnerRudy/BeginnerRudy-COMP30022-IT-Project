@@ -153,14 +153,14 @@ data class Family(
 
             // Check whether family exist
             if (!dataSnapshot.hasChild(familyIdInputModified) || familyIdInput.trim() == "") {
-                Toast.makeText(currActivity, "Family Id is not correct!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(currActivity, mActivity.getString(R.string.family_id_not_exist), Toast.LENGTH_SHORT).show()
             } else {
                 // Get family
                 val family =
                     dataSnapshot.child(familyIdInputModified).getValue(Family::class.java) as Family
                 // Check password
                 if (family.password != Hash.applyHash(familyPasswordInput)) {
-                    Toast.makeText(currActivity, "Password is not correct!", Toast.LENGTH_SHORT)
+                    Toast.makeText(currActivity, mActivity.getString(R.string.password_is_incorrect), Toast.LENGTH_SHORT)
                         .show()
                 } else {
                     // Add user to family and add family to user
@@ -169,7 +169,7 @@ data class Family(
                         family.store(mActivity, currUid, username)
                     }
 
-                    Toast.makeText(currActivity, "Join family successful!", Toast.LENGTH_SHORT)
+                    Toast.makeText(currActivity, mActivity.getString(R.string.join_family_successfully), Toast.LENGTH_SHORT)
                         .show()
                 }
             }
