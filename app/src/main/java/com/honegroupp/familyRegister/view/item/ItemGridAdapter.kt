@@ -10,10 +10,8 @@ import android.net.Uri
 import android.widget.Toast.*
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.squareup.picasso.Picasso
-
-import androidx.appcompat.app.AppCompatActivity
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.R.drawable.ic_add_black_24dp
+
 
 
 class ItemGridAdapter:BaseAdapter{
@@ -41,7 +39,7 @@ class ItemGridAdapter:BaseAdapter{
         val linearLayout = RelativeLayout.LayoutParams(330, 310)
         imageView.layoutParams = linearLayout
 
-        if (position == count -1){
+        if (isAddButton(position)){
 
             //load the the add sign to the imagView
             imageView.setImageResource(R.drawable.ic_add_black_24dp)
@@ -55,25 +53,34 @@ class ItemGridAdapter:BaseAdapter{
 
         imageView.setOnClickListener {
             //press the add button
-            if(position == count -1){
+            if (isAddButton(position)){
                 context!!.selectImageInAlbum()
             }
         }
 
 
-
-
+        val cancelBackground =
+            view.findViewById<ImageView>(R.id.upload_image_cancel_background)
+        val cancelButton = view.findViewById<ImageView>(R.id.upload_image_cancel_button)
         imageView.setOnLongClickListener {
-            Toast.makeText(context, "Long click detected" + position.toString(), Toast.LENGTH_SHORT).show()
 
-            //set background of cancel button
-            val cancelBackground = view.findViewById<ImageView>(R.id.upload_image_cancel_background)
-            cancelBackground.setImageResource(R.drawable.ic_circle_white_24dp)
+            if (!isAddButton(position)) {
+                Toast.makeText(  context,
+                    "Long click detected" + position.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
 
-            //set cancal button
-            val cancelButton = view.findViewById<ImageView>(R.id.upload_image_cancel_button)
-            cancelButton.setImageResource(R.drawable.ic_cancel_red_24dp)
+                //set background of cancel button
+                cancelBackground.setImageResource(R.drawable.ic_circle_white_24dp)
+
+                //set cancal button
+                cancelButton.setImageResource(R.drawable.ic_cancel_red_24dp)
+            }
             true
+        }
+
+        cancelButton.setOnClickListener{
+            context!!.removeItem(position)
         }
 
         return view
@@ -94,9 +101,12 @@ class ItemGridAdapter:BaseAdapter{
         return allUris!!.size + 1
     }
 
-    fun isAddBUtton(position: Int):Boolean{
+    /*check whether the image view is the last one (add button)*/
+    fun isAddButton(position: Int):Boolean{
         if (position == count -1){
             return true
+        }else{
+            return false
         }
     }
 

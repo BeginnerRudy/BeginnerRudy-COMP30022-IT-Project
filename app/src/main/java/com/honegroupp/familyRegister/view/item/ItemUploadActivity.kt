@@ -56,6 +56,8 @@ class ItemUploadActivity : AppCompatActivity(){
         itemGridView.adapter = adapter
 
 
+
+
         itemChooseImage.setOnClickListener {
             selectImageInAlbum()
         }
@@ -101,24 +103,27 @@ class ItemUploadActivity : AppCompatActivity(){
 
 //                    adding multiple image
                     if (data != null) {
+
+
+                        var allUris : ArrayList<Uri> = arrayListOf()
+
                         if (data.getClipData() != null) {
 
                             //handle multiple images
                             val count = data.getClipData()!!.getItemCount()
                             numberOfImages += count
 
-                            var allUris : ArrayList<Uri> = arrayListOf()
+
                             for (i in 0 until count) {
                                 val uri = data.getClipData()!!.getItemAt(i).uri
                                 if (uri != null) {
-
                                     //add into Uri List
                                     allImageUri.add(uri)
-
-                                    //upload uri to firebase
-                                    uploadtofirebase(uri)
+                                    allUris.add(uri)
                                 }
                             }
+
+
 
 
                             //selecting single image from album
@@ -129,8 +134,8 @@ class ItemUploadActivity : AppCompatActivity(){
                             val uri = data.getData()
                             if (uri != null) {
 
-                                //upload to firebase
-                                uploadtofirebase(uri)
+
+                                allUris.add(uri)
 
                                 //add into Uri List
                                 allImageUri.add(uri)
@@ -138,36 +143,84 @@ class ItemUploadActivity : AppCompatActivity(){
 
                         }
 
+                        //upload uri to firebase
+                        uploadtofirebase(allUris)
+
                         // Get an instance of base adapter
                         val adapter = ItemGridAdapter(this,allImageUri)
 
                         // Set the grid view adapter
                         itemGridView.adapter = adapter
 
-                        Toast.makeText(this,numberOfImages.toString(),Toast.LENGTH_LONG).show()
+
+//                        Toast.makeText(this,numberOfImages.toString(),Toast.LENGTH_LONG).show()
                     }else{
-                        Toast.makeText(this,"Error",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this,"Error",Toast.LENGTH_LONG).show()
                     }
                 }
             }
         }
     }
 
-    private fun uploadtofirebase(selectedImage: Uri) {
-        val uploadPath = " "
-        val ref =
-            FirebaseStorage.getInstance().reference.child(uploadPath + System.currentTimeMillis())
-        var uploadTask: StorageTask<UploadTask.TaskSnapshot>? = ref.putFile(selectedImage!!)
-            .addOnSuccessListener {
-                //add item logic
+//    private fun uploadtofirebase(selectedImage: Uri) {
+//        val uploadPath = " "
+//        val ref =
+//            FirebaseStorage.getInstance().reference.child(uploadPath + System.currentTimeMillis())
+//        var uploadTask: StorageTask<UploadTask.TaskSnapshot>? = ref.putFile(selectedImage!!)
+//            .addOnSuccessListener {
+//                //add item logic
+//
+//                ref.downloadUrl.addOnCompleteListener() { taskSnapshot ->
+//                    var url = taskSnapshot.result
+//                    this.imagePathList.add(url.toString())
+//
+//
+//
+//                }
+//            }
+//    }
 
-                ref.downloadUrl.addOnCompleteListener() { taskSnapshot ->
+    private fun uploadtofirebase(images: ArrayList<Uri>) {
+        if (images.size == 0){
+            Toast.makeText(this, "All images are uploaded",Toast.LENGTH_SHORT).show()
+        }else {
 
-                    var url = taskSnapshot.result
+            val uploadPath = " "
+            val ref =
+                FirebaseStorage.getInstance()
+                    .reference.child(uploadPath + System.currentTimeMillis())
 
-                    this.imagePathList.add(url.toString())
+            var uploadTask: StorageTask<UploadTask.TaskSnapshot>? = ref.putFile(images[0]!!)
+                .addOnSuccessListener {
 
+                    images.removeAt(0)
+
+                    //add item logic
+                    ref.downloadUrl.addOnCompleteListener() { taskSnapshot ->
+                        var url = taskSnapshot.result
+                        this.imagePathList.add(url.toString())
+
+                        Toast.makeText(this, images.size.toString(),Toast.LENGTH_SHORT).show()
+
+                        //recursively upload
+                        uploadtofirebase(images)
+                    }
                 }
-            }
+        }
     }
+
+   fun removeItem(position:Int){
+       if(imagePathList.size == allImageUri.size) {
+           imagePathList.removeAt(position)
+           allImageUri.removeAt(position)
+           numberOfImages -= 1
+
+           // Set the grid view adapter
+           val adapter = ItemGridAdapter(this, allImageUri)
+           itemGridView.adapter = adapter
+       }else{
+           Toast.makeText(this, "Cannot delete now",Toast.LENGTH_SHORT).show()
+       }
+   }
+
 }
