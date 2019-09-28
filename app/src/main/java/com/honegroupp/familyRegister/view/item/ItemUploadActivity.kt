@@ -8,6 +8,7 @@ import com.honegroupp.familyRegister.R
 import kotlinx.android.synthetic.main.item_upload_page.*
 import android.app.Activity
 import android.net.Uri
+import android.view.MotionEvent
 import android.widget.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
@@ -21,6 +22,7 @@ import kotlin.collections.ArrayList
 class ItemUploadActivity : AppCompatActivity(){
     val GALLERY_REQUEST_CODE = 123
     var imagePathList = ArrayList<String>()
+    var allImageUri= ArrayList<Uri>()
     var numberOfImages = 0
     lateinit var uid :String
 
@@ -28,6 +30,7 @@ class ItemUploadActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.item_upload_page)
+
         uid = intent.getStringExtra("UserID")
         val categoryName = intent.getStringExtra("categoryPath").toString()
 
@@ -73,9 +76,9 @@ class ItemUploadActivity : AppCompatActivity(){
     private fun selectImageInAlbum() {
 
         //reset the image url list
-        imagePathList.clear()
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
+
         // ask for multiple images picker
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
@@ -96,7 +99,7 @@ class ItemUploadActivity : AppCompatActivity(){
 
                             //handle multiple images
                             val count = data.getClipData()!!.getItemCount()
-                            numberOfImages = count
+                            numberOfImages += count
 
                             var allUris : ArrayList<Uri> = arrayListOf()
                             for (i in 0 until count) {
@@ -104,41 +107,36 @@ class ItemUploadActivity : AppCompatActivity(){
                                 if (uri != null) {
 
                                     //add into Uri List
-                                    allUris.add(uri)
+                                    allImageUri.add(uri)
+
+                                    //upload uri to firebase
                                     uploadtofirebase(uri)
-
-                                    // Get an instance of base adapter
-                                    val adapter = ItemGridAdapter(this,allUris)
-
-                                    // Set the grid view adapter
-                                    itemGridView.adapter = adapter
                                 }
                             }
 
 
-
-
+                            //selecting single image from album
                         } else if (data.getData() != null) {
-                            //handle single image
-                            numberOfImages = 1
+
+                            numberOfImages += 1
 
                             val uri = data.getData()
                             if (uri != null) {
+
+                                //upload to firebase
                                 uploadtofirebase(uri)
 
-                                var allUris : ArrayList<Uri> = arrayListOf()
-                                allUris.add(uri)
-
-                                // Get an instance of base adapter
-                                val adapter = ItemGridAdapter(this,allUris)
-
-                                // Set the grid view adapter
-                                itemGridView.adapter = adapter
+                                //add into Uri List
+                                allImageUri.add(uri)
                             }
 
                         }
 
+                        // Get an instance of base adapter
+                        val adapter = ItemGridAdapter(this,allImageUri)
 
+                        // Set the grid view adapter
+                        itemGridView.adapter = adapter
 
                         Toast.makeText(this,numberOfImages.toString(),Toast.LENGTH_LONG).show()
                     }else{
@@ -151,7 +149,6 @@ class ItemUploadActivity : AppCompatActivity(){
 
     private fun uploadtofirebase(selectedImage: Uri) {
         val uploadPath = " "
-        val firebaseStore = FirebaseStorage.getInstance()
         val ref =
             FirebaseStorage.getInstance().reference.child(uploadPath + System.currentTimeMillis())
         var uploadTask: StorageTask<UploadTask.TaskSnapshot>? = ref.putFile(selectedImage!!)
