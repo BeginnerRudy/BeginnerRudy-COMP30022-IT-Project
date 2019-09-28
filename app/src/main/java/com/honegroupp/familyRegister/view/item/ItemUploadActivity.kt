@@ -14,6 +14,8 @@ import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.honegroupp.familyRegister.controller.ItemController.Companion.createItem
 import com.honegroupp.familyRegister.view.itemList.ItemGridAdapter
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ItemUploadActivity : AppCompatActivity(){
@@ -21,6 +23,8 @@ class ItemUploadActivity : AppCompatActivity(){
     var imagePathList = ArrayList<String>()
     var numberOfImages = 0
     lateinit var uid :String
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.item_upload_page)
@@ -121,7 +125,17 @@ class ItemUploadActivity : AppCompatActivity(){
                             val uri = data.getData()
                             if (uri != null) {
                                 uploadtofirebase(uri)
+
+                                var allUris : ArrayList<Uri> = arrayListOf()
+                                allUris.add(uri)
+
+                                // Get an instance of base adapter
+                                val adapter = ItemGridAdapter(this,allUris)
+
+                                // Set the grid view adapter
+                                itemGridView.adapter = adapter
                             }
+
                         }
 
 

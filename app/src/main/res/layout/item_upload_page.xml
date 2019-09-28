@@ -92,5 +92,6 @@
             android:backgroundTint="@color/colorAccent"
             android:text="@string/add_item"
             android:textColor="@color/textColorPrimary" />
+
     </LinearLayout>
 </LinearLayout>
