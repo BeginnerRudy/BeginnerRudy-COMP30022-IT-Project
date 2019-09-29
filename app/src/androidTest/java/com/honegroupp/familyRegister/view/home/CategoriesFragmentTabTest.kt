@@ -36,7 +36,6 @@ class CategoriesFragmentTabTest {
         }
 
 
-
         @AfterClass
         @JvmStatic
         fun teardown() {
@@ -46,9 +45,10 @@ class CategoriesFragmentTabTest {
 
     @get:Rule
     val homeActivityRule = ActivityTestRule(HomeActivity::class.java, false, false)
+    val categoryNames = arrayListOf<String>("Letter", "Instrument", "Photo", "Others")
 
     @Before
-    fun prepareTest(){
+    fun prepareTest() {
         homeActivityRule.launchActivity(intent)
 
         onView(withText(R.string.category))
@@ -60,17 +60,29 @@ class CategoriesFragmentTabTest {
         ThreadController.stopForNMilliseconds(3000)
     }
 
+    /**
+     * Verify that all 4 categories display correctly.
+     * */
     @Test
-    fun categoryFragmentLaunched() {
-        onView(withText("Letter"))
-            // 3 check if it is displayed
-            .check(matches(isDisplayed()))
-        onView(withText("Letter"))
-            // 3 check if it is displayed
-            .perform(click())
-
-
-        ThreadController.stopForNMilliseconds(500)
+    fun allCategoriesDisplayed() {
+        for (category in categoryNames){
+            onView(withText(category))
+                // check if it is displayed
+                .check(matches(isDisplayed()))
+        }
     }
+
+    /**
+     * Verify that all 4 categories are clickable.
+     * */
+    @Test
+    fun allCategoriesClickable() {
+        for (category in categoryNames){
+            onView(withText(category))
+                .perform(click())
+            pressBack()
+        }
+    }
+
 
 }
