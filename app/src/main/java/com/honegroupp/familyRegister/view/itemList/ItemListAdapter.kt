@@ -3,15 +3,19 @@ package com.honegroupp.familyRegister.view.itemList
 import android.content.Context
 import android.util.Log
 import android.view.*
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.image_item.*
+import kotlinx.android.synthetic.main.image_item.view.*
 
-class ItemListAdapter(val items: ArrayList<Item>, val mContext: Context) :
+class ItemListAdapter(val items: ArrayList<Item>, val mContext: AppCompatActivity) :
     RecyclerView.Adapter<ItemListAdapter.ImageViewHolder>() {
 
     var listener: OnItemClickerListener? = null
@@ -19,6 +23,18 @@ class ItemListAdapter(val items: ArrayList<Item>, val mContext: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val v = LayoutInflater.from(mContext).inflate(R.layout.image_item, parent, false)
+        // Add logic for show page
+        var is_shown = false
+        val showButton = v.button_show
+        showButton.setOnClickListener {
+            if (is_shown) {
+                showButton.setImageResource(android.R.drawable.star_big_off)
+                is_shown = false
+            } else {
+                showButton.setImageResource(android.R.drawable.star_big_on)
+                is_shown = true
+            }
+        }
         return ImageViewHolder(v)
     }
 
@@ -34,6 +50,7 @@ class ItemListAdapter(val items: ArrayList<Item>, val mContext: Context) :
             .centerCrop()
             .into(holder.imageView)
         Log.d("url000", currItem.imageURLs[0])
+
     }
 
     override fun getItemCount(): Int {
