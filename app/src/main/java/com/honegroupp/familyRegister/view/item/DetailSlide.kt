@@ -16,6 +16,8 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
 import android.util.Log
+import android.view.ContextMenu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -32,8 +34,10 @@ import java.io.FileOutputStream
 
 class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener,
     DetailImagesSliderAdapter.OnItemClickerListener {
-    private val STORAGE_PERMISSION_CODE: Int = 1000
+    lateinit var shareImgView: ImageView
     private var downloadUrl :String = ""
+
+    private val STORAGE_PERMISSION_CODE: Int = 1000
 
     lateinit var mSlideViewPager : ViewPager
     lateinit var sliderAdapter: DetailSliderAdapter
@@ -54,6 +58,52 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
     var itemUploads: ArrayList<Item> = ArrayList()
     var categoryUploads: ArrayList<Category> = ArrayList()
+
+    override fun setMenu(slideImageView: ImageView) {
+        registerForContextMenu(slideImageView)
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menu!!.setHeaderTitle("Choose your option");
+        getMenuInflater().inflate(R.menu.item_detail_menu, menu);
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.option_1 -> {
+                Toast.makeText(this, "Download selected", Toast.LENGTH_SHORT).show()
+                this.downloadUrl = sliderAdapter.imagesSliderAdapter.items[sliderAdapter.imagesSlideViewPager.currentItem]
+                menuDownloadClick()
+                // Hide the status bar.
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+                // Remember that you should never show the action bar if the
+                // status bar is hidden, so hide that too if necessary.
+                actionBar?.hide()
+                return true
+            }
+            R.id.option_2 -> {
+                Toast.makeText(this, "Share selected", Toast.LENGTH_SHORT).show()
+                this.downloadUrl = sliderAdapter.imagesSliderAdapter.items[sliderAdapter.imagesSlideViewPager.currentItem]
+                Picasso.get()
+                    .load(downloadUrl)
+                    .placeholder(R.drawable.loading_jewellery)
+                    .into(shareImgView)
+                menuShareClick()
+                // Hide the status bar.
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+                // Remember that you should never show the action bar if the
+                // status bar is hidden, so hide that too if necessary.
+                actionBar?.hide()
+                return true
+            }
+            else -> return super.onContextItemSelected(item)
+        }
+    }
 
     override fun setListener() {
         sliderAdapter.imagesSliderAdapter.listener = this
@@ -192,27 +242,9 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                     }
                 }
 
-
-
                 // Notify ViewPager to update
                 Log.d("ooonDataChangeNotifyyy","NOty")
                 sliderAdapter.notifyDataSetChanged()
-
-//                val tagPosition = 0
-//                val view: View = mSlideViewPager.findViewWithTag("pos" + tagPosition)
-//                val slideImageView = view.findViewById<ImageView>(R.id.detail_image)
-//                val slideHeading = view.findViewById<TextView>(R.id.detail_heading)
-//                val slideDescription = view.findViewById<TextView>(R.id.detail_desc)
-//
-//                val currItemUploads = itemUploads[tagPosition]
-//
-//                // Load image to ImageView via its URL from Firebase Storage
-//                Picasso.get()
-//                    .load(currItemUploads.imageURLs[0])
-//                    .placeholder(R.drawable.loading_jewellery)
-//                    .into(slideImageView)
-//                slideHeading.setText(currItemUploads.itemName)
-//                slideDescription.setText(currItemUploads.itemDescription)
 
 
 
@@ -225,17 +257,18 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                 }
             }
         })
+
     }
+
+
 
     /**
      * share use Bitmap from ImageVIew
      * code change from:
      * https://www.youtube.com/watch?v=1tpc3fyEObI&t=2s
      */
-    @SuppressLint("SetWorldReadable")
-    override fun onShareClick(position: Int, items:ArrayList<Item>, imageView: ImageView) {
-        this.downloadUrl = items[position].imageURLs[0]
-        val bitmap = getBitmapFromView(imageView)
+    private fun menuShareClick() {
+        val bitmap = getBitmapFromView(this.shareImgView)
         try {
             val file = File(this.externalCacheDir,"fml_rgst_share.png")
             val fOut = FileOutputStream(file)
@@ -272,9 +305,8 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         return returnedBitmap
     }
 
-    // download when click
-    override fun onDownloadClick(position: Int, image_position: Int, items: ArrayList<Item>) {
-        this.downloadUrl = items[position].imageURLs[image_position]
+    // download when click in menu
+    private fun menuDownloadClick() {
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_DENIED){

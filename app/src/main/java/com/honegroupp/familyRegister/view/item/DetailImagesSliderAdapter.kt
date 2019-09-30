@@ -8,14 +8,17 @@ import android.widget.ImageButton
 import androidx.viewpager.widget.PagerAdapter
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import android.widget.Toast
 import com.honegroupp.familyRegister.R
 import com.squareup.picasso.Picasso
 
 class DetailImagesSliderAdapter(val items: ArrayList<String>, val context: Context) : PagerAdapter() {
     var listener: OnItemClickerListener? = null
+    lateinit var slideImageView: ImageView
 
     interface OnItemClickerListener {
         fun onImageClick(position: Int, items: ArrayList<String>)
+        fun setMenu(slideImageView: ImageView)
     }
 
     override fun getCount(): Int {
@@ -36,7 +39,7 @@ class DetailImagesSliderAdapter(val items: ArrayList<String>, val context: Conte
         val layoutInflater:LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_detail_images_layout, container, false)
 
-        val slideImageView = view.findViewById<ImageView>(R.id.detail_images)
+        slideImageView = view.findViewById<ImageView>(R.id.detail_images)
 
         val currItemUrls = items[position]
 
@@ -46,10 +49,17 @@ class DetailImagesSliderAdapter(val items: ArrayList<String>, val context: Conte
             .placeholder(R.drawable.loading_jewellery)
             .into(slideImageView)
 
+        listener!!.setMenu(slideImageView)
+
         view.findViewById<ImageView>(R.id.detail_images).setOnClickListener{
             Log.d("ddddtailclickonviewp",items.toString())
             listener!!.onImageClick(position, items)
         }
+
+//        view.setOnLongClickListener{
+//            Log.d("longgggclicklis", "longclick")
+//            return@setOnLongClickListener true
+//        }
 
         container.addView(view)
         return view

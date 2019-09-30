@@ -18,8 +18,6 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
 
     interface OnItemClickerListener {
         fun onItemClick(position: Int, items:ArrayList<Item>)
-        fun onDownloadClick(position: Int, image_position: Int, items:ArrayList<Item>)
-        fun onShareClick(position: Int, items:ArrayList<Item>, imageView: ImageView)
         fun onEditClick(itemKey: String?)
         fun setListener()
     }
@@ -66,18 +64,6 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         view.findViewById<ViewPager>(R.id.detail_images_slideViewPager).setOnClickListener{
             Log.d("ddddtailclickonviewp",items.toString())
             listener!!.onItemClick(position, items)
-        }
-
-        view.findViewById<Button>(R.id.detail_download).setOnClickListener{
-            listener!!.onDownloadClick(position, imagesSlideViewPager.currentItem, items)
-        }
-
-        view.findViewById<Button>(R.id.detail_share).setOnClickListener{
-//            Picasso.get()
-//                .load(currItemUploads.imageURLs[0])
-//                .placeholder(R.drawable.loading_jewellery)
-//                .into(slideImageView)
-//            listener!!.onShareClick(position, items, slideImageView)
         }
 
         container.addView(view)
