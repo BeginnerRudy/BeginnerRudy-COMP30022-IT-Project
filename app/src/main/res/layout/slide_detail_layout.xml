@@ -29,7 +29,7 @@
         android:layout_above="@+id/detail_desc"
         android:layout_marginBottom="0dp"
         android:text="HEADING"
-        android:textColor="@color/colorWhite"
+        android:padding="10dp"
         android:textSize="24sp" />
 
     <TextView
@@ -46,8 +46,8 @@
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginBottom="0dp"
-        android:text="Lkcjash, sajhashcj sajdch sakjch, askjch, aschk, ascjhkjhkjhkhcskah csajk cajksh  akjchoeufq feoif asc,c asjhkjhascjkh askjhckash"
-        android:textColor="@color/colorWhite" />
+        android:padding="10dp"
+        android:text="Lkcjash, sajhashcj sajdch sakjch, askjch, aschk, ascjhkjhkjhkhcskah csajk cajksh  akjchoeufq feoif asc,c asjhkjhascjkh askjhckash" />
 
     <Button
         android:id="@+id/detail_download"
@@ -59,8 +59,7 @@
         android:layout_toEndOf="@+id/detail_share"
         android:layout_toRightOf="@+id/detail_share"
         android:background="@null"
-        android:text="@string/detail_download"
-        android:textColor="@color/colorWhite" />
+        android:text="@string/detail_download"/>
 
     <Button
         android:id="@+id/detail_share"
@@ -69,8 +68,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="@null"
-        android:text="@string/detail_share"
-        android:textColor="@color/colorWhite" />
+        android:text="@string/detail_share" />
 
     <Button
         android:id="@+id/detail_edit"
@@ -79,7 +77,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:background="@null"
-        android:text="@string/detail_edit"
-        android:textColor="@color/colorWhite" />
+        android:text="@string/detail_edit"/>
 
 </RelativeLayout>
