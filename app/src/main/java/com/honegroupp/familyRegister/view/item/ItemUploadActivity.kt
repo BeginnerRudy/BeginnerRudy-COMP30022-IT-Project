@@ -16,6 +16,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.honegroupp.familyRegister.controller.ItemController.Companion.createItem
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -59,6 +60,8 @@ class ItemUploadActivity : AppCompatActivity() {
                 Toast.makeText(this, "Item name should not leave blank", Toast.LENGTH_SHORT).show()
             } else if (numberOfImages == 0) {
                 Toast.makeText(this, "Please select at least one image", Toast.LENGTH_SHORT).show()
+            } else if (!legalDate(text_date)) {
+                Toast.makeText(this, "Please pick a date for item", Toast.LENGTH_SHORT).show()
             } else if (numberOfImages != imagePathList.size) {
 //                Toast.makeText(this, numberOfImages.toString() +" " + imagePathList.size.toString(),Toast.LENGTH_SHORT).show()
                 Toast.makeText(this, "Please wait for uploading image", Toast.LENGTH_SHORT).show()
@@ -70,13 +73,29 @@ class ItemUploadActivity : AppCompatActivity() {
                     uid,
                     categoryName,
                     imagePathList,
-                    spinner.selectedItemPosition == 0
+                    spinner.selectedItemPosition == 0,
+                    text_date.text.toString()
                 )
             }
         }
 
         // set date picker
         setDatePicker(text_date)
+    }
+
+    /**
+     * This method validate whether the text of a given textView is a valid date or not.
+     * */
+    private fun legalDate(textView: TextView): Boolean {
+        val dobString = textView.text.toString()
+        val df = SimpleDateFormat("dd/M/yyyy")
+        df.isLenient = false
+        return try {
+            val date: Date = df.parse(dobString)
+            true
+        } catch (e: ParseException) {
+            false
+        }
     }
 
     /**

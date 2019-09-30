@@ -4,6 +4,9 @@ package com.honegroupp.familyRegister.model
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.PropertyName
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 data class Item(
     @set:PropertyName("familyId")
@@ -33,7 +36,11 @@ data class Item(
 
     @set:PropertyName("isPublic")
     @get:PropertyName("isPublic")
-    var isPublic: Boolean = false
+    var isPublic: Boolean = false,
+
+    @set:PropertyName("date")
+    @get:PropertyName("date")
+    var date: String = ""
 
 ) {
     /*This is the primary constructor to create an item instance*/

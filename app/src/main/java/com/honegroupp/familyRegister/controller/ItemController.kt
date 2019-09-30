@@ -33,7 +33,8 @@ class ItemController {
             uid: String,
             categoryName: String,
             imageURLs: ArrayList<String>,
-            isPublic: Boolean
+            isPublic: Boolean,
+            date: String
         ) {
 
             val item = Item(
@@ -41,7 +42,8 @@ class ItemController {
                 itemDescription = itemDescription.text.toString(),
                 itemOwnerUID = uid,
                 imageURLs = imageURLs,
-                isPublic = isPublic
+                isPublic = isPublic,
+                date = date
             )
             item.store(uid, categoryName)
 
