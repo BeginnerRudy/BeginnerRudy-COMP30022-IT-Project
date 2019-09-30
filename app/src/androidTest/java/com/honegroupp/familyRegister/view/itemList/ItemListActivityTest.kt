@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.intent.Intents
@@ -63,7 +64,7 @@ class ItemListActivityTest{
 
 
         // wait for the categories are loaded
-        ThreadController.stopForNMilliseconds(3000)
+        ThreadController.stopForNMilliseconds(5000)
     }
 
     /**
@@ -84,7 +85,7 @@ class ItemListActivityTest{
      * */
     @Test
     fun allItemClickable(){
-        // click the empty category
+        // click the category
         onView(withText("Photo"))
             .perform(click())
 

@@ -1,5 +1,6 @@
 package com.honegroupp.familyRegister.model
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.util.Log
 import android.view.View
@@ -153,14 +154,22 @@ data class Family(
 
             // Check whether family exist
             if (!dataSnapshot.hasChild(familyIdInputModified) || familyIdInput.trim() == "") {
-                Toast.makeText(currActivity, mActivity.getString(R.string.family_id_not_exist), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    currActivity,
+                    mActivity.getString(R.string.family_id_not_exist),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 // Get family
                 val family =
                     dataSnapshot.child(familyIdInputModified).getValue(Family::class.java) as Family
                 // Check password
                 if (family.password != Hash.applyHash(familyPasswordInput)) {
-                    Toast.makeText(currActivity, mActivity.getString(R.string.password_is_incorrect), Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        currActivity,
+                        mActivity.getString(R.string.password_is_incorrect),
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 } else {
                     // Add user to family and add family to user
@@ -169,7 +178,11 @@ data class Family(
                         family.store(mActivity, currUid, username)
                     }
 
-                    Toast.makeText(currActivity, mActivity.getString(R.string.join_family_successfully), Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        currActivity,
+                        mActivity.getString(R.string.join_family_successfully),
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -242,18 +255,19 @@ data class Family(
                 dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId)
                     .child("categories").child(categoryName).child("itemKeys")
 
-            val itemKeys = if (!itemKeysSnapshot.hasChildren()) {
+            var itemKeys = if (!itemKeysSnapshot.hasChildren()) {
                 // the item keys is empty
                 ArrayList()
             } else {
                 itemKeysSnapshot.value as ArrayList<String>
             }
 
+            // remove null from the itemkeys
+            itemKeys = itemKeys.filterNotNull() as ArrayList<String>
+
             // clear items once retrieve item from the database
             items.clear()
             for (key in itemKeys) {
-                Log.d("item keys", key)
-
                 // get item by each key
                 val currItem =
                     dataSnapshot
@@ -281,7 +295,7 @@ data class Family(
                     View.INVISIBLE
             }
 
-            if (itemKeys.isEmpty()){
+            if (itemKeys.isEmpty()) {
                 // Make the progress bar invisible
                 mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
                     View.INVISIBLE
@@ -289,6 +303,81 @@ data class Family(
                 mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
                     View.VISIBLE
             }
+        }
+
+        /**
+         * Delete item from family
+         * */
+        fun deleteItem(
+            uid: String,
+            categoryName: String,
+            mActivity: ItemListActivity,
+            itemId: String
+        ) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
+                callbackDeleteItem(uid, categoryName, mActivity, itemId, d)
+            }
+        }
+
+        /**
+         * This is the callback for deleteItem.
+         * This method defines the logic of deleting an item.
+         * */
+        @SuppressLint("RestrictedApi")
+        private fun callbackDeleteItem(
+            uid: String,
+            categoryName: String,
+            mActivity: ItemListActivity,
+            itemId: String,
+            dataSnapshot: DataSnapshot
+        ) {
+            // get user's family ID
+            val currFamilyId =
+                dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).child("familyId").getValue(
+                    String::class.java
+                ) as String
+
+
+            val countOfCategory = (dataSnapshot
+                .child(FirebaseDatabaseManager.FAMILY_PATH)
+                .child(currFamilyId)
+                .child("categories")
+                .value as ArrayList<Category>).size
+
+            // find the category
+            val itemKeys = dataSnapshot
+                .child(FirebaseDatabaseManager.FAMILY_PATH)
+                .child(currFamilyId)
+                .child("categories")
+                .child(categoryName)
+                .child("itemKeys")
+                .children
+
+//            Toast.makeText(mActivity, itemId, Toast.LENGTH_SHORT).show()
+            for (itemKey in itemKeys) {
+                // remove item from category only.
+                if (itemKey.value == itemId) {
+                    itemKey.ref.setValue(null)
+                    // update the item count
+                    val itemCount = dataSnapshot
+                        .child(FirebaseDatabaseManager.FAMILY_PATH)
+                        .child(currFamilyId)
+                        .child("categories")
+                        .child(categoryName)
+                        .child("count")
+                        .value as Long
+
+                    val countReference =
+                        "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/count"
+                    FirebaseDatabase.getInstance().getReference(countReference)
+                        .setValue(itemCount - 1)
+
+                    break
+                }
+            }
+
+
         }
     }
 
