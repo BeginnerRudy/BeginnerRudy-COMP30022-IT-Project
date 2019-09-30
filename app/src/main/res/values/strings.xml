@@ -43,6 +43,7 @@
     <string name="detail_download">Download</string>
     <string name="detail_share">Share</string>
     <string name="edit_confirm">OK</string>
+    <string name="trailer">Trailer</string>
 
     <string-array name="privacy_options">
         <item>Visible by family</item>
