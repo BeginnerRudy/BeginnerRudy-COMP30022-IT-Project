@@ -18,6 +18,7 @@ import android.os.StrictMode
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.google.firebase.database.*
@@ -25,6 +26,7 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Category
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.model.User
+import com.squareup.picasso.Picasso
 import java.io.File
 import java.io.FileOutputStream
 
@@ -50,7 +52,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
     var itemUploads: ArrayList<Item> = ArrayList()
     var categoryUploads: ArrayList<Category> = ArrayList()
-
 
     // start editing
     override fun onEditClick(itemKey: String?) {
@@ -169,9 +170,29 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                     }
                 }
 
+
+
                 // Notify ViewPager to update
                 Log.d("ooonDataChangeNotifyyy","NOty")
                 sliderAdapter.notifyDataSetChanged()
+
+//                val tagPosition = 0
+//                val view: View = mSlideViewPager.findViewWithTag("pos" + tagPosition)
+//                val slideImageView = view.findViewById<ImageView>(R.id.detail_image)
+//                val slideHeading = view.findViewById<TextView>(R.id.detail_heading)
+//                val slideDescription = view.findViewById<TextView>(R.id.detail_desc)
+//
+//                val currItemUploads = itemUploads[tagPosition]
+//
+//                // Load image to ImageView via its URL from Firebase Storage
+//                Picasso.get()
+//                    .load(currItemUploads.imageURLs[0])
+//                    .placeholder(R.drawable.loading_jewellery)
+//                    .into(slideImageView)
+//                slideHeading.setText(currItemUploads.itemName)
+//                slideDescription.setText(currItemUploads.itemDescription)
+
+
 
                 // set Item to be seen first in View Page when items(itemUploads) is ready
                 if (itemUploads.size > 0) {

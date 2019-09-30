@@ -167,7 +167,7 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
             }
 
             if(mDots.isNotEmpty()){
-                mDots[position]?.setTextColor(resources.getColor(R.color.colorWhite))
+//                mDots[position]?.setTextColor(resources.getColor(R.color.colorWhite))
             }
         }
     }

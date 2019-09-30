@@ -1,8 +1,6 @@
 package com.honegroupp.familyRegister.view.item
 
 import android.content.Context
-import android.content.Intent
-import android.util.Log
 import android.view.*
 import android.widget.Button
 import androidx.viewpager.widget.PagerAdapter
@@ -34,9 +32,10 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
     override fun instantiateItem(container: ViewGroup, position: Int): View {
         val layoutInflater:LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_detail_layout, container, false)
+//        view.setTag("pos$position")
 
         val slideImageView = view.findViewById<ImageView>(R.id.detail_image)
-        val slideHeaing = view.findViewById<TextView>(R.id.detail_heading)
+        val slideHeading = view.findViewById<TextView>(R.id.detail_heading)
         val slideDescription = view.findViewById<TextView>(R.id.detail_desc)
 
         val currItemUploads = items[position]
@@ -47,7 +46,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
             .load(currItemUploads.imageURLs[0])
             .placeholder(R.drawable.loading_jewellery)
             .into(slideImageView)
-        slideHeaing.setText(currItemUploads.itemName)
+        slideHeading.setText(currItemUploads.itemName)
         slideDescription.setText(currItemUploads.itemDescription)
 
         view.findViewById<Button>(R.id.detail_edit).setOnClickListener{
