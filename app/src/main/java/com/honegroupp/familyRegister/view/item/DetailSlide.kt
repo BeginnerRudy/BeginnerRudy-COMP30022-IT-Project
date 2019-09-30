@@ -135,6 +135,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                     val currCategoryUpload = it.getValue(Category::class.java) as Category
                     categoryUploads.add(currCategoryUpload)
                 }
+                sliderAdapter.notifyDataSetChanged()
             }
         })
 

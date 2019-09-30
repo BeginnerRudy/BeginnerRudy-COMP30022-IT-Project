@@ -1,6 +1,7 @@
 package com.honegroupp.familyRegister.view.item
 
 import android.content.Context
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import androidx.viewpager.widget.PagerAdapter
@@ -27,6 +28,11 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
         return view == `object`
+    }
+
+    override fun getItemPosition(`object`: Any): Int {
+        Log.d("ggggItemPosi",items.toString())
+        return POSITION_NONE
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): View {
