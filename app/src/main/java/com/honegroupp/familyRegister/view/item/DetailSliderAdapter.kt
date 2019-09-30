@@ -3,11 +3,9 @@ package com.honegroupp.familyRegister.view.item
 import android.content.Context
 import android.util.Log
 import android.view.*
-import android.widget.Button
+import android.widget.*
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.viewpager.widget.PagerAdapter
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
@@ -41,7 +39,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
 //        view.setTag("pos$position")
 
         val slideImageView = view.findViewById<ImageView>(R.id.detail_image)
-        val slideHeading = view.findViewById<TextView>(R.id.detail_heading)
+//        val slideHeading = view.findViewById<TextView>(R.id.detail_heading)
         val slideDescription = view.findViewById<TextView>(R.id.detail_desc)
 
         val currItemUploads = items[position]
@@ -52,7 +50,9 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
             .load(currItemUploads.imageURLs[0])
             .placeholder(R.drawable.loading_jewellery)
             .into(slideImageView)
-        slideHeading.setText(currItemUploads.itemName)
+//        slideHeading.setText(currItemUploads.itemName)
+        val slideToolbar = view.findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.detial_collapsing_toolbar)
+        slideToolbar.setTitle(currItemUploads.itemName)
         slideDescription.setText(currItemUploads.itemDescription)
 
         view.findViewById<Button>(R.id.detail_edit).setOnClickListener{
@@ -81,7 +81,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        container.removeView(`object` as RelativeLayout)
+        container.removeView(`object` as CoordinatorLayout)
     }
 
 }

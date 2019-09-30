@@ -21,7 +21,9 @@
     <dimen name="user_rating">12dp</dimen>
     <dimen name="detail_backdrop_height">500dp</dimen>
     <dimen name="layout_margin_left">10dp</dimen>
+    <dimen name="layout_margin_right">10dp</dimen>
     <dimen name="layout_margin_top">3dp</dimen>
     <dimen name="layout_margin_top2">10dp</dimen>
     <dimen name="padding_layout">16dp</dimen>
+    <dimen name="button_width">110dp</dimen>
 </resources>
