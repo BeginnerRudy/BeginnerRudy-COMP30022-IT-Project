@@ -43,60 +43,55 @@ class ItemListAdapter(val items: ArrayList<Item>, val mContext: Context) :
 
     interface OnItemClickerListener {
         fun onItemClick(position: Int)
-//        fun onWhatEverClick(position: Int)
+        //        fun onWhatEverClick(position: Int)
         fun onDeleteClick(itemId: String)
 //        fun onDownloadClick(position: Int,item:ArrayList<ItemUpload>)
     }
 
-    inner class ImageViewHolder(val viewItem: View) : RecyclerView.ViewHolder(viewItem), View.OnClickListener
-        , View.OnLongClickListener
+    inner class ImageViewHolder(viewItem: View) : RecyclerView.ViewHolder(viewItem),
+        View.OnClickListener
+//        , View.OnLongClickListener
+        , MenuItem.OnMenuItemClickListener
+        , View.OnCreateContextMenuListener
 //        , View.OnClickListener, View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener
     {
         val textViewName: TextView = viewItem.findViewById(R.id.txt_name)
 
         val imageView: ImageView = viewItem.findViewById(R.id.img_upload)
+
         init {
             viewItem.setOnClickListener(this)
-            viewItem.setOnLongClickListener(this)
+            viewItem.setOnCreateContextMenuListener(this)
         }
 
 
-//        override fun onMenuItemClick(p0: MenuItem?): Boolean {
-//            if (listener != null) {
-//                val position = adapterPosition
-//                if (position != RecyclerView.NO_POSITION) {
-//                    when (p0?.itemId) {
-//                        1 -> {
-//                            listener!!.onWhatEverClick(position)
-//                            return true
-//                        }
-//                        2 -> {
-//                            listener!!.onDeleteClick(position)
-//                            return true
-//                        }
-//                        3 -> {
-//                            listener!!.onDownloadClick(position,items)
-//                            return true
-//                        }
-//                    }
-//                }
-//            }
-//            return false
-//        }
+        override fun onMenuItemClick(p0: MenuItem?): Boolean {
+            if (listener != null) {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    when (p0?.itemId) {
+                        1 -> {
+                            listener!!.onDeleteClick(items[position].key.toString())
+                            return true
+                        }
+                    }
+                }
+            }
+            return false
+        }
 
-//        override fun onCreateContextMenu(p0: ContextMenu?, p1: View?, p2: ContextMenu.ContextMenuInfo?) {
-//            p0?.setHeaderTitle("Select Action")
-//            val doWatEver = p0?.add(Menu.NONE, 1, 1, "Do Whatever: ")
-//            val delete = p0?.add(Menu.NONE, 2, 2, "Do Delete: ")
-//            val save = p0?.add(Menu.NONE, 3, 3, "Do Save: ")
-//
-//            doWatEver?.setOnMenuItemClickListener(this)
-//
-//            delete?.setOnMenuItemClickListener(this)
-//
-//            save?.setOnMenuItemClickListener(this)
-//        }
-//
+        override fun onCreateContextMenu(
+            p0: ContextMenu?,
+            p1: View?,
+            p2: ContextMenu.ContextMenuInfo?
+        ) {
+            p0?.setHeaderTitle("Select Action")
+            val delete = p0?.add(Menu.NONE, 1, 1, "Do Delete: ")
+
+
+            delete?.setOnMenuItemClickListener(this)
+        }
+
         override fun onClick(p0: View?) {
             if (listener != null) {
                 val position = adapterPosition
@@ -106,17 +101,17 @@ class ItemListAdapter(val items: ArrayList<Item>, val mContext: Context) :
             }
         }
 
-        /**
-         * Long click an item to delete it.
-         * */
-        override fun onLongClick(p0: View?): Boolean {
-            if (listener != null) {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    listener!!.onDeleteClick(items[position].key.toString())
-                }
-            }
-            return true
-        }
+//        /**
+//         * Long click an item to delete it.
+//         * */
+//        override fun onLongClick(p0: View?): Boolean {
+//            if (listener != null) {
+//                val position = adapterPosition
+//                if (position != RecyclerView.NO_POSITION) {
+//                    listener!!.onDeleteClick(items[position].key.toString())
+//                }
+//            }
+//            return true
+//        }
     }
 }

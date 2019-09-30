@@ -315,7 +315,7 @@ data class Family(
             itemId: String
         ) {
             val rootPath = "/"
-            FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
+            FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
                 callbackDeleteItem(uid, categoryName, mActivity, itemId, d)
             }
         }
@@ -359,23 +359,39 @@ data class Family(
                 // remove item from category only.
                 if (itemKey.value == itemId) {
                     itemKey.ref.setValue(null)
-                    // update the item count
-                    val itemCount = dataSnapshot
-                        .child(FirebaseDatabaseManager.FAMILY_PATH)
-                        .child(currFamilyId)
-                        .child("categories")
-                        .child(categoryName)
-                        .child("count")
-                        .value as Long
-
-                    val countReference =
-                        "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/count"
-                    FirebaseDatabase.getInstance().getReference(countReference)
-                        .setValue(itemCount - 1)
 
                     break
                 }
             }
+            // update itemkeys index first
+
+            val itemKeysPath =
+                "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/itemKeys/"
+            var categoryItemKeys = dataSnapshot
+                .child(FirebaseDatabaseManager.FAMILY_PATH)
+                .child(currFamilyId)
+                .child("categories")
+                .child(categoryName)
+                .child("itemKeys")
+                .value as ArrayList<String>
+
+            categoryItemKeys = categoryItemKeys.filterNotNull() as ArrayList<String>
+            categoryItemKeys.remove(itemId)
+
+            FirebaseDatabaseManager.update(itemKeysPath, categoryItemKeys)
+
+            // update the item count
+            val itemCount = dataSnapshot
+                .child(FirebaseDatabaseManager.FAMILY_PATH)
+                .child(currFamilyId)
+                .child("categories")
+                .child(categoryName)
+                .child("itemKeys")
+                .childrenCount
+            val countReference =
+                "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/count"
+            FirebaseDatabase.getInstance().getReference(countReference)
+                .setValue(itemCount - 1)
 
 
         }
