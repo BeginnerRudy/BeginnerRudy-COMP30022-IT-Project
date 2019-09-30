@@ -6,18 +6,22 @@ import android.view.*
 import android.widget.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 
 class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : PagerAdapter() {
+    lateinit var imagesSlideViewPager : ViewPager
+    lateinit var imagesSliderAdapter: DetailImagesSliderAdapter
     var listener: OnItemClickerListener? = null
 
     interface OnItemClickerListener {
         fun onItemClick(position: Int, items:ArrayList<Item>)
-        fun onDownloadClick(position: Int, items:ArrayList<Item>)
+        fun onDownloadClick(position: Int, image_position: Int, items:ArrayList<Item>)
         fun onShareClick(position: Int, items:ArrayList<Item>, imageView: ImageView)
         fun onEditClick(itemKey: String?)
+        fun setListener()
     }
 
     override fun getCount(): Int {
@@ -36,21 +40,20 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
     override fun instantiateItem(container: ViewGroup, position: Int): View {
         val layoutInflater:LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_detail_layout, container, false)
-//        view.setTag("pos$position")
 
-        val slideImageView = view.findViewById<ImageView>(R.id.detail_image)
-//        val slideHeading = view.findViewById<TextView>(R.id.detail_heading)
+        // set slides of images
+        imagesSlideViewPager = view.findViewById(R.id.detail_images_slideViewPager)
+        imagesSliderAdapter = DetailImagesSliderAdapter(items[position].imageURLs, context)
+        imagesSlideViewPager.adapter = imagesSliderAdapter
+        listener!!.setListener()
+
+
+        // val slideHeading = view.findViewById<TextView>(R.id.detail_heading)
         val slideDescription = view.findViewById<TextView>(R.id.detail_desc)
 
         val currItemUploads = items[position]
 
-
-        // Load image to ImageView via its URL from Firebase Storage
-        Picasso.get()
-            .load(currItemUploads.imageURLs[0])
-            .placeholder(R.drawable.loading_jewellery)
-            .into(slideImageView)
-//        slideHeading.setText(currItemUploads.itemName)
+        // slideHeading.setText(currItemUploads.itemName)
         val slideToolbar = view.findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.detial_collapsing_toolbar)
         slideToolbar.setTitle(currItemUploads.itemName)
         slideDescription.setText(currItemUploads.itemDescription)
@@ -60,20 +63,21 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         }
 
         // set on click listeners
-        view.findViewById<ImageView>(R.id.detail_image).setOnClickListener{
+        view.findViewById<ViewPager>(R.id.detail_images_slideViewPager).setOnClickListener{
+            Log.d("ddddtailclickonviewp",items.toString())
             listener!!.onItemClick(position, items)
         }
 
         view.findViewById<Button>(R.id.detail_download).setOnClickListener{
-            listener!!.onDownloadClick(position, items)
+            listener!!.onDownloadClick(position, imagesSlideViewPager.currentItem, items)
         }
 
         view.findViewById<Button>(R.id.detail_share).setOnClickListener{
-            Picasso.get()
-                .load(currItemUploads.imageURLs[0])
-                .placeholder(R.drawable.loading_jewellery)
-                .into(slideImageView)
-            listener!!.onShareClick(position, items, slideImageView)
+//            Picasso.get()
+//                .load(currItemUploads.imageURLs[0])
+//                .placeholder(R.drawable.loading_jewellery)
+//                .into(slideImageView)
+//            listener!!.onShareClick(position, items, slideImageView)
         }
 
         container.addView(view)

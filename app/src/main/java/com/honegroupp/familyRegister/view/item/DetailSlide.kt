@@ -30,11 +30,13 @@ import com.squareup.picasso.Picasso
 import java.io.File
 import java.io.FileOutputStream
 
-class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener {
+class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener,
+    DetailImagesSliderAdapter.OnItemClickerListener {
     private val STORAGE_PERMISSION_CODE: Int = 1000
     private var downloadUrl :String = ""
 
     lateinit var mSlideViewPager : ViewPager
+    lateinit var sliderAdapter: DetailSliderAdapter
 
     lateinit var detailUserId: String
     lateinit var detailFamilyId: String
@@ -52,6 +54,25 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
     var itemUploads: ArrayList<Item> = ArrayList()
     var categoryUploads: ArrayList<Category> = ArrayList()
+
+    override fun setListener() {
+        sliderAdapter.imagesSliderAdapter.listener = this
+    }
+
+    override fun onImageClick(position: Int, items: ArrayList<String>) {
+        val intent = Intent(this, DImageSlide::class.java)
+        intent.putExtra("ItemKey", itemUploads[mSlideViewPager.currentItem].key)
+        intent.putExtra("FamilyId", detailFamilyId)
+        this.startActivity(intent)
+    }
+
+    // open Detail Image page when image is clicked
+    override fun onItemClick(position: Int, items:ArrayList<Item>) {
+        val intent = Intent(this, DImageSlide::class.java)
+        intent.putExtra("ItemKey", items[position].key)
+        intent.putExtra("FamilyId", detailFamilyId)
+        this.startActivity(intent)
+    }
 
     // start editing
     override fun onEditClick(itemKey: String?) {
@@ -88,7 +109,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
         // adapter of items for ViewPager, set listener in adapter for listening click action
         mSlideViewPager = findViewById(R.id.detail_slideViewPager)
-        val sliderAdapter = DetailSliderAdapter(itemUploads,this)
+        sliderAdapter = DetailSliderAdapter(itemUploads,this)
         mSlideViewPager.adapter = sliderAdapter
         sliderAdapter.listener = this@DetailSlide
 
@@ -252,8 +273,8 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     }
 
     // download when click
-    override fun onDownloadClick(position: Int, items: ArrayList<Item>) {
-        this.downloadUrl = items[position].imageURLs[0]
+    override fun onDownloadClick(position: Int, image_position: Int, items: ArrayList<Item>) {
+        this.downloadUrl = items[position].imageURLs[image_position]
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_DENIED){
@@ -301,13 +322,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         }
     }
 
-    // open Detail Image page when image is clicked
-    override fun onItemClick(position: Int, items:ArrayList<Item>) {
-        val intent = Intent(this, DImageSlide::class.java)
-        intent.putExtra("ItemKey", items[position].key)
-        intent.putExtra("FamilyId", detailFamilyId)
-        this.startActivity(intent)
-    }
+
 
     override fun onDestroy() {
         super.onDestroy()
