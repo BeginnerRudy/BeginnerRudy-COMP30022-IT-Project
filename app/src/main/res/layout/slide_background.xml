@@ -7,6 +7,12 @@
     android:background="@color/colorWhite"
     tools:context=".view.item.DetailSlide">
 
+    <ImageView
+        android:id="@+id/image_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:color/transparent" />
+
     <LinearLayout
         android:id="@+id/detail_dotsLayout"
         android:layout_width="wrap_content"

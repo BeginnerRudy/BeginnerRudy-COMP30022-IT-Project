@@ -11,15 +11,32 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 
-class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : PagerAdapter() {
+class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : PagerAdapter(),
+    DetailImagesSliderAdapter.OnItemClickerListener {
+
+
     lateinit var imagesSlideViewPager : ViewPager
     lateinit var imagesSliderAdapter: DetailImagesSliderAdapter
     var listener: OnItemClickerListener? = null
 
     interface OnItemClickerListener {
-        fun onItemClick(position: Int, items:ArrayList<Item>)
+        fun onItemClick(position: Int)
+        fun onShareClick(imageView: ImageView)
+        fun onDownloadClick(position: Int)
         fun onEditClick(itemKey: String?)
-        fun setListener()
+//        fun setListener()
+    }
+
+    override fun onShareClick(imageView: ImageView) {
+        listener!!.onShareClick(imageView)
+    }
+
+    override fun onDownloadClick(position: Int) {
+        listener!!.onDownloadClick(position)
+    }
+
+    override fun onImageClick(position: Int, items: ArrayList<String>) {
+        listener!!.onItemClick(position)
     }
 
     override fun getCount(): Int {
@@ -43,7 +60,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         imagesSlideViewPager = view.findViewById(R.id.detail_images_slideViewPager)
         imagesSliderAdapter = DetailImagesSliderAdapter(items[position].imageURLs, context)
         imagesSlideViewPager.adapter = imagesSliderAdapter
-        listener!!.setListener()
+        imagesSliderAdapter.listener = this
 
 
         // val slideHeading = view.findViewById<TextView>(R.id.detail_heading)
@@ -58,12 +75,6 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
 
         view.findViewById<Button>(R.id.detail_edit).setOnClickListener{
             listener!!.onEditClick(items[position].key)
-        }
-
-        // set on click listeners
-        view.findViewById<ViewPager>(R.id.detail_images_slideViewPager).setOnClickListener{
-            Log.d("ddddtailclickonviewp",items.toString())
-            listener!!.onItemClick(position, items)
         }
 
         container.addView(view)
