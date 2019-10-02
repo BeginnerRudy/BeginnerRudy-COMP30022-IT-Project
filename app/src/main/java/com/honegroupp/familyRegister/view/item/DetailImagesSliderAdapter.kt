@@ -47,7 +47,7 @@ class DetailImagesSliderAdapter(val items: ArrayList<String>, val context: Conte
         // Load image to ImageView via its URL from Firebase Storage
         Picasso.get()
             .load(currItemUrls)
-            .placeholder(R.drawable.loading_jewellery)
+            .placeholder(R.mipmap.loading_jewellery)
             .into(slideImageView)
 
 //        listener!!.setMenu(slideImageView)
