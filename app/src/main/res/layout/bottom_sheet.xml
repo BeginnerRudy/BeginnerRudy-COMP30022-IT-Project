@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Share"
+            android:text="@string/detail_share"
             android:layout_gravity="center_vertical"
             android:padding="8dp"
             />
@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/uploadLinearLayout"
+        android:id="@+id/downloadLinearLayout"
         android:background="?android:attr/selectableItemBackground"
         android:padding="8dp"
         >
@@ -53,7 +53,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upload"
+            android:text="@string/detail_download"
             android:layout_gravity="center_vertical"
             android:padding="8dp"
             />
@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/copyLinearLayout"
+        android:id="@+id/deleteLinearLayout"
         android:background="?android:attr/selectableItemBackground"
         android:padding="8dp"
         >
@@ -80,7 +80,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Copy"
+            android:text="@string/detail_delete"
             android:layout_gravity="center_vertical"
             android:padding="8dp"
             />

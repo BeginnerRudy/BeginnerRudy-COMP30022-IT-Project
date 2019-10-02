@@ -98,14 +98,6 @@
                 android:text="urllllll"
                 android:visibility="invisible"/>
 
-            <TextView
-                android:id="@+id/trailer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:text="@string/trailer"
-                />
-
             <Button
                 android:id="@+id/detail_share"
                 android:layout_width="@dimen/button_width"

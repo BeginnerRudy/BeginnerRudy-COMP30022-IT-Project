@@ -16,7 +16,6 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
 
 
     lateinit var imagesSlideViewPager : ViewPager
-    lateinit var imagesSliderAdapter: DetailImagesSliderAdapter
     var listener: OnItemClickerListener? = null
 
     interface OnItemClickerListener {
@@ -24,17 +23,19 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         fun onShareClick(imageView: ImageView)
         fun onDownloadClick(position: Int)
         fun onEditClick(itemKey: String?)
-//        fun setListener()
     }
 
+    // on share click in menu
     override fun onShareClick(imageView: ImageView) {
         listener!!.onShareClick(imageView)
     }
 
+    // on download click in menu
     override fun onDownloadClick(position: Int) {
         listener!!.onDownloadClick(position)
     }
 
+    // on image click in menu
     override fun onImageClick(position: Int, items: ArrayList<String>) {
         listener!!.onItemClick(position)
     }
@@ -47,8 +48,8 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         return view == `object`
     }
 
+    // notify data set change
     override fun getItemPosition(`object`: Any): Int {
-        Log.d("ggggItemPosi",items.toString())
         return POSITION_NONE
     }
 
@@ -58,7 +59,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
 
         // set slides of images
         imagesSlideViewPager = view.findViewById(R.id.detail_images_slideViewPager)
-        imagesSliderAdapter = DetailImagesSliderAdapter(items[position].imageURLs, context)
+        var imagesSliderAdapter = DetailImagesSliderAdapter(items[position].imageURLs, context)
         imagesSlideViewPager.adapter = imagesSliderAdapter
         imagesSliderAdapter.listener = this
 
@@ -73,6 +74,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         slideToolbar.setTitle(currItemUploads.itemName)
         slideDescription.setText(currItemUploads.itemDescription)
 
+        // click on edit button
         view.findViewById<Button>(R.id.detail_edit).setOnClickListener{
             listener!!.onEditClick(items[position].key)
         }

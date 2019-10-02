@@ -43,6 +43,7 @@
     <string name="detail_edit">编辑</string>
     <string name="detail_download">下载</string>
     <string name="detail_share">分享</string>
+    <string name="detail_delete">删除</string>
     <string name="edit_confirm">确定</string>
 
     <string name="query_hints">物品名称/收藏时间</string>

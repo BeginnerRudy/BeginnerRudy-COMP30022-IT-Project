@@ -1,17 +1,13 @@
 package com.honegroupp.familyRegister.view.item
 
 import android.content.Context
-import android.provider.ContactsContract
 import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.viewpager.widget.PagerAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.slide_detail_images_layout.view.*
-import kotlinx.android.synthetic.main.slide_dimage_layout.view.*
 
 class DetailImagesSliderAdapter(val items: ArrayList<String>, val context: Context) : PagerAdapter(), View.OnClickListener {
 
@@ -80,8 +76,8 @@ class DetailImagesSliderAdapter(val items: ArrayList<String>, val context: Conte
     private fun createBottomSheetDialog() {
         val view = LayoutInflater.from(context).inflate(R.layout.bottom_sheet, null)
         var shareLinearLayout = view.findViewById<LinearLayout>(R.id.shareLinearLayout)
-        var uploadLinearLayout = view.findViewById<LinearLayout>(R.id.uploadLinearLayout)
-        var copyLinearLayout = view.findViewById<LinearLayout>(R.id.copyLinearLayout)
+        var uploadLinearLayout = view.findViewById<LinearLayout>(R.id.downloadLinearLayout)
+        var copyLinearLayout = view.findViewById<LinearLayout>(R.id.deleteLinearLayout)
 
         shareLinearLayout.setOnClickListener(this)
         uploadLinearLayout.setOnClickListener(this)
@@ -100,16 +96,13 @@ class DetailImagesSliderAdapter(val items: ArrayList<String>, val context: Conte
             when (view.id) {
                 R.id.shareLinearLayout -> {
                     listener!!.onShareClick(currSlideImageView)
-                    Log.d("ooooclick", currposition.toString())
                     bottomSheetDialog.dismiss()
                 }
-                R.id.uploadLinearLayout -> {
+                R.id.downloadLinearLayout -> {
                     listener!!.onDownloadClick(currposition)
-                    Log.d("ooooclick", "upload")
                     bottomSheetDialog.dismiss()
                 }
-                R.id.copyLinearLayout -> {
-                    Log.d("ooooclick", "copy")
+                R.id.deleteLinearLayout -> {
                     bottomSheetDialog.dismiss()
                 }
             }
