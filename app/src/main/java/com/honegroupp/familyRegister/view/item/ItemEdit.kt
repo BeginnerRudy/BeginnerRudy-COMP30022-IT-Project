@@ -1,12 +1,14 @@
 package com.honegroupp.familyRegister.view.item
 
 import android.app.DatePickerDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -58,6 +60,11 @@ class ItemEdit : AppCompatActivity() {
                 findViewById<EditText>(R.id.editName).setText(currItem.itemName)
                 findViewById<EditText>(R.id.editDescription).setText(currItem.itemDescription)
                 findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
+
+                // set passDown dialog
+                editPassDown.setOnClickListener(){
+                    createAltertDialog()
+                }
 
                 // set Date picker
                 setDatePicker(editItemDate)
@@ -114,6 +121,25 @@ class ItemEdit : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    fun createAltertDialog(){
+        val listItems = arrayOf("Item 1", "Item 2", "Item 3")
+        val mBuilder = AlertDialog.Builder(this@ItemEdit)
+        mBuilder.setTitle("Choose an item").setItems(listItems, DialogInterface.OnClickListener { dialog, which ->
+            // The 'which' argument contains the index position
+            // of the selected item
+        })
+
+        // Set the neutral/cancel button click listener
+        mBuilder.setNeutralButton("Cancel") { dialog, which ->
+            // Do something when click the neutral button
+            dialog.cancel()
+        }
+
+        val mDialog = mBuilder.create()
+        mDialog.getWindow()?.setBackgroundDrawableResource(R.color.fui_bgAnonymous)
+        mDialog.show()
     }
 
     /**

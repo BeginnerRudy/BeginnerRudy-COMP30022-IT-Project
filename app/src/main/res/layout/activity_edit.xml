@@ -121,12 +121,23 @@
         </RelativeLayout>
 
         <Button
-            android:id="@+id/editConfirm"
+            android:id="@+id/editPassDown"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/edit_snipper_bar"
+            android:backgroundTint="@color/colorAccent"
+            android:text="PASSDOWN"
+            android:textColor="@color/textColorPrimary" />
+
+        <Button
+            android:id="@+id/editConfirm"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editPassDown"
             android:backgroundTint="@color/colorAccent"
             android:text="@string/edit_confirm"
             android:textColor="@color/textColorPrimary" />
