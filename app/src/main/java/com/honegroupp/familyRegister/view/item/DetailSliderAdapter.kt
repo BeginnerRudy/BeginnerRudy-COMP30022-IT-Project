@@ -72,6 +72,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
 
         // val slideHeading = view.findViewById<TextView>(R.id.detail_heading)
         val slideDescription = view.findViewById<TextView>(R.id.detail_desc)
+        val slideDate = view.findViewById<TextView>(R.id.detail_date)
 
         val currItemUploads = items[position]
 
@@ -79,6 +80,10 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         val slideToolbar = view.findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.detial_collapsing_toolbar)
         slideToolbar.setTitle(currItemUploads.itemName)
         slideDescription.setText(currItemUploads.itemDescription)
+        var dateParts = currItemUploads.date.split("/")
+        var newDate = dateParts[2] + "." + dateParts[1] + "." + dateParts[0]
+        slideDate.setText(newDate)
+
 
         // click on edit button
         view.findViewById<Button>(R.id.detail_edit).setOnClickListener{

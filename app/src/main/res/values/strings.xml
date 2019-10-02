@@ -43,7 +43,8 @@
     <string name="detail_download">Download</string>
     <string name="detail_share">Share</string>
     <string name="detail_delete">Delete</string>
-    <string name="edit_confirm">OK</string>
+    <string name="edit_confirm">CONFIRM CHANGE</string>
+    <string name="edit_date">Click to change date time</string>
 
     <string-array name="privacy_options">
         <item>Visible by family</item>
