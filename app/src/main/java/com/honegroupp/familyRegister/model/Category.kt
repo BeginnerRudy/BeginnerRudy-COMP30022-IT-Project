@@ -38,7 +38,7 @@ data class Category(
         mActivity: AppCompatActivity,
         position: Int, uid: String
     ) {
-        var url = DEFAULT_COVER
+//        var url = DEFAULT_COVER
         if (itemKeys.isNotEmpty()) {
             val lastItemKey = itemKeys.last()
             val rootPath = "/"
