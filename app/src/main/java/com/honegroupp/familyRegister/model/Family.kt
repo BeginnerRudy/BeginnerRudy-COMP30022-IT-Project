@@ -250,6 +250,9 @@ data class Family(
                     String::class.java
                 ) as String
 
+            // set familyID
+            mActivity.familyId = currFamilyId
+
             // get item keys for the given category as an ArrayList
             val itemKeysSnapshot =
                 dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId)

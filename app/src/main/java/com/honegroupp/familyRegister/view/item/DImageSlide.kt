@@ -46,7 +46,18 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
     private lateinit var databaseReferenceItem: DatabaseReference
     private lateinit var dbListenerItem: ValueEventListener
 
+    private var currPosition: Int = 0
+
     var itemUrls: ArrayList<String> = ArrayList()
+
+    override fun onResume() {
+        super.onResume()
+        // Hide the status bar.
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        actionBar?.hide()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,6 +124,8 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
                     if (!alreadySet){
                         addDotsIndicator(0)
                         alreadySet = true
+                    } else{
+                        addDotsIndicator(currPosition)
                     }
                 }
             }
@@ -129,6 +142,7 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
             }
             override fun onPageSelected(position: Int) {
                 addDotsIndicator(position)
+                currPosition = position
             }
 
         })
@@ -152,8 +166,10 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
 
             }
 
-            if(mDots.isNotEmpty()){
+            if(position <= mDots.size-1){
                 mDots[position]?.setTextColor(resources.getColor(R.color.colorWhite))
+            } else {
+                mDots[mDots.size-1]?.setTextColor(resources.getColor(R.color.colorWhite))
             }
         }
     }

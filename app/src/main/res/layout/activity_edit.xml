@@ -1,37 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rootContainer"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
-
-    <Button
-        android:id="@+id/changebutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:text="Change Image" />
-
-    <ImageView
-        android:id="@+id/detailimage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/editName"
+    android:layout_height="match_parent">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="editName" />
+        android:padding="15dp">
 
-    <EditText
-        android:id="@+id/editDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:text="editDescription"/>
+        <ImageView
+            android:id="@+id/editItemImage"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="#07000000"
+            android:scaleType="centerCrop" />
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/edit_progress_bar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editItemImage"
+            android:layout_alignParentLeft="true" />
+
+        <Button
+            android:id="@+id/editItemChooseImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_progress_bar"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/choose_image"
+            android:textColor="@color/textColorPrimary" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_snipper_bar"
+            android:layout_below="@id/editItemChooseImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Spinner
+                android:id="@+id/edit_privacy_spinner"
+                android:layout_width="383dp"
+                android:layout_height="43dp"
+                android:layout_below="@id/editItemChooseImage"
+                android:spinnerMode="dropdown"
+                android:visibility="visible" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/itemName"
+            android:layout_below="@id/edit_snipper_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/type_item_name"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/itemDescription"
+            android:layout_below="@id/itemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/type_item_description"
+                android:inputType="textMultiLine" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <Button
+            android:id="@+id/editConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/itemDescription"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/edit_confirm"
+            android:textColor="@color/textColorPrimary" />
+    </RelativeLayout>
 </LinearLayout>
