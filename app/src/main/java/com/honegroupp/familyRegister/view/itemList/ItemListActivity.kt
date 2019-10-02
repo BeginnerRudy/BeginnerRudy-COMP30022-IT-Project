@@ -39,6 +39,10 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
         startActivity(intent)
     }
 
+    override fun onDeleteClick(itemId: String) {
+        ItemListController.deleteItems(uid, categoryName, this, itemId)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_list)

@@ -42,7 +42,7 @@ class ListViewAapter(val items: ArrayList<Item>, val mActivity:AppCompatActivity
         //set image to imageView
         Picasso.get()
                 .load(imageURLList[position])
-                .placeholder(R.drawable.loading_jewellery)
+                .placeholder(R.mipmap.loading_jewellery)
                 .fit()
                 .centerCrop()
                 .into(picture)
