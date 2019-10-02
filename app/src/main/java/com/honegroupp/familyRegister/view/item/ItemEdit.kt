@@ -6,10 +6,7 @@ import android.util.Log
 import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -24,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_edit.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ItemEdit : AppCompatActivity(){
+class ItemEdit : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,17 +59,37 @@ class ItemEdit : AppCompatActivity(){
                 findViewById<EditText>(R.id.editDescription).setText(currItem.itemDescription)
                 findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
 
+                // set Date picker
                 setDatePicker(editItemDate)
 
+                // set up the spinner (select public and privacy)
+                val spinner: Spinner = findViewById(R.id.edit_privacy_spinner)
+
+                // Create an ArrayAdapter using the string array and a default spinner layout
+                ArrayAdapter.createFromResource(
+                    this@ItemEdit,
+                    R.array.privacy_options,
+                    android.R.layout.simple_spinner_item
+                ).also { adapter ->
+                    // Specify the layout to use when the list of choices appears
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    // Apply the adapter to the spinner
+                    spinner.adapter = adapter
+                }
+
                 // set on click listener
-                editConfirm.setOnClickListener{
-                    if(editName.text.toString() == ""){
-                        Toast.makeText(this@ItemEdit, "Item name should not leave blank",Toast.LENGTH_SHORT).show()
+                editConfirm.setOnClickListener {
+                    if (editName.text.toString() == "") {
+                        Toast.makeText(
+                            this@ItemEdit,
+                            "Item name should not leave blank",
+                            Toast.LENGTH_SHORT
+                        ).show()
 //                    }else if(numberOfImages == 0) {
 //                        Toast.makeText(this, "Please select at least one image", Toast.LENGTH_SHORT).show()
 //                    }else if(numberOfImages != imagePathList.size){
 //                        Toast.makeText(this, "Please wait for uploading image", Toast.LENGTH_SHORT).show()
-                    }else {
+                    } else {
 
                         // create item to upload to Firebase
                         val updatedItem = Item(
@@ -80,7 +97,7 @@ class ItemEdit : AppCompatActivity(){
                             itemDescription = editDescription.text.toString(),
                             itemOwnerUID = currItem.itemOwnerUID,
                             imageURLs = currItem.imageURLs,
-                            isPublic = currItem.isPublic,
+                            isPublic = spinner.selectedItemPosition == 0,
                             date = editItemDate.text.toString()
                         )
 
@@ -96,7 +113,6 @@ class ItemEdit : AppCompatActivity(){
                     }
                 }
             }
-
         })
     }
 
@@ -123,30 +139,6 @@ class ItemEdit : AppCompatActivity(){
                 cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH)
             ).show()
-        }
-    }
-
-    override fun onCreateContextMenu(
-        menu: ContextMenu?,
-        v: View?,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        menu!!.setHeaderTitle("Choose your option");
-        getMenuInflater().inflate(R.menu.item_detail_menu, menu);
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.option_1 -> {
-                Toast.makeText(this, "Option 1 selected", Toast.LENGTH_SHORT).show()
-                return true
-            }
-            R.id.option_2 -> {
-                Toast.makeText(this, "Option 2 selected", Toast.LENGTH_SHORT).show()
-                return true
-            }
-            else -> return super.onContextItemSelected(item)
         }
     }
 }
