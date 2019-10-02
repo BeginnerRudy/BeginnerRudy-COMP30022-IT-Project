@@ -19,7 +19,6 @@ import com.honegroupp.familyRegister.controller.ItemController.Companion.editIte
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_edit.*
-import kotlinx.android.synthetic.main.item_upload_page.*
 
 class ItemEdit : AppCompatActivity(){
 
@@ -80,6 +79,9 @@ class ItemEdit : AppCompatActivity(){
                         val databaseRef = FirebaseDatabase.getInstance().getReference(itemPath)
 
                         databaseRef.child("").setValue(updatedItem)
+
+                        // Go back to the previous activity
+                        this@ItemEdit.finish()
                     }
                 }
             }

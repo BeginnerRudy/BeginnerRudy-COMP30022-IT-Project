@@ -1,7 +1,6 @@
 package com.honegroupp.familyRegister.view.item
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -16,25 +15,20 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
 import android.util.Log
-import android.view.ContextMenu
-import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Category
 import com.honegroupp.familyRegister.model.Item
-import com.honegroupp.familyRegister.model.User
-import com.squareup.picasso.Picasso
 import java.io.File
 import java.io.FileOutputStream
 
 class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener{
 
-    lateinit var shareImgView: ImageView
     private var downloadUrl :String = ""
 
     private val STORAGE_PERMISSION_CODE: Int = 1000
@@ -47,14 +41,13 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
     lateinit var pathItem: String
     lateinit var pathCategory: String
-    private lateinit var pathUser: String
+
+    var storage: FirebaseStorage = FirebaseStorage.getInstance()
 
     lateinit var databaseReferenceItem: DatabaseReference
     lateinit var databaseReferenceCategory: DatabaseReference
-    lateinit var databaseReferenceUser: DatabaseReference
     lateinit var dbListenerItem: ValueEventListener
     lateinit var dbListenerCategory: ValueEventListener
-    lateinit var dbListenerUser: ValueEventListener
 
     var itemUploads: ArrayList<Item> = ArrayList()
     var categoryUploads: ArrayList<Category> = ArrayList()
@@ -62,9 +55,37 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     // open Detail Image page when image is clicked
     override fun onItemClick(position: Int) {
         val intent = Intent(this, DImageSlide::class.java)
+        intent.putExtra("PositionDetail", position.toString())
         intent.putExtra("ItemKey", itemUploads[mSlideViewPager.currentItem].key)
         intent.putExtra("FamilyId", detailFamilyId)
         this.startActivity(intent)
+    }
+
+    override fun onDeleteClick(position: Int) {
+        if (itemUploads[mSlideViewPager.currentItem].imageURLs.size > 1){
+            // use url create reference of image to be deleted
+            val deleteUrl = itemUploads[mSlideViewPager.currentItem].imageURLs[position]
+            val imageRef = storage.getReferenceFromUrl(deleteUrl)
+
+            // Delete image and its tile from Fitrbase Storage
+            imageRef.delete()
+                .addOnSuccessListener {
+                    // Delete image url from Firebase Real-time Database
+                    removeItemUrl(position)
+                    toast("Image deleted", Toast.LENGTH_SHORT)
+                }
+                .addOnFailureListener {
+                    toast("Failed for deleting the item", Toast.LENGTH_SHORT)
+                }
+        }
+    }
+
+    fun removeItemUrl(position: Int){
+        itemUploads[mSlideViewPager.currentItem].imageURLs.removeAt(position)
+        databaseReferenceItem
+            .child(itemUploads[mSlideViewPager.currentItem].key.toString())
+            .child("imageURLs")
+            .setValue(itemUploads[mSlideViewPager.currentItem].imageURLs)
     }
 
     // start editing
@@ -78,6 +99,19 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
     override fun onResume() {
         super.onResume()
+
+        // hide status bar
+        hideStatusBar()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+
+        // hide status bar
+        hideStatusBar()
+    }
+
+    private fun hideStatusBar(){
         // Hide the status bar.
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         // Remember that you should never show the action bar if the
@@ -88,11 +122,8 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Hide the status bar.
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        // Remember that you should never show the action bar if the
-        // status bar is hidden, so hide that too if necessary.
-        actionBar?.hide()
+        // hide status bar
+        hideStatusBar()
 
         setContentView(R.layout.slide_background)
 
@@ -120,8 +151,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
 
         // initialise database References, Item and Categories path cannot be get before the family id is get
-        pathUser = "Users"
-        databaseReferenceUser = FirebaseDatabase.getInstance().getReference(pathUser)
         databaseReferenceItem = FirebaseDatabase.getInstance().getReference("")
         databaseReferenceCategory = FirebaseDatabase.getInstance().getReference("")
 
@@ -186,10 +215,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                 }
 
                 // Notify ViewPager to update
-                Log.d("ooonDataChangeNotifyyy","NOty")
                 sliderAdapter.notifyDataSetChanged()
-
-
 
                 // set Item to be seen first in View Page when items(itemUploads) is ready
                 if (itemUploads.size > 0) {
@@ -211,15 +237,15 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
      * https://www.youtube.com/watch?v=1tpc3fyEObI&t=2s
      */
     override fun onShareClick(imageView: ImageView) {
-        var bitmap = getBitmapFromView(imageView);
+        val bitmap = getBitmapFromView(imageView);
         try {
-            var file = File(this.getExternalCacheDir(),"logicchip.png");
-            var fOut = FileOutputStream(file);
+            val file = File(this.getExternalCacheDir(),"logicchip.png");
+            val fOut = FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
             fOut.flush();
             fOut.close();
             file.setReadable(true, false);
-            var intent = Intent(android.content.Intent.ACTION_SEND);
+            val intent = Intent(android.content.Intent.ACTION_SEND);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Intent.EXTRA_TEXT, "name");
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));

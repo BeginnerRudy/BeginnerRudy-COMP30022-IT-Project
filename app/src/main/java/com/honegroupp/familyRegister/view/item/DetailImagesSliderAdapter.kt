@@ -16,10 +16,10 @@ class DetailImagesSliderAdapter(val items: ArrayList<String>, val context: Conte
     var currposition = 0
 
     interface OnItemClickerListener {
-        fun onImageClick(position: Int, items: ArrayList<String>)
-//        fun setMenu(slideImageView: ImageView)
+        fun onImageClick(position: Int)
         fun onDownloadClick(position: Int)
         fun onShareClick(imageView: ImageView)
+        fun onDeleteClick(position: Int)
     }
 
     override fun getCount(): Int {
@@ -50,11 +50,9 @@ class DetailImagesSliderAdapter(val items: ArrayList<String>, val context: Conte
             .placeholder(R.mipmap.loading_jewellery)
             .into(slideImageView)
 
-//        listener!!.setMenu(slideImageView)
-
         view.findViewById<ImageView>(R.id.detail_images).setOnClickListener{
             Log.d("ddddtailclickonviewp",items.toString())
-            listener!!.onImageClick(position, items)
+            listener!!.onImageClick(position)
         }
 
         createBottomSheetDialog()
@@ -75,13 +73,20 @@ class DetailImagesSliderAdapter(val items: ArrayList<String>, val context: Conte
 
     private fun createBottomSheetDialog() {
         val view = LayoutInflater.from(context).inflate(R.layout.bottom_sheet, null)
-        var shareLinearLayout = view.findViewById<LinearLayout>(R.id.shareLinearLayout)
-        var uploadLinearLayout = view.findViewById<LinearLayout>(R.id.downloadLinearLayout)
-        var copyLinearLayout = view.findViewById<LinearLayout>(R.id.deleteLinearLayout)
+        val shareLinearLayout = view.findViewById<LinearLayout>(R.id.shareLinearLayout)
+        val downloadLinearLayout = view.findViewById<LinearLayout>(R.id.downloadLinearLayout)
+        val deleteLinearLayout = view.findViewById<LinearLayout>(R.id.deleteLinearLayout)
+
 
         shareLinearLayout.setOnClickListener(this)
-        uploadLinearLayout.setOnClickListener(this)
-        copyLinearLayout.setOnClickListener(this)
+        downloadLinearLayout.setOnClickListener(this)
+
+        if (items.size > 1){
+            deleteLinearLayout.setOnClickListener(this)
+            deleteLinearLayout.setVisibility(View.VISIBLE)
+        } else {
+            deleteLinearLayout.setVisibility(View.INVISIBLE)
+        }
 
         bottomSheetDialog = BottomSheetDialog(context)
         bottomSheetDialog.setContentView(view)
@@ -103,6 +108,7 @@ class DetailImagesSliderAdapter(val items: ArrayList<String>, val context: Conte
                     bottomSheetDialog.dismiss()
                 }
                 R.id.deleteLinearLayout -> {
+                    listener!!.onDeleteClick(currposition)
                     bottomSheetDialog.dismiss()
                 }
             }
