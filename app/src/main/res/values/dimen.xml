@@ -23,7 +23,7 @@
     <dimen name="layout_margin_left">10dp</dimen>
     <dimen name="layout_margin_right">10dp</dimen>
     <dimen name="layout_margin_top">3dp</dimen>
-    <dimen name="layout_margin_top_button">35dp</dimen>
+    <dimen name="layout_margin_top_button">55dp</dimen>
     <dimen name="padding_layout">16dp</dimen>
     <dimen name="button_width">110dp</dimen>
 </resources>

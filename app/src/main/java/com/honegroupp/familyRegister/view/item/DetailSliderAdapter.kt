@@ -14,7 +14,6 @@ import com.squareup.picasso.Picasso
 class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : PagerAdapter(),
     DetailImagesSliderAdapter.OnItemClickerListener {
 
-
     lateinit var imagesSlideViewPager : ViewPager
     var listener: OnItemClickerListener? = null
 
@@ -22,6 +21,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         fun onItemClick(position: Int)
         fun onShareClick(imageView: ImageView)
         fun onDownloadClick(position: Int)
+        fun onDeleteClick(position: Int)
         fun onEditClick(itemKey: String?)
     }
 
@@ -35,10 +35,16 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         listener!!.onDownloadClick(position)
     }
 
-    // on image click in menu
-    override fun onImageClick(position: Int, items: ArrayList<String>) {
+    // on delete click in menu
+    override fun onDeleteClick(position: Int) {
+        listener!!.onDeleteClick(position)
+    }
+
+    // on image click
+    override fun onImageClick(position: Int) {
         listener!!.onItemClick(position)
     }
+
 
     override fun getCount(): Int {
         return items.size

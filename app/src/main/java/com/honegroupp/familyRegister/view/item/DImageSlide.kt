@@ -74,9 +74,14 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
         val builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
 
+        // get position of item clicked in item detail for setting Current page item
+        currPosition = intent.getStringExtra("PositionDetail").toInt()
+
         // set database reference for itemUrls
         dImageFamilyId= intent.getStringExtra("FamilyId")
         dImageItemKey= intent.getStringExtra("ItemKey")
+
+        // path of item
         pathItem = "Family/$dImageFamilyId/items"
         databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
 
@@ -122,10 +127,11 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
                 // only need to set initial dot indicator one time once the itemUrls(urls) is got from database
                 if (itemUrls.size > 0){
                     if (!alreadySet){
-                        addDotsIndicator(0)
+                        mSlideViewPager.currentItem = currPosition
+                        addDotsIndicator(currPosition)
                         alreadySet = true
                     } else{
-                        addDotsIndicator(currPosition)
+                        addDotsIndicator(this@DImageSlide.currPosition)
                     }
                 }
             }
@@ -142,7 +148,7 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
             }
             override fun onPageSelected(position: Int) {
                 addDotsIndicator(position)
-                currPosition = position
+                this@DImageSlide.currPosition = position
             }
 
         })
