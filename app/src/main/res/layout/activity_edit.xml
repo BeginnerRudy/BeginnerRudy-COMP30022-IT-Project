@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -79,15 +79,37 @@
                 android:inputType="textMultiLine" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/itemDate"
+            android:layout_below="@id/itemDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/editItemDateHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/edit_date"
+                android:inputType="textMultiLine"
+                android:textSize="12sp"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/editItemDate"
+                android:padding="@dimen/padding_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="2019/01/01"
+                android:inputType="textMultiLine"
+                android:textSize="20sp"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/editConfirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/itemDescription"
+            android:layout_below="@id/itemDate"
             android:backgroundTint="@color/colorAccent"
             android:text="@string/edit_confirm"
             android:textColor="@color/textColorPrimary" />
     </RelativeLayout>
-</LinearLayout>
+</ScrollView>

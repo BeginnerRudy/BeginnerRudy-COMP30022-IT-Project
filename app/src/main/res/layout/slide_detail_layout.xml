@@ -73,7 +73,7 @@
             <TextView
                 android:layout_width="368dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/releasedate"
+                android:id="@+id/detail_date"
                 android:layout_below="@+id/detail_favorite_button"
                 android:layout_marginLeft="@dimen/layout_margin_left"
                 android:padding="@dimen/padding_layout"
@@ -85,7 +85,7 @@
                 android:layout_width="368dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/detail_desc"
-                android:layout_below="@+id/releasedate"
+                android:layout_below="@+id/detail_date"
                 android:padding="@dimen/padding_layout"
                 android:textSize="20sp"
                 android:text="This is a fasi asjkd askdj askjd askjd aksjdh asdkjh sakjdh asdkjha sdjkhsad jkhsad kasjhkjashd kjashdkjashd askjdha skjashd akjshd akjshd sakjhasd aksjhd asdjkha dkjashd a askjdh asdkjahs askjdh asjdh kjahsd sajdh jkashd akjsdh ."

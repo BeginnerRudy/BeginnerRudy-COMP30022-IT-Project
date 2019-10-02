@@ -1,5 +1,6 @@
 package com.honegroupp.familyRegister.view.item
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.ContextMenu
@@ -7,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
@@ -19,6 +21,8 @@ import com.honegroupp.familyRegister.controller.ItemController.Companion.editIte
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_edit.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ItemEdit : AppCompatActivity(){
 
@@ -56,6 +60,9 @@ class ItemEdit : AppCompatActivity(){
                     .into(editItemImage)
                 findViewById<EditText>(R.id.editName).setText(currItem.itemName)
                 findViewById<EditText>(R.id.editDescription).setText(currItem.itemDescription)
+                findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
+
+                setDatePicker(editItemDate)
 
                 // set on click listener
                 editConfirm.setOnClickListener{
@@ -66,14 +73,18 @@ class ItemEdit : AppCompatActivity(){
 //                    }else if(numberOfImages != imagePathList.size){
 //                        Toast.makeText(this, "Please wait for uploading image", Toast.LENGTH_SHORT).show()
                     }else {
+
+                        // create item to upload to Firebase
                         val updatedItem = Item(
                             itemName = editName.text.toString(),
                             itemDescription = editDescription.text.toString(),
                             itemOwnerUID = currItem.itemOwnerUID,
                             imageURLs = currItem.imageURLs,
-                            isPublic = currItem.isPublic
+                            isPublic = currItem.isPublic,
+                            date = editItemDate.text.toString()
                         )
-                        // upload to update item
+
+                        // upload to Firebase
                         val itemPath =
                             FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/" + "items/" + itemKey
                         val databaseRef = FirebaseDatabase.getInstance().getReference(itemPath)
@@ -87,6 +98,32 @@ class ItemEdit : AppCompatActivity(){
             }
 
         })
+    }
+
+    /**
+     * This method is responsible for setting date picker.
+     * */
+    private fun setDatePicker(textView: TextView) {
+        val cal = Calendar.getInstance()
+        val dateSetListener =
+            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                cal.set(Calendar.YEAR, year)
+                cal.set(Calendar.MONTH, monthOfYear)
+                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+                val sdf = SimpleDateFormat("dd/M/yyyy")
+                textView.text = sdf.format(cal.time)
+
+            }
+
+        textView.setOnClickListener {
+            DatePickerDialog(
+                this, dateSetListener,
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
     }
 
     override fun onCreateContextMenu(
