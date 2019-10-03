@@ -17,6 +17,8 @@ import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListAdapter
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.view.home.ContainerActivity
+import com.honegroupp.familyRegister.view.home.ContainerAdapter
 import com.honegroupp.familyRegister.view.home.ShowTabAdapter
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
@@ -241,7 +243,7 @@ data class Family(
             recyclerView.layoutManager = LinearLayoutManager(mActivity)
 
             // setting one ItemListAdapter
-            val itemListAdapter = ItemListAdapter(items, mActivity)
+            val itemListAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.CATEGORY)
             recyclerView.adapter = itemListAdapter
             itemListAdapter.listener = mActivity
 
@@ -315,7 +317,7 @@ data class Family(
         fun deleteItem(
             uid: String,
             categoryName: String,
-            mActivity: ItemListActivity,
+            mActivity: ContainerActivity,
             itemId: String
         ) {
             val rootPath = "/"
@@ -332,7 +334,7 @@ data class Family(
         private fun callbackDeleteItem(
             uid: String,
             categoryName: String,
-            mActivity: ItemListActivity,
+            mActivity: ContainerActivity,
             itemId: String,
             dataSnapshot: DataSnapshot
         ) {
