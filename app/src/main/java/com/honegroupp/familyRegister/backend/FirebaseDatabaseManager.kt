@@ -172,6 +172,51 @@ class FirebaseDatabaseManager() {
         }
 
         /**
+         * This method is responsible for edit given item to specified path of the database.
+         * */
+        fun UeditItem(
+            item: Item,
+            path: String,
+            items: HashMap<String, Item>,
+            categoryPath: String
+        ) {
+            // reference of family
+            val databaseRef = FirebaseDatabase.getInstance().getReference(path)
+            val itemKey = databaseRef.push().key.toString()
+
+            // add current item to the items Hashmap
+            items[itemKey] = item
+
+            // add current's key to the corresponding category
+            val categoryDatabaseReference =
+                FirebaseDatabase.getInstance().getReference(categoryPath)
+            categoryDatabaseReference.addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                    //Don't ignore errors!
+                    Log.d("TAG", p0.message)
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    // remove listener, since we only want to call this listener once.
+                    categoryDatabaseReference.removeEventListener(this)
+
+                    val category = p0.child("").getValue(Category::class.java) as Category
+                    // add new item key to category and update counts
+                    category.itemKeys.add(itemKey)
+                    category.count = category.itemKeys.size
+
+                    // update category to Firebase
+                    update(categoryPath, category)
+
+                }
+            })
+
+
+            // upload items to the Firebase
+            databaseRef.child("items").setValue(items)
+        }
+
+        /**
          * This method is responsible for uploading given object to specified path of the database.
          * */
         fun update(path: String, obj: Any) {

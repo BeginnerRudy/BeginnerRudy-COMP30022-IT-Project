@@ -46,7 +46,18 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
     private lateinit var databaseReferenceItem: DatabaseReference
     private lateinit var dbListenerItem: ValueEventListener
 
+    private var currPosition: Int = 0
+
     var itemUrls: ArrayList<String> = ArrayList()
+
+    override fun onResume() {
+        super.onResume()
+        // Hide the status bar.
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        actionBar?.hide()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,9 +74,14 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
         val builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
 
+        // get position of item clicked in item detail for setting Current page item
+        currPosition = intent.getStringExtra("PositionDetail").toInt()
+
         // set database reference for itemUrls
         dImageFamilyId= intent.getStringExtra("FamilyId")
         dImageItemKey= intent.getStringExtra("ItemKey")
+
+        // path of item
         pathItem = "Family/$dImageFamilyId/items"
         databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
 
@@ -111,8 +127,11 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
                 // only need to set initial dot indicator one time once the itemUrls(urls) is got from database
                 if (itemUrls.size > 0){
                     if (!alreadySet){
-                        addDotsIndicator(0)
+                        mSlideViewPager.currentItem = currPosition
+                        addDotsIndicator(currPosition)
                         alreadySet = true
+                    } else{
+                        addDotsIndicator(this@DImageSlide.currPosition)
                     }
                 }
             }
@@ -129,6 +148,7 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
             }
             override fun onPageSelected(position: Int) {
                 addDotsIndicator(position)
+                this@DImageSlide.currPosition = position
             }
 
         })
@@ -152,8 +172,10 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
 
             }
 
-            if(mDots.isNotEmpty()){
+            if(position <= mDots.size-1){
                 mDots[position]?.setTextColor(resources.getColor(R.color.colorWhite))
+            } else {
+                mDots[mDots.size-1]?.setTextColor(resources.getColor(R.color.colorWhite))
             }
         }
     }

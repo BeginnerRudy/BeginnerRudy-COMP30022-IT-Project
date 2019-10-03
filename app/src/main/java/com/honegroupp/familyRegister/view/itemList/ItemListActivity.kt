@@ -21,6 +21,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
 
     lateinit var itemListAdapter: ItemListAdapter
     lateinit var uid: String
+    lateinit var familyId: String
     lateinit var path: String
     lateinit var categoryName: String
     var storage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -34,6 +35,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
     override fun onItemClick(position: Int) {
         val intent = Intent(this, DetailSlide::class.java)
         intent.putExtra("UserID", uid)
+        intent.putExtra("FamilyId", familyId)
         intent.putExtra("PositionList", position.toString())
         intent.putExtra("CategoryNameList", categoryName)
         startActivity(intent)
@@ -49,6 +51,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
         //get User ID
         uid = intent.getStringExtra("UserID")
         categoryName = intent.getStringExtra("categoryPath")
+        familyId = intent.getStringExtra("categoryPath")
 
         // add item logic
         ItemListController.addItem(uid, categoryName, this)
