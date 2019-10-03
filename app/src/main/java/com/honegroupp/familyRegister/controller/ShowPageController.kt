@@ -1,7 +1,6 @@
 package com.honegroupp.familyRegister.controller
 
 import android.widget.ImageButton
-import androidx.appcompat.app.AppCompatActivity
 import com.honegroupp.familyRegister.model.Family
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.view.home.HomeActivity

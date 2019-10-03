@@ -7,6 +7,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ItemListController
 import com.honegroupp.familyRegister.view.item.DetailSlide
+import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 
 /**
  * This class is responsible for the logic of activities which contains a list of items.
@@ -33,9 +34,11 @@ open class ContainerActivity : AppCompatActivity(), ContainerAdapter.OnItemClick
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_item_list)
         //get User ID
         uid = intent.getStringExtra("UserID")
-        categoryName = intent.getStringExtra("categoryPath")
+
+        if (this is ItemListActivity) {
+            categoryName = intent.getStringExtra("categoryPath")
+        }
     }
 }

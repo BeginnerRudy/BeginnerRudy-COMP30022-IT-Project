@@ -2,10 +2,8 @@ package com.honegroupp.familyRegister.model
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +13,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.view.home.HomeActivity
-import com.honegroupp.familyRegister.view.itemList.ItemListAdapter
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.view.home.ContainerActivity
 import com.honegroupp.familyRegister.view.home.ContainerAdapter
@@ -447,7 +444,7 @@ data class Family(
             recyclerView.layoutManager = LinearLayoutManager(mActivity)
 
             // setting one ItemListAdapter
-            val showTabAdapter = ShowTabAdapter(items, mActivity)
+            val showTabAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.SHOWPAGE)
             recyclerView.adapter = showTabAdapter
 
             // clear items once retrieve item from the database

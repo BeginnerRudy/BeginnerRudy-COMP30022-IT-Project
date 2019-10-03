@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ShowPageController
 import com.honegroupp.familyRegister.model.Item
-import com.honegroupp.familyRegister.view.itemList.ItemListAdapter
 import com.squareup.picasso.Picasso
 
 /**
