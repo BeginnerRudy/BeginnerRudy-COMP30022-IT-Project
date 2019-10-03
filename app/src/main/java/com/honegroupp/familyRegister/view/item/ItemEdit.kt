@@ -63,12 +63,9 @@ class ItemEdit : AppCompatActivity() {
                         .child("members")
                         .getValue(t) as ArrayList<String>
 
-                Log.d("ccccfamily", currFamilyMembers.toString())
-
                 // get users username in family, prepare for pass down
                 var userNames: Array<String> = emptyArray()
                 val usersHashMap:HashMap<String, String> = HashMap()
-
                 p0.child("Users").children.forEach {
                     val currUserUploads = it.getValue(User::class.java) as User
 
@@ -77,10 +74,6 @@ class ItemEdit : AppCompatActivity() {
                         userNames = userNames.plus(currUserUploads.username)
                     }
                 }
-                Log.d("ccccfamilyusers", userNames.toString())
-                Log.d("ccccfamilyhashmap", usersHashMap.toString())
-
-
 
                 // set current item to view
                 Picasso.get()
@@ -92,6 +85,8 @@ class ItemEdit : AppCompatActivity() {
                 findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
 
                 // set position click
+                val passwordLocation = "0"
+                var receivePassword = ""
                 edit_location_layout.setOnClickListener(){
                     toast("clikkkkkkk", Toast.LENGTH_SHORT)
                 }

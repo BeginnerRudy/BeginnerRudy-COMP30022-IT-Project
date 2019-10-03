@@ -40,7 +40,11 @@ data class Item(
 
     @set:PropertyName("date")
     @get:PropertyName("date")
-    var date: String = ""
+    var date: String = "",
+
+    @set:PropertyName("showPageUids")
+    @get:PropertyName("showPageUids")
+    var ShowPageUids: HashMap<String, String> = HashMap()
 
 ) {
     /*This is the primary constructor to create an item instance*/

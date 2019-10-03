@@ -28,10 +28,15 @@ import java.io.File
 import java.io.FileOutputStream
 
 class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener{
+    companion object {
+        const val ALL_PAGE_SIGNAL = -1
+        const val SHOW_PAGE_SIGNAL = -2
+        const val CATEGORY_SIGNAL = 0
+
+        private const val STORAGE_PERMISSION_CODE: Int = 1000
+    }
 
     private var downloadUrl :String = ""
-
-    private val STORAGE_PERMISSION_CODE: Int = 1000
 
     lateinit var mSlideViewPager : ViewPager
     lateinit var sliderAdapter: DetailSliderAdapter
@@ -40,17 +45,19 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     lateinit var detailFamilyId: String
 
     lateinit var pathItem: String
+    lateinit var databaseReferenceItem: DatabaseReference
+    lateinit var dbListenerItem: ValueEventListener
+    var itemUploads: ArrayList<Item> = ArrayList()
+
+    var isInCategory: Boolean = false
     lateinit var pathCategory: String
+    lateinit var databaseReferenceCategory: DatabaseReference
+    lateinit var dbListenerCategory: ValueEventListener
+    var categoryUploads: ArrayList<Category> = ArrayList()
 
     var storage: FirebaseStorage = FirebaseStorage.getInstance()
 
-    lateinit var databaseReferenceItem: DatabaseReference
-    lateinit var databaseReferenceCategory: DatabaseReference
-    lateinit var dbListenerItem: ValueEventListener
-    lateinit var dbListenerCategory: ValueEventListener
 
-    var itemUploads: ArrayList<Item> = ArrayList()
-    var categoryUploads: ArrayList<Category> = ArrayList()
 
     // open Detail Image page when image is clicked
     override fun onItemClick(position: Int) {
@@ -139,6 +146,9 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
         // get position of current category for setting Current page item
         val categoryIndexList= intent.getStringExtra("CategoryNameList").toInt()
+        if (categoryIndexList >= CATEGORY_SIGNAL ){
+            isInCategory = true
+        }
 
         // get position of current category for setting Current page item
         detailFamilyId= intent.getStringExtra("FamilyId")
@@ -149,37 +159,38 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         mSlideViewPager.adapter = sliderAdapter
         sliderAdapter.listener = this@DetailSlide
 
-        // initialise database References, Item and Categories path cannot be get before the family id is get
-        databaseReferenceItem = FirebaseDatabase.getInstance().getReference("")
-        databaseReferenceCategory = FirebaseDatabase.getInstance().getReference("")
-
         // whether item position is already set, View Pager pages cannot be set until it is ready
         var alreadySet = false
 
+        // database Reference for Item
         pathItem = "Family/$detailFamilyId/items"
-        pathCategory = "Family/$detailFamilyId/categories"
-
-        // database Reference for Item & Category
         databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
-        databaseReferenceCategory = FirebaseDatabase.getInstance().getReference(pathCategory)
 
-        // listener for category on firebase, realtime change categories(categoryUploads)
-        dbListenerCategory = databaseReferenceCategory.addValueEventListener(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-                toast(p0.message, Toast.LENGTH_SHORT)
-            }
+        // get category information if this activity is activated in category page
+        if (isInCategory) {
+            // database Reference for Category
+            pathCategory = "Family/$detailFamilyId/categories"
+            databaseReferenceCategory = FirebaseDatabase.getInstance().getReference(pathCategory)
 
-            override fun onDataChange(p0: DataSnapshot) {
-                categoryUploads.clear()
+            // listener for category on firebase, realtime change categories(categoryUploads)
+            dbListenerCategory =
+                databaseReferenceCategory.addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                        toast(p0.message, Toast.LENGTH_SHORT)
+                    }
 
-                // get all categories and put into categories(categoryUploads)
-                p0.children.forEach {
-                    val currCategoryUpload = it.getValue(Category::class.java) as Category
-                    categoryUploads.add(currCategoryUpload)
-                }
-                sliderAdapter.notifyDataSetChanged()
-            }
-        })
+                    override fun onDataChange(p0: DataSnapshot) {
+                        categoryUploads.clear()
+
+                        // get all categories and put into categories(categoryUploads)
+                        p0.children.forEach {
+                            val currCategoryUpload = it.getValue(Category::class.java) as Category
+                            categoryUploads.add(currCategoryUpload)
+                        }
+                        sliderAdapter.notifyDataSetChanged()
+                    }
+                })
+        }
 
         // listener for items on firebase, realtime change items(itemUploads)
         dbListenerItem = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
@@ -199,14 +210,21 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
                     // wait for categories(categoryUploads) is get from database
                     if (categoryUploads.size != 0){
-                        // check item in current category
-                        if (currItemUpload.key in categoryUploads[categoryIndexList].itemKeys){
-                            // check item is visible, if not check user is owner
-                            if (currItemUpload.isPublic) {
-                                Log.d("ooonDataChangeItem",currItemUpload.itemName)
-                                itemUploads.add(currItemUpload)
-                            } else if (currItemUpload.itemOwnerUID == detailUserId){
-                                Log.d("ooonDataChangeItem",currItemUpload.itemName)
+
+                        if (isInCategory) {
+                            // check item in current category
+                            if (currItemUpload.key in categoryUploads[categoryIndexList].itemKeys){
+                                // check item is visible, if not check user is owner
+                                if (currItemUpload.isPublic) {
+                                    itemUploads.add(currItemUpload)
+                                } else if (currItemUpload.itemOwnerUID == detailUserId){
+                                    itemUploads.add(currItemUpload)
+                                }
+                            }
+                        } else if (categoryIndexList == ALL_PAGE_SIGNAL) {
+                            itemUploads.add(currItemUpload)
+                        } else if (categoryIndexList == SHOW_PAGE_SIGNAL){
+                            if (detailUserId in currItemUpload.ShowPageUids.keys){
                                 itemUploads.add(currItemUpload)
                             }
                         }
@@ -328,7 +346,9 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     override fun onDestroy() {
         super.onDestroy()
         databaseReferenceItem.removeEventListener(dbListenerItem)
-        databaseReferenceCategory.removeEventListener(dbListenerCategory)
+        if (isInCategory){
+            databaseReferenceCategory.removeEventListener(dbListenerCategory)
+        }
     }
 
     fun toast(msg: String, duration: Int) {
