@@ -19,6 +19,7 @@ class FirebaseDatabaseManager() {
     companion object {
         val USER_PATH = "/Users/"
         val FAMILY_PATH = "/Family/"
+        val NOTHING = "=_="
 
         /**
          * This method is responsible for retrieving object from the database depends on given path
@@ -223,6 +224,19 @@ class FirebaseDatabaseManager() {
             val databaseRef = FirebaseDatabase.getInstance().getReference(path)
 
             databaseRef.child("").setValue(obj)
+        }
+
+        /**
+         * This method is responsible for getting family id by uid
+         *
+         * */
+        fun getFamilyIDByUID(uid: String, dataSnapshot: DataSnapshot): String {
+            val currFamilyId =
+                dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).child("familyId").getValue(
+                    String::class.java
+                ) as String
+
+            return currFamilyId
         }
 
     }
