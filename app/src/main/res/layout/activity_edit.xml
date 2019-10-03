@@ -103,7 +103,7 @@
                 android:paddingLeft="@dimen/layout_margin_left"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Visibility"
+                android:text="@string/edit_visibility"
                 android:inputType="textMultiLine"
                 android:layout_centerVertical="true"
                 android:textSize="18sp"/>
@@ -121,10 +121,54 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/edit_location"
+            android:layout_below="@id/edit_snipper_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/edit_location_text"
+                android:paddingLeft="@dimen/layout_margin_left"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/edit_location"
+                android:inputType="textMultiLine"
+                android:layout_centerVertical="true"
+                android:textSize="18sp"/>
+
+            <RelativeLayout
+                android:id="@+id/edit_location_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="43dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_toEndOf="@+id/edit_location_text">
+
+                <TextView
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/layout_margin_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Enter password to view" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/layout_margin_right"
+                    app:srcCompat="@drawable/ic_edit_chevron_arrow_right" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/edit_pass_down"
+            android:paddingTop="@dimen/layout_margin_top_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edit_snipper_bar"
+            android:layout_below="@id/edit_location"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="@dimen/layout_margin_right">
 
@@ -134,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:backgroundTint="@color/colorAccent"
-                android:text="@string/edit_passdown_btn"
+                android:text="@string/edit_pass_down_btn"
                 android:textColor="@color/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -144,7 +188,7 @@
                 android:layout_below="@id/editPassDownBtn"
                 android:layout_alignParentEnd="true"
                 android:inputType="textMultiLine|textNoSuggestions"
-                android:text="@string/edit_passdown_to"
+                android:text="@string/edit_pass_down_to"
                 android:textSize="18sp" />
 
         </RelativeLayout>

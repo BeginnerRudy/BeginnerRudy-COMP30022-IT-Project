@@ -63,12 +63,9 @@ class ItemEdit : AppCompatActivity() {
                         .child("members")
                         .getValue(t) as ArrayList<String>
 
-                Log.d("ccccfamily", currFamilyMembers.toString())
-
                 // get users username in family, prepare for pass down
                 var userNames: Array<String> = emptyArray()
                 val usersHashMap:HashMap<String, String> = HashMap()
-
                 p0.child("Users").children.forEach {
                     val currUserUploads = it.getValue(User::class.java) as User
 
@@ -77,10 +74,6 @@ class ItemEdit : AppCompatActivity() {
                         userNames = userNames.plus(currUserUploads.username)
                     }
                 }
-                Log.d("ccccfamilyusers", userNames.toString())
-                Log.d("ccccfamilyhashmap", usersHashMap.toString())
-
-
 
                 // set current item to view
                 Picasso.get()
@@ -90,6 +83,13 @@ class ItemEdit : AppCompatActivity() {
                 findViewById<EditText>(R.id.editName).setText(currItem.itemName)
                 findViewById<EditText>(R.id.editDescription).setText(currItem.itemDescription)
                 findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
+
+                // set position click
+                val passwordLocation = "0"
+                var receivePassword = ""
+                edit_location_layout.setOnClickListener(){
+                    toast("clikkkkkkk", Toast.LENGTH_SHORT)
+                }
 
                 // set current item Owner
                 var currItemOwner = currItem.itemOwnerUID
@@ -108,7 +108,7 @@ class ItemEdit : AppCompatActivity() {
                     mBuilder.setNeutralButton("Cancel") { dialog, which ->
                         // Do something when click the neutral button
                         currItemOwner = currItem.itemOwnerUID
-                        findViewById<TextView>(R.id.edit_passdown_to).setText(R.string.edit_passdown_to)
+                        findViewById<TextView>(R.id.edit_passdown_to).setText(R.string.edit_pass_down_to)
                         dialog.cancel()
                     }
 
@@ -198,5 +198,9 @@ class ItemEdit : AppCompatActivity() {
                 cal.get(Calendar.DAY_OF_MONTH)
             ).show()
         }
+    }
+
+    fun toast(msg: String, duration: Int) {
+        Toast.makeText(this, msg, duration).show()
     }
 }
