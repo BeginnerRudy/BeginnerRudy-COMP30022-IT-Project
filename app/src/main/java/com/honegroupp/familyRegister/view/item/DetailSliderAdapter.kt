@@ -11,7 +11,7 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 
-class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : PagerAdapter(),
+class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val context: Context) : PagerAdapter(),
     DetailImagesSliderAdapter.OnItemClickerListener {
 
     lateinit var imagesSlideViewPager : ViewPager
@@ -24,27 +24,6 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         fun onDeleteClick(position: Int)
         fun onEditClick(itemKey: String?)
     }
-
-    // on share click in menu
-    override fun onShareClick(imageView: ImageView) {
-        listener!!.onShareClick(imageView)
-    }
-
-    // on download click in menu
-    override fun onDownloadClick(position: Int) {
-        listener!!.onDownloadClick(position)
-    }
-
-    // on delete click in menu
-    override fun onDeleteClick(position: Int) {
-        listener!!.onDeleteClick(position)
-    }
-
-    // on image click
-    override fun onImageClick(position: Int) {
-        listener!!.onItemClick(position)
-    }
-
 
     override fun getCount(): Int {
         return items.size
@@ -65,7 +44,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
 
         // set slides of images
         imagesSlideViewPager = view.findViewById(R.id.detail_images_slideViewPager)
-        var imagesSliderAdapter = DetailImagesSliderAdapter(items[position].imageURLs, context)
+        var imagesSliderAdapter = DetailImagesSliderAdapter(items[position].imageURLs, items[position].itemOwnerUID==userId, context)
         imagesSlideViewPager.adapter = imagesSliderAdapter
         imagesSliderAdapter.listener = this
 
@@ -86,12 +65,37 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
 
 
         // click on edit button
-        view.findViewById<Button>(R.id.detail_edit).setOnClickListener{
-            listener!!.onEditClick(items[position].key)
+        if (items[position].itemOwnerUID == userId){
+            view.findViewById<Button>(R.id.detail_edit).setOnClickListener{
+                listener!!.onEditClick(items[position].key)
+            }
+        } else {
+            view.findViewById<Button>(R.id.detail_edit).visibility = View.INVISIBLE
         }
 
         container.addView(view)
         return view
+    }
+
+
+    // on share click in menu
+    override fun onShareClick(imageView: ImageView) {
+        listener!!.onShareClick(imageView)
+    }
+
+    // on download click in menu
+    override fun onDownloadClick(position: Int) {
+        listener!!.onDownloadClick(position)
+    }
+
+    // on delete click in menu
+    override fun onDeleteClick(position: Int) {
+        listener!!.onDeleteClick(position)
+    }
+
+    // on image click
+    override fun onImageClick(position: Int) {
+        listener!!.onItemClick(position)
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {

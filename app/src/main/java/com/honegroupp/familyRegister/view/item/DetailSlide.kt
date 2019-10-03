@@ -131,12 +131,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         val builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
 
-        // adapter of items for ViewPager, set listener in adapter for listening click action
-        mSlideViewPager = findViewById(R.id.detail_slideViewPager)
-        sliderAdapter = DetailSliderAdapter(itemUploads,this)
-        mSlideViewPager.adapter = sliderAdapter
-        sliderAdapter.listener = this@DetailSlide
-
         // get position of item clicked in item list for setting Current page item
         val positionList = intent.getStringExtra("PositionList").toInt()
 
@@ -149,6 +143,11 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         // get position of current category for setting Current page item
         detailFamilyId= intent.getStringExtra("FamilyId")
 
+        // adapter of items for ViewPager, set listener in adapter for listening click action
+        mSlideViewPager = findViewById(R.id.detail_slideViewPager)
+        sliderAdapter = DetailSliderAdapter(itemUploads, detailUserId, this)
+        mSlideViewPager.adapter = sliderAdapter
+        sliderAdapter.listener = this@DetailSlide
 
         // initialise database References, Item and Categories path cannot be get before the family id is get
         databaseReferenceItem = FirebaseDatabase.getInstance().getReference("")

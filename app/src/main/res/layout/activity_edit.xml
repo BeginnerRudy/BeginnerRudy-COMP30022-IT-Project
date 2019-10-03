@@ -120,16 +120,36 @@
                 android:visibility="visible" />
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/editPassDown"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="30dp"
+        <RelativeLayout
+            android:id="@+id/edit_pass_down"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/edit_snipper_bar"
-            android:backgroundTint="@color/colorAccent"
-            android:text="PASSDOWN"
-            android:textColor="@color/textColorPrimary" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/layout_margin_right">
+
+            <Button
+                android:id="@+id/editPassDownBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:backgroundTint="@color/colorAccent"
+                android:text="@string/edit_passdown_btn"
+                android:textColor="@color/textColorPrimary" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/edit_passdown_to"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@id/editPassDownBtn"
+                android:layout_alignParentEnd="true"
+                android:inputType="textMultiLine|textNoSuggestions"
+                android:text="@string/edit_passdown_to"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+
 
         <Button
             android:id="@+id/editConfirm"
@@ -137,7 +157,7 @@
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/editPassDown"
+            android:layout_below="@id/edit_pass_down"
             android:backgroundTint="@color/colorAccent"
             android:text="@string/edit_confirm"
             android:textColor="@color/textColorPrimary" />

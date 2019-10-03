@@ -4,9 +4,6 @@ import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextMenu
-import android.view.MenuItem
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -16,12 +13,15 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
-import com.honegroupp.familyRegister.controller.ItemController.Companion.editItem
 import com.honegroupp.familyRegister.model.Item
+import com.honegroupp.familyRegister.model.User
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_edit.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+import com.google.firebase.database.GenericTypeIndicator
+
 
 class ItemEdit : AppCompatActivity() {
 
@@ -30,8 +30,8 @@ class ItemEdit : AppCompatActivity() {
         setContentView(R.layout.activity_edit)
 
         // get extra from Item Detail(DetailSlide)
-        val itemKey = intent.getStringExtra("ItemKey")
-        val currFamilyId = intent.getStringExtra("FamilyId")
+        val itemKey = intent.getStringExtra("ItemKey").toString()
+        val currFamilyId = intent.getStringExtra("FamilyId").toString()
 
         // retrieve Item
         lateinit var currItem: Item
@@ -44,6 +44,9 @@ class ItemEdit : AppCompatActivity() {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
+                val t = object : GenericTypeIndicator<ArrayList<String>>() {}
+
+                // get current Item from data snap shot
                 currItem =
                     p0
                         .child(FirebaseDatabaseManager.FAMILY_PATH)
@@ -51,6 +54,33 @@ class ItemEdit : AppCompatActivity() {
                         .child("items")
                         .child(itemKey)
                         .getValue(Item::class.java) as Item
+
+                // get current family members from data snap shot
+                var currFamilyMembers =
+                    p0
+                        .child(FirebaseDatabaseManager.FAMILY_PATH)
+                        .child(currFamilyId)
+                        .child("members")
+                        .getValue(t) as ArrayList<String>
+
+                Log.d("ccccfamily", currFamilyMembers.toString())
+
+                // get users username in family, prepare for pass down
+                var userNames: Array<String> = emptyArray()
+                val usersHashMap:HashMap<String, String> = HashMap()
+
+                p0.child("Users").children.forEach {
+                    val currUserUploads = it.getValue(User::class.java) as User
+
+                    if (it.key in currFamilyMembers && it.key != currItem.itemOwnerUID){
+                        usersHashMap[currUserUploads.username] = it.key.toString()
+                        userNames = userNames.plus(currUserUploads.username)
+                    }
+                }
+                Log.d("ccccfamilyusers", userNames.toString())
+                Log.d("ccccfamilyhashmap", usersHashMap.toString())
+
+
 
                 // set current item to view
                 Picasso.get()
@@ -61,9 +91,30 @@ class ItemEdit : AppCompatActivity() {
                 findViewById<EditText>(R.id.editDescription).setText(currItem.itemDescription)
                 findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
 
+                // set current item Owner
+                var currItemOwner = currItem.itemOwnerUID
+
                 // set passDown dialog
-                editPassDown.setOnClickListener(){
-                    createAltertDialog()
+                editPassDownBtn.setOnClickListener(){
+                    val mBuilder = AlertDialog.Builder(this@ItemEdit)
+                    mBuilder.setTitle("Choose an item").setItems(userNames, DialogInterface.OnClickListener { dialog, which ->
+                        currItemOwner = usersHashMap[userNames[which]].toString()
+                        findViewById<TextView>(R.id.edit_passdown_to).text = userNames[which]
+                        // The 'which' argument contains the index position
+                        // of the selected item
+                    })
+
+                    // Set the neutral/cancel button click listener
+                    mBuilder.setNeutralButton("Cancel") { dialog, which ->
+                        // Do something when click the neutral button
+                        currItemOwner = currItem.itemOwnerUID
+                        findViewById<TextView>(R.id.edit_passdown_to).setText(R.string.edit_passdown_to)
+                        dialog.cancel()
+                    }
+
+                    val mDialog = mBuilder.create()
+                    mDialog.getWindow()?.setBackgroundDrawableResource(R.color.fui_bgAnonymous)
+                    mDialog.show()
                 }
 
                 // set Date picker
@@ -102,7 +153,7 @@ class ItemEdit : AppCompatActivity() {
                         val updatedItem = Item(
                             itemName = editName.text.toString(),
                             itemDescription = editDescription.text.toString(),
-                            itemOwnerUID = currItem.itemOwnerUID,
+                            itemOwnerUID = currItemOwner,
                             imageURLs = currItem.imageURLs,
                             isPublic = spinner.selectedItemPosition == 0,
                             date = editItemDate.text.toString()
@@ -121,25 +172,6 @@ class ItemEdit : AppCompatActivity() {
                 }
             }
         })
-    }
-
-    fun createAltertDialog(){
-        val listItems = arrayOf("Item 1", "Item 2", "Item 3")
-        val mBuilder = AlertDialog.Builder(this@ItemEdit)
-        mBuilder.setTitle("Choose an item").setItems(listItems, DialogInterface.OnClickListener { dialog, which ->
-            // The 'which' argument contains the index position
-            // of the selected item
-        })
-
-        // Set the neutral/cancel button click listener
-        mBuilder.setNeutralButton("Cancel") { dialog, which ->
-            // Do something when click the neutral button
-            dialog.cancel()
-        }
-
-        val mDialog = mBuilder.create()
-        mDialog.getWindow()?.setBackgroundDrawableResource(R.color.fui_bgAnonymous)
-        mDialog.show()
     }
 
     /**
