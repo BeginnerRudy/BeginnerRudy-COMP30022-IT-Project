@@ -45,6 +45,9 @@
     <string name="detail_delete">Delete</string>
     <string name="edit_confirm">CONFIRM CHANGE</string>
     <string name="edit_date">Click to change date time</string>
+    <string name="edit_passdown_btn">PASS DOWN</string>
+    <string name="edit_passdown_to">Pass down To</string>
+
 
     <string-array name="privacy_options">
         <item>Visible by family</item>

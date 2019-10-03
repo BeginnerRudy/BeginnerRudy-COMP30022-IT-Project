@@ -9,7 +9,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.honegroupp.familyRegister.R
 import com.squareup.picasso.Picasso
 
-class DetailImagesSliderAdapter(val items: ArrayList<String>, val context: Context) : PagerAdapter(), View.OnClickListener {
+class DetailImagesSliderAdapter(val items: ArrayList<String>, val canDelete: Boolean, val context: Context) : PagerAdapter(), View.OnClickListener {
 
     var listener: OnItemClickerListener? = null
     lateinit var currSlideImageView: ImageView
@@ -81,7 +81,7 @@ class DetailImagesSliderAdapter(val items: ArrayList<String>, val context: Conte
         shareLinearLayout.setOnClickListener(this)
         downloadLinearLayout.setOnClickListener(this)
 
-        if (items.size > 1){
+        if (items.size > 1 && canDelete){
             deleteLinearLayout.setOnClickListener(this)
             deleteLinearLayout.setVisibility(View.VISIBLE)
         } else {
