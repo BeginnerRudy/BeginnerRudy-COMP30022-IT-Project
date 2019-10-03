@@ -17,6 +17,7 @@ import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListAdapter
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.view.home.ShowTabAdapter
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 
@@ -397,6 +398,86 @@ data class Family(
                 .setValue(itemCount - 1)
 
 
+        }
+
+
+        /**
+         * This method is responsible for showing all items in the show page
+         *
+         * */
+        fun displayShowPage(mActivity: HomeActivity, uid: String) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
+                callbackDisplayShowPage(
+                    uid,
+                    mActivity,
+                    d
+                )
+            }
+        }
+
+        /**
+         * This method is the callback for showing all items in the show page
+         * */
+        private fun callbackDisplayShowPage(
+            uid: String,
+            mActivity: HomeActivity,
+            dataSnapshot: DataSnapshot
+        ) {
+            // get user's family ID
+            val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+
+            // get items from the family
+            val allItems =
+                dataSnapshot
+                    .child(FirebaseDatabaseManager.FAMILY_PATH)
+                    .child(currFamilyId)
+                    .child("items")
+                    .children
+
+            // set list for liked items
+            val items = ArrayList<Item>()
+
+            val recyclerView = mActivity.findViewById<RecyclerView>(R.id.item_list_recycler_view)
+
+            // Setting the recycler view
+            recyclerView.setHasFixedSize(true)
+            recyclerView.layoutManager = LinearLayoutManager(mActivity)
+
+            // setting one ItemListAdapter
+            val showTabAdapter = ShowTabAdapter(items, mActivity)
+            recyclerView.adapter = showTabAdapter
+
+            // clear items once retrieve item from the database
+            items.clear()
+
+            allItems.forEach {
+                val item = it.getValue(Item::class.java) as Item
+
+                // add it to the items, check item is visible, if not check user is owner
+                if (item.ShowPageUids.contains(uid)) {
+                    item.key = it.key.toString()
+                    items.add(item)
+                }
+
+                // notify the adapter to update
+                showTabAdapter.notifyDataSetChanged()
+                // Make the progress bar invisible
+                mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
+                    View.INVISIBLE
+                mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
+                    View.INVISIBLE
+
+            }
+
+            if (items.isEmpty()) {
+                // Make the progress bar invisible
+                mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
+                    View.INVISIBLE
+
+                mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
+                    View.VISIBLE
+            }
         }
     }
 

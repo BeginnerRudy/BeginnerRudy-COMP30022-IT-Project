@@ -5,8 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.controller.CategoryController
+import com.honegroupp.familyRegister.controller.ShowPageController
 
 
 class ShowTabFragment : Fragment() {
@@ -20,7 +23,13 @@ class ShowTabFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_one, container, false)
+        val view = inflater.inflate(R.layout.activity_item_list, container, false)
+
+        // Show all item liked
+        val homeActivity = activity as HomeActivity
+        ShowPageController.showAllLiked(homeActivity, homeActivity.userID)
+
+        return view
     }
 
-}// Required empty public constructor
+}

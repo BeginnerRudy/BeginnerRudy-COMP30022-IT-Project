@@ -9,6 +9,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <ImageButton
+            android:id="@+id/button_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:src="@android:drawable/star_big_off" />
+
         <ImageView
             android:id="@+id/img_upload"
             android:layout_width="match_parent"

@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.Toast
 import com.google.firebase.database.*
 
@@ -12,6 +13,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.controller.ItemListController
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.view.item.DetailSlide
+import kotlinx.android.synthetic.main.image_item.*
 import kotlin.collections.ArrayList
 
 class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListener {
@@ -56,6 +58,7 @@ class ItemListActivity : AppCompatActivity(), ItemListAdapter.OnItemClickerListe
 
         // show items in the category logic
         ItemListController.showItems(uid, categoryName, this)
+
     }
 
 

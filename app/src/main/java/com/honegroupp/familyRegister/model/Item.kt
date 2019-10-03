@@ -1,7 +1,9 @@
 package com.honegroupp.familyRegister.model
 
 
+import android.widget.ImageButton
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.PropertyName
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import java.util.*
@@ -9,14 +11,6 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 data class Item(
-    @set:PropertyName("familyId")
-    @get:PropertyName("familyId")
-    var familyId: String = "",
-
-    @set:PropertyName("itemId")
-    @get:PropertyName("itemId")
-    var itemId: String = "",
-
     @set:PropertyName("itemName")
     @get:PropertyName("itemName")
     var itemName: String = "",
@@ -40,7 +34,11 @@ data class Item(
 
     @set:PropertyName("date")
     @get:PropertyName("date")
-    var date: String = ""
+    var date: String = "",
+
+    @set:PropertyName("showPageUids")
+    @get:PropertyName("showPageUids")
+    var ShowPageUids: HashMap<String, String> = HashMap()
 
 ) {
     /*This is the primary constructor to create an item instance*/
@@ -70,10 +68,7 @@ data class Item(
      * */
     private fun callbackStore(uid: String, categoryName: String, dataSnapshot: DataSnapshot) {
         // get user's family ID
-        val currFamilyId =
-            dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).child("familyId").getValue(
-                String::class.java
-            ) as String
+        val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
 
         //get last index
         val familyItemsDataSnapshot =
@@ -113,10 +108,7 @@ data class Item(
      * */
     private fun callbackEdit(uid: String, categoryName: String, dataSnapshot: DataSnapshot) {
         // get user's family ID
-        val currFamilyId =
-            dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).child("familyId").getValue(
-                String::class.java
-            ) as String
+        val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
 
         //get last index
         val familyItemsDataSnapshot =
@@ -138,5 +130,45 @@ data class Item(
         val categoryPath =
             FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/" + "categories/" + categoryName + "/"
         FirebaseDatabaseManager.UeditItem(this, path, items, categoryPath)
+    }
+
+    /**
+     * This method is responsible for adding or removing item from the user's show page.
+     *
+     * */
+    fun manageShowItem(showButton: ImageButton, uid: String) {
+        val rootPath = "/"
+        FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
+            callbackManageShowItem(showButton, uid, d)
+        }
+    }
+
+    /**
+     * This method is the callback for adding or removing item from the user's show page.
+     *
+     * */
+    private fun callbackManageShowItem(
+        showButton: ImageButton,
+        uid: String,
+        dataSnapshot: DataSnapshot
+    ) {
+        // get user's family ID
+        val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+
+        // First check whether this user's uid in the item's showPageUids
+        val showPageUidsPath =
+            "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/items/$key/showPageUids/"
+        val isInItemShowPageUids = dataSnapshot.child(showPageUidsPath).hasChild(uid)
+
+        // if it is not in the showPageUids, then the user now want to click to add it in
+        if (!isInItemShowPageUids) {
+            // add this user's uid
+            FirebaseDatabase.getInstance().getReference(showPageUidsPath).child(uid)
+                .setValue(FirebaseDatabaseManager.NOTHING)
+        } else {
+            // remove user's uid
+            FirebaseDatabase.getInstance().getReference(showPageUidsPath).child(uid).removeValue()
+        }
+
     }
 }

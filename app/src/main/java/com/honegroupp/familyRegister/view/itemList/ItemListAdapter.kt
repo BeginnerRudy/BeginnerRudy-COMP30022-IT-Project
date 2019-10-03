@@ -3,15 +3,20 @@ package com.honegroupp.familyRegister.view.itemList
 import android.content.Context
 import android.util.Log
 import android.view.*
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.controller.ShowPageController
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.image_item.*
+import kotlinx.android.synthetic.main.image_item.view.*
 
-class ItemListAdapter(val items: ArrayList<Item>, val mContext: Context) :
+class ItemListAdapter(val items: ArrayList<Item>, val mContext: ItemListActivity) :
     RecyclerView.Adapter<ItemListAdapter.ImageViewHolder>() {
 
     var listener: OnItemClickerListener? = null
@@ -33,7 +38,20 @@ class ItemListAdapter(val items: ArrayList<Item>, val mContext: Context) :
             .fit()
             .centerCrop()
             .into(holder.imageView)
-        Log.d("url000", currItem.imageURLs[0])
+
+
+        // Add logic for show page
+        val showButton = holder.showButton
+
+        showButton.setOnClickListener {
+            ShowPageController.manageShow(showButton, currItem, mContext.uid)
+        }
+
+        // if this user add this item to the show page, turn on the star
+        if (currItem.ShowPageUids.containsKey(mContext.uid)){
+            showButton.setImageResource(android.R.drawable.star_big_on)
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -58,6 +76,8 @@ class ItemListAdapter(val items: ArrayList<Item>, val mContext: Context) :
         val textViewName: TextView = viewItem.findViewById(R.id.txt_name)
 
         val imageView: ImageView = viewItem.findViewById(R.id.img_upload)
+
+        val showButton: ImageButton = viewItem.findViewById(R.id.button_show)
 
         init {
             viewItem.setOnClickListener(this)
@@ -86,7 +106,7 @@ class ItemListAdapter(val items: ArrayList<Item>, val mContext: Context) :
             p2: ContextMenu.ContextMenuInfo?
         ) {
             p0?.setHeaderTitle("Select Action")
-            val delete = p0?.add(Menu.NONE, 1, 1, "Do Delete: ")
+            val delete = p0?.add(Menu.NONE, 1, 1, R.string.delete_from_this_category)
 
 
             delete?.setOnMenuItemClickListener(this)
