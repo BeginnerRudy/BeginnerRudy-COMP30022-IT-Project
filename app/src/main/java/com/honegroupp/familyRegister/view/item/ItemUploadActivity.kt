@@ -8,8 +8,6 @@ import com.honegroupp.familyRegister.R
 import kotlinx.android.synthetic.main.item_upload_page.*
 import android.app.Activity
 import android.net.Uri
-import android.opengl.Visibility
-import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import com.google.firebase.storage.FirebaseStorage
@@ -17,19 +15,15 @@ import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.honegroupp.familyRegister.controller.ItemController.Companion.createItem
 import com.honegroupp.familyRegister.view.itemList.ItemGridAdapter
-import java.util.*
 import kotlin.collections.ArrayList
-
-import android.view.WindowManager
-import android.content.DialogInterface
-
-import android.app.AlertDialog
-import android.view.Gravity
-import android.widget.PopupWindow
-import android.content.Context.LAYOUT_INFLATER_SERVICE
-import androidx.core.content.ContextCompat.getSystemService
-import android.view.LayoutInflater
-
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
+import androidx.annotation.RequiresApi
+import java.io.ByteArrayOutputStream
+import android.provider.MediaStore
+import android.graphics.BitmapFactory
+import com.honegroupp.familyRegister.utility.CompressionUtil
 
 
 class ItemUploadActivity : AppCompatActivity(){
@@ -99,7 +93,8 @@ class ItemUploadActivity : AppCompatActivity(){
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
-    @SuppressLint("ResourceType")
+    @RequiresApi(Build.VERSION_CODES.P)
+    @SuppressLint("ResourceType", "NewApi")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -121,8 +116,33 @@ class ItemUploadActivity : AppCompatActivity(){
 
 
                             for (i in 0 until count) {
-                                val uri = data.getClipData()!!.getItemAt(i).uri
+                                var uri = data.getClipData()!!.getItemAt(i).uri
                                 if (uri != null) {
+
+                                    //compress the image
+
+
+
+
+
+//                                    val bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(this.contentResolver, uri))
+//
+//
+//                                    val bytes = ByteArrayOutputStream()
+//
+//
+//                                    bitmap.compress(Bitmap.CompressFormat.PNG, 10, bytes)
+//                                    val bitmapdata = bytes.toByteArray()
+//                                    val newBitmap  = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.size);
+//
+//
+//                                    //get compressed image
+//                                    val path = MediaStore.Images.Media.insertImage(this.getContentResolver(), newBitmap, "Title", null);
+//                                    val compressedUri = Uri.parse(path)
+
+//                                    compress the image
+//                                    val compressedUri = CompressionUtil.compressImage(uri,this)
+
                                     //add into Uri List
                                     allImageUri.add(uri)
                                     allUris.add(uri)
@@ -165,23 +185,6 @@ class ItemUploadActivity : AppCompatActivity(){
         }
     }
 
-//    private fun uploadtofirebase(selectedImage: Uri) {
-//        val uploadPath = " "
-//        val ref =
-//            FirebaseStorage.getInstance().reference.child(uploadPath + System.currentTimeMillis())
-//        var uploadTask: StorageTask<UploadTask.TaskSnapshot>? = ref.putFile(selectedImage!!)
-//            .addOnSuccessListener {
-//                //add item logic
-//
-//                ref.downloadUrl.addOnCompleteListener() { taskSnapshot ->
-//                    var url = taskSnapshot.result
-//                    this.imagePathList.add(url.toString())
-//
-//
-//
-//                }
-//            }
-//    }
 
 
    /*remove already selected items from the list, update the view
@@ -208,13 +211,13 @@ class ItemUploadActivity : AppCompatActivity(){
 
         }else {
             //upload uri to firebase
-            uploadtofirebase(allImageUri, categoryName)
+            uploadToFirebase(allImageUri, categoryName)
         }
 
     }
 
-    @SuppressLint("ResourceType")
-    private fun uploadtofirebase(allImageUri: ArrayList<Uri>, categoryName:String) {
+
+    private fun uploadToFirebase(allImageUri: ArrayList<Uri>, categoryName:String) {
         if (allImageUri.size == 0){
             Toast.makeText(this, "All images are uploaded",Toast.LENGTH_SHORT).show()
             //upload the item
@@ -230,7 +233,14 @@ class ItemUploadActivity : AppCompatActivity(){
                     .reference.child(uploadPath + System.currentTimeMillis())
 
 
-            var uploadTask: StorageTask<UploadTask.TaskSnapshot>? = ref.putFile(allImageUri[0])
+            val uri = allImageUri[0]
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            val bytes = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, CompressionUtil.IMAGA_QUALITY, bytes)
+            val data = bytes.toByteArray()
+
+
+            var uploadTask: StorageTask<UploadTask.TaskSnapshot>? = ref.putBytes(data)
                 .addOnSuccessListener {
 
                     allImageUri.removeAt(0)
@@ -241,15 +251,7 @@ class ItemUploadActivity : AppCompatActivity(){
                         this.imagePathList.add(url.toString())
 
                         Toast.makeText(this, allImageUri.size.toString(),Toast.LENGTH_SHORT).show()
-
-                        // progress Bar
-//                        val progressBar = findViewById<ProgressBar>(R.id.progressBarRound)
-//                        progressBar.setProgress(imagePathList.size*100/(imagePathList.size + allImageUri.size))
-
-//                        progressBarText.text = "Uploading" + (imagePathList.size+1).toString()+" of "+(imagePathList.size + allImageUri.size).toString() + " images"
-
-                        //recursively upload
-                        uploadtofirebase(allImageUri,categoryName)
+                        uploadToFirebase(allImageUri,categoryName)
 
                     }
                 }
@@ -257,7 +259,7 @@ class ItemUploadActivity : AppCompatActivity(){
     }
 
     //Update the progress bar and display the progress message
-    fun displayProgress(){
+    private fun displayProgress(){
         val percent = imagePathList.size*100/(imagePathList.size + allImageUri.size)
         progressBarText.text = percent.toString() + " %,  " +
                 getString(R.string.uploading) +

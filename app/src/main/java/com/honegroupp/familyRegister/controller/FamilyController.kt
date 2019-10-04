@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Category
 import com.honegroupp.familyRegister.model.Family
-import com.honegroupp.familyRegister.model.Hash
+import com.honegroupp.familyRegister.utility.Hash
 
 
 /**
