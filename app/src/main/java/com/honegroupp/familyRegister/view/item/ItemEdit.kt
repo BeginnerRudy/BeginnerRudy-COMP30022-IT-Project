@@ -21,9 +21,25 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import com.google.firebase.database.GenericTypeIndicator
+import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationEnterPasswordDialog
+import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationViewDialog
 
 
-class ItemEdit : AppCompatActivity() {
+class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerListener, LocationViewDialog.OnChangeClickListener {
+    override fun clickOnChangeLocation() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    val passwordLocation = "1"
+    var enteredPassword = ""
+    val itemLocation = "Bedside ddtable first drawer"
+    override fun applyPasswords(password: String) {
+        enteredPassword = password
+        if (passwordLocation == enteredPassword) {
+            openLocationViewDialog()
+            toast("Clicked view family", Toast.LENGTH_SHORT)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,11 +101,7 @@ class ItemEdit : AppCompatActivity() {
                 findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
 
                 // set position click
-                val passwordLocation = "0"
-                var receivePassword = ""
-                edit_location_layout.setOnClickListener(){
-                    toast("clikkkkkkk", Toast.LENGTH_SHORT)
-                }
+                edit_location_layout.setOnClickListener { openLocationEnterPasswordDialog() }
 
                 // set current item Owner
                 var currItemOwner = currItem.itemOwnerUID
@@ -97,7 +109,7 @@ class ItemEdit : AppCompatActivity() {
                 // set passDown dialog
                 editPassDownBtn.setOnClickListener(){
                     val mBuilder = AlertDialog.Builder(this@ItemEdit)
-                    mBuilder.setTitle("Choose an item").setItems(userNames, DialogInterface.OnClickListener { dialog, which ->
+                    mBuilder.setTitle("Choose a family member").setItems(userNames, DialogInterface.OnClickListener { dialog, which ->
                         currItemOwner = usersHashMap[userNames[which]].toString()
                         findViewById<TextView>(R.id.edit_passdown_to).text = userNames[which]
                         // The 'which' argument contains the index position
@@ -113,7 +125,7 @@ class ItemEdit : AppCompatActivity() {
                     }
 
                     val mDialog = mBuilder.create()
-                    mDialog.getWindow()?.setBackgroundDrawableResource(R.color.fui_bgAnonymous)
+                    mDialog.window?.setBackgroundDrawableResource(R.color.fui_bgAnonymous)
                     mDialog.show()
                 }
 
@@ -172,6 +184,16 @@ class ItemEdit : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun openLocationEnterPasswordDialog() {
+        val locationEnterPasswordDialog = LocationEnterPasswordDialog()
+        locationEnterPasswordDialog.show(supportFragmentManager, "Location Enter Password Dialog")
+    }
+
+    private fun openLocationViewDialog() {
+        val locationViewDialog = LocationViewDialog(itemLocation)
+        locationViewDialog.show(supportFragmentManager, "Location View Dialog")
     }
 
     /**

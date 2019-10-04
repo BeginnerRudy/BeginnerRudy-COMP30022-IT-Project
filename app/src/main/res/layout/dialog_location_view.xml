@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/view_location_text"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bedside table first drawer"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:textColor="@color/colorWhite"/>
+
+    <Button
+        android:id="@+id/view_location_changeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view_location_text"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/black"
+        android:text="Change"
+        android:textColor="@android:color/white"/>
+
+</RelativeLayout>
