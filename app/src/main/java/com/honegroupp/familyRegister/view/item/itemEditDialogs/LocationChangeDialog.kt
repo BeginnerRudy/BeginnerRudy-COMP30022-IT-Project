@@ -7,14 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import com.honegroupp.familyRegister.R
 
 
-class LocationViewDialog(val itemLocation: String) : AppCompatDialogFragment() {
-    private var listener: OnChangeClickListener? = null
+class LocationChangeDialog(val itemLocation: String) : AppCompatDialogFragment() {
+    private var listener: OnChangeConfirmClickListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,16 +30,17 @@ class LocationViewDialog(val itemLocation: String) : AppCompatDialogFragment() {
         val builder = AlertDialog.Builder(context as Context)
 
         val inflater = activity!!.layoutInflater
-        val view = inflater.inflate(R.layout.dialog_location_view, null)
+        val view = inflater.inflate(R.layout.dialog_location_change, null)
 
-        view.findViewById<TextView>(R.id.view_location_text).text = itemLocation
+        view.findViewById<TextView>(R.id.view_location_change_text).text = itemLocation
 
         builder.setView(view)
             .setTitle(R.string.edit_dialog_location_text)
             .setPositiveButton(R.string.edit_ok) { _, _ -> }
 
-        view.findViewById<Button>(R.id.view_location_changeBtn).setOnClickListener{
-            listener!!.clickOnChangeLocation()
+        view.findViewById<Button>(R.id.view_location_change_confirm_Btn).setOnClickListener{
+            var newLocation = view.findViewById<EditText>(R.id.new_location).text.toString()
+            listener!!.clickOnChangeLocation(newLocation)
             this.dismiss()
         }
 
@@ -49,14 +51,14 @@ class LocationViewDialog(val itemLocation: String) : AppCompatDialogFragment() {
         super.onAttach(context)
 
         try {
-            listener = context as OnChangeClickListener
+            listener = context as OnChangeConfirmClickListener
         } catch (e: ClassCastException) {
             throw ClassCastException(context.toString() + "must implement OnChangeClickListener")
         }
 
     }
 
-    interface OnChangeClickListener {
-        fun clickOnChangeLocation()
+    interface OnChangeConfirmClickListener {
+        fun clickOnChangeLocation(newLocation: String)
     }
 }

@@ -33,8 +33,8 @@ class LocationEnterPasswordDialog : AppCompatDialogFragment() {
         val view = inflater.inflate(R.layout.dialog_location_password_required, null)
 
         builder.setView(view)
-            .setTitle("Password is required for Location")
-            .setNeutralButton("Cancel") { dialog, _ ->
+            .setTitle(R.string.edit_password_required_for_location)
+            .setNeutralButton(R.string.edit_cancel) { dialog, _ ->
                 dialog.cancel()
             }
 

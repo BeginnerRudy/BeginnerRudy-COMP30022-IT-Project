@@ -22,7 +22,7 @@
         android:layout_marginTop="40dp"
         android:layout_centerHorizontal="true"
         android:background="@android:color/black"
-        android:text="Change"
+        android:text="@string/edit_dialog_confirm_change"
         android:textColor="@android:color/white"/>
 
 </RelativeLayout>

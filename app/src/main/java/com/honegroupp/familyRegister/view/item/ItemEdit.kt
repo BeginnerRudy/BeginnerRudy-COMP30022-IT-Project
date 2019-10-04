@@ -21,23 +21,34 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import com.google.firebase.database.GenericTypeIndicator
+import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationChangeDialog
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationEnterPasswordDialog
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationViewDialog
 
 
-class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerListener, LocationViewDialog.OnChangeClickListener {
-    override fun clickOnChangeLocation() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerListener,
+    LocationViewDialog.OnChangeClickListener, LocationChangeDialog.OnChangeConfirmClickListener {
 
     val passwordLocation = "1"
     var enteredPassword = ""
-    val itemLocation = "Bedside ddtable first drawer"
+    var itemLocation = "Bedside ddtable first drawer"
+
+    override fun clickOnChangeLocation(newLocation: String) {
+        itemLocation = newLocation
+        toast(itemLocation, Toast.LENGTH_SHORT)
+        openLocationViewDialog()
+    }
+
+    override fun clickOnChangeLocation() {
+        openLocationChangeDialog()
+    }
+
     override fun applyPasswords(password: String) {
         enteredPassword = password
         if (passwordLocation == enteredPassword) {
             openLocationViewDialog()
-            toast("Clicked view family", Toast.LENGTH_SHORT)
+        } else {
+            toast(getString(R.string.edit_location_password_incorrect), Toast.LENGTH_LONG)
         }
     }
 
@@ -109,7 +120,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                 // set passDown dialog
                 editPassDownBtn.setOnClickListener(){
                     val mBuilder = AlertDialog.Builder(this@ItemEdit)
-                    mBuilder.setTitle("Choose a family member").setItems(userNames, DialogInterface.OnClickListener { dialog, which ->
+                    mBuilder.setTitle(R.string.edit_pass_down_text).setItems(userNames, DialogInterface.OnClickListener { dialog, which ->
                         currItemOwner = usersHashMap[userNames[which]].toString()
                         findViewById<TextView>(R.id.edit_passdown_to).text = userNames[which]
                         // The 'which' argument contains the index position
@@ -117,7 +128,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                     })
 
                     // Set the neutral/cancel button click listener
-                    mBuilder.setNeutralButton("Cancel") { dialog, which ->
+                    mBuilder.setNeutralButton(R.string.edit_cancel) { dialog, which ->
                         // Do something when click the neutral button
                         currItemOwner = currItem.itemOwnerUID
                         findViewById<TextView>(R.id.edit_passdown_to).setText(R.string.edit_pass_down_to)
@@ -194,6 +205,11 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
     private fun openLocationViewDialog() {
         val locationViewDialog = LocationViewDialog(itemLocation)
         locationViewDialog.show(supportFragmentManager, "Location View Dialog")
+    }
+
+    private fun openLocationChangeDialog() {
+        val locationChangeDialog = LocationChangeDialog(itemLocation)
+        locationChangeDialog.show(supportFragmentManager, "Location Change Dialog")
     }
 
     /**
