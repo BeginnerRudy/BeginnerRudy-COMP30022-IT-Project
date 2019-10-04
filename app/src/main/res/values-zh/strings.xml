@@ -36,10 +36,9 @@
     <string name="change_location_password">修改查看物品存放地点的密码</string>
     <string name="account_capital">账户信息</string>
     <string name="type_item_name">请输入物品名称</string>
-    <string name="choose_image">choose an image</string>
+    <string name="choose_image">选择一张图片</string>
     <string name="add_item">add item</string>
     <string name="type_item_description">请输入物品描述</string>
-
     <string name="detail_edit">编辑</string>
     <string name="detail_download">下载</string>
     <string name="detail_share">分享</string>
@@ -48,8 +47,18 @@
     <string name="edit_date">点击更改日期</string>
     <string name="edit_visibility">可见</string>
     <string name="edit_location">存放地点</string>
+    <string name="edit_enter_password_to_view_location">输入密码查看</string>
+    <string name="edit_pass_down_text">选择一个家庭成员</string>
     <string name="edit_pass_down_btn">传承</string>
     <string name="edit_pass_down_to">传给</string>
+    <string name="edit_cancel">取消</string>
+    <string name="edit_password_required_for_location">输入密码查看存放地点</string>
+    <string name="edit_ok">完成</string>
+    <string name="edit_location_password_incorrect">密码不正确</string>
+    <string name="edit_dialog_location_text">存放地点</string>
+    <string name="edit_dialog_new_location">新的地点</string>
+    <string name="edit_dialog_confirm_change">更改</string>
+    <string name="edit_dialog_view_location">查看</string>
 
     <string name="query_hints">物品名称/收藏时间</string>
     <string name="there_is_no_item_in_this_category">此分类为空</string>

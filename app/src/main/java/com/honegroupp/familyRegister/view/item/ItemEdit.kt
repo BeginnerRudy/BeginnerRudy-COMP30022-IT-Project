@@ -21,9 +21,36 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import com.google.firebase.database.GenericTypeIndicator
+import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationChangeDialog
+import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationEnterPasswordDialog
+import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationViewDialog
 
 
-class ItemEdit : AppCompatActivity() {
+class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerListener,
+    LocationViewDialog.OnChangeClickListener, LocationChangeDialog.OnChangeConfirmClickListener {
+
+    val passwordLocation = "1"
+    var enteredPassword = ""
+    var itemLocation = "Bedside ddtable first drawer"
+
+    override fun clickOnChangeLocation(newLocation: String) {
+        itemLocation = newLocation
+        toast(itemLocation, Toast.LENGTH_SHORT)
+        openLocationViewDialog()
+    }
+
+    override fun clickOnChangeLocation() {
+        openLocationChangeDialog()
+    }
+
+    override fun applyPasswords(password: String) {
+        enteredPassword = password
+        if (passwordLocation == enteredPassword) {
+            openLocationViewDialog()
+        } else {
+            toast(getString(R.string.edit_location_password_incorrect), Toast.LENGTH_LONG)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,11 +112,7 @@ class ItemEdit : AppCompatActivity() {
                 findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
 
                 // set position click
-                val passwordLocation = "0"
-                var receivePassword = ""
-                edit_location_layout.setOnClickListener(){
-                    toast("clikkkkkkk", Toast.LENGTH_SHORT)
-                }
+                edit_location_layout.setOnClickListener { openLocationEnterPasswordDialog() }
 
                 // set current item Owner
                 var currItemOwner = currItem.itemOwnerUID
@@ -97,7 +120,7 @@ class ItemEdit : AppCompatActivity() {
                 // set passDown dialog
                 editPassDownBtn.setOnClickListener(){
                     val mBuilder = AlertDialog.Builder(this@ItemEdit)
-                    mBuilder.setTitle("Choose an item").setItems(userNames, DialogInterface.OnClickListener { dialog, which ->
+                    mBuilder.setTitle(R.string.edit_pass_down_text).setItems(userNames, DialogInterface.OnClickListener { dialog, which ->
                         currItemOwner = usersHashMap[userNames[which]].toString()
                         findViewById<TextView>(R.id.edit_passdown_to).text = userNames[which]
                         // The 'which' argument contains the index position
@@ -105,7 +128,7 @@ class ItemEdit : AppCompatActivity() {
                     })
 
                     // Set the neutral/cancel button click listener
-                    mBuilder.setNeutralButton("Cancel") { dialog, which ->
+                    mBuilder.setNeutralButton(R.string.edit_cancel) { dialog, which ->
                         // Do something when click the neutral button
                         currItemOwner = currItem.itemOwnerUID
                         findViewById<TextView>(R.id.edit_passdown_to).setText(R.string.edit_pass_down_to)
@@ -113,7 +136,7 @@ class ItemEdit : AppCompatActivity() {
                     }
 
                     val mDialog = mBuilder.create()
-                    mDialog.getWindow()?.setBackgroundDrawableResource(R.color.fui_bgAnonymous)
+                    mDialog.window?.setBackgroundDrawableResource(R.color.fui_bgAnonymous)
                     mDialog.show()
                 }
 
@@ -172,6 +195,21 @@ class ItemEdit : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun openLocationEnterPasswordDialog() {
+        val locationEnterPasswordDialog = LocationEnterPasswordDialog()
+        locationEnterPasswordDialog.show(supportFragmentManager, "Location Enter Password Dialog")
+    }
+
+    private fun openLocationViewDialog() {
+        val locationViewDialog = LocationViewDialog(itemLocation)
+        locationViewDialog.show(supportFragmentManager, "Location View Dialog")
+    }
+
+    private fun openLocationChangeDialog() {
+        val locationChangeDialog = LocationChangeDialog(itemLocation)
+        locationChangeDialog.show(supportFragmentManager, "Location Change Dialog")
     }
 
     /**
