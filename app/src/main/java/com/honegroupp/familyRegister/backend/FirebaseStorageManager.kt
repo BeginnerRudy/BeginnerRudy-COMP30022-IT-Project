@@ -6,6 +6,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.honegroupp.familyRegister.utility.CompressionUtil
+import com.honegroupp.familyRegister.utility.FilePathUtil
+import com.honegroupp.familyRegister.utility.ImageRotateUtil
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 
 class FirebaseStorageManager{
@@ -29,13 +31,18 @@ class FirebaseStorageManager{
 
                 //convert first image in list to bitmap
                 val uri = allImageUri[0]
+                val path = FilePathUtil.getFilePathFromContentUri(uri, activity)
+                val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
                 val bitmap = MediaStore.Images.Media.getBitmap(activity.contentResolver, uri)
 
                 //decrease the resolution
                 val scaledBitmap = CompressionUtil.scaleDown(bitmap, true)
 
+                //correct the orientation of the bitmap
+                val orientedScaledBitmap = ImageRotateUtil.rotateBitmap(scaledBitmap,orientation)
+
                 //compress the image
-                val data = CompressionUtil.compressImage(scaledBitmap)
+                val data = CompressionUtil.compressImage(orientedScaledBitmap)
 
                 //upload the compressed image
                 var uploadTask: StorageTask<UploadTask.TaskSnapshot>? = ref.putBytes(data)

@@ -1,22 +1,15 @@
 package com.honegroupp.familyRegister.view.itemList
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.view.*
 import android.widget.*
 import android.view.LayoutInflater
 import android.net.Uri
-import android.provider.MediaStore
-import android.widget.Toast.*
-import androidx.loader.content.CursorLoader
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.utility.ImageRotateUtil
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.squareup.picasso.Picasso
-
-import android.app.Activity
-import android.database.Cursor
+import com.honegroupp.familyRegister.utility.FilePathUtil
 
 
 class ItemGridAdapter:BaseAdapter{
@@ -29,7 +22,7 @@ class ItemGridAdapter:BaseAdapter{
         this.allUris = allUris
     }
 
-    @SuppressLint("ResourceType")
+
     override fun getView(position:Int, convertView: View?, parent: ViewGroup?): View {
 
         // Inflate the view
@@ -52,15 +45,14 @@ class ItemGridAdapter:BaseAdapter{
             imageView.setImageResource(R.drawable.ic_add_grey_24dp)
         }else{
 
-            //load the image to view
+            //get the orientation and make sure image are at its original orientation
             val uri = allUris?.get(position)
-            val path = getFilePathFromContentUri(uri!!, context!!)
+            val path = FilePathUtil.getFilePathFromContentUri(uri!!, context!!)
             val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
-            Toast.makeText(context, orientation.toString(),Toast.LENGTH_SHORT).show()
+
+            //load the image the the view
             Picasso.get().load(uri).rotate(orientation).into(imageView)
         }
-
-
 
         imageView.setOnClickListener {
             //press the add button
@@ -113,12 +105,8 @@ class ItemGridAdapter:BaseAdapter{
     }
 
     /*check whether the image view is the last one (add button)*/
-    fun isAddButton(position: Int):Boolean{
-        if (position == count -1){
-            return true
-        }else{
-            return false
-        }
+    private fun isAddButton(position: Int):Boolean{
+        return position == count -1
     }
 
 

@@ -4,12 +4,11 @@ import android.app.Activity
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
-import java.security.MessageDigest
 
 
 class FilePathUtil{
     companion object {
-
+        /*Convert the the uri of file to the absolute path*/
         fun getFilePathFromContentUri(uri: Uri, activity: Activity): String? {
             var path: String? = null
             var image_id: String? = null
