@@ -33,7 +33,6 @@ class SearchMethod{
     private fun callbackInit(mActivity: AppCompatActivity, uid:String, category: Int, listView: ListView, dataSnapshot: DataSnapshot){
 
         var itemList: ArrayList<Item> = ArrayList()
-        var itemCategoryList: ArrayList<Item> = ArrayList()
 
         // get user's family ID
         val currFamilyId =
@@ -45,43 +44,43 @@ class SearchMethod{
         val itemsDataSnapshot =
             dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId).child("items")
 
-        //transfer datasnapshot to arraylist
-        for (itemsDataSnapshot in itemsDataSnapshot.children){
-            itemList.add(
-                itemsDataSnapshot.getValue(
-                    Item::class.java
-                )!!
-            )
-        }
-
+        //when click on category page
         if (category >= DetailSlide.CATEGORY_SIGNAL){
             val itemsKey = dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH)
                 .child(currFamilyId)
-                .child("category")
-                .child(category.toString())
+                .child("categories")
+                .child("$category/")
                 .child("itemKeys")
 
-            for (keyDataSnapshot in itemsKey.children){
+            for (keyDataSnapshot in itemsKey.children) {
                 val key = keyDataSnapshot.getValue(
                     String::class.java
                 )!!
 
-                for (item in itemList){
-                    if (key == item.key){
-                        itemCategoryList.add(item)
-                    }
-                }
+                val newItem = itemsDataSnapshot.child(key).getValue(
+                    Item::class.java
+                )!!
+
+                itemList.add(newItem)
+            }
+
+        }
+        //when click on all page
+        else if (category == DetailSlide.ALL_PAGE_SIGNAL){
+            //transfer datasnapshot to arraylist
+            for (itemsDataSnapshot in itemsDataSnapshot.children){
+                itemList.add(
+                    itemsDataSnapshot.getValue(
+                        Item::class.java
+                    )!!
+                )
             }
         }
-        else if (category == DetailSlide.ALL_PAGE_SIGNAL){
-            itemCategoryList.addAll(itemList)
-        }
-
-
 
         //set adapter to show items
         listView.adapter = ListViewAapter(itemList, mActivity)
 
+        //jump to item detail page with 4 necessary arguments
         listView.setOnItemClickListener { parent, view, position, id ->
             val intent = Intent(mActivity, DetailSlide::class.java)
             intent.putExtra("UserID", uid)
@@ -110,8 +109,8 @@ class SearchMethod{
     private fun callbackDoSearch(mActivity: AppCompatActivity, uid: String, category: Int, queryText: String, listView: ListView, dataSnapshot: DataSnapshot) {
 
         var itemList: ArrayList<Item> = ArrayList()
-        var newList: ArrayList<Item> = ArrayList()
-
+        var newList: ArrayList<Item>
+        //a hashmap to get correct position of item in itemlist
         var itemPositionMap : HashMap<Item, Int> = HashMap()
 
         // get user's family ID
@@ -124,13 +123,37 @@ class SearchMethod{
         val itemsDataSnapshot =
             dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId).child("items")
 
-        //transfer datasnapshot to arraylist
-        for (itemsDataSnapshot in itemsDataSnapshot.children){
-            itemList.add(
-                itemsDataSnapshot.getValue(
+        //when click on category page
+        if (category >= DetailSlide.CATEGORY_SIGNAL){
+            val itemsKey = dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH)
+                .child(currFamilyId)
+                .child("categories")
+                .child("$category/")
+                .child("itemKeys")
+
+            for (keyDataSnapshot in itemsKey.children) {
+                val key = keyDataSnapshot.getValue(
+                    String::class.java
+                )!!
+
+                val newItem = itemsDataSnapshot.child(key).getValue(
                     Item::class.java
                 )!!
-            )
+
+                itemList.add(newItem)
+            }
+
+        }
+        //when click on all page
+        else if (category == DetailSlide.ALL_PAGE_SIGNAL){
+            //transfer datasnapshot to arraylist
+            for (itemsDataSnapshot in itemsDataSnapshot.children){
+                itemList.add(
+                    itemsDataSnapshot.getValue(
+                        Item::class.java
+                    )!!
+                )
+            }
         }
 
         //get final list after search
