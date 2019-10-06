@@ -429,9 +429,6 @@ data class Family(
         ) {
 
             if (currFrag != null && currFrag.isVisible) {
-                // set the categoryName for HomeActivity
-                mActivity.categoryName = DetailSlide.SHOW_PAGE_SIGNAL.toString()
-
                 // get user's family ID
                 val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
                 mActivity.familyId = currFamilyId
@@ -504,9 +501,6 @@ data class Family(
             dataSnapshot: DataSnapshot
         ) {
             if (currFrag != null && currFrag.isVisible) {
-                // set the categoryName for HomeActivity
-                mActivity.categoryName = DetailSlide.ALL_PAGE_SIGNAL.toString()
-
                 // get user's family ID
                 val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
                 mActivity.familyId = currFamilyId

@@ -156,6 +156,11 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         // get position of current category for setting Current page item
         detailFamilyId= intent.getStringExtra("FamilyId")
 
+        Log.d("dddddddpoli", positionList.toString())
+        Log.d("ddddddduid", detailUserId.toString())
+        Log.d("dddddddcat", categoryIndexList.toString())
+        Log.d("ddddddddetai", detailFamilyId.toString())
+
         // adapter of items for ViewPager, set listener in adapter for listening click action
         mSlideViewPager = findViewById(R.id.detail_slideViewPager)
         sliderAdapter = DetailSliderAdapter(itemUploads, detailUserId, this)
