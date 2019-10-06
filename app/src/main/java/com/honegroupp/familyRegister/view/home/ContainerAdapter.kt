@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.github.ivbaranov.mfb.MaterialFavoriteButton
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ShowPageController
 import com.honegroupp.familyRegister.model.Item
@@ -54,16 +55,18 @@ open class ContainerAdapter(
         // Add logic for show page
         val showButton = holder.showButton
         showButton.setOnClickListener {
-            ShowPageController.manageShow(showButton, currItem, mContext.uid)
+            ShowPageController.manageShow(currItem, mContext.uid)
         }
 
         // if this user liked this item, make the like image on
-        if (situation == CATEGORY || situation == ALL) {
-            if (currItem.showPageUids.containsKey(mContext.uid)) {
-                showButton.setImageResource(android.R.drawable.star_big_on)
+        if (showButton.isFavorite){
+            if (!currItem.showPageUids.containsKey(mContext.uid)) {
+                showButton.isFavorite = false
             }
-        } else if (situation == SHOWPAGE) {
-            showButton.setImageResource(android.R.drawable.star_big_on)
+        }else{
+            if (currItem.showPageUids.containsKey(mContext.uid)) {
+                showButton.isFavorite = true
+            }
         }
 
     }
@@ -78,7 +81,7 @@ open class ContainerAdapter(
         fun onDeleteClick(itemId: String)
     }
 
-     inner class ImageViewHolder(viewItem: View) :
+    inner class ImageViewHolder(viewItem: View) :
         RecyclerView.ViewHolder(viewItem),
         View.OnClickListener,
         View.OnCreateContextMenuListener,
@@ -87,11 +90,13 @@ open class ContainerAdapter(
 
         val imageView: ImageView = viewItem.findViewById(R.id.img_upload)
 
-        val showButton: ImageButton = viewItem.findViewById(R.id.button_show)
+        val showButton: MaterialFavoriteButton =
+            viewItem.findViewById(R.id.item_list_favorite_button)
 
         init {
             viewItem.setOnClickListener(this)
-            if (situation == CATEGORY){
+
+            if (situation == CATEGORY) {
                 viewItem.setOnCreateContextMenuListener(this)
             }
         }
@@ -102,7 +107,7 @@ open class ContainerAdapter(
                 if (position != RecyclerView.NO_POSITION) {
                     listener!!.onItemClick(position)
                 }
-            }else{
+            } else {
                 Toast.makeText(mContext, "listener is null", Toast.LENGTH_LONG).show()
             }
         }

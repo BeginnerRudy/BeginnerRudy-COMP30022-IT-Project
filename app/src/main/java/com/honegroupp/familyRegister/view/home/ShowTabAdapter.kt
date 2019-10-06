@@ -5,6 +5,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.github.ivbaranov.mfb.MaterialFavoriteButton
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ShowPageController
 import com.honegroupp.familyRegister.model.Item
@@ -36,7 +37,7 @@ class ShowTabAdapter(val items: ArrayList<Item>, val mContext: HomeActivity) :
         val showButton = holder.showButton
 
         showButton.setOnClickListener {
-            ShowPageController.manageShow(showButton, currItem, mContext.userID)
+            ShowPageController.manageShow(currItem, mContext.userID)
         }
         showButton.setImageResource(android.R.drawable.star_big_on)
 
@@ -52,7 +53,7 @@ class ShowTabAdapter(val items: ArrayList<Item>, val mContext: HomeActivity) :
 
         val imageView: ImageView = viewItem.findViewById(R.id.img_upload)
 
-        val showButton: ImageButton = viewItem.findViewById(R.id.button_show)
+        val showButton: MaterialFavoriteButton = viewItem.findViewById(R.id.item_list_favorite_button)
 
     }
 }
