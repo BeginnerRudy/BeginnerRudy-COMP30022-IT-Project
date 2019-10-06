@@ -7,7 +7,9 @@ import android.widget.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.github.ivbaranov.mfb.MaterialFavoriteButton
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.controller.ShowPageController
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 
@@ -52,6 +54,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val co
         // val slideHeading = view.findViewById<TextView>(R.id.detail_heading)
         val slideDescription = view.findViewById<TextView>(R.id.detail_desc)
         val slideDate = view.findViewById<TextView>(R.id.detail_date)
+        val showButton = view.findViewById<MaterialFavoriteButton>(R.id.detail_favorite_button)
 
         val currItemUploads = items[position]
 
@@ -61,8 +64,17 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val co
         slideDescription.setText(currItemUploads.itemDescription)
         var dateParts = currItemUploads.date.split("/")
         var newDate = dateParts[2] + "." + dateParts[1] + "." + dateParts[0]
-        slideDate.setText(newDate)
+        slideDate.text = newDate
 
+        // set show button, solid heart if it is shown in show page
+        if (userId in items[position].showPageUids) {
+            showButton.isFavorite = true
+        }
+
+        // click on show button
+        showButton.setOnClickListener(){
+            ShowPageController.manageShow(currItemUploads, userId)
+        }
 
         // click on edit button
         if (items[position].itemOwnerUID == userId){
