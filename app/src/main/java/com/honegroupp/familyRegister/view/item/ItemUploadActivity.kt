@@ -9,18 +9,13 @@ import android.app.Activity
 import android.net.Uri
 import android.view.View
 import android.widget.*
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageTask
-import com.google.firebase.storage.UploadTask
-import com.honegroupp.familyRegister.controller.ItemController.Companion.createItem
+
 import com.honegroupp.familyRegister.view.itemList.ItemGridAdapter
 import kotlin.collections.ArrayList
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.honegroupp.familyRegister.backend.FirebaseStorageManager
-
+import com.honegroupp.familyRegister.controller.ItemController
 
 
 class ItemUploadActivity : AppCompatActivity(){
@@ -62,23 +57,31 @@ class ItemUploadActivity : AppCompatActivity(){
 
 
 
-
-
-
         addItemConfirm.setOnClickListener{
             itemPrivacyPosition = spinner.selectedItemPosition
 
             progressBarRound.visibility = View.VISIBLE
-//            addItemConfirm.visibility = View.INVISIBLE
 
             //check input
             checkInputAndUpload(categoryName)
         }
     }
+    fun uploadItem(categoryName:String){
+        //create the item and upload
+        ItemController.createItem(
+            this,
+            this.item_name_input,
+            this.item_description_input,
+            this.uid,
+            categoryName,
+            this.imagePathList,
+            this.itemPrivacyPosition == 0
+        )
+    }
 
 
 
-   /* use the phone API to get thr image from the album*/
+   /* use the phone API to get images from the album*/
     fun selectImageInAlbum() {
 
         //reset the image url list
@@ -173,7 +176,7 @@ class ItemUploadActivity : AppCompatActivity(){
 
    }
 
-    fun checkInputAndUpload(categoryName:String){
+    private fun checkInputAndUpload(categoryName:String){
 
         // need to check item name is not empty
         if(item_name_input.text.toString() == ""){

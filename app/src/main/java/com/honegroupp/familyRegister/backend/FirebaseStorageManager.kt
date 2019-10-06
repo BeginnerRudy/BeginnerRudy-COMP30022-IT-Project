@@ -18,16 +18,17 @@ class FirebaseStorageManager{
         fun uploadToFirebase(allImageUri: ArrayList<Uri>, categoryName:String,activity:ItemUploadActivity) {
             if (allImageUri.size == 0){
 
-                //create the item and upload
-                ItemController.createItem(
-                    activity,
-                    activity.item_name_input,
-                    activity.item_description_input,
-                    activity.uid,
-                    categoryName,
-                    activity.imagePathList,
-                    activity.itemPrivacyPosition == 0
-                )
+//                //create the item and upload
+//                ItemController.createItem(
+//                    activity,
+//                    activity.item_name_input,
+//                    activity.item_description_input,
+//                    activity.uid,
+//                    categoryName,
+//                    activity.imagePathList,
+//                    activity.itemPrivacyPosition == 0
+//                )
+                activity.uploadItem(categoryName)
 
             }else {
                 //upload the progress bar
