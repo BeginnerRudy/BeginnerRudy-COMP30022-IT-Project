@@ -24,6 +24,8 @@ import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 import android.widget.TextView
 import androidx.core.view.marginRight
+import androidx.fragment.app.findFragment
+import com.honegroupp.familyRegister.view.item.DetailSlide
 
 import com.honegroupp.familyRegister.view.utility.SearchActivity
 import kotlinx.android.synthetic.main.nav_header_main.*
@@ -36,6 +38,22 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
     lateinit var userID:String
+
+    override fun onItemClick(position: Int) {
+        if (viewPager.currentItem == 0){
+            categoryName = DetailSlide.ALL_PAGE_SIGNAL.toString()
+        }else if(viewPager.currentItem  == 2){
+            categoryName = DetailSlide.SHOW_PAGE_SIGNAL.toString()
+        }
+
+
+        val intent = Intent(this, DetailSlide::class.java)
+        intent.putExtra("UserID", uid)
+        intent.putExtra("FamilyId", familyId)
+        intent.putExtra("PositionList", position.toString())
+        intent.putExtra("CategoryNameList", categoryName)
+        startActivity(intent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +87,7 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         search_icon.setOnClickListener {
             val intent = Intent(this,SearchActivity::class.java)
             intent.putExtra("UserID", userID)
+            intent.putExtra("Category", DetailSlide.ALL_PAGE_SIGNAL.toString())
             startActivity(intent)
             true
         }

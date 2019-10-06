@@ -25,6 +25,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val co
         fun onDownloadClick(position: Int)
         fun onDeleteClick(position: Int)
         fun onEditClick(itemKey: String?)
+        fun onBackClick()
     }
 
     override fun getCount(): Int {
@@ -76,6 +77,10 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val co
         // set show button, solid heart if it is shown in show page
         if (userId in items[position].showPageUids) {
             showButton.isFavorite = true
+        }
+
+        view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.detail_toolbar).setNavigationOnClickListener(){
+            listener!!.onBackClick()
         }
 
         // show button logic

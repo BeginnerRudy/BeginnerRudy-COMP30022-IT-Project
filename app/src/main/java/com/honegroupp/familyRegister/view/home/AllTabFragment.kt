@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -12,6 +13,7 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.AllPageController
 import com.honegroupp.familyRegister.controller.ShowPageController
 import com.honegroupp.familyRegister.model.Item
+import com.honegroupp.familyRegister.view.item.DetailSlide
 import kotlinx.android.synthetic.main.activity_item_list.view.*
 
 
@@ -35,7 +37,8 @@ class AllTabFragment : Fragment() {
 
         // Setting the recycler view
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(homeActivity)
+        recyclerView.layoutManager = GridLayoutManager(homeActivity, 2)
+
 
         // setting one ItemListAdapter
         val showTabAdapter = ContainerAdapter(items, homeActivity, ContainerAdapter.SHOWPAGE)
