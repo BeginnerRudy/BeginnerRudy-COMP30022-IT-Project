@@ -1,6 +1,7 @@
 package com.honegroupp.familyRegister.view.item
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -9,6 +10,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -24,6 +26,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Category
 import com.honegroupp.familyRegister.model.Item
+import kotlinx.android.synthetic.main.slide_background.*
 import java.io.File
 import java.io.FileOutputStream
 
@@ -79,10 +82,10 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                 .addOnSuccessListener {
                     // Delete image url from Firebase Real-time Database
                     removeItemUrl(position)
-                    toast("Image deleted", Toast.LENGTH_SHORT)
+                    toast(getString(R.string.detail_delete_success), Toast.LENGTH_SHORT)
                 }
                 .addOnFailureListener {
-                    toast("Failed for deleting the item", Toast.LENGTH_SHORT)
+                    toast(getString(R.string.detail_delete_fail), Toast.LENGTH_SHORT)
                 }
         }
     }
@@ -207,10 +210,8 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                     val currItemUpload = it.getValue(Item::class.java) as Item
                     currItemUpload.key = it.key
 
-
                     // wait for categories(categoryUploads) is get from database
                     if (categoryUploads.size != 0 || !isInCategory){
-
                         if (isInCategory) {
                             // check item in current category
                             if (currItemUpload.key in categoryUploads[categoryIndexList].itemKeys){
@@ -234,6 +235,11 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                 }
 
                 // Notify ViewPager to update
+                if (itemUploads.size == 0) {
+                    text_view_empty_detail.visibility = View.VISIBLE
+                } else {
+                    text_view_empty_detail.visibility = View.INVISIBLE
+                }
                 sliderAdapter.notifyDataSetChanged()
 
                 // set Item to be seen first in View Page when items(itemUploads) is ready
@@ -255,23 +261,24 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
      * code change from:
      * https://www.youtube.com/watch?v=1tpc3fyEObI&t=2s
      */
+    @SuppressLint("SetWorldReadable")
     override fun onShareClick(imageView: ImageView) {
-        val bitmap = getBitmapFromView(imageView);
+        val bitmap = getBitmapFromView(imageView)
         try {
-            val file = File(this.getExternalCacheDir(),"logicchip.png");
-            val fOut = FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-            fOut.flush();
-            fOut.close();
-            file.setReadable(true, false);
-            val intent = Intent(android.content.Intent.ACTION_SEND);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Intent.EXTRA_TEXT, "name");
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-            intent.setType("image/png");
-            startActivity(Intent.createChooser(intent, "Share image via"));
+            val file = File(this.externalCacheDir,"family_remember.png")
+            val fOut = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut)
+            fOut.flush()
+            fOut.close()
+            file.setReadable(true, false)
+            val intent = Intent(android.content.Intent.ACTION_SEND)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.putExtra(Intent.EXTRA_TEXT, "name")
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file))
+            intent.type = "image/png"
+            startActivity(Intent.createChooser(intent, "Share image via"))
         } catch (e: Exception ) {
-            e.printStackTrace();
+            e.printStackTrace()
         }
     }
 
