@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -35,7 +36,8 @@ class AllTabFragment : Fragment() {
 
         // Setting the recycler view
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(homeActivity)
+        recyclerView.layoutManager = GridLayoutManager(homeActivity, 2)
+
 
         // setting one ItemListAdapter
         val showTabAdapter = ContainerAdapter(items, homeActivity, ContainerAdapter.SHOWPAGE)
