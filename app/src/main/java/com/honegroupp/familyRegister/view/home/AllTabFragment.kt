@@ -13,6 +13,7 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.AllPageController
 import com.honegroupp.familyRegister.controller.ShowPageController
 import com.honegroupp.familyRegister.model.Item
+import com.honegroupp.familyRegister.view.item.DetailSlide
 import kotlinx.android.synthetic.main.activity_item_list.view.*
 
 
