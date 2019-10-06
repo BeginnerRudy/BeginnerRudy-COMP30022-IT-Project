@@ -1,11 +1,17 @@
 package com.honegroupp.utility
 
+import android.content.Intent
+import android.util.Log
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 import com.google.firebase.database.DataSnapshot
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.Item
+import com.honegroupp.familyRegister.view.item.DetailSlide
 import com.honegroupp.familyRegister.view.utility.ListViewAapter
+import com.honegroupp.familyRegister.view.utility.SearchActivity
 
 class SearchMethod{
 
@@ -49,6 +55,15 @@ class SearchMethod{
 
         //set adapter to show items
         listView.adapter = ListViewAapter(itemList, mActivity)
+
+        listView.setOnItemClickListener { parent, view, position, id ->
+            val intent = Intent(mActivity, DetailSlide::class.java)
+            intent.putExtra("UserID", uid)
+            intent.putExtra("PositionList", listView.adapter.getItemId(position).toString())
+            intent.putExtra("CategoryNameList", "1")
+            intent.putExtra("FamilyId", currFamilyId)
+            mActivity.startActivity(intent)
+        }
     }
 
     /**
@@ -70,6 +85,8 @@ class SearchMethod{
 
         var itemList: ArrayList<Item> = ArrayList()
         var newList: ArrayList<Item> = ArrayList()
+
+        var itemPositionMap : HashMap<Item, Int> = HashMap()
 
         // get user's family ID
         val currFamilyId =
@@ -95,10 +112,26 @@ class SearchMethod{
 
         //set adapter to show items
         listView.adapter = ListViewAapter(newList, mActivity)
+
+        for (i in 0 until itemList.size){
+            itemPositionMap[itemList[i]] = i
+        }
+
+
+        listView.setOnItemClickListener { parent, view, position, id ->
+            Toast.makeText(mActivity,position.toString(),Toast.LENGTH_SHORT)
+            val element = listView.adapter.getItem(listView.adapter.getItemId(position).toInt()) // The item that was clicked
+            val intent = Intent(mActivity, DetailSlide::class.java)
+            intent.putExtra("UserID", uid)
+            intent.putExtra("PositionList", itemPositionMap[element].toString())
+            intent.putExtra("CategoryNameList", "1")
+            intent.putExtra("FamilyId", currFamilyId)
+            mActivity.startActivity(intent)
+        }
     }
 
     //a search function depending on item Name
-    private fun search(queryText: String, itemList: ArrayList<Item>):ArrayList<Item>{
+    fun search(queryText: String, itemList: ArrayList<Item>):ArrayList<Item>{
         val newItemList: ArrayList<Item> = ArrayList()
         for (item in itemList){
             if (item.itemName.contains(queryText)){
@@ -107,4 +140,6 @@ class SearchMethod{
         }
         return newItemList
     }
+
+
 }

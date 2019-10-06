@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -21,6 +23,7 @@ import com.honegroupp.familyRegister.controller.AuthenticationController
 import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 import android.widget.TextView
+import androidx.core.view.marginRight
 
 import com.honegroupp.familyRegister.view.utility.SearchActivity
 import kotlinx.android.synthetic.main.nav_header_main.*
@@ -60,7 +63,8 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
 
 
         // Searching Feature
-
+        var search = findViewById<TextView>(R.id.search_icon)
+        search.layoutParams = Toolbar.LayoutParams(Gravity.RIGHT)
 
         search_icon.setOnClickListener {
             val intent = Intent(this,SearchActivity::class.java)
