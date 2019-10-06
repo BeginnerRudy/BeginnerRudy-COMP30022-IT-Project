@@ -4,7 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp">
+    android:layout_margin="4dp"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardElevation="0dp"
+    app:cardPreventCornerOverlap="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,7 +30,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@+id/item_list_favorite_button"
+            android:layout_alignParentRight="true"
             android:paddingBottom="8dp"
             android:paddingLeft="8dp"
             android:text="Name"
@@ -40,6 +43,8 @@
             android:layout_height="52dp"
             android:layout_below="@+id/img_upload"
             android:layout_alignParentRight="true"
+            android:layout_marginTop="-48dp"
+            android:layout_marginRight="0dp"
             app:mfb_animate_favorite="false"
             app:mfb_animate_unfavorite="false"
             app:mfb_not_favorite_image="@integer/fui_min_password_length"
