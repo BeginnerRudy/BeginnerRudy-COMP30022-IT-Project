@@ -13,8 +13,10 @@
 
         <ImageView
             android:id="@+id/img_upload"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/txt_name"
@@ -34,9 +36,9 @@
             android:layout_marginLeft="@dimen/layout_margin_left"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:padding="@dimen/padding_layout"
-            app:mfb_not_favorite_image="@integer/fui_min_password_length"
             app:mfb_animate_favorite="false"
             app:mfb_animate_unfavorite="false"
+            app:mfb_not_favorite_image="@integer/fui_min_password_length"
             app:mfb_type="heart" />
     </LinearLayout>
 
