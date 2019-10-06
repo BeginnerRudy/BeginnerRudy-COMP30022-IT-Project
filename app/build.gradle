@@ -73,6 +73,9 @@ dependencies {
     // itemdetail
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
+    // image zoom
+    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
+
     // do not update this dependency, because the animation feature would be disabled.
     // Only 0.1.4 works properly for favourite button
     implementation 'com.github.ivbaranov:materialfavoritebutton:0.1.4'
