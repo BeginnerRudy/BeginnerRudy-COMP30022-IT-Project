@@ -38,6 +38,7 @@
     <string name="choose_image">choose an image</string>
     <string name="add_item">add item</string>
     <string name="type_item_description">Please enter item description</string>
+    <string name="transition_test">test</string>
     <string name="detail_no_item">No Item</string>
     <string name="detail_edit">Edit</string>
     <string name="detail_download">Download</string>

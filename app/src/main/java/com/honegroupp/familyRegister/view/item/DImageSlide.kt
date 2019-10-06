@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -16,7 +17,6 @@ import android.os.Environment
 import android.os.StrictMode
 import android.text.Html
 import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast.*
@@ -25,6 +25,8 @@ import androidx.viewpager.widget.ViewPager
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Item
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.slide_dimage_background.*
 import java.io.File
 import java.io.FileOutputStream
 
@@ -121,6 +123,16 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
                 // Notify ViewPager to update
                 dImageSliderAdapter.notifyDataSetChanged()
 
+                // click on share
+                dimage_share.setOnClickListener(){
+                    onShareClick()
+                }
+
+                // click on download
+                dimage_download.setOnClickListener(){
+                    onDownloadClick()
+                }
+
                 // set number of dots to be appeared at bottom
                 numDots = itemUrls.size
 
@@ -166,7 +178,7 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
             for (i in 0 until numDots) {
                 mDots[i] = TextView(this)
                 mDots[i]?.text = Html.fromHtml("&#8226;")
-                mDots[i]?.setTextSize(30.toFloat())
+                mDots[i]?.textSize = 20.toFloat()
                 mDots[i]?.setTextColor(resources.getColor(R.color.colorTransparentWhite))
 
                 mDotLayout.addView(mDots[i])
@@ -187,13 +199,22 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
      * https://www.youtube.com/watch?v=1tpc3fyEObI&t=2s
      */
     @SuppressLint("SetWorldReadable")
-    override fun onShareClick(position: Int, item:ArrayList<String>, imageView: ImageView) {
-        this.downloadUrl = item[position]
-        val bitmap = getBitmapFromView(imageView)
+    fun onShareClick() {
+        this.downloadUrl = itemUrls[mSlideViewPager.currentItem]
+        lateinit var bitmapShare : Bitmap
+        Picasso.get().load(downloadUrl).into(object : com.squareup.picasso.Target {
+            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                bitmapShare = bitmap as Bitmap
+            }
+
+            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+
+            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
+        })
         try {
             val file = File(this.externalCacheDir,"fml_rgst_share.png")
             val fOut = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut)
+            bitmapShare.compress(Bitmap.CompressFormat.PNG, 100, fOut)
             fOut.flush()
             fOut.close()
             file.setReadable(true, false)
@@ -226,8 +247,8 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
         return returnedBitmap
     }
 
-    override fun onDownloadClick(position: Int, item: ArrayList<String>) {
-        this.downloadUrl = item[position]
+    fun onDownloadClick() {
+        this.downloadUrl = itemUrls[mSlideViewPager.currentItem]
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_DENIED){
