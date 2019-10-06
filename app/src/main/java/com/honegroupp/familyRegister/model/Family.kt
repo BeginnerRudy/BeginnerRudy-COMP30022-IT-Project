@@ -2,6 +2,7 @@ package com.honegroupp.familyRegister.model
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -426,6 +427,7 @@ data class Family(
             allTabAdapter: ContainerAdapter,
             dataSnapshot: DataSnapshot
         ) {
+
             if (currFrag != null && currFrag.isVisible) {
                 // set the categoryName for HomeActivity
                 mActivity.categoryName = DetailSlide.SHOW_PAGE_SIGNAL.toString()
@@ -456,6 +458,10 @@ data class Family(
                     }
                 }
 
+
+                // notify the adapter to update
+                allTabAdapter.notifyDataSetChanged()
+
                 if (items.isEmpty()) {
                     // Make the progress bar invisible
                     mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
@@ -465,8 +471,6 @@ data class Family(
                     text.text = mActivity.getString(R.string.no_items_for_the_show_page)
                     text.visibility = View.VISIBLE
                 } else {
-                    // notify the adapter to update
-                    allTabAdapter.notifyDataSetChanged()
                     // Make the progress bar invisible
                     mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
                         View.INVISIBLE
@@ -525,6 +529,9 @@ data class Family(
                     items.add(item)
                 }
 
+                // notify the adapter to update
+                showTabAdapter.notifyDataSetChanged()
+
                 if (items.isEmpty()) {
                     // Make the progress bar invisible
                     mActivity.findViewById<ProgressBar>(R.id.all_progress_circular).visibility =
@@ -533,8 +540,6 @@ data class Family(
                     val text = mActivity.findViewById<TextView>(R.id.text_view_empty_category)
                     text.visibility = View.VISIBLE
                 } else {
-                    // notify the adapter to update
-                    showTabAdapter.notifyDataSetChanged()
                     // Make the progress bar invisible
                     mActivity.findViewById<ProgressBar>(R.id.all_progress_circular).visibility =
                         View.INVISIBLE

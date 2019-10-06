@@ -47,6 +47,8 @@ class ShowTabFragment : Fragment() {
         // User could not add item from the show page
         view.btn_add.visibility = View.INVISIBLE
 
+        view.btn_search.visibility = View.INVISIBLE
+
         return view
     }
 
