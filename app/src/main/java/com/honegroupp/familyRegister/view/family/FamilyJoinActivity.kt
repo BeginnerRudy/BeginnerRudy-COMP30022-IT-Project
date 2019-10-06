@@ -35,12 +35,11 @@ class FamilyJoinActivity : AppCompatActivity() {
         button.setOnClickListener {
             FamilyController.joinFamily(
                 this,
-                edit_text_family_name_input,
+                edit_text_family_id_input,
                 edit_text_family_password_input,
                 currUid,
                 username
             )
-
         }
     }
 }

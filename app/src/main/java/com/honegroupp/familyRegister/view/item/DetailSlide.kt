@@ -1,7 +1,6 @@
 package com.honegroupp.familyRegister.view.item
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -21,54 +20,123 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Category
 import com.honegroupp.familyRegister.model.Item
-import com.honegroupp.familyRegister.model.User
 import java.io.File
 import java.io.FileOutputStream
 
-class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener {
-    private val STORAGE_PERMISSION_CODE: Int = 1000
+class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener{
+    companion object {
+        const val ALL_PAGE_SIGNAL = -1
+        const val SHOW_PAGE_SIGNAL = -2
+        const val CATEGORY_SIGNAL = 0
+
+        private const val STORAGE_PERMISSION_CODE: Int = 1000
+    }
+
     private var downloadUrl :String = ""
 
     lateinit var mSlideViewPager : ViewPager
+    lateinit var sliderAdapter: DetailSliderAdapter
 
     lateinit var detailUserId: String
     lateinit var detailFamilyId: String
 
     lateinit var pathItem: String
-    lateinit var pathCategory: String
-    private lateinit var pathUser: String
-
     lateinit var databaseReferenceItem: DatabaseReference
-    lateinit var databaseReferenceCategory: DatabaseReference
-    lateinit var databaseReferenceUser: DatabaseReference
     lateinit var dbListenerItem: ValueEventListener
-    lateinit var dbListenerCategory: ValueEventListener
-    lateinit var dbListenerUser: ValueEventListener
-
     var itemUploads: ArrayList<Item> = ArrayList()
+
+    var isInCategory: Boolean = false
+    lateinit var pathCategory: String
+    lateinit var databaseReferenceCategory: DatabaseReference
+    lateinit var dbListenerCategory: ValueEventListener
     var categoryUploads: ArrayList<Category> = ArrayList()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    var storage: FirebaseStorage = FirebaseStorage.getInstance()
+
+
+
+    // open Detail Image page when image is clicked
+    override fun onItemClick(position: Int) {
+        val intent = Intent(this, DImageSlide::class.java)
+        intent.putExtra("PositionDetail", position.toString())
+        intent.putExtra("ItemKey", itemUploads[mSlideViewPager.currentItem].key)
+        intent.putExtra("FamilyId", detailFamilyId)
+        this.startActivity(intent)
+    }
+
+    override fun onDeleteClick(position: Int) {
+        if (itemUploads[mSlideViewPager.currentItem].imageURLs.size > 1){
+            // use url create reference of image to be deleted
+            val deleteUrl = itemUploads[mSlideViewPager.currentItem].imageURLs[position]
+            val imageRef = storage.getReferenceFromUrl(deleteUrl)
+
+            // Delete image and its tile from Fitrbase Storage
+            imageRef.delete()
+                .addOnSuccessListener {
+                    // Delete image url from Firebase Real-time Database
+                    removeItemUrl(position)
+                    toast("Image deleted", Toast.LENGTH_SHORT)
+                }
+                .addOnFailureListener {
+                    toast("Failed for deleting the item", Toast.LENGTH_SHORT)
+                }
+        }
+    }
+
+    fun removeItemUrl(position: Int){
+        itemUploads[mSlideViewPager.currentItem].imageURLs.removeAt(position)
+        databaseReferenceItem
+            .child(itemUploads[mSlideViewPager.currentItem].key.toString())
+            .child("imageURLs")
+            .setValue(itemUploads[mSlideViewPager.currentItem].imageURLs)
+    }
+
+    // start editing
+    override fun onEditClick(itemKey: String?) {
+        val intent = Intent(this, ItemEdit::class.java)
+        intent.putExtra("ItemKey", itemKey)
+        intent.putExtra("FamilyId", detailFamilyId)
+
+        this.startActivity(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // hide status bar
+        hideStatusBar()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+
+        // hide status bar
+        hideStatusBar()
+    }
+
+    private fun hideStatusBar(){
         // Hide the status bar.
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         // Remember that you should never show the action bar if the
         // status bar is hidden, so hide that too if necessary.
         actionBar?.hide()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // hide status bar
+        hideStatusBar()
+
         setContentView(R.layout.slide_background)
 
         // StrictMode for share
         val builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
-
-        // adapter of items for ViewPager, set listener in adapter for listening click action
-        mSlideViewPager = findViewById(R.id.detail_slideViewPager)
-        val sliderAdapter = DetailSliderAdapter(itemUploads,this)
-        mSlideViewPager.adapter = sliderAdapter
-        sliderAdapter.listener = this@DetailSlide
 
         // get position of item clicked in item list for setting Current page item
         val positionList = intent.getStringExtra("PositionList").toInt()
@@ -78,134 +146,132 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
         // get position of current category for setting Current page item
         val categoryIndexList= intent.getStringExtra("CategoryNameList").toInt()
+        if (categoryIndexList >= CATEGORY_SIGNAL ){
+            isInCategory = true
+        }
 
+        // get position of current category for setting Current page item
+        detailFamilyId= intent.getStringExtra("FamilyId")
 
-        // initialise database References, Item and Categories path cannot be get before the family id is get
-        pathUser = "Users"
-        databaseReferenceUser = FirebaseDatabase.getInstance().getReference(pathUser)
-        databaseReferenceItem = FirebaseDatabase.getInstance().getReference("")
-        databaseReferenceCategory = FirebaseDatabase.getInstance().getReference("")
+        // adapter of items for ViewPager, set listener in adapter for listening click action
+        mSlideViewPager = findViewById(R.id.detail_slideViewPager)
+        sliderAdapter = DetailSliderAdapter(itemUploads, detailUserId, this)
+        mSlideViewPager.adapter = sliderAdapter
+        sliderAdapter.listener = this@DetailSlide
 
         // whether item position is already set, View Pager pages cannot be set until it is ready
         var alreadySet = false
 
-        // listener for user on firebase, realtime change familyID(detailFamilyId)
-        dbListenerUser = databaseReferenceUser.addValueEventListener(object : ValueEventListener {
+        // database Reference for Item
+        pathItem = "Family/$detailFamilyId/items"
+        databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
+
+        // get category information if this activity is activated in category page
+        if (isInCategory) {
+            // database Reference for Category
+            pathCategory = "Family/$detailFamilyId/categories"
+            databaseReferenceCategory = FirebaseDatabase.getInstance().getReference(pathCategory)
+
+            // listener for category on firebase, realtime change categories(categoryUploads)
+            dbListenerCategory =
+                databaseReferenceCategory.addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                        toast(p0.message, Toast.LENGTH_SHORT)
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        categoryUploads.clear()
+
+                        // get all categories and put into categories(categoryUploads)
+                        p0.children.forEach {
+                            val currCategoryUpload = it.getValue(Category::class.java) as Category
+                            categoryUploads.add(currCategoryUpload)
+                        }
+                        sliderAdapter.notifyDataSetChanged()
+                    }
+                })
+        }
+
+        // listener for items on firebase, realtime change items(itemUploads)
+        dbListenerItem = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 toast(p0.message, Toast.LENGTH_SHORT)
             }
 
             override fun onDataChange(p0: DataSnapshot) {
+                itemUploads.clear()
+                sliderAdapter.notifyDataSetChanged()
 
-                // Retrieve each User from database from pathUser
-                p0.children.forEach { it ->
-                    val currUserUpload = it.getValue(User::class.java) as User
-                    
-                    // find the user by UserId
-                    // , get all detail url into itemUrls
-                    if (it.key == detailUserId){
-                        // get familyID to produce path of Item & path of Category
-                        detailFamilyId = currUserUpload.familyId
-                        pathItem = "Family/$detailFamilyId/items"
-                        pathCategory = "Family/$detailFamilyId/categories"
+                // get all items and put into items(itemUploads) if user has access
+                p0.children.forEach {
+                    val currItemUpload = it.getValue(Item::class.java) as Item
+                    currItemUpload.key = it.key
 
-                        // database Reference for Item & Category
-                        databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
-                        databaseReferenceCategory = FirebaseDatabase.getInstance().getReference(pathCategory)
 
-                        // listener for category on firebase, realtime change categories(categoryUploads)
-                        dbListenerCategory = databaseReferenceCategory.addValueEventListener(object : ValueEventListener {
-                            override fun onCancelled(p0: DatabaseError) {
-                                toast(p0.message, Toast.LENGTH_SHORT)
-                            }
+                    // wait for categories(categoryUploads) is get from database
+                    if (categoryUploads.size != 0 || !isInCategory){
 
-                            override fun onDataChange(p0: DataSnapshot) {
-                                categoryUploads.clear()
-
-                                // get all categories and put into categories(categoryUploads)
-                                p0.children.forEach {
-                                    val currCategoryUpload = it.getValue(Category::class.java) as Category
-                                    categoryUploads.add(currCategoryUpload)
-                                }
-
-                                // Notify ViewPager to update
-                                sliderAdapter.notifyDataSetChanged()
-                            }
-                        })
-
-                        // listener for items on firebase, realtime change items(itemUploads)
-                        dbListenerItem = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
-                            override fun onCancelled(p0: DatabaseError) {
-                                toast(p0.message, Toast.LENGTH_SHORT)
-                            }
-
-                            override fun onDataChange(p0: DataSnapshot) {
-                                itemUploads.clear()
-
-                                // get all items and put into items(itemUploads) if user has access
-                                p0.children.forEach {
-                                    val currItemUpload = it.getValue(Item::class.java) as Item
-                                    currItemUpload.key = it.key
-
-                                    // wait for categories(categoryUploads) is get from database
-                                    if (categoryUploads.size != 0){
-                                        // check item in current category
-                                        if (currItemUpload.key in categoryUploads[categoryIndexList].itemKeys){
-                                            // check item is visible, if not check user is owner
-                                            if (currItemUpload.isPublic) {
-                                                itemUploads.add(currItemUpload)
-                                            } else if (currItemUpload.itemOwnerUID == detailUserId){
-                                                itemUploads.add(currItemUpload)
-                                            }
-                                        }
-                                    }
-                                }
-
-                                // Notify ViewPager to update
-                                sliderAdapter.notifyDataSetChanged()
-
-                                // set Item to be seen first in View Page when items(itemUploads) is ready
-                                if (itemUploads.size > 0) {
-                                    if (!alreadySet){
-                                        mSlideViewPager.currentItem = positionList
-                                        alreadySet = true
-                                    }
+                        if (isInCategory) {
+                            // check item in current category
+                            if (currItemUpload.key in categoryUploads[categoryIndexList].itemKeys){
+                                // check item is visible, if not check user is owner
+                                if (currItemUpload.isPublic) {
+                                    itemUploads.add(currItemUpload)
+                                } else if (currItemUpload.itemOwnerUID == detailUserId){
+                                    itemUploads.add(currItemUpload)
                                 }
                             }
-                        })
+                        } else if (categoryIndexList == ALL_PAGE_SIGNAL) {
+                            itemUploads.add(currItemUpload)
+                        } else if (categoryIndexList == SHOW_PAGE_SIGNAL){
+
+
+                            if (detailUserId in currItemUpload.showPageUids.keys){
+                                itemUploads.add(currItemUpload)
+                            }
+                        }
                     }
                 }
 
-                // It would update recycler after loading image from firebase storage
+                // Notify ViewPager to update
                 sliderAdapter.notifyDataSetChanged()
+
+                // set Item to be seen first in View Page when items(itemUploads) is ready
+                if (itemUploads.size > 0) {
+                    if (!alreadySet){
+                        mSlideViewPager.currentItem = positionList
+                        alreadySet = true
+                    }
+                }
             }
         })
+
     }
+
+
 
     /**
      * share use Bitmap from ImageVIew
      * code change from:
      * https://www.youtube.com/watch?v=1tpc3fyEObI&t=2s
      */
-    @SuppressLint("SetWorldReadable")
-    override fun onShareClick(position: Int, items:ArrayList<Item>, imageView: ImageView) {
-        this.downloadUrl = items[position].imageURLs[0]
-        val bitmap = getBitmapFromView(imageView)
+    override fun onShareClick(imageView: ImageView) {
+        val bitmap = getBitmapFromView(imageView);
         try {
-            val file = File(this.externalCacheDir,"fml_rgst_share.png")
-            val fOut = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut)
-            fOut.flush()
-            fOut.close()
-            file.setReadable(true, false)
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            intent.putExtra(Intent.EXTRA_TEXT, "name")
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file))
-            intent.type = "image/png"
-            startActivity(Intent.createChooser(intent, "Share image via"))
+            val file = File(this.getExternalCacheDir(),"logicchip.png");
+            val fOut = FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+            file.setReadable(true, false);
+            val intent = Intent(android.content.Intent.ACTION_SEND);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Intent.EXTRA_TEXT, "name");
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            intent.setType("image/png");
+            startActivity(Intent.createChooser(intent, "Share image via"));
         } catch (e: Exception ) {
-            e.printStackTrace()
+            e.printStackTrace();
         }
     }
 
@@ -227,9 +293,9 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         return returnedBitmap
     }
 
-    // download when click
-    override fun onDownloadClick(position: Int, items: ArrayList<Item>) {
-        this.downloadUrl = items[position].imageURLs[0]
+    // download when click in menu
+    override fun onDownloadClick(position: Int) {
+        downloadUrl = itemUploads[mSlideViewPager.currentItem].imageURLs[position]
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_DENIED){
@@ -277,18 +343,14 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         }
     }
 
-    // open Detail Image page when image is clicked
-    override fun onItemClick(position: Int, items:ArrayList<Item>) {
-        val intent = Intent(this, DImageSlide::class.java)
-        intent.putExtra("ItemKey", items[position].key)
-        intent.putExtra("FamilyId", detailFamilyId)
-        this.startActivity(intent)
-    }
+
 
     override fun onDestroy() {
         super.onDestroy()
         databaseReferenceItem.removeEventListener(dbListenerItem)
-        databaseReferenceCategory.removeEventListener(dbListenerCategory)
+        if (isInCategory){
+            databaseReferenceCategory.removeEventListener(dbListenerCategory)
+        }
     }
 
     fun toast(msg: String, duration: Int) {

@@ -1,21 +1,24 @@
 package com.honegroupp.familyRegister.model
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.view.home.HomeActivity
-import com.honegroupp.familyRegister.view.itemList.ItemListAdapter
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.utility.Hash
+import com.honegroupp.familyRegister.view.home.ContainerActivity
+import com.honegroupp.familyRegister.view.home.ContainerAdapter
+import com.honegroupp.familyRegister.view.item.DetailSlide
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 
@@ -153,14 +156,22 @@ data class Family(
 
             // Check whether family exist
             if (!dataSnapshot.hasChild(familyIdInputModified) || familyIdInput.trim() == "") {
-                Toast.makeText(currActivity, "Family Id is not correct!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    currActivity,
+                    mActivity.getString(R.string.family_id_not_exist),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 // Get family
                 val family =
                     dataSnapshot.child(familyIdInputModified).getValue(Family::class.java) as Family
                 // Check password
                 if (family.password != Hash.applyHash(familyPasswordInput)) {
-                    Toast.makeText(currActivity, "Password is not correct!", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        currActivity,
+                        mActivity.getString(R.string.password_is_incorrect),
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 } else {
                     // Add user to family and add family to user
@@ -169,7 +180,11 @@ data class Family(
                         family.store(mActivity, currUid, username)
                     }
 
-                    Toast.makeText(currActivity, "Join family successful!", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        currActivity,
+                        mActivity.getString(R.string.join_family_successfully),
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -227,7 +242,7 @@ data class Family(
             recyclerView.layoutManager = LinearLayoutManager(mActivity)
 
             // setting one ItemListAdapter
-            val itemListAdapter = ItemListAdapter(items, mActivity)
+            val itemListAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.CATEGORY)
             recyclerView.adapter = itemListAdapter
             itemListAdapter.listener = mActivity
 
@@ -237,23 +252,27 @@ data class Family(
                     String::class.java
                 ) as String
 
+            // set familyID
+            mActivity.familyId = currFamilyId
+
             // get item keys for the given category as an ArrayList
             val itemKeysSnapshot =
                 dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId)
                     .child("categories").child(categoryName).child("itemKeys")
 
-            val itemKeys = if (!itemKeysSnapshot.hasChildren()) {
+            var itemKeys = if (!itemKeysSnapshot.hasChildren()) {
                 // the item keys is empty
                 ArrayList()
             } else {
                 itemKeysSnapshot.value as ArrayList<String>
             }
 
+            // remove null from the itemkeys
+            itemKeys = itemKeys.filterNotNull() as ArrayList<String>
+
             // clear items once retrieve item from the database
             items.clear()
             for (key in itemKeys) {
-                Log.d("item keys", key)
-
                 // get item by each key
                 val currItem =
                     dataSnapshot
@@ -281,13 +300,272 @@ data class Family(
                     View.INVISIBLE
             }
 
-            if (itemKeys.isEmpty()){
+            if (itemKeys.isEmpty()) {
                 // Make the progress bar invisible
                 mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
                     View.INVISIBLE
 
                 mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
                     View.VISIBLE
+            }
+        }
+
+        /**
+         * Delete item from family
+         * */
+        fun deleteItem(
+            uid: String,
+            categoryName: String,
+            mActivity: ContainerActivity,
+            itemId: String
+        ) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
+                callbackDeleteItem(uid, categoryName, mActivity, itemId, d)
+            }
+        }
+
+        /**
+         * This is the callback for deleteItem.
+         * This method defines the logic of deleting an item.
+         * */
+        @SuppressLint("RestrictedApi")
+        private fun callbackDeleteItem(
+            uid: String,
+            categoryName: String,
+            mActivity: ContainerActivity,
+            itemId: String,
+            dataSnapshot: DataSnapshot
+        ) {
+            // get user's family ID
+            val currFamilyId =
+                dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).child("familyId").getValue(
+                    String::class.java
+                ) as String
+
+
+            val countOfCategory = (dataSnapshot
+                .child(FirebaseDatabaseManager.FAMILY_PATH)
+                .child(currFamilyId)
+                .child("categories")
+                .value as ArrayList<Category>).size
+
+            // find the category
+            val itemKeys = dataSnapshot
+                .child(FirebaseDatabaseManager.FAMILY_PATH)
+                .child(currFamilyId)
+                .child("categories")
+                .child(categoryName)
+                .child("itemKeys")
+                .children
+
+//            Toast.makeText(mActivity, itemId, Toast.LENGTH_SHORT).show()
+            for (itemKey in itemKeys) {
+                // remove item from category only.
+                if (itemKey.value == itemId) {
+                    itemKey.ref.setValue(null)
+
+                    break
+                }
+            }
+            // update itemkeys index first
+
+            val itemKeysPath =
+                "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/itemKeys/"
+            var categoryItemKeys = dataSnapshot
+                .child(FirebaseDatabaseManager.FAMILY_PATH)
+                .child(currFamilyId)
+                .child("categories")
+                .child(categoryName)
+                .child("itemKeys")
+                .value as ArrayList<String>
+
+            categoryItemKeys = categoryItemKeys.filterNotNull() as ArrayList<String>
+            categoryItemKeys.remove(itemId)
+
+            FirebaseDatabaseManager.update(itemKeysPath, categoryItemKeys)
+
+            // update the item count
+            val itemCount = dataSnapshot
+                .child(FirebaseDatabaseManager.FAMILY_PATH)
+                .child(currFamilyId)
+                .child("categories")
+                .child(categoryName)
+                .child("itemKeys")
+                .childrenCount
+            val countReference =
+                "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/count"
+            FirebaseDatabase.getInstance().getReference(countReference)
+                .setValue(itemCount - 1)
+
+
+        }
+
+
+        /**
+         * This method is responsible for showing all items in the show page
+         *
+         * */
+        fun displayShowPage(mActivity: HomeActivity, uid: String, currFrag: Fragment) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
+                callbackDisplayShowPage(
+                    uid,
+                    mActivity,
+                    currFrag,
+                    d
+                )
+            }
+        }
+
+        /**
+         * This method is the callback for showing all items in the show page
+         * */
+        private fun callbackDisplayShowPage(
+            uid: String,
+            mActivity: HomeActivity,
+            currFrag: Fragment,
+            dataSnapshot: DataSnapshot
+        ) {
+            if (currFrag != null && currFrag.isVisible) {
+                // set the categoryName for HomeActivity
+                mActivity.categoryName = DetailSlide.SHOW_PAGE_SIGNAL.toString()
+
+                // get user's family ID
+                val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+                mActivity.familyId = currFamilyId
+
+                // get items from the family
+                val allItems =
+                    dataSnapshot
+                        .child(FirebaseDatabaseManager.FAMILY_PATH)
+                        .child(currFamilyId)
+                        .child("items")
+                        .children
+
+                // set list for liked items
+                val items = ArrayList<Item>()
+
+                val recyclerView =
+                    mActivity.findViewById<RecyclerView>(R.id.item_list_recycler_view)
+
+                // Setting the recycler view
+                recyclerView.setHasFixedSize(true)
+                recyclerView.layoutManager = LinearLayoutManager(mActivity)
+
+                // setting one ItemListAdapter
+                val showTabAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.SHOWPAGE)
+                recyclerView.adapter = showTabAdapter
+
+                // set listener
+                showTabAdapter.listener = mActivity
+
+                // clear items once retrieve item from the database
+                items.clear()
+
+                allItems.forEach {
+                    val item = it.getValue(Item::class.java) as Item
+
+                    // add it to the items, check item is visible, if not check user is owner
+                    if (item.showPageUids.contains(uid)) {
+                        item.key = it.key.toString()
+                        items.add(item)
+                    }
+                }
+
+                if (items.isEmpty()) {
+                    // Make the progress bar invisible
+                    mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
+                        View.INVISIBLE
+
+                    mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
+                        View.VISIBLE
+                } else {
+                    // notify the adapter to update
+                    showTabAdapter.notifyDataSetChanged()
+                    // Make the progress bar invisible
+                    mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
+                        View.INVISIBLE
+                    mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
+                        View.INVISIBLE
+                }
+            }
+        }
+
+
+        fun showAll(uid: String, mActivity: HomeActivity, currFrag: Fragment) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
+                callbackShowAll(uid, mActivity, currFrag, d)
+            }
+        }
+
+
+        private fun callbackShowAll(
+            uid: String,
+            mActivity: HomeActivity,
+            currFrag: Fragment,
+            dataSnapshot: DataSnapshot
+        ) {
+            if (currFrag != null && currFrag.isVisible) {
+                // set the categoryName for HomeActivity
+                mActivity.categoryName = DetailSlide.SHOW_PAGE_SIGNAL.toString()
+
+                // get user's family ID
+                val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+                mActivity.familyId = currFamilyId
+
+                // get items from the family
+                val allItems =
+                    dataSnapshot
+                        .child(FirebaseDatabaseManager.FAMILY_PATH)
+                        .child(currFamilyId)
+                        .child("items")
+                        .children
+
+                // set list for liked items
+                val items = ArrayList<Item>()
+
+                val recyclerView =
+                    mActivity.findViewById<RecyclerView>(R.id.all_item_list_recycler_view)
+
+                // Setting the recycler view
+                recyclerView.setHasFixedSize(true)
+                recyclerView.layoutManager = LinearLayoutManager(mActivity)
+
+                // setting one ItemListAdapter
+                val showTabAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.SHOWPAGE)
+                recyclerView.adapter = showTabAdapter
+
+                // set listener
+                showTabAdapter.listener = mActivity
+
+                // clear items once retrieve item from the database
+                items.clear()
+
+                allItems.forEach {
+                    val item = it.getValue(Item::class.java) as Item
+
+                    item.key = it.key.toString()
+                    items.add(item)
+                }
+
+                if (items.isEmpty()) {
+                    // Make the progress bar invisible
+                    mActivity.findViewById<ProgressBar>(R.id.all_progress_circular).visibility =
+                        View.INVISIBLE
+
+                    mActivity.findViewById<TextView>(R.id.all_text_view_empty_category).visibility =
+                        View.VISIBLE
+                } else {
+                    // notify the adapter to update
+                    showTabAdapter.notifyDataSetChanged()
+                    // Make the progress bar invisible
+                    mActivity.findViewById<ProgressBar>(R.id.all_progress_circular).visibility =
+                        View.INVISIBLE
+                    mActivity.findViewById<TextView>(R.id.all_text_view_empty_category).visibility =
+                        View.INVISIBLE
+                }
             }
         }
     }

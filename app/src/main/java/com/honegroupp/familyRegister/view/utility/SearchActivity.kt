@@ -1,17 +1,26 @@
 package com.honegroupp.familyRegister.view.utility
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.SearchView
+import android.widget.Toast
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.SearchController
+import com.honegroupp.familyRegister.view.item.DetailSlide
 import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : AppCompatActivity() {
 
+    companion object{
+        const val SEARCH_All = -1
+        const val SEARCH_SHOW = -2
+    }
+
     lateinit var currUid: String
+    lateinit var category: CharCategory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +28,7 @@ class SearchActivity : AppCompatActivity() {
 
         //get User ID
         currUid= intent.getStringExtra("UserID")
+        //get
         val listView: ListView = findViewById(R.id.list_view)
 
         initView(listView, currUid);

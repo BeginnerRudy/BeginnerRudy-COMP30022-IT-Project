@@ -7,9 +7,7 @@ import org.junit.Assert.*
 import org.junit.Before
 
 /**
- * Example local unit category_item, which will execute on the development machine (host).
  *
- * See [testing documentation](http://d.android.com/tools/testing).
  */
 class UserTest {
 //    private val mUser = User()
@@ -28,7 +26,7 @@ class UserTest {
     fun hasFamilyNewUser() {
         val mUser = User()
         val hasFamilyResult = mUser.hasFamily()
-        assertEquals(hasFamilyResult, false)
+        assertEquals(false, hasFamilyResult)
     }
 
     /**

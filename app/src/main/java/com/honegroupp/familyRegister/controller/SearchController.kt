@@ -1,12 +1,8 @@
 package com.honegroupp.familyRegister.controller
 
-import android.widget.EditText
 import android.widget.ListView
-import android.widget.SearchView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.honegroupp.familyRegister.model.Item
-import com.honegroupp.familyRegister.utility.SearchMethod
+import com.honegroupp.utility.SearchMethod
 
 
 /**

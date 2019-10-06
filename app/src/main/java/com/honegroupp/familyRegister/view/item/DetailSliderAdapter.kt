@@ -1,25 +1,30 @@
 package com.honegroupp.familyRegister.view.item
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.*
-import android.widget.Button
+import android.widget.*
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.viewpager.widget.PagerAdapter
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import androidx.viewpager.widget.ViewPager
+import com.github.ivbaranov.mfb.MaterialFavoriteButton
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.controller.ShowPageController
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 
-class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : PagerAdapter() {
+class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val context: Context) : PagerAdapter(),
+    DetailImagesSliderAdapter.OnItemClickerListener {
+
+    lateinit var imagesSlideViewPager : ViewPager
     var listener: OnItemClickerListener? = null
 
     interface OnItemClickerListener {
-        fun onItemClick(position: Int, items:ArrayList<Item>)
-        fun onDownloadClick(position: Int, items:ArrayList<Item>)
-        fun onShareClick(position: Int, items:ArrayList<Item>, imageView: ImageView)
+        fun onItemClick(position: Int)
+        fun onShareClick(imageView: ImageView)
+        fun onDownloadClick(position: Int)
+        fun onDeleteClick(position: Int)
+        fun onEditClick(itemKey: String?)
     }
 
     override fun getCount(): Int {
@@ -30,53 +35,90 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val context: Context) : Pa
         return view == `object`
     }
 
+    // notify data set change
+    override fun getItemPosition(`object`: Any): Int {
+        return POSITION_NONE
+    }
+
     override fun instantiateItem(container: ViewGroup, position: Int): View {
-        val layoutInflater:LayoutInflater = LayoutInflater.from(context)
+        val layoutInflater: LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_detail_layout, container, false)
 
-        val slideImageView = view.findViewById<ImageView>(R.id.detail_image)
-        val slideHeaing = view.findViewById<TextView>(R.id.detail_heading)
+        // set slides of images
+        imagesSlideViewPager = view.findViewById(R.id.detail_images_slideViewPager)
+        var imagesSliderAdapter = DetailImagesSliderAdapter(
+            items[position].imageURLs,
+            items[position].itemOwnerUID == userId,
+            context
+        )
+        imagesSlideViewPager.adapter = imagesSliderAdapter
+        imagesSliderAdapter.listener = this
+
+
+        // val slideHeading = view.findViewById<TextView>(R.id.detail_heading)
         val slideDescription = view.findViewById<TextView>(R.id.detail_desc)
+        val slideDate = view.findViewById<TextView>(R.id.detail_date)
+        val showButton = view.findViewById<MaterialFavoriteButton>(R.id.detail_favorite_button)
+        showButton.isFavorite = false
+        showButton.setFavoriteResource(R.drawable.ic_favorite_red_24dp)
 
         val currItemUploads = items[position]
 
-
-        // Load image to ImageView via its URL from Firebase Storage
-        Picasso.get()
-            .load(currItemUploads.imageURLs[0])
-            .placeholder(R.mipmap.ic_launcher)
-            .into(slideImageView)
-        slideHeaing.setText(currItemUploads.itemName)
+        // slideHeading.setText(currItemUploads.itemName)
+        val slideToolbar =
+            view.findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.detial_collapsing_toolbar)
+        slideToolbar.setTitle(currItemUploads.itemName)
         slideDescription.setText(currItemUploads.itemDescription)
+        var dateParts = currItemUploads.date.split("/")
+        var newDate = dateParts[2] + "." + dateParts[1] + "." + dateParts[0]
+        slideDate.text = newDate
 
-        view.findViewById<Button>(R.id.detail_edit).setOnClickListener{
-            val intent = Intent(context, ItemEdit::class.java)
-            context.startActivity(intent)
+        // set show button, solid heart if it is shown in show page
+        if (userId in items[position].showPageUids) {
+            showButton.isFavorite = true
         }
 
-        // set on click listeners
-        view.findViewById<ImageView>(R.id.detail_image).setOnClickListener{
-            listener!!.onItemClick(position, items)
+        // show button logic
+        showButton.setOnClickListener {
+            ShowPageController.manageShow(currItemUploads, userId)
         }
 
-        view.findViewById<Button>(R.id.detail_download).setOnClickListener{
-            listener!!.onDownloadClick(position, items)
-        }
-
-        view.findViewById<Button>(R.id.detail_share).setOnClickListener{
-            Picasso.get()
-                .load(currItemUploads.imageURLs[0])
-                .placeholder(R.mipmap.ic_launcher)
-                .into(slideImageView)
-            listener!!.onShareClick(position, items, slideImageView)
+        // click on edit button
+        if (items[position].itemOwnerUID == userId) {
+            view.findViewById<Button>(R.id.detail_edit).setOnClickListener {
+                listener!!.onEditClick(items[position].key)
+            }
+        } else {
+            view.findViewById<Button>(R.id.detail_edit).visibility = View.INVISIBLE
         }
 
         container.addView(view)
         return view
     }
 
+
+    // on share click in menu
+    override fun onShareClick(imageView: ImageView) {
+        listener!!.onShareClick(imageView)
+    }
+
+    // on download click in menu
+    override fun onDownloadClick(position: Int) {
+        listener!!.onDownloadClick(position)
+    }
+
+    // on delete click in menu
+    override fun onDeleteClick(position: Int) {
+        listener!!.onDeleteClick(position)
+    }
+
+    // on image click
+    override fun onImageClick(position: Int) {
+        listener!!.onItemClick(position)
+    }
+
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        container.removeView(`object` as RelativeLayout)
+        container.removeView(`object` as CoordinatorLayout)
     }
 
 }

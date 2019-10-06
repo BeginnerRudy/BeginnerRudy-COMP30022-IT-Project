@@ -38,7 +38,7 @@ data class Category(
         mActivity: AppCompatActivity,
         position: Int, uid: String
     ) {
-        var url = DEFAULT_COVER
+//        var url = DEFAULT_COVER
         if (itemKeys.isNotEmpty()) {
             val lastItemKey = itemKeys.last()
             val rootPath = "/"
@@ -98,7 +98,7 @@ data class Category(
 
             Picasso.get()
                 .load(url)
-                .placeholder(R.mipmap.ic_launcher)
+                .placeholder(R.mipmap.loading_jewellery)
                 .fit()
                 .centerCrop()
                 .into(holder.imageView)

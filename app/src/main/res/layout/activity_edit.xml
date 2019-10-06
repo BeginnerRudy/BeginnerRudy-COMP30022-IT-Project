@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/editItemImage"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="#07000000"
+            android:scaleType="centerCrop" />
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/edit_progress_bar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editItemImage"
+            android:layout_alignParentLeft="true" />
+
+        <Button
+            android:id="@+id/editItemChooseImage"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_progress_bar"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/choose_image"
+            android:textColor="@color/textColorPrimary" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/itemDate"
+            android:paddingStart="@dimen/layout_margin_left"
+            android:paddingBottom="5dp"
+            android:layout_below="@id/editItemChooseImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/editItemDateHint"
+                android:paddingBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/edit_date"
+                android:inputType="textMultiLine"
+                android:textSize="12sp"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/editItemDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="2019/01/01"
+                android:inputType="textMultiLine"
+                android:textSize="20sp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/itemName"
+
+            android:layout_below="@id/itemDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/type_item_name"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/itemDescription"
+            android:layout_below="@id/itemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/type_item_description"
+                android:inputType="textMultiLine" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <RelativeLayout
+            android:id="@+id/edit_snipper_bar"
+            android:layout_below="@id/itemDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/edit_snipper_bar_text"
+                android:paddingLeft="@dimen/layout_margin_left"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/edit_visibility"
+                android:inputType="textMultiLine"
+                android:layout_centerVertical="true"
+                android:textSize="18sp"/>
+
+            <Spinner
+                android:id="@+id/edit_privacy_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="43dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_toEndOf="@+id/edit_snipper_bar_text"
+                android:spinnerMode="dropdown"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/edit_location"
+            android:layout_below="@id/edit_snipper_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/edit_location_text"
+                android:paddingLeft="@dimen/layout_margin_left"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/edit_location"
+                android:inputType="textMultiLine"
+                android:layout_centerVertical="true"
+                android:textSize="18sp"/>
+
+            <RelativeLayout
+                android:id="@+id/edit_location_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="43dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_toEndOf="@+id/edit_location_text">
+
+                <TextView
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/layout_margin_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit_enter_password_to_view_location" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/layout_margin_right"
+                    app:srcCompat="@drawable/ic_edit_chevron_arrow_right" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/edit_pass_down"
+            android:paddingTop="@dimen/layout_margin_top_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edit_location"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/layout_margin_right">
+
+            <Button
+                android:id="@+id/editPassDownBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:backgroundTint="@color/colorAccent"
+                android:text="@string/edit_pass_down_btn"
+                android:textColor="@color/textColorPrimary" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/edit_passdown_to"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@id/editPassDownBtn"
+                android:layout_alignParentEnd="true"
+                android:inputType="textMultiLine|textNoSuggestions"
+                android:text="@string/edit_pass_down_to"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+
+
+        <Button
+            android:id="@+id/editConfirm"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edit_pass_down"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/edit_confirm"
+            android:textColor="@color/textColorPrimary" />
+    </RelativeLayout>
+</ScrollView>

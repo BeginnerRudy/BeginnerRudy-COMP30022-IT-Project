@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:backgroundTint="@color/colorWhite"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -102,28 +101,33 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/item_description_input"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/type_item_description"
-                            android:inputType="text" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/item_description_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/type_item_description"
+                        android:inputType="textMultiLine" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
-
+                    <TextView
+                        android:id="@+id/text_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/itemDescription"
+                        android:gravity="center"
+                        android:text="Please choose a date"
+                        android:textSize="24dp" />
                     <Button
                         android:id="@+id/addItemConfirm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/itemDescription"
+                        android:layout_below="@+id/text_date"
                         android:backgroundTint="@color/colorAccent"
                         android:text="@string/add_item"
                         android:textColor="@color/textColorPrimary" />
-
                 </LinearLayout>
             </ScrollView>
 
         </LinearLayout>
 </LinearLayout >
-
