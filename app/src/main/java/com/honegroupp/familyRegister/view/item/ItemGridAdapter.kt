@@ -61,7 +61,7 @@ class ItemGridAdapter:BaseAdapter{
             val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
 
             //load the image the the view
-            Picasso.get().load(uri).rotate(orientation).into(imageView)
+            Picasso.get().load(uri).resize(330, 310).centerCrop().rotate(orientation).into(imageView)
         }
 
         imageView.setOnClickListener {

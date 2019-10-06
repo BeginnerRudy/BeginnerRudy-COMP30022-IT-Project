@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:backgroundTint="@color/colorWhite"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,27 +13,26 @@
             android:padding="15dp"
             android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_view"
-                android:layout_gravity="center"
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:id="@+id/card_view"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_width="match_parent"-->
+<!--                app:cardElevation="0dp"-->
+<!--                android:paddingLeft="5dp"-->
+<!--                android:paddingRight="5dp"-->
+<!--                android:layout_height="670px"-->
+<!--                android:background="@color/colorAccent">-->
+
+<!--                -->
+
+<!--            </androidx.cardview.widget.CardView>-->
+            <GridView
+                android:id="@+id/itemGridView"
                 android:layout_width="match_parent"
-                app:cardElevation="0dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_height="670px"
-                android:background="@color/colorAccent">
-
-                <GridView
-                    android:id="@+id/itemGridView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:horizontalSpacing="10dp"
-                    android:numColumns="3"
-                    android:verticalSpacing="10dp"
-                    android:paddingBottom="10dp"/>
-
-            </androidx.cardview.widget.CardView>
-
+                android:layout_height="680px"
+                android:horizontalSpacing="10dp"
+                android:numColumns="3"
+                android:verticalSpacing="10dp" />
 
             <LinearLayout
                 android:layout_margin = "5dp"
