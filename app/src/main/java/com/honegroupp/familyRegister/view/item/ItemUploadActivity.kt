@@ -114,7 +114,9 @@ class ItemUploadActivity : AppCompatActivity(){
 
 
 
-   /* use the phone API to get images from the album*/
+   /*
+   use the phone API to get images from the album
+   */
     fun selectImageInAlbum() {
 
         //reset the image url list
@@ -126,7 +128,9 @@ class ItemUploadActivity : AppCompatActivity(){
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
-
+    /*
+    process when receive the result of image selection
+    */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -146,11 +150,9 @@ class ItemUploadActivity : AppCompatActivity(){
                             //handle multiple images
                             val count = data.getClipData()!!.getItemCount()
 
-
                             for (i in 0 until count) {
                                 var uri = data.getClipData()!!.getItemAt(i).uri
                                 if (uri != null) {
-
 
                                     //add into Uri List
                                     allImageUri.add(uri)
@@ -158,20 +160,17 @@ class ItemUploadActivity : AppCompatActivity(){
                                 }
                             }
 
-
                             //selecting single image from album
                         } else if (data.getData() != null) {
 
                             val uri = data.getData()
                             if (uri != null) {
 
-
                                 allUris.add(uri)
 
                                 //add into Uri List
                                 allImageUri.add(uri)
                             }
-
                         }
 
 
@@ -192,7 +191,8 @@ class ItemUploadActivity : AppCompatActivity(){
 
 
 
-   /*remove already selected items from the list, update the view
+   /*
+   remove already selected items from the list, update the view
    */
     fun removeItem(position:Int){
 
@@ -204,6 +204,9 @@ class ItemUploadActivity : AppCompatActivity(){
 
    }
 
+    /*
+    This method check the input is valid and upload to firebase if it is valid
+    */
     private fun checkInputAndUpload(categoryName:String){
 
         // need to check item name is not empty
@@ -225,7 +228,9 @@ class ItemUploadActivity : AppCompatActivity(){
     }
 
 
-    //Update the progress bar and display the progress message
+    /**
+    * Update the progress bar and display the progress message
+    **/
     fun displayProgress(){
         val percent = imagePathList.size*100/(imagePathList.size + allImageUri.size)
         progressBarText.text = percent.toString() + " %,  " +
@@ -235,6 +240,7 @@ class ItemUploadActivity : AppCompatActivity(){
                 (imagePathList.size + allImageUri.size).toString() + " " +
                 getString(com.honegroupp.familyRegister.R.string.image)
     }
+
 
     /**
      * This method validate whether the text of a given textView is a valid date or not.
@@ -251,10 +257,22 @@ class ItemUploadActivity : AppCompatActivity(){
         }
     }
 
+
     /**
      * This method is responsible for setting date picker.
      * */
     private fun setDatePicker(textView: TextView) {
+
+        //set cursor invisible
+        textView.isCursorVisible = false
+
+        //disable keyboard because select date
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textView.setShowSoftInputOnFocus(false);
+        } else {
+            textView.setTextIsSelectable(true);
+        }
+
         var cal = Calendar.getInstance()
         val dateSetListener =
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
