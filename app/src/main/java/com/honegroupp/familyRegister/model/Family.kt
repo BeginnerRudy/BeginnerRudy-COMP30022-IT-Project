@@ -210,11 +210,19 @@ data class Family(
          * This function is responsible for showing all the items in the category
          *
          * */
-        fun showItems(uid: String, categoryName: String, mActivity: ItemListActivity) {
+        fun showItems(
+            uid: String,
+            items: ArrayList<Item>,
+            itemListAdapter: ContainerAdapter,
+            categoryName: String,
+            mActivity: ItemListActivity
+        ) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
                 callbackShowItems(
                     uid,
+                    items,
+                    itemListAdapter,
                     categoryName,
                     mActivity,
                     d
@@ -227,24 +235,13 @@ data class Family(
          * */
         private fun callbackShowItems(
             uid: String,
+            items: ArrayList<Item>,
+            itemListAdapter: ContainerAdapter,
             categoryName: String,
             mActivity: ItemListActivity,
             dataSnapshot: DataSnapshot
         ) {
 
-            // get items of that category
-            val items = ArrayList<Item>()
-
-            val recyclerView = mActivity.findViewById<RecyclerView>(R.id.item_list_recycler_view)
-
-            // Setting the recycler view
-            recyclerView.setHasFixedSize(true)
-            recyclerView.layoutManager = LinearLayoutManager(mActivity)
-
-            // setting one ItemListAdapter
-            val itemListAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.CATEGORY)
-            recyclerView.adapter = itemListAdapter
-            itemListAdapter.listener = mActivity
 
             // get user's family ID
             val currFamilyId =
@@ -343,13 +340,6 @@ data class Family(
                     String::class.java
                 ) as String
 
-
-            val countOfCategory = (dataSnapshot
-                .child(FirebaseDatabaseManager.FAMILY_PATH)
-                .child(currFamilyId)
-                .child("categories")
-                .value as ArrayList<Category>).size
-
             // find the category
             val itemKeys = dataSnapshot
                 .child(FirebaseDatabaseManager.FAMILY_PATH)
@@ -359,7 +349,7 @@ data class Family(
                 .child("itemKeys")
                 .children
 
-//            Toast.makeText(mActivity, itemId, Toast.LENGTH_SHORT).show()
+
             for (itemKey in itemKeys) {
                 // remove item from category only.
                 if (itemKey.value == itemId) {
@@ -406,13 +396,21 @@ data class Family(
          * This method is responsible for showing all items in the show page
          *
          * */
-        fun displayShowPage(mActivity: HomeActivity, uid: String, currFrag: Fragment) {
+        fun displayShowPage(
+            mActivity: HomeActivity,
+            items: ArrayList<Item>,
+            showTabAdapter: ContainerAdapter,
+            uid: String,
+            currFrag: Fragment
+        ) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
                 callbackDisplayShowPage(
                     uid,
                     mActivity,
                     currFrag,
+                    items,
+                    showTabAdapter,
                     d
                 )
             }
@@ -425,6 +423,8 @@ data class Family(
             uid: String,
             mActivity: HomeActivity,
             currFrag: Fragment,
+            items: ArrayList<Item>,
+            allTabAdapter: ContainerAdapter,
             dataSnapshot: DataSnapshot
         ) {
             if (currFrag != null && currFrag.isVisible) {
@@ -443,22 +443,6 @@ data class Family(
                         .child("items")
                         .children
 
-                // set list for liked items
-                val items = ArrayList<Item>()
-
-                val recyclerView =
-                    mActivity.findViewById<RecyclerView>(R.id.item_list_recycler_view)
-
-                // Setting the recycler view
-                recyclerView.setHasFixedSize(true)
-                recyclerView.layoutManager = LinearLayoutManager(mActivity)
-
-                // setting one ItemListAdapter
-                val showTabAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.SHOWPAGE)
-                recyclerView.adapter = showTabAdapter
-
-                // set listener
-                showTabAdapter.listener = mActivity
 
                 // clear items once retrieve item from the database
                 items.clear()
@@ -482,7 +466,7 @@ data class Family(
                         View.VISIBLE
                 } else {
                     // notify the adapter to update
-                    showTabAdapter.notifyDataSetChanged()
+                    allTabAdapter.notifyDataSetChanged()
                     // Make the progress bar invisible
                     mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
                         View.INVISIBLE
@@ -493,16 +477,24 @@ data class Family(
         }
 
 
-        fun showAll(uid: String, mActivity: HomeActivity, currFrag: Fragment) {
+        fun showAll(
+            uid: String,
+            items: ArrayList<Item>,
+            showTabAdapter: ContainerAdapter,
+            mActivity: HomeActivity,
+            currFrag: Fragment
+        ) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
-                callbackShowAll(uid, mActivity, currFrag, d)
+                callbackShowAll(uid, items, showTabAdapter, mActivity, currFrag, d)
             }
         }
 
 
         private fun callbackShowAll(
             uid: String,
+            items: ArrayList<Item>,
+            showTabAdapter: ContainerAdapter,
             mActivity: HomeActivity,
             currFrag: Fragment,
             dataSnapshot: DataSnapshot
@@ -522,23 +514,6 @@ data class Family(
                         .child(currFamilyId)
                         .child("items")
                         .children
-
-                // set list for liked items
-                val items = ArrayList<Item>()
-
-                val recyclerView =
-                    mActivity.findViewById<RecyclerView>(R.id.all_item_list_recycler_view)
-
-                // Setting the recycler view
-                recyclerView.setHasFixedSize(true)
-                recyclerView.layoutManager = LinearLayoutManager(mActivity)
-
-                // setting one ItemListAdapter
-                val showTabAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.SHOWPAGE)
-                recyclerView.adapter = showTabAdapter
-
-                // set listener
-                showTabAdapter.listener = mActivity
 
                 // clear items once retrieve item from the database
                 items.clear()
