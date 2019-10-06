@@ -1,5 +1,6 @@
 package com.honegroupp.familyRegister.controller
 
+import androidx.fragment.app.Fragment
 import com.honegroupp.familyRegister.model.Family
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.view.home.HomeActivity
@@ -19,8 +20,8 @@ class ShowPageController {
          * This method is responsible for displaying all liked items
          *
          * */
-        fun showAllLiked(mActivity: HomeActivity, uid: String){
-            Family.displayShowPage(mActivity, uid)
+        fun showAllLiked(mActivity: HomeActivity, uid: String, currFrag: Fragment ){
+            Family.displayShowPage(mActivity, uid, currFrag)
         }
     }
 }
