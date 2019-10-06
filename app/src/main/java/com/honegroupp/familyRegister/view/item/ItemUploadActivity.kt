@@ -52,6 +52,7 @@ class ItemUploadActivity : AppCompatActivity(){
         //set up the grid view
         // Get an instance of base adapter
         val adapter = ItemGridAdapter(this,allImageUri)
+
         // Set the grid view adapter
         itemGridView.adapter = adapter
 
@@ -66,8 +67,11 @@ class ItemUploadActivity : AppCompatActivity(){
             checkInputAndUpload(categoryName)
         }
     }
+
+
+    /*create the item and upload*/
     fun uploadItem(categoryName:String){
-        //create the item and upload
+
         ItemController.createItem(
             this,
             this.item_name_input,
@@ -93,8 +97,7 @@ class ItemUploadActivity : AppCompatActivity(){
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
-    @SuppressLint("ResourceType", "NewApi")
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -127,8 +130,6 @@ class ItemUploadActivity : AppCompatActivity(){
                             }
 
 
-
-
                             //selecting single image from album
                         } else if (data.getData() != null) {
 
@@ -145,7 +146,6 @@ class ItemUploadActivity : AppCompatActivity(){
                         }
 
 
-
                         // Get an instance of base adapter
                         val adapter = ItemGridAdapter(this,allImageUri)
 
@@ -153,7 +153,6 @@ class ItemUploadActivity : AppCompatActivity(){
                         itemGridView.adapter = adapter
 
 
-//                        Toast.makeText(this,numberOfImages.toString(),Toast.LENGTH_LONG).show()
                     }else{
                         Toast.makeText(this,"Error",Toast.LENGTH_LONG).show()
                     }

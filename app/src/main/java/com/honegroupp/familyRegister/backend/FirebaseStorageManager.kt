@@ -5,11 +5,8 @@ import android.provider.MediaStore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
-import com.honegroupp.familyRegister.controller.ItemController
 import com.honegroupp.familyRegister.utility.CompressionUtil
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
-import kotlinx.android.synthetic.main.item_upload_page.*
-import java.io.ByteArrayOutputStream
 
 class FirebaseStorageManager{
     companion object {
@@ -18,16 +15,7 @@ class FirebaseStorageManager{
         fun uploadToFirebase(allImageUri: ArrayList<Uri>, categoryName:String,activity:ItemUploadActivity) {
             if (allImageUri.size == 0){
 
-//                //create the item and upload
-//                ItemController.createItem(
-//                    activity,
-//                    activity.item_name_input,
-//                    activity.item_description_input,
-//                    activity.uid,
-//                    categoryName,
-//                    activity.imagePathList,
-//                    activity.itemPrivacyPosition == 0
-//                )
+                //Create Item And Upload
                 activity.uploadItem(categoryName)
 
             }else {

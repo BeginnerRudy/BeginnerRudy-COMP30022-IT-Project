@@ -7,11 +7,16 @@ import android.view.*
 import android.widget.*
 import android.view.LayoutInflater
 import android.net.Uri
+import android.provider.MediaStore
 import android.widget.Toast.*
+import androidx.loader.content.CursorLoader
+import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.utility.ImageRotateUtil
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.squareup.picasso.Picasso
-import com.honegroupp.familyRegister.R
 
+import android.app.Activity
+import android.database.Cursor
 
 
 class ItemGridAdapter:BaseAdapter{
@@ -32,6 +37,8 @@ class ItemGridAdapter:BaseAdapter{
             getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
 
+
+
         var view = inflater.inflate(com.honegroupp.familyRegister.R.layout.upload_image,null)
 
         //set imageView size
@@ -46,7 +53,11 @@ class ItemGridAdapter:BaseAdapter{
         }else{
 
             //load the image to view
-            Picasso.get().load(allUris?.get(position)).into(imageView)
+            val uri = allUris?.get(position)
+            val path = getFilePathFromContentUri(uri!!, context!!)
+            val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
+            Toast.makeText(context, orientation.toString(),Toast.LENGTH_SHORT).show()
+            Picasso.get().load(uri).rotate(orientation).into(imageView)
         }
 
 
@@ -109,5 +120,8 @@ class ItemGridAdapter:BaseAdapter{
             return false
         }
     }
+
+
+
 
 }
