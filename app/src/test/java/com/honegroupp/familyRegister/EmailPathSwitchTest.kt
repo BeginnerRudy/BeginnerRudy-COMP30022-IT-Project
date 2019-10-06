@@ -1,5 +1,5 @@
 package com.honegroupp.familyRegister
-import com.honegroupp.familyRegister.model.EmailPathSwitch
+import com.honegroupp.familyRegister.utility.EmailPathSwitch
 import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Before

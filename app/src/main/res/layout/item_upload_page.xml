@@ -19,7 +19,7 @@
                 app:cardElevation="0dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:layout_height="wrap_content"
+                android:layout_height="670px"
                 android:background="@color/colorAccent">
 
                 <GridView
@@ -33,12 +33,7 @@
 
             </androidx.cardview.widget.CardView>
 
-<!--            <ProgressBar-->
-<!--                android:id="@+id/uploadProgressBar"-->
-<!--                style="?android:attr/progressBarStyleHorizontal"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:max="100" />-->
+
             <LinearLayout
                 android:layout_margin = "5dp"
                 android:layout_width="match_parent"
@@ -72,15 +67,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-<!--                    <Button-->
-<!--                        android:id="@+id/itemChooseImage"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_below="@+id/itemGridView"-->
-<!--                        android:backgroundTint="@color/colorAccent"-->
-<!--                        android:text="@string/choose_image"-->
-<!--                        android:textColor="@color/textColorPrimary" />-->
-
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/spinner"

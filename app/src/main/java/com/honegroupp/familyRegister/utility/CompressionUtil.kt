@@ -13,37 +13,30 @@ class CompressionUtil{
 
 
         val IMAGA_QUALITY = 30
+        val MAX_RESOLUTION : Float = 2016f
 
-        //compress the image th PNG
-        fun compressImage(uri: Uri, context:Context):Uri{
+        //compress the image
+        fun compressImage(scaledBitmap: Bitmap):ByteArray{
             val bytes = ByteArrayOutputStream()
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, IMAGA_QUALITY, bytes)
+            return bytes.toByteArray()
+        }
 
-//            require minimum API level 28
-//            val bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
+        /*Decrease the resolution of image to reduce the size*/
+        fun scaleDown(
+            realImage: Bitmap,filter: Boolean): Bitmap {
+            val maxImageSize:Float = MAX_RESOLUTION
+            val ratio = Math.min(
+                maxImageSize / realImage.width,
+                maxImageSize / realImage.height
+            )
+            val width = Math.round(ratio * realImage.width)
+            val height = Math.round(ratio * realImage.height)
 
-//            convert the uri to bitmap
-            val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-
-//            compres the image
-            bitmap.compress(Bitmap.CompressFormat.PNG, IMAGA_QUALITY, bytes)
-
-//            convert bitmap to bytes
-            val bytesData = bytes.toByteArray()
-
-//            convert the bytes to newBitmap
-            val newBitmap  = BitmapFactory.decodeByteArray(bytesData, 0, bytesData.size);
-
-
-//            convert the bitmap to path
-            val path =
-                MediaStore.Images.Media.insertImage(context.contentResolver,
-                    newBitmap, System.currentTimeMillis().toString(), null)
-
-//            convert the path to uri
-            val compressedUri = Uri.parse(path)
-
-            //return the uri of compressed image
-            return compressedUri
+            return Bitmap.createScaledBitmap(
+                realImage, width,
+                height, filter
+            )
         }
 
     }

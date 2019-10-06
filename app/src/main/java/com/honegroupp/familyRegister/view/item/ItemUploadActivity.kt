@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.honegroupp.familyRegister.R
 import kotlinx.android.synthetic.main.item_upload_page.*
 import android.app.Activity
 import android.net.Uri
@@ -20,10 +19,8 @@ import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.os.Build
 import androidx.annotation.RequiresApi
-import java.io.ByteArrayOutputStream
-import android.provider.MediaStore
-import android.graphics.BitmapFactory
-import com.honegroupp.familyRegister.utility.CompressionUtil
+import com.honegroupp.familyRegister.backend.FirebaseStorageManager
+
 
 
 class ItemUploadActivity : AppCompatActivity(){
@@ -37,18 +34,18 @@ class ItemUploadActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.item_upload_page)
+        setContentView(com.honegroupp.familyRegister.R.layout.item_upload_page)
 
         uid = intent.getStringExtra("UserID")
         val categoryName = intent.getStringExtra("categoryPath").toString()
 
         //set up the spinner (select public and privacy)
-        val spinner: Spinner = findViewById(R.id.privacy_spinner)
+        val spinner: Spinner = findViewById(com.honegroupp.familyRegister.R.id.privacy_spinner)
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
             this,
-            R.array.privacy_options,
+            com.honegroupp.familyRegister.R.array.privacy_options,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears
@@ -119,29 +116,6 @@ class ItemUploadActivity : AppCompatActivity(){
                                 var uri = data.getClipData()!!.getItemAt(i).uri
                                 if (uri != null) {
 
-                                    //compress the image
-
-
-
-
-
-//                                    val bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(this.contentResolver, uri))
-//
-//
-//                                    val bytes = ByteArrayOutputStream()
-//
-//
-//                                    bitmap.compress(Bitmap.CompressFormat.PNG, 10, bytes)
-//                                    val bitmapdata = bytes.toByteArray()
-//                                    val newBitmap  = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.size);
-//
-//
-//                                    //get compressed image
-//                                    val path = MediaStore.Images.Media.insertImage(this.getContentResolver(), newBitmap, "Title", null);
-//                                    val compressedUri = Uri.parse(path)
-
-//                                    compress the image
-//                                    val compressedUri = CompressionUtil.compressImage(uri,this)
 
                                     //add into Uri List
                                     allImageUri.add(uri)
@@ -203,70 +177,29 @@ class ItemUploadActivity : AppCompatActivity(){
 
         // need to check item name is not empty
         if(item_name_input.text.toString() == ""){
-            Toast.makeText(this,getString(R.string.item_name_should_not_leave_blank),Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,getString(com.honegroupp.familyRegister.R.string.item_name_should_not_leave_blank),Toast.LENGTH_SHORT).show()
 
         //check at least one photo is added
         }else if(allImageUri.size == 0) {
-            Toast.makeText(this,getString(R.string.please_select_at_least_one_image), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,getString(com.honegroupp.familyRegister.R.string.please_select_at_least_one_image), Toast.LENGTH_SHORT).show()
 
         }else {
             //upload uri to firebase
-            uploadToFirebase(allImageUri, categoryName)
+            FirebaseStorageManager.uploadToFirebase(allImageUri, categoryName,this)
         }
 
     }
 
-
-    private fun uploadToFirebase(allImageUri: ArrayList<Uri>, categoryName:String) {
-        if (allImageUri.size == 0){
-            Toast.makeText(this, "All images are uploaded",Toast.LENGTH_SHORT).show()
-            //upload the item
-            createItem(this, item_name_input,item_description_input, uid, categoryName, imagePathList, itemPrivacyPosition == 0)
-
-        }else {
-
-            displayProgress()
-
-            val uploadPath = " "
-            val ref =
-                FirebaseStorage.getInstance()
-                    .reference.child(uploadPath + System.currentTimeMillis())
-
-
-            val uri = allImageUri[0]
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-            val bytes = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, CompressionUtil.IMAGA_QUALITY, bytes)
-            val data = bytes.toByteArray()
-
-
-            var uploadTask: StorageTask<UploadTask.TaskSnapshot>? = ref.putBytes(data)
-                .addOnSuccessListener {
-
-                    allImageUri.removeAt(0)
-
-                    //add item logic
-                    ref.downloadUrl.addOnCompleteListener() { taskSnapshot ->
-                        var url = taskSnapshot.result
-                        this.imagePathList.add(url.toString())
-
-                        Toast.makeText(this, allImageUri.size.toString(),Toast.LENGTH_SHORT).show()
-                        uploadToFirebase(allImageUri,categoryName)
-
-                    }
-                }
-        }
-    }
 
     //Update the progress bar and display the progress message
-    private fun displayProgress(){
+    fun displayProgress(){
         val percent = imagePathList.size*100/(imagePathList.size + allImageUri.size)
         progressBarText.text = percent.toString() + " %,  " +
-                getString(R.string.uploading) +
+                getString(com.honegroupp.familyRegister.R.string.uploading) +
                 (imagePathList.size+1).toString()+
-                getString(R.string.of)+
+                getString(com.honegroupp.familyRegister.R.string.of)+
                 (imagePathList.size + allImageUri.size).toString() + " " +
-                getString(R.string.image)
+                getString(com.honegroupp.familyRegister.R.string.image)
     }
 
 }
