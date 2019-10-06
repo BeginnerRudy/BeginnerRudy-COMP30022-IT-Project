@@ -21,10 +21,11 @@ class   SearchController {
         fun init(
             mActivity: AppCompatActivity,
             listView: ListView,
-            uid: String
+            uid: String,
+            category: Int
         ){
             //actual logic function for init function
-            searchMethod.init(mActivity,listView, uid)
+            searchMethod.init(mActivity,listView, uid, category)
         }
 
         /**
@@ -35,10 +36,11 @@ class   SearchController {
             mActivity: AppCompatActivity,
             queryText: String,
             uid: String,
+            category: Int,
             listView: ListView
         ) {
             //actual logic function for doSearch function
-            searchMethod.doSearch(mActivity, listView, uid, queryText);
+            searchMethod.doSearch(mActivity, listView, uid, category, queryText);
 
             //Toast.makeText(mActivity, "Search Finished", Toast.LENGTH_SHORT).show()
         }

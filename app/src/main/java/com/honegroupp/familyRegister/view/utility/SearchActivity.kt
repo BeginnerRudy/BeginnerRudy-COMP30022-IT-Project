@@ -11,16 +11,12 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.SearchController
 import com.honegroupp.familyRegister.view.item.DetailSlide
 import kotlinx.android.synthetic.main.activity_search.*
+import kotlin.properties.Delegates
 
 class SearchActivity : AppCompatActivity() {
 
-    companion object{
-        const val SEARCH_All = -1
-        const val SEARCH_SHOW = -2
-    }
-
     lateinit var currUid: String
-    lateinit var category: CharCategory
+    var category: Int = -99
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +24,13 @@ class SearchActivity : AppCompatActivity() {
 
         //get User ID
         currUid= intent.getStringExtra("UserID")
-        //get
+        // get position of item clicked in item list for setting Current page item
+        category = intent.getStringExtra("Category").toInt()
+        //get listview
         val listView: ListView = findViewById(R.id.list_view)
 
-        initView(listView, currUid);
-        setListener(listView);
+        initView(listView, currUid)
+        setListener(listView)
     }
 
     /*
@@ -42,7 +40,7 @@ class SearchActivity : AppCompatActivity() {
     private fun initView(listView: ListView, uid: String){
         //the style of search view
         view_search.onActionViewExpanded()
-        SearchController.init(this, listView, uid)
+        SearchController.init(this, listView, uid, category)
     }
 
     private fun setListener(listView: ListView){
@@ -52,13 +50,13 @@ class SearchActivity : AppCompatActivity() {
 
             //when search clicked
             override fun onQueryTextSubmit(query: String): Boolean {
-                SearchController.makeSearch(this@SearchActivity,query,currUid, listView)
+                SearchController.makeSearch(this@SearchActivity,query,currUid, category, listView)
                 return false
             }
 
             //when search context changed
             override fun onQueryTextChange(newText: String): Boolean {
-                SearchController.makeSearch(this@SearchActivity,newText,currUid, listView)
+                SearchController.makeSearch(this@SearchActivity,newText,currUid, category, listView)
                 return false
             }
 
