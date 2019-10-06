@@ -461,8 +461,9 @@ data class Family(
                     mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
                         View.INVISIBLE
 
-                    mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
-                        View.VISIBLE
+                    val text = mActivity.findViewById<TextView>(R.id.text_view_empty_category)
+                    text.text = mActivity.getString(R.string.no_items_for_the_show_page)
+                    text.visibility = View.VISIBLE
                 } else {
                     // notify the adapter to update
                     allTabAdapter.notifyDataSetChanged()
@@ -500,7 +501,7 @@ data class Family(
         ) {
             if (currFrag != null && currFrag.isVisible) {
                 // set the categoryName for HomeActivity
-                mActivity.categoryName = DetailSlide.SHOW_PAGE_SIGNAL.toString()
+                mActivity.categoryName = DetailSlide.ALL_PAGE_SIGNAL.toString()
 
                 // get user's family ID
                 val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
@@ -529,8 +530,8 @@ data class Family(
                     mActivity.findViewById<ProgressBar>(R.id.all_progress_circular).visibility =
                         View.INVISIBLE
 
-                    mActivity.findViewById<TextView>(R.id.all_text_view_empty_category).visibility =
-                        View.VISIBLE
+                    val text = mActivity.findViewById<TextView>(R.id.text_view_empty_category)
+                    text.visibility = View.VISIBLE
                 } else {
                     // notify the adapter to update
                     showTabAdapter.notifyDataSetChanged()

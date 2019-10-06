@@ -78,6 +78,10 @@
     <string name="password_is_incorrect">密码错误！</string>
     <string name="join_family_successfully">成功加入家庭！</string>
 
+
+    <string name="delete_from_this_category">从此分类删除</string>
+    <string name="no_items_for_the_show_page">展示页没有物品</string>
+
     <string-array name="privacy_options">
         <item>家庭可见</item>
         <item>仅自己可见</item>
