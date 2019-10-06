@@ -4,6 +4,7 @@ import android.view.*
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ShowPageController
@@ -101,6 +102,8 @@ open class ContainerAdapter(
                 if (position != RecyclerView.NO_POSITION) {
                     listener!!.onItemClick(position)
                 }
+            }else{
+                Toast.makeText(mContext, "listener is null", Toast.LENGTH_LONG).show()
             }
         }
 
