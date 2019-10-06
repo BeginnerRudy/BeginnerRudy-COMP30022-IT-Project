@@ -41,12 +41,16 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val co
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): View {
-        val layoutInflater:LayoutInflater = LayoutInflater.from(context)
+        val layoutInflater: LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_detail_layout, container, false)
 
         // set slides of images
         imagesSlideViewPager = view.findViewById(R.id.detail_images_slideViewPager)
-        var imagesSliderAdapter = DetailImagesSliderAdapter(items[position].imageURLs, items[position].itemOwnerUID==userId, context)
+        var imagesSliderAdapter = DetailImagesSliderAdapter(
+            items[position].imageURLs,
+            items[position].itemOwnerUID == userId,
+            context
+        )
         imagesSlideViewPager.adapter = imagesSliderAdapter
         imagesSliderAdapter.listener = this
 
@@ -55,11 +59,14 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val co
         val slideDescription = view.findViewById<TextView>(R.id.detail_desc)
         val slideDate = view.findViewById<TextView>(R.id.detail_date)
         val showButton = view.findViewById<MaterialFavoriteButton>(R.id.detail_favorite_button)
+        showButton.isFavorite = false
+        showButton.setFavoriteResource(R.drawable.ic_favorite_red_24dp)
 
         val currItemUploads = items[position]
 
         // slideHeading.setText(currItemUploads.itemName)
-        val slideToolbar = view.findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.detial_collapsing_toolbar)
+        val slideToolbar =
+            view.findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.detial_collapsing_toolbar)
         slideToolbar.setTitle(currItemUploads.itemName)
         slideDescription.setText(currItemUploads.itemDescription)
         var dateParts = currItemUploads.date.split("/")
@@ -71,14 +78,14 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val co
             showButton.isFavorite = true
         }
 
-        // click on show button
-        showButton.setOnClickListener(){
+        // show button logic
+        showButton.setOnClickListener {
             ShowPageController.manageShow(currItemUploads, userId)
         }
 
         // click on edit button
-        if (items[position].itemOwnerUID == userId){
-            view.findViewById<Button>(R.id.detail_edit).setOnClickListener{
+        if (items[position].itemOwnerUID == userId) {
+            view.findViewById<Button>(R.id.detail_edit).setOnClickListener {
                 listener!!.onEditClick(items[position].key)
             }
         } else {

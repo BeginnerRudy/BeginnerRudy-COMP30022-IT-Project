@@ -96,6 +96,9 @@ open class ContainerAdapter(
         init {
             viewItem.setOnClickListener(this)
 
+            showButton.setFavoriteResource(R.drawable.ic_favorite_red_24dp)
+            showButton.isFavorite = false
+
             if (situation == CATEGORY) {
                 viewItem.setOnCreateContextMenuListener(this)
             }
