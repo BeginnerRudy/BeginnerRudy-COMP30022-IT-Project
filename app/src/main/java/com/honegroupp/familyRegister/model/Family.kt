@@ -2,10 +2,8 @@ package com.honegroupp.familyRegister.model
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,9 +13,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.view.home.HomeActivity
-import com.honegroupp.familyRegister.view.itemList.ItemListAdapter
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.view.home.ShowTabAdapter
+import com.honegroupp.familyRegister.view.home.ContainerActivity
+import com.honegroupp.familyRegister.view.home.ContainerAdapter
+import com.honegroupp.familyRegister.view.item.DetailSlide
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 
@@ -241,7 +240,7 @@ data class Family(
             recyclerView.layoutManager = LinearLayoutManager(mActivity)
 
             // setting one ItemListAdapter
-            val itemListAdapter = ItemListAdapter(items, mActivity)
+            val itemListAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.CATEGORY)
             recyclerView.adapter = itemListAdapter
             itemListAdapter.listener = mActivity
 
@@ -315,7 +314,7 @@ data class Family(
         fun deleteItem(
             uid: String,
             categoryName: String,
-            mActivity: ItemListActivity,
+            mActivity: ContainerActivity,
             itemId: String
         ) {
             val rootPath = "/"
@@ -332,7 +331,7 @@ data class Family(
         private fun callbackDeleteItem(
             uid: String,
             categoryName: String,
-            mActivity: ItemListActivity,
+            mActivity: ContainerActivity,
             itemId: String,
             dataSnapshot: DataSnapshot
         ) {
@@ -424,8 +423,11 @@ data class Family(
             mActivity: HomeActivity,
             dataSnapshot: DataSnapshot
         ) {
+            mActivity.categoryName = DetailSlide.SHOW_PAGE_SIGNAL.toString()
+
             // get user's family ID
             val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+            mActivity.familyId = currFamilyId
 
             // get items from the family
             val allItems =
@@ -445,8 +447,11 @@ data class Family(
             recyclerView.layoutManager = LinearLayoutManager(mActivity)
 
             // setting one ItemListAdapter
-            val showTabAdapter = ShowTabAdapter(items, mActivity)
+            val showTabAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.SHOWPAGE)
             recyclerView.adapter = showTabAdapter
+
+            // set listener
+            showTabAdapter.listener = mActivity
 
             // clear items once retrieve item from the database
             items.clear()
@@ -455,7 +460,7 @@ data class Family(
                 val item = it.getValue(Item::class.java) as Item
 
                 // add it to the items, check item is visible, if not check user is owner
-                if (item.ShowPageUids.contains(uid)) {
+                if (item.showPageUids.contains(uid)) {
                     item.key = it.key.toString()
                     items.add(item)
                 }

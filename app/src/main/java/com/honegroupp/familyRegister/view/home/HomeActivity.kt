@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.nav_header_main.*
 
 
 @Suppress("DEPRECATION")
-class HomeActivity : AppCompatActivity(), IDoubleClickToExit {
+class HomeActivity : ContainerActivity(), IDoubleClickToExit {
 
     private lateinit var toolbar: Toolbar
     private lateinit var tabLayout: TabLayout

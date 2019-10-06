@@ -179,7 +179,8 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                             itemOwnerUID = currItemOwner,
                             imageURLs = currItem.imageURLs,
                             isPublic = spinner.selectedItemPosition == 0,
-                            date = editItemDate.text.toString()
+                            date = editItemDate.text.toString(),
+                            showPageUids = currItem.showPageUids
                         )
 
                         // upload to Firebase
