@@ -7,14 +7,17 @@ import android.widget.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.github.ivbaranov.mfb.MaterialFavoriteButton
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.controller.ShowPageController
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 
-class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val context: Context) : PagerAdapter(),
+class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val context: Context) :
+    PagerAdapter(),
     DetailImagesSliderAdapter.OnItemClickerListener {
 
-    lateinit var imagesSlideViewPager : ViewPager
+    lateinit var imagesSlideViewPager: ViewPager
     var listener: OnItemClickerListener? = null
 
     interface OnItemClickerListener {
@@ -39,12 +42,16 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val co
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): View {
-        val layoutInflater:LayoutInflater = LayoutInflater.from(context)
+        val layoutInflater: LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_detail_layout, container, false)
 
         // set slides of images
         imagesSlideViewPager = view.findViewById(R.id.detail_images_slideViewPager)
-        var imagesSliderAdapter = DetailImagesSliderAdapter(items[position].imageURLs, items[position].itemOwnerUID==userId, context)
+        var imagesSliderAdapter = DetailImagesSliderAdapter(
+            items[position].imageURLs,
+            items[position].itemOwnerUID == userId,
+            context
+        )
         imagesSlideViewPager.adapter = imagesSliderAdapter
         imagesSliderAdapter.listener = this
 
@@ -52,26 +59,39 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val co
         // val slideHeading = view.findViewById<TextView>(R.id.detail_heading)
         val slideDescription = view.findViewById<TextView>(R.id.detail_desc)
         val slideDate = view.findViewById<TextView>(R.id.detail_date)
+        val showButton = view.findViewById<MaterialFavoriteButton>(R.id.detail_favorite_button)
+        showButton.isFavorite = false
+        showButton.setFavoriteResource(R.drawable.ic_favorite_red_24dp)
 
         val currItemUploads = items[position]
 
         // slideHeading.setText(currItemUploads.itemName)
-        val slideToolbar = view.findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.detial_collapsing_toolbar)
+        val slideToolbar =
+            view.findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.detial_collapsing_toolbar)
         slideToolbar.setTitle(currItemUploads.itemName)
         slideDescription.setText(currItemUploads.itemDescription)
         var dateParts = currItemUploads.date.split("/")
         var newDate = dateParts[2] + "." + dateParts[1] + "." + dateParts[0]
         slideDate.setText(newDate)
 
+        if (userId in items[position].showPageUids) {
+            showButton.isFavorite = true
+        }
+
+        // show button logic
+        showButton.setOnClickListener {
+            ShowPageController.manageShow(currItemUploads, userId)
+        }
 
         // click on edit button
-        if (items[position].itemOwnerUID == userId){
-            view.findViewById<Button>(R.id.detail_edit).setOnClickListener{
+        if (items[position].itemOwnerUID == userId) {
+            view.findViewById<Button>(R.id.detail_edit).setOnClickListener {
                 listener!!.onEditClick(items[position].key)
             }
         } else {
             view.findViewById<Button>(R.id.detail_edit).visibility = View.INVISIBLE
         }
+
 
         container.addView(view)
         return view
