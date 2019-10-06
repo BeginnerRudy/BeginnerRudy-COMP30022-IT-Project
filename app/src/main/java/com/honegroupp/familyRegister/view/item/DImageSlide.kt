@@ -166,6 +166,7 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
             for (i in 0 until numDots) {
                 mDots[i] = TextView(this)
                 mDots[i]?.text = Html.fromHtml("&#8226;")
+                mDots[i]?.setTextSize(30.toFloat())
                 mDots[i]?.setTextColor(resources.getColor(R.color.colorTransparentWhite))
 
                 mDotLayout.addView(mDots[i])
