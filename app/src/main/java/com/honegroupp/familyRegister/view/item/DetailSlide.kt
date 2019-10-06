@@ -223,9 +223,10 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                                 }
                             }
                         } else if (categoryIndexList == ALL_PAGE_SIGNAL) {
+                            Log.d("ccccindexalll", categoryIndexList.toString())
                             itemUploads.add(currItemUpload)
                         } else if (categoryIndexList == SHOW_PAGE_SIGNAL){
-
+                            Log.d("ccccindexssss", categoryIndexList.toString())
 
                             if (detailUserId in currItemUpload.showPageUids.keys){
                                 itemUploads.add(currItemUpload)
