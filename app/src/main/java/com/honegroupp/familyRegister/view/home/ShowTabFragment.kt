@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.CategoryController
 import com.honegroupp.familyRegister.controller.ShowPageController
+import kotlinx.android.synthetic.main.activity_item_list.view.*
 
 
 class ShowTabFragment : Fragment() {
@@ -28,6 +29,9 @@ class ShowTabFragment : Fragment() {
         // Show all item liked
         val homeActivity = activity as HomeActivity
         ShowPageController.showAllLiked(homeActivity, homeActivity.userID)
+
+        // User could not add item from the show page
+        view.btn_add.visibility = View.INVISIBLE
 
         return view
     }
