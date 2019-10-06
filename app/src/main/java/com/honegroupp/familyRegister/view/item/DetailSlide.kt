@@ -199,7 +199,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                Log.d("ooonDataChange","cccccgne")
                 itemUploads.clear()
                 sliderAdapter.notifyDataSetChanged()
 
@@ -207,6 +206,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                 p0.children.forEach {
                     val currItemUpload = it.getValue(Item::class.java) as Item
                     currItemUpload.key = it.key
+
 
                     // wait for categories(categoryUploads) is get from database
                     if (categoryUploads.size != 0){
@@ -224,6 +224,8 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                         } else if (categoryIndexList == ALL_PAGE_SIGNAL) {
                             itemUploads.add(currItemUpload)
                         } else if (categoryIndexList == SHOW_PAGE_SIGNAL){
+
+
                             if (detailUserId in currItemUpload.ShowPageUids.keys){
                                 itemUploads.add(currItemUpload)
                             }

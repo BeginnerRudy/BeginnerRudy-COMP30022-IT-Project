@@ -17,6 +17,7 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.view.home.ContainerActivity
 import com.honegroupp.familyRegister.view.home.ContainerAdapter
 import com.honegroupp.familyRegister.view.home.ShowTabAdapter
+import com.honegroupp.familyRegister.view.item.DetailSlide
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 
@@ -423,8 +424,11 @@ data class Family(
             mActivity: HomeActivity,
             dataSnapshot: DataSnapshot
         ) {
+            mActivity.categoryName = DetailSlide.SHOW_PAGE_SIGNAL.toString()
+
             // get user's family ID
             val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+            mActivity.familyId = currFamilyId
 
             // get items from the family
             val allItems =
@@ -446,6 +450,9 @@ data class Family(
             // setting one ItemListAdapter
             val showTabAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.SHOWPAGE)
             recyclerView.adapter = showTabAdapter
+
+            // set listener
+            showTabAdapter.listener = mActivity
 
             // clear items once retrieve item from the database
             items.clear()
