@@ -1,6 +1,7 @@
 package com.honegroupp.familyRegister.view.itemList
 
 import android.content.Context
+import android.graphics.Color
 import android.view.*
 import android.widget.*
 import android.view.LayoutInflater
@@ -10,6 +11,10 @@ import com.honegroupp.familyRegister.utility.ImageRotateUtil
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.squareup.picasso.Picasso
 import com.honegroupp.familyRegister.utility.FilePathUtil
+import android.widget.LinearLayout
+
+
+
 
 
 class ItemGridAdapter:BaseAdapter{
@@ -42,7 +47,12 @@ class ItemGridAdapter:BaseAdapter{
         if (isAddButton(position)){
 
             //load the the add sign to the imagView
-            imageView.setImageResource(R.drawable.ic_add_grey_24dp)
+            //set background colour
+            imageView.setBackgroundColor(Color.rgb(240, 240, 240))
+            imageView.setImageResource(R.drawable.add_thin_grey_512)
+            imageView.setPadding(100,100,100,100)
+            val layoutParams = RelativeLayout.LayoutParams(110, 110)
+//            imageView.layoutParams = layoutParams
         }else{
 
             //get the orientation and make sure image are at its original orientation
