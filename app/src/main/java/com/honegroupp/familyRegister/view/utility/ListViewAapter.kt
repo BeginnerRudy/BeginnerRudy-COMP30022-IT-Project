@@ -21,7 +21,7 @@ class ListViewAapter(val items: ArrayList<Item>, val mActivity:AppCompatActivity
         return items.size
     }
 
-    override fun getItem(position: Int): Any {
+    override fun getItem(position: Int): Item {
         return items[position]
     }
 
@@ -35,6 +35,7 @@ class ListViewAapter(val items: ArrayList<Item>, val mActivity:AppCompatActivity
         val name : TextView = layout.findViewById(R.id.name)
 
         for (item in items){
+
             imageURLList.add(item.imageURLs[0])
             nameList.add(item.itemName)
         }
