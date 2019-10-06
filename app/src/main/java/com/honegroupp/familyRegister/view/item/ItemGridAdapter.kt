@@ -1,20 +1,21 @@
 package com.honegroupp.familyRegister.view.itemList
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.view.*
 import android.widget.*
 import android.view.LayoutInflater
 import android.net.Uri
+import android.os.Build
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.utility.ImageRotateUtil
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.squareup.picasso.Picasso
 import com.honegroupp.familyRegister.utility.FilePathUtil
 import android.widget.LinearLayout
-
-
-
+import kotlinx.android.synthetic.main.item_upload_page.*
 
 
 class ItemGridAdapter:BaseAdapter{
@@ -67,7 +68,27 @@ class ItemGridAdapter:BaseAdapter{
         imageView.setOnClickListener {
             //press the add button
             if (isAddButton(position)){
-                context!!.selectImageInAlbum()
+                if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
+
+                    if(context!!.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) ==
+                        PackageManager.PERMISSION_DENIED){
+                        //permission denied
+                        context!!.requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),1000)
+                    }else{
+                        //permission already granted
+                        context!!.selectImageInAlbum()
+//                        context!!.Toast.makeText(this,"HAS PREMISSION11",Toast.LENGTH_SHORT).show()
+
+
+                    }
+                }else{
+                    //system os less than mashmallow
+//                    Toast.makeText(this,"less than mashmallow",Toast.LENGTH_SHORT).show()
+                    context!!.selectImageInAlbum()
+                }
+
+
+//                context!!.selectImageInAlbum()
             }
         }
 
@@ -118,8 +139,6 @@ class ItemGridAdapter:BaseAdapter{
     private fun isAddButton(position: Int):Boolean{
         return position == count -1
     }
-
-
 
 
 }

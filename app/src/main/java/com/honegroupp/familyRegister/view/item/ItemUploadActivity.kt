@@ -1,11 +1,14 @@
 package com.honegroupp.familyRegister.view.item
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.item_upload_page.*
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.view.View
 import android.widget.*
@@ -14,8 +17,12 @@ import com.honegroupp.familyRegister.view.itemList.ItemGridAdapter
 import kotlin.collections.ArrayList
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseStorageManager
 import com.honegroupp.familyRegister.controller.ItemController
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class ItemUploadActivity : AppCompatActivity(){
@@ -25,22 +32,23 @@ class ItemUploadActivity : AppCompatActivity(){
     lateinit var uid :String
 
     var itemPrivacyPosition: Int = 0
+    private val READ_PERMISSION_CODE: Int = 1000
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.honegroupp.familyRegister.R.layout.item_upload_page)
+        setContentView(R.layout.item_upload_page)
 
         uid = intent.getStringExtra("UserID")
         val categoryName = intent.getStringExtra("categoryPath").toString()
 
         //set up the spinner (select public and privacy)
-        val spinner: Spinner = findViewById(com.honegroupp.familyRegister.R.id.privacy_spinner)
+        val spinner: Spinner = findViewById(R.id.privacy_spinner)
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
             this,
-            com.honegroupp.familyRegister.R.array.privacy_options,
+            R.array.privacy_options,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
             // Specify the layout to use when the list of choices appears
@@ -62,9 +70,29 @@ class ItemUploadActivity : AppCompatActivity(){
             itemPrivacyPosition = spinner.selectedItemPosition
 
             progressBarRound.visibility = View.VISIBLE
-
             //check input
             checkInputAndUpload(categoryName)
+        }
+
+        // set date picker
+        setDatePicker(text_date)
+    }
+
+
+
+
+    //Over Android M version, need to request EXTERNAL STORAGE permission in order to save image
+    override fun onRequestPermissionsResult(requestCode: Int,permissions: Array<out String>,grantResults: IntArray){
+        when(requestCode){
+            READ_PERMISSION_CODE ->{
+                if(grantResults.isNotEmpty()&& grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+                    Toast.makeText(this,getString(R.string.get_read_permission),Toast.LENGTH_SHORT).show()
+                    selectImageInAlbum()
+                }else{
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 
@@ -180,11 +208,14 @@ class ItemUploadActivity : AppCompatActivity(){
 
         // need to check item name is not empty
         if(item_name_input.text.toString() == ""){
-            Toast.makeText(this,getString(com.honegroupp.familyRegister.R.string.item_name_should_not_leave_blank),Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,getString(R.string.item_name_should_not_leave_blank),Toast.LENGTH_SHORT).show()
 
         //check at least one photo is added
         }else if(allImageUri.size == 0) {
-            Toast.makeText(this,getString(com.honegroupp.familyRegister.R.string.please_select_at_least_one_image), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,getString(R.string.please_select_at_least_one_image), Toast.LENGTH_SHORT).show()
+
+        }else if(!legalDate(text_date)){
+            Toast.makeText(this, getString(R.string.please_pick_date_for_item), Toast.LENGTH_SHORT).show()
 
         }else {
             //upload uri to firebase
@@ -203,6 +234,47 @@ class ItemUploadActivity : AppCompatActivity(){
                 getString(com.honegroupp.familyRegister.R.string.of)+
                 (imagePathList.size + allImageUri.size).toString() + " " +
                 getString(com.honegroupp.familyRegister.R.string.image)
+    }
+
+    /**
+     * This method validate whether the text of a given textView is a valid date or not.
+     * */
+    private fun legalDate(textView: TextView): Boolean {
+        val dobString = textView.text.toString()
+        val df = SimpleDateFormat("dd/M/yyyy")
+        df.isLenient = false
+        return try {
+            val date: Date = df.parse(dobString)
+            true
+        } catch (e: ParseException) {
+            false
+        }
+    }
+
+    /**
+     * This method is responsible for setting date picker.
+     * */
+    private fun setDatePicker(textView: TextView) {
+        var cal = Calendar.getInstance()
+        val dateSetListener =
+            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                cal.set(Calendar.YEAR, year)
+                cal.set(Calendar.MONTH, monthOfYear)
+                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+                val sdf = SimpleDateFormat("dd/M/yyyy")
+                textView.text = sdf.format(cal.time)
+
+            }
+
+        textView.setOnClickListener {
+            DatePickerDialog(
+                this, dateSetListener,
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
     }
 
 }
