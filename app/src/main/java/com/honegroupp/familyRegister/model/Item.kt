@@ -136,10 +136,10 @@ data class Item(
      * This method is responsible for adding or removing item from the user's show page.
      *
      * */
-    fun manageShowItem(showButton: ImageButton, uid: String) {
+    fun manageShowItem(uid: String) {
         val rootPath = "/"
         FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
-            callbackManageShowItem(showButton, uid, d)
+            callbackManageShowItem(uid, d)
         }
     }
 
@@ -148,7 +148,6 @@ data class Item(
      *
      * */
     private fun callbackManageShowItem(
-        showButton: ImageButton,
         uid: String,
         dataSnapshot: DataSnapshot
     ) {

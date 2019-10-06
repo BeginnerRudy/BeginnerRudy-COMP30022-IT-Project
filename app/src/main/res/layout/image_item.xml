@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp">
@@ -8,13 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <ImageButton
-            android:id="@+id/button_show"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|top"
-            android:src="@android:drawable/star_big_off" />
 
         <ImageView
             android:id="@+id/img_upload"
@@ -31,6 +26,18 @@
             android:text="Name"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
+
+        <com.github.ivbaranov.mfb.MaterialFavoriteButton
+            android:id="@+id/item_list_favorite_button"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginLeft="@dimen/layout_margin_left"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:padding="@dimen/padding_layout"
+            app:mfb_not_favorite_image="@integer/fui_min_password_length"
+            app:mfb_animate_favorite="false"
+            app:mfb_animate_unfavorite="false"
+            app:mfb_type="heart" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
