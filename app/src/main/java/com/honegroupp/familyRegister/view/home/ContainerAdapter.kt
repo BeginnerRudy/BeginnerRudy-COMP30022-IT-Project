@@ -59,7 +59,7 @@ open class ContainerAdapter(
 
         // if this user liked this item, make the like image on
         if (situation == CATEGORY || situation == ALL) {
-            if (currItem.ShowPageUids.containsKey(mContext.uid)) {
+            if (currItem.showPageUids.containsKey(mContext.uid)) {
                 showButton.setImageResource(android.R.drawable.star_big_on)
             }
         } else if (situation == SHOWPAGE) {

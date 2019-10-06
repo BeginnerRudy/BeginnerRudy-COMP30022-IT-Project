@@ -38,7 +38,7 @@ data class Item(
 
     @set:PropertyName("showPageUids")
     @get:PropertyName("showPageUids")
-    var ShowPageUids: HashMap<String, String> = HashMap()
+    var showPageUids: HashMap<String, String> = HashMap()
 
 ) {
     /*This is the primary constructor to create an item instance*/

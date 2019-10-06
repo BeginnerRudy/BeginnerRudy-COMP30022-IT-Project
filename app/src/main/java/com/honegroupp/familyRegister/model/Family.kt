@@ -16,7 +16,6 @@ import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.view.home.ContainerActivity
 import com.honegroupp.familyRegister.view.home.ContainerAdapter
-import com.honegroupp.familyRegister.view.home.ShowTabAdapter
 import com.honegroupp.familyRegister.view.item.DetailSlide
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
@@ -461,7 +460,7 @@ data class Family(
                 val item = it.getValue(Item::class.java) as Item
 
                 // add it to the items, check item is visible, if not check user is owner
-                if (item.ShowPageUids.contains(uid)) {
+                if (item.showPageUids.contains(uid)) {
                     item.key = it.key.toString()
                     items.add(item)
                 }

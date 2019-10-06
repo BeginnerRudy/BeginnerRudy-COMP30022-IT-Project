@@ -209,7 +209,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
 
                     // wait for categories(categoryUploads) is get from database
-                    if (categoryUploads.size != 0){
+                    if (categoryUploads.size != 0 || !isInCategory){
 
                         if (isInCategory) {
                             // check item in current category
@@ -226,7 +226,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                         } else if (categoryIndexList == SHOW_PAGE_SIGNAL){
 
 
-                            if (detailUserId in currItemUpload.ShowPageUids.keys){
+                            if (detailUserId in currItemUpload.showPageUids.keys){
                                 itemUploads.add(currItemUpload)
                             }
                         }
