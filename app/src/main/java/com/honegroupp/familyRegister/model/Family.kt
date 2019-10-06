@@ -16,6 +16,7 @@ import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.utility.Hash
 import com.honegroupp.familyRegister.view.home.ContainerActivity
 import com.honegroupp.familyRegister.view.home.ContainerAdapter
 import com.honegroupp.familyRegister.view.item.DetailSlide

@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.model
+package com.honegroupp.familyRegister.utility
 
 
 import java.security.MessageDigest
@@ -25,12 +25,14 @@ class Hash{
 
         //compare whether two string has same hash are equal
         fun equalHash(text1: String, text2: String): Boolean{
-            return applyHash(text1+ salt) == (applyHash(text2+ salt))
+            return applyHash(text1 + salt) == (applyHash(
+                text2 + salt
+            ))
         }
 
         //check whether a text has the hash
         fun checkHash(text: String, hash: String):Boolean{
-            return applyHash(text+ salt) == hash
+            return applyHash(text + salt) == hash
         }
 
 
