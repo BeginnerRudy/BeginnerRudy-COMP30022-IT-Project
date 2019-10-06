@@ -41,8 +41,8 @@
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/colorAccent"
         android:clickable="true"
+        app:borderWidth="0dp"
         app:srcCompat="@drawable/ic_add_white_24dp" />
-
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_search"
@@ -53,9 +53,10 @@
         android:layout_alignParentRight="true"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="81dp"
+        android:layout_marginBottom="72dp"
         android:backgroundTint="@color/colorPrimary"
         android:clickable="true"
-        app:srcCompat="@drawable/ic_add_white_24dp" />
+        app:borderWidth="0dp"
+        app:srcCompat="@drawable/ic_search_white_24dp" />
 
 </RelativeLayout>
