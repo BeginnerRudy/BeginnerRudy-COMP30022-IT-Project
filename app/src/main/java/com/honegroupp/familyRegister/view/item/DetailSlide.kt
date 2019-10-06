@@ -31,6 +31,10 @@ import java.io.File
 import java.io.FileOutputStream
 
 class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener{
+    override fun onBackClick() {
+        finish()
+    }
+
     companion object {
         const val ALL_PAGE_SIGNAL = -1
         const val SHOW_PAGE_SIGNAL = -2
