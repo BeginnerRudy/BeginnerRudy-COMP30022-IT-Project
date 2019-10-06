@@ -79,7 +79,8 @@ class ItemUploadActivity : AppCompatActivity(){
             this.uid,
             categoryName,
             this.imagePathList,
-            this.itemPrivacyPosition == 0
+            this.itemPrivacyPosition == 0,
+            this.text_date.text.toString()
         )
     }
 

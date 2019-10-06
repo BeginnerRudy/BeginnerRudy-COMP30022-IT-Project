@@ -32,7 +32,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         const val ALL_PAGE_SIGNAL = -1
         const val SHOW_PAGE_SIGNAL = -2
         const val CATEGORY_SIGNAL = 0
-
         private const val STORAGE_PERMISSION_CODE: Int = 1000
     }
 
