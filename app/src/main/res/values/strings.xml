@@ -38,13 +38,27 @@
     <string name="choose_image">choose an image</string>
     <string name="add_item">add item</string>
     <string name="type_item_description">Please enter item description</string>
-
     <string name="detail_edit">Edit</string>
     <string name="detail_download">Download</string>
     <string name="detail_share">Share</string>
     <string name="detail_delete">Delete</string>
     <string name="edit_confirm">CONFIRM CHANGE</string>
     <string name="edit_date">Click to change date time</string>
+    <string name="edit_visibility">Visibility</string>
+    <string name="edit_location">Location</string>
+    <string name="edit_enter_password_to_view_location">Enter password to view</string>
+    <string name="edit_pass_down_text">Choose a family member</string>
+    <string name="edit_pass_down_btn">PASS DOWN</string>
+    <string name="edit_pass_down_to">Pass down To</string>
+    <string name="edit_cancel">Cancel</string>
+    <string name="edit_password_required_for_location">Password is required for Location</string>
+    <string name="edit_ok">Ok</string>
+    <string name="edit_location_password_incorrect">Password Incorrect</string>
+    <string name="edit_dialog_location_text">Location</string>
+    <string name="edit_dialog_new_location">New Location</string>
+    <string name="edit_dialog_confirm_change">Change</string>
+    <string name="edit_dialog_view_location">View</string>
+
 
     <string-array name="privacy_options">
         <item>Visible by family</item>

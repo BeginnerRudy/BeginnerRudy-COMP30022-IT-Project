@@ -1,12 +1,11 @@
 package com.honegroupp.familyRegister.view.item
 
 import android.app.DatePickerDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextMenu
-import android.view.MenuItem
-import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -14,22 +13,52 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
-import com.honegroupp.familyRegister.controller.ItemController.Companion.editItem
 import com.honegroupp.familyRegister.model.Item
+import com.honegroupp.familyRegister.model.User
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_edit.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+import com.google.firebase.database.GenericTypeIndicator
+import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationChangeDialog
+import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationEnterPasswordDialog
+import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationViewDialog
 
-class ItemEdit : AppCompatActivity() {
+
+class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerListener,
+    LocationViewDialog.OnChangeClickListener, LocationChangeDialog.OnChangeConfirmClickListener {
+
+    val passwordLocation = "1"
+    var enteredPassword = ""
+    var itemLocation = "Bedside ddtable first drawer"
+
+    override fun clickOnChangeLocation(newLocation: String) {
+        itemLocation = newLocation
+        toast(itemLocation, Toast.LENGTH_SHORT)
+        openLocationViewDialog()
+    }
+
+    override fun clickOnChangeLocation() {
+        openLocationChangeDialog()
+    }
+
+    override fun applyPasswords(password: String) {
+        enteredPassword = password
+        if (passwordLocation == enteredPassword) {
+            openLocationViewDialog()
+        } else {
+            toast(getString(R.string.edit_location_password_incorrect), Toast.LENGTH_LONG)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
 
         // get extra from Item Detail(DetailSlide)
-        val itemKey = intent.getStringExtra("ItemKey")
-        val currFamilyId = intent.getStringExtra("FamilyId")
+        val itemKey = intent.getStringExtra("ItemKey").toString()
+        val currFamilyId = intent.getStringExtra("FamilyId").toString()
 
         // retrieve Item
         lateinit var currItem: Item
@@ -42,6 +71,9 @@ class ItemEdit : AppCompatActivity() {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
+                val t = object : GenericTypeIndicator<ArrayList<String>>() {}
+
+                // get current Item from data snap shot
                 currItem =
                     p0
                         .child(FirebaseDatabaseManager.FAMILY_PATH)
@@ -49,6 +81,26 @@ class ItemEdit : AppCompatActivity() {
                         .child("items")
                         .child(itemKey)
                         .getValue(Item::class.java) as Item
+
+                // get current family members from data snap shot
+                var currFamilyMembers =
+                    p0
+                        .child(FirebaseDatabaseManager.FAMILY_PATH)
+                        .child(currFamilyId)
+                        .child("members")
+                        .getValue(t) as ArrayList<String>
+
+                // get users username in family, prepare for pass down
+                var userNames: Array<String> = emptyArray()
+                val usersHashMap:HashMap<String, String> = HashMap()
+                p0.child("Users").children.forEach {
+                    val currUserUploads = it.getValue(User::class.java) as User
+
+                    if (it.key in currFamilyMembers && it.key != currItem.itemOwnerUID){
+                        usersHashMap[currUserUploads.username] = it.key.toString()
+                        userNames = userNames.plus(currUserUploads.username)
+                    }
+                }
 
                 // set current item to view
                 Picasso.get()
@@ -58,6 +110,35 @@ class ItemEdit : AppCompatActivity() {
                 findViewById<EditText>(R.id.editName).setText(currItem.itemName)
                 findViewById<EditText>(R.id.editDescription).setText(currItem.itemDescription)
                 findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
+
+                // set position click
+                edit_location_layout.setOnClickListener { openLocationEnterPasswordDialog() }
+
+                // set current item Owner
+                var currItemOwner = currItem.itemOwnerUID
+
+                // set passDown dialog
+                editPassDownBtn.setOnClickListener(){
+                    val mBuilder = AlertDialog.Builder(this@ItemEdit)
+                    mBuilder.setTitle(R.string.edit_pass_down_text).setItems(userNames, DialogInterface.OnClickListener { dialog, which ->
+                        currItemOwner = usersHashMap[userNames[which]].toString()
+                        findViewById<TextView>(R.id.edit_passdown_to).text = userNames[which]
+                        // The 'which' argument contains the index position
+                        // of the selected item
+                    })
+
+                    // Set the neutral/cancel button click listener
+                    mBuilder.setNeutralButton(R.string.edit_cancel) { dialog, which ->
+                        // Do something when click the neutral button
+                        currItemOwner = currItem.itemOwnerUID
+                        findViewById<TextView>(R.id.edit_passdown_to).setText(R.string.edit_pass_down_to)
+                        dialog.cancel()
+                    }
+
+                    val mDialog = mBuilder.create()
+                    mDialog.window?.setBackgroundDrawableResource(R.color.fui_bgAnonymous)
+                    mDialog.show()
+                }
 
                 // set Date picker
                 setDatePicker(editItemDate)
@@ -95,7 +176,7 @@ class ItemEdit : AppCompatActivity() {
                         val updatedItem = Item(
                             itemName = editName.text.toString(),
                             itemDescription = editDescription.text.toString(),
-                            itemOwnerUID = currItem.itemOwnerUID,
+                            itemOwnerUID = currItemOwner,
                             imageURLs = currItem.imageURLs,
                             isPublic = spinner.selectedItemPosition == 0,
                             date = editItemDate.text.toString()
@@ -114,6 +195,21 @@ class ItemEdit : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun openLocationEnterPasswordDialog() {
+        val locationEnterPasswordDialog = LocationEnterPasswordDialog()
+        locationEnterPasswordDialog.show(supportFragmentManager, "Location Enter Password Dialog")
+    }
+
+    private fun openLocationViewDialog() {
+        val locationViewDialog = LocationViewDialog(itemLocation)
+        locationViewDialog.show(supportFragmentManager, "Location View Dialog")
+    }
+
+    private fun openLocationChangeDialog() {
+        val locationChangeDialog = LocationChangeDialog(itemLocation)
+        locationChangeDialog.show(supportFragmentManager, "Location Change Dialog")
     }
 
     /**
@@ -140,5 +236,9 @@ class ItemEdit : AppCompatActivity() {
                 cal.get(Calendar.DAY_OF_MONTH)
             ).show()
         }
+    }
+
+    fun toast(msg: String, duration: Int) {
+        Toast.makeText(this, msg, duration).show()
     }
 }
