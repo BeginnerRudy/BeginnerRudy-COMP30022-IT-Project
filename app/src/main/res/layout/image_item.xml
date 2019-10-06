@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -22,9 +22,11 @@
             android:id="@+id/txt_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/img_upload"
             android:layout_gravity="center"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
+            android:layout_toRightOf="@+id/item_list_favorite_button"
             android:text="Name"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
@@ -33,13 +35,13 @@
             android:id="@+id/item_list_favorite_button"
             android:layout_width="52dp"
             android:layout_height="52dp"
-            android:layout_marginLeft="@dimen/layout_margin_left"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:padding="@dimen/padding_layout"
+            android:layout_below="@+id/img_upload"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
             app:mfb_animate_favorite="false"
             app:mfb_animate_unfavorite="false"
             app:mfb_not_favorite_image="@integer/fui_min_password_length"
             app:mfb_type="heart" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
