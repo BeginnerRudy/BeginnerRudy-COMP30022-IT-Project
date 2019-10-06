@@ -13,11 +13,10 @@ import com.honegroupp.familyRegister.controller.ShowPageController
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 
-class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val context: Context) :
-    PagerAdapter(),
+class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val context: Context) : PagerAdapter(),
     DetailImagesSliderAdapter.OnItemClickerListener {
 
-    lateinit var imagesSlideViewPager: ViewPager
+    lateinit var imagesSlideViewPager : ViewPager
     var listener: OnItemClickerListener? = null
 
     interface OnItemClickerListener {
@@ -72,8 +71,9 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val co
         slideDescription.setText(currItemUploads.itemDescription)
         var dateParts = currItemUploads.date.split("/")
         var newDate = dateParts[2] + "." + dateParts[1] + "." + dateParts[0]
-        slideDate.setText(newDate)
+        slideDate.text = newDate
 
+        // set show button, solid heart if it is shown in show page
         if (userId in items[position].showPageUids) {
             showButton.isFavorite = true
         }
@@ -91,7 +91,6 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val co
         } else {
             view.findViewById<Button>(R.id.detail_edit).visibility = View.INVISIBLE
         }
-
 
         container.addView(view)
         return view
