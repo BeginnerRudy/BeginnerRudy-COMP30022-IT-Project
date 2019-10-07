@@ -6,7 +6,6 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -38,9 +37,8 @@
     <string name="choose_image">choose an image</string>
     <string name="add_item">add item</string>
     <string name="type_item_description">Please enter item description</string>
-    <string name="transition_test">test</string>
+    <string name="transition_test" translatable="false">test</string>
     <string name="detail_no_item">No Item</string>
-
     <string name="detail_edit">Edit</string>
     <string name="detail_download">Download</string>
     <string name="detail_share">Share</string>
@@ -63,15 +61,10 @@
     <string name="edit_dialog_new_location">New Location</string>
     <string name="edit_dialog_confirm_change">Change</string>
     <string name="edit_dialog_view_location">View</string>
-
-
     <string-array name="privacy_options">
         <item>Visible by family</item>
         <item>Keep it private</item>
-
     </string-array>
-
-
     <string name="query_hints">name/age</string>
     <string name="there_is_no_item_in_this_category">There is no item in this category</string>
     <string name="item_name_should_not_leave_blank">Item name should not leave blank</string>
@@ -80,7 +73,6 @@
     <string name="of">" of "</string>
     <string name="finished">finished</string>
     <string name="image">image</string>
-
     <string name="please_enter_the_password">Please enter the password</string>
     <string name="please_enter_the_password_again">Please enter the password again</string>
     <string name="two_password_are_not_same">Two passwords are not same</string>
@@ -93,4 +85,5 @@
     <string name="please_pick_date_for_item">Please pick a date for item</string>
     <string name="no_items_for_the_show_page">No Items For The Show Page</string>
     <string name="reset_email_message">The reset password email has been sent, please click the link in the email to reset your email.</string>
+    <string name="password_rest_success">Email reset successful!</string>
 </resources>

@@ -27,14 +27,16 @@ class AccountActivity : AppCompatActivity() {
 
         changePassword.setOnClickListener {
 
+            Toast.makeText(this,
+                getString(R.string.reset_email_message),
+                Toast.LENGTH_LONG).show()
+
             var mAuth: FirebaseAuth? = null
             mAuth = FirebaseAuth.getInstance()
             mAuth!!.sendPasswordResetEmail(EmailPathSwitch.pathToEmail(uid))
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(this,
-                            getString(R.string.reset_email_message),
-                            Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.password_rest_success),Toast.LENGTH_LONG).show()
                     } else {
                         Toast.makeText(this, "ERROR",Toast.LENGTH_LONG).show()
                     }
