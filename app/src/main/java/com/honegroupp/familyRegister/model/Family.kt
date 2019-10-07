@@ -532,8 +532,8 @@ data class Family(
                     mActivity.findViewById<ProgressBar>(R.id.all_progress_circular).visibility =
                         View.INVISIBLE
 
-                    val text = mActivity.findViewById<TextView>(R.id.text_view_empty_category)
-                    text.visibility = View.VISIBLE
+                    mActivity.findViewById<TextView>(R.id.all_text_view_empty_category).visibility =
+                        View.VISIBLE
                 } else {
                     // Make the progress bar invisible
                     mActivity.findViewById<ProgressBar>(R.id.all_progress_circular).visibility =
