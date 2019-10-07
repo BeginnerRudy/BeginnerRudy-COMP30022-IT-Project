@@ -1,37 +1,55 @@
 package com.honegroupp.familyRegister.view.item
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.model.User
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_edit.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import com.google.firebase.database.GenericTypeIndicator
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageTask
+import com.google.firebase.storage.UploadTask
+import com.honegroupp.familyRegister.utility.CompressionUtil
+import com.honegroupp.familyRegister.utility.FilePathUtil
+import com.honegroupp.familyRegister.utility.ImageRotateUtil
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationChangeDialog
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationEnterPasswordDialog
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationViewDialog
+import kotlinx.android.synthetic.main.item_upload_page.*
+import java.text.ParseException
 
 
 class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerListener,
     LocationViewDialog.OnChangeClickListener, LocationChangeDialog.OnChangeConfirmClickListener {
 
+    val GALLERY_REQUEST_CODE = 123
     val passwordLocation = "1"
     var enteredPassword = ""
     var itemLocation = "Bedside ddtable first drawer"
+    var allImageUri = ArrayList<Uri>()
+    var detailImageUrls = ArrayList<String>()
+    var deleteImageUrls = ArrayList<String>()
+
+    lateinit var databaseRef: DatabaseReference
+    lateinit var itemKey: String
+    lateinit var currFamilyId: String
+
+    var storage: FirebaseStorage = FirebaseStorage.getInstance()
 
     override fun clickOnChangeLocation(newLocation: String) {
         itemLocation = newLocation
@@ -52,18 +70,135 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
         }
     }
 
+    /*
+   use the phone API to get images from the album
+   */
+    fun selectImageInAlbum() {
+
+        //reset the image url list
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+
+        // ask for multiple images picker
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        startActivityForResult(intent, GALLERY_REQUEST_CODE)
+    }
+
+    /*
+   remove already selected items from the list, update the view
+   */
+    fun removeItem(currentIsUrl: Boolean, position:Int){
+        if (currentIsUrl){
+            deleteImageUrls.add(detailImageUrls[position])
+            detailImageUrls.removeAt(position)
+        } else {
+            allImageUri.removeAt(position)
+        }
+
+
+        // reset the grid view adapter
+        val adapter = ItemEditGridAdapter(this, detailImageUrls, allImageUri)
+        editImagesGrid.adapter = adapter
+        Log.d("ggggginit1", "init")
+
+
+    }
+
+    fun deleteStorageImages() {
+        for (deleteUrl in deleteImageUrls){
+            // use url create reference of image to be deleted
+            val imageRef = storage.getReferenceFromUrl(deleteUrl)
+
+            // Delete image and its tile from Fitrbase Storage
+            imageRef.delete()
+                .addOnSuccessListener {
+                    toast(getString(R.string.detail_delete_success), Toast.LENGTH_SHORT)
+                }
+                .addOnFailureListener {
+                    toast(getString(R.string.detail_delete_fail), Toast.LENGTH_SHORT)
+                }
+        }
+    }
+
+    fun uploadToFirebase(currItem: Item) {
+        val uploadPath = " "
+        var numSuccess = 0
+        for (uri in allImageUri){
+            //upload the progress bar
+            displayProgress()
+
+            //get firebase storage reference
+            val ref =
+                FirebaseStorage.getInstance()
+                    .reference.child(uploadPath + System.currentTimeMillis())
+
+            //convert first image in list to bitmap
+            val path = FilePathUtil.getFilePathFromContentUri(uri, this)
+            val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
+            val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
+
+            //decrease the resolution
+            val scaledBitmap = CompressionUtil.scaleDown(bitmap, true)
+
+            //correct the orientation of the bitmap
+            val orientedScaledBitmap = ImageRotateUtil.rotateBitmap(scaledBitmap,orientation)
+
+            //compress the image
+            val data = CompressionUtil.compressImage(orientedScaledBitmap)
+
+            //upload the compressed image
+            ref.putBytes(data)
+                .addOnSuccessListener {
+
+                    //add item logic
+                    ref.downloadUrl.addOnCompleteListener { taskSnapshot ->
+                        var url = taskSnapshot.result
+                        detailImageUrls.add(url.toString())
+                        numSuccess += 1
+                        if (numSuccess == allImageUri.size){
+                            databaseRef
+                                .child(FirebaseDatabaseManager.FAMILY_PATH)
+                                .child(currFamilyId)
+                                .child("items")
+                                .child(itemKey)
+                                .child("imageURLs")
+                                .setValue(detailImageUrls)
+                            toast(getString(R.string.uploading) + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+                            Log.d("eeeenimgupload", detailImageUrls.toString())
+                        }
+                        toast(getString(R.string.uploading) + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+                        Log.d("eeeenimg", detailImageUrls.toString())
+                    }
+                }
+        }
+    }
+
+    /**
+     * Update the progress bar and display the progress message
+     **/
+    fun displayProgress(){
+        val numNewImages = allImageUri.size
+        val percent = numNewImages*100/(numNewImages + allImageUri.size)
+        editProgressBarText.text = percent.toString() + " %,  " +
+                getString(R.string.uploading) +
+                (numNewImages+1).toString()+
+                getString(R.string.of)+
+                (numNewImages + allImageUri.size).toString() + " " +
+                getString(R.string.image)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
 
         // get extra from Item Detail(DetailSlide)
-        val itemKey = intent.getStringExtra("ItemKey").toString()
-        val currFamilyId = intent.getStringExtra("FamilyId").toString()
+        itemKey = intent.getStringExtra("ItemKey").toString()
+        currFamilyId = intent.getStringExtra("FamilyId").toString()
 
         // retrieve Item
         lateinit var currItem: Item
         val rootPath = "/"
-        val databaseRef = FirebaseDatabase.getInstance().getReference(rootPath)
+        databaseRef = FirebaseDatabase.getInstance().getReference(rootPath)
         databaseRef.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 //Don't ignore errors!
@@ -103,10 +238,16 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                 }
 
                 // set current item to view
-                Picasso.get()
-                    .load(currItem.imageURLs[0])
-                    .placeholder(R.drawable.ic_launcher_foreground)
-                    .into(editItemImage)
+//                Picasso.get()
+//                    .load(currItem.imageURLs[0])
+//                    .placeholder(R.drawable.ic_launcher_foreground)
+//                    .into(editItemImage)
+                for (url in currItem.imageURLs) {
+                    detailImageUrls.add(url)
+                }
+                val adapter = ItemEditGridAdapter(this@ItemEdit, detailImageUrls, allImageUri)
+                editImagesGrid.adapter = adapter
+                Log.d("ggggginitdatalis", "init")
                 findViewById<EditText>(R.id.editName).setText(currItem.itemName)
                 findViewById<EditText>(R.id.editDescription).setText(currItem.itemDescription)
                 findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
@@ -160,24 +301,34 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
 
                 // set on click listener
                 editConfirm.setOnClickListener {
+
+                    // delete images in storage
+                    deleteStorageImages()
+
+                    // upload new images
+                    uploadToFirebase(currItem)
+
+                    // need to check item name is not empty
                     if (editName.text.toString() == "") {
                         Toast.makeText(
                             this@ItemEdit,
-                            "Item name should not leave blank",
+                            getString(R.string.item_name_should_not_leave_blank),
                             Toast.LENGTH_SHORT
                         ).show()
-//                    }else if(numberOfImages == 0) {
-//                        Toast.makeText(this, "Please select at least one image", Toast.LENGTH_SHORT).show()
-//                    }else if(numberOfImages != imagePathList.size){
-//                        Toast.makeText(this, "Please wait for uploading image", Toast.LENGTH_SHORT).show()
+                        //check at least one photo is added
+                    } else if(!legalDate(editItemDate)) {
+                        Toast.makeText(
+                            this@ItemEdit,
+                            getString(R.string.please_pick_date_for_item),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
-
                         // create item to upload to Firebase
                         val updatedItem = Item(
                             itemName = editName.text.toString(),
                             itemDescription = editDescription.text.toString(),
                             itemOwnerUID = currItemOwner,
-                            imageURLs = currItem.imageURLs,
+                            imageURLs = detailImageUrls,
                             isPublic = spinner.selectedItemPosition == 0,
                             date = editItemDate.text.toString(),
                             showPageUids = currItem.showPageUids
@@ -198,6 +349,62 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
         })
     }
 
+    /*
+    process when receive the result of image selection
+    */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result code is RESULT_OK only if the user selects an Image
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                GALLERY_REQUEST_CODE -> {
+
+                    // adding multiple image
+                    if (data != null) {
+                        var allUris : ArrayList<Uri> = arrayListOf()
+
+                        if (data.getClipData() != null) {
+
+                            //handle multiple images
+                            val count = data.getClipData()!!.getItemCount()
+
+                            for (i in 0 until count) {
+                                var uri = data.getClipData()!!.getItemAt(i).uri
+                                if (uri != null) {
+
+                                    //add into Uri List
+                                    allImageUri.add(uri)
+                                    allUris.add(uri)
+                                }
+                            }
+
+                            //selecting single image from album
+                        } else if (data.getData() != null) {
+                            val uri = data.getData()
+                            if (uri != null) {
+
+                                allUris.add(uri)
+
+                                //add into Uri List
+                                allImageUri.add(uri)
+                            }
+                        }
+
+                        // Get an instance of base adapter
+                        val adapter = ItemEditGridAdapter(this, detailImageUrls, allImageUri)
+
+                        // Set the grid view adapter
+                        editImagesGrid.adapter = adapter
+                        Log.d("ggggginitselectimg", "init")
+                    }else{
+                        Toast.makeText(this,"Error",Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+    }
+
     private fun openLocationEnterPasswordDialog() {
         val locationEnterPasswordDialog = LocationEnterPasswordDialog()
         locationEnterPasswordDialog.show(supportFragmentManager, "Location Enter Password Dialog")
@@ -214,12 +421,38 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
     }
 
     /**
+     * This method validate whether the text of a given textView is a valid date or not.
+     * */
+    private fun legalDate(textView: TextView): Boolean {
+        val dobString = textView.text.toString()
+        val df = SimpleDateFormat("dd/M/yyyy")
+        df.isLenient = false
+        return try {
+            val date: Date = df.parse(dobString)
+            true
+        } catch (e: ParseException) {
+            false
+        }
+    }
+
+    /**
      * This method is responsible for setting date picker.
      * */
     private fun setDatePicker(textView: TextView) {
+
+        //set cursor invisible
+        textView.isCursorVisible = false
+
+        //disable keyboard because select date
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textView.showSoftInputOnFocus = false
+        } else {
+            textView.setTextIsSelectable(true)
+        }
+
         val cal = Calendar.getInstance()
         val dateSetListener =
-            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                 cal.set(Calendar.YEAR, year)
                 cal.set(Calendar.MONTH, monthOfYear)
                 cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)

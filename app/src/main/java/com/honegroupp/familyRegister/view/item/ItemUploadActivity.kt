@@ -268,14 +268,14 @@ class ItemUploadActivity : AppCompatActivity(){
 
         //disable keyboard because select date
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            textView.setShowSoftInputOnFocus(false);
+            textView.showSoftInputOnFocus = false
         } else {
-            textView.setTextIsSelectable(true);
+            textView.setTextIsSelectable(true)
         }
 
-        var cal = Calendar.getInstance()
+        val cal = Calendar.getInstance()
         val dateSetListener =
-            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                 cal.set(Calendar.YEAR, year)
                 cal.set(Calendar.MONTH, monthOfYear)
                 cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
