@@ -36,7 +36,7 @@ class AccountActivity : AppCompatActivity() {
             mAuth!!.sendPasswordResetEmail(EmailPathSwitch.pathToEmail(uid))
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(this, getString(R.string.password_rest_success),Toast.LENGTH_LONG).show()
+//                        Toast.makeText(this, getString(R.string.password_rest_success),Toast.LENGTH_LONG).show()
                     } else {
                         Toast.makeText(this, "ERROR",Toast.LENGTH_LONG).show()
                     }
