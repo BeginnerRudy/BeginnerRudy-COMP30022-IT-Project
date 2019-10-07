@@ -9,64 +9,43 @@
         android:layout_height="wrap_content"
         android:padding="15dp">
 
-        <ImageView
-            android:id="@+id/editItemImage"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="#07000000"
-            android:scaleType="centerCrop" />
+        <GridView
+            android:id="@+id/editImagesGrid"
+            android:layout_width="match_parent"
+            android:layout_height="680px"
+            android:horizontalSpacing="10dp"
+            android:numColumns="3"
+            android:verticalSpacing="10dp" />
 
-        <androidx.core.widget.ContentLoadingProgressBar
-            android:id="@+id/edit_progress_bar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        <LinearLayout
+            android:id="@+id/editProgressLayout"
+            android:layout_margin = "5dp"
+            android:layout_below="@+id/editImagesGrid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/editItemImage"
-            android:layout_alignParentLeft="true" />
+            android:orientation = "horizontal">
 
-        <Button
-            android:id="@+id/editItemChooseImage"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/edit_progress_bar"
-            android:backgroundTint="@color/colorAccent"
-            android:text="@string/choose_image"
-            android:textColor="@color/textColorPrimary" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/itemDate"
-            android:paddingStart="@dimen/layout_margin_left"
-            android:paddingBottom="5dp"
-            android:layout_below="@id/editItemChooseImage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/editItemDateHint"
-                android:paddingBottom="8dp"
-                android:layout_width="match_parent"
+            <ProgressBar
+                android:id="@+id/editProgressBarRound"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/edit_date"
-                android:inputType="textMultiLine"
-                android:textSize="12sp"/>
+                android:visibility="invisible"
+                android:max="100" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/editItemDate"
+            <TextView
+                android:id="@+id/editProgressBarText"
+                android:layout_margin = "5dp"
+                android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="2019/01/01"
-                android:inputType="textMultiLine"
-                android:textSize="20sp"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/itemName"
 
-            android:layout_below="@id/itemDate"
+            android:layout_below="@id/editProgressLayout"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -79,8 +58,22 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/itemDescription"
+            android:id="@+id/editInputDate"
             android:layout_below="@id/itemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editItemDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:hint="@string/edit_date" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/itemDescription"
+            android:layout_below="@id/editInputDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -192,8 +185,6 @@
                 android:textSize="18sp" />
 
         </RelativeLayout>
-
-
 
         <Button
             android:id="@+id/editConfirm"

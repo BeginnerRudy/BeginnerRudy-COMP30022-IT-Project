@@ -1,7 +1,11 @@
 package com.honegroupp.familyRegister.view.item
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
@@ -15,7 +19,6 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.model.User
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_edit.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,9 +32,12 @@ import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationViewDialo
 class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerListener,
     LocationViewDialog.OnChangeClickListener, LocationChangeDialog.OnChangeConfirmClickListener {
 
+    val GALLERY_REQUEST_CODE = 123
     val passwordLocation = "1"
     var enteredPassword = ""
     var itemLocation = "Bedside ddtable first drawer"
+    var allImageUri = ArrayList<Uri>()
+    var detailImageUrls = ArrayList<String>()
 
     override fun clickOnChangeLocation(newLocation: String) {
         itemLocation = newLocation
@@ -50,6 +56,33 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
         } else {
             toast(getString(R.string.edit_location_password_incorrect), Toast.LENGTH_LONG)
         }
+    }
+
+    /*
+   use the phone API to get images from the album
+   */
+    fun selectImageInAlbum() {
+
+        //reset the image url list
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+
+        // ask for multiple images picker
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        startActivityForResult(intent, GALLERY_REQUEST_CODE)
+    }
+
+    /*
+   remove already selected items from the list, update the view
+   */
+    fun removeItem(position:Int){
+
+        allImageUri.removeAt(position)
+
+        // reset the grid view adapter
+        val adapter = ItemEditGridAdapter(this, detailImageUrls, allImageUri)
+        editImagesGrid.adapter = adapter
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,10 +136,13 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                 }
 
                 // set current item to view
-                Picasso.get()
-                    .load(currItem.imageURLs[0])
-                    .placeholder(R.drawable.ic_launcher_foreground)
-                    .into(editItemImage)
+//                Picasso.get()
+//                    .load(currItem.imageURLs[0])
+//                    .placeholder(R.drawable.ic_launcher_foreground)
+//                    .into(editItemImage)
+                detailImageUrls = currItem.imageURLs
+                val adapter = ItemEditGridAdapter(this@ItemEdit, detailImageUrls, allImageUri)
+                editImagesGrid.adapter = adapter
                 findViewById<EditText>(R.id.editName).setText(currItem.itemName)
                 findViewById<EditText>(R.id.editDescription).setText(currItem.itemDescription)
                 findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
@@ -198,6 +234,61 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
         })
     }
 
+    /*
+    process when receive the result of image selection
+    */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result code is RESULT_OK only if the user selects an Image
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                GALLERY_REQUEST_CODE -> {
+
+                    // adding multiple image
+                    if (data != null) {
+                        var allUris : ArrayList<Uri> = arrayListOf()
+
+                        if (data.getClipData() != null) {
+
+                            //handle multiple images
+                            val count = data.getClipData()!!.getItemCount()
+
+                            for (i in 0 until count) {
+                                var uri = data.getClipData()!!.getItemAt(i).uri
+                                if (uri != null) {
+
+                                    //add into Uri List
+                                    allImageUri.add(uri)
+                                    allUris.add(uri)
+                                }
+                            }
+
+                            //selecting single image from album
+                        } else if (data.getData() != null) {
+                            val uri = data.getData()
+                            if (uri != null) {
+
+                                allUris.add(uri)
+
+                                //add into Uri List
+                                allImageUri.add(uri)
+                            }
+                        }
+
+                        // Get an instance of base adapter
+                        val adapter = ItemEditGridAdapter(this, detailImageUrls, allImageUri)
+
+                        // Set the grid view adapter
+                        editImagesGrid.adapter = adapter
+                    }else{
+                        Toast.makeText(this,"Error",Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+    }
+
     private fun openLocationEnterPasswordDialog() {
         val locationEnterPasswordDialog = LocationEnterPasswordDialog()
         locationEnterPasswordDialog.show(supportFragmentManager, "Location Enter Password Dialog")
@@ -217,9 +308,20 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
      * This method is responsible for setting date picker.
      * */
     private fun setDatePicker(textView: TextView) {
+
+        //set cursor invisible
+        textView.isCursorVisible = false
+
+        //disable keyboard because select date
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textView.showSoftInputOnFocus = false
+        } else {
+            textView.setTextIsSelectable(true)
+        }
+
         val cal = Calendar.getInstance()
         val dateSetListener =
-            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                 cal.set(Calendar.YEAR, year)
                 cal.set(Calendar.MONTH, monthOfYear)
                 cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)

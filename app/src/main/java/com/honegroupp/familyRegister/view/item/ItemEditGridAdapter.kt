@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.view.itemList
+package com.honegroupp.familyRegister.view.item
 
 import android.Manifest
 import android.content.Context
@@ -11,32 +11,31 @@ import android.net.Uri
 import android.os.Build
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.utility.ImageRotateUtil
-import com.honegroupp.familyRegister.view.item.ItemUploadActivity
+import com.honegroupp.familyRegister.view.item.ItemEdit
 import com.squareup.picasso.Picasso
 import com.honegroupp.familyRegister.utility.FilePathUtil
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.item_upload_page.*
 
 
-class ItemGridAdapter:BaseAdapter{
-    private var context : ItemUploadActivity? = null
+class ItemEditGridAdapter:BaseAdapter{
+    private var context : ItemEdit? = null
     private var allUris: ArrayList<Uri>? = null
+    var detailImageUrls = ArrayList<String>()
 
-
-    constructor( context: ItemUploadActivity, allUris: ArrayList<Uri>){
+    constructor( context: ItemEdit, detailImageUrls: ArrayList<String>, allUris: ArrayList<Uri>){
         this.context = context
+        this.detailImageUrls = detailImageUrls
         this.allUris = allUris
     }
 
 
     override fun getView(position:Int, convertView: View?, parent: ViewGroup?): View {
-
+        val uriPosition = position - detailImageUrls.size
+        val urlMaxPosition = detailImageUrls.size - 1
         // Inflate the view
         val inflater = parent?.context?.
             getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
-
-
 
         var view = inflater.inflate(com.honegroupp.familyRegister.R.layout.upload_image,null)
 
@@ -54,10 +53,15 @@ class ItemGridAdapter:BaseAdapter{
             imageView.setPadding(100,100,100,100)
             val layoutParams = RelativeLayout.LayoutParams(110, 110)
 //            imageView.layoutParams = layoutParams
-        }else{
+        } else if (position <= urlMaxPosition) {
+            Picasso.get()
+                    .load(detailImageUrls[position])
+                    .placeholder(R.mipmap.loading_jewellery)
+                    .into(imageView)
+        } else {
 
             //get the orientation and make sure image are at its original orientation
-            val uri = allUris?.get(position)
+            val uri = allUris?.get(uriPosition)
             val path = FilePathUtil.getFilePathFromContentUri(uri!!, context!!)
             val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
 
@@ -65,30 +69,32 @@ class ItemGridAdapter:BaseAdapter{
             Picasso.get().load(uri).resize(330, 310).centerCrop().rotate(orientation).into(imageView)
         }
 
-        imageView.setOnClickListener {
-            //press the add button
-            if (isAddButton(position)){
-                if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
+        //press the add button
+        if (isAddButton(position)) {
+            imageView.setOnClickListener {
 
-                    if(context!!.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) ==
-                        PackageManager.PERMISSION_DENIED){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                    if (context!!.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) ==
+                        PackageManager.PERMISSION_DENIED
+                    ) {
                         //permission denied
-                        context!!.requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),1000)
-                    }else{
+                        context!!.requestPermissions(
+                            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                            1000
+                        )
+                    } else {
                         //permission already granted
                         context!!.selectImageInAlbum()
 //                        context!!.Toast.makeText(this,"HAS PREMISSION11",Toast.LENGTH_SHORT).show()
 
 
                     }
-                }else{
+                } else {
                     //system os less than mashmallow
 //                    Toast.makeText(this,"less than mashmallow",Toast.LENGTH_SHORT).show()
                     context!!.selectImageInAlbum()
                 }
-
-
-//                context!!.selectImageInAlbum()
             }
         }
 
@@ -121,7 +127,9 @@ class ItemGridAdapter:BaseAdapter{
             }
 
             cancelButton.setOnClickListener {
-                context!!.removeItem(position)
+                if (position > urlMaxPosition) {
+                    context!!.removeItem(uriPosition)
+                }
             }
         }
 
@@ -138,9 +146,9 @@ class ItemGridAdapter:BaseAdapter{
 
     override fun getCount(): Int {
         if (allUris == null){
-            return 1
+            return detailImageUrls.size + 1
         }
-        return allUris!!.size + 1
+        return detailImageUrls.size + allUris!!.size + 1
     }
 
     /*check whether the image view is the last one (add button)*/
