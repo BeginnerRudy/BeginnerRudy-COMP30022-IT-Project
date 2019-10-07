@@ -92,29 +92,47 @@ class ItemGridAdapter:BaseAdapter{
             }
         }
 
+        if (!isAddButton(position)) {
+            val cancelBackground =
+                view.findViewById<ImageView>(R.id.upload_image_cancel_background)
+            val cancelButton = view.findViewById<ImageView>(R.id.upload_image_cancel_button)
 
-        val cancelBackground =
-            view.findViewById<ImageView>(R.id.upload_image_cancel_background)
-        val cancelButton = view.findViewById<ImageView>(R.id.upload_image_cancel_button)
-        imageView.setOnLongClickListener {
+            //set background of cancel button
+            cancelBackground.setImageResource(R.drawable.ic_circle_white_24dp)
+            cancelBackground.visibility = View.INVISIBLE
 
-            if (!isAddButton(position)) {
-                Toast.makeText(  context,
-                    "Long click detected" + position.toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
+            //set cancal button
+            cancelButton.setImageResource(R.drawable.ic_cancel_red_24dp)
+            cancelButton.isEnabled = false
+            cancelButton.visibility = View.INVISIBLE
 
-                //set background of cancel button
-                cancelBackground.setImageResource(R.drawable.ic_circle_white_24dp)
-
-                //set cancal button
-                cancelButton.setImageResource(R.drawable.ic_cancel_red_24dp)
+            imageView.setOnLongClickListener {
+                // long click to enable and disable cancelButton
+                if (cancelButton.isEnabled) {
+                    Toast.makeText(
+                        context,
+                        "truetofalse" + position.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    cancelButton.isEnabled = false
+                    cancelButton.visibility = View.INVISIBLE
+                    cancelBackground.visibility = View.INVISIBLE
+                } else {
+                    Toast.makeText(
+                        context,
+                        "falsetotrue" + position.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    cancelButton.isEnabled = true
+                    cancelButton.visibility = View.VISIBLE
+                    cancelBackground.visibility = View.VISIBLE
+                }
+                true
             }
-            true
-        }
 
-        cancelButton.setOnClickListener{
-            context!!.removeItem(position)
+            cancelButton.setOnClickListener {
+                context!!.removeItem(position)
+            }
         }
 
         return view
