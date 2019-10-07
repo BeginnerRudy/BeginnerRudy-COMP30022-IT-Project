@@ -39,24 +39,23 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:background="#9C27B0"
         android:backgroundTint="@color/colorAccent"
         android:clickable="true"
-        app:borderWidth="0dp"
-        app:srcCompat="@drawable/ic_add_white_24dp" />
+        android:src="@android:drawable/ic_input_add"
+        android:tint="@color/colorWhite"
+        app:backgroundTint="#4CAF50" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/item_list_recycler_view"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="72dp"
-        android:backgroundTint="@color/colorPrimary"
+        android:layout_margin="8dp"
+        android:layout_above="@+id/btn_add"
+        android:backgroundTint="#FF9800"
         android:clickable="true"
-        app:borderWidth="0dp"
+        app:backgroundTint="#FFEB3B"
         app:srcCompat="@drawable/ic_search_white_24dp" />
 
 </RelativeLayout>
