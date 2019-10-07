@@ -1,35 +1,44 @@
 package com.honegroupp.familyRegister.view.item
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.honegroupp.familyRegister.R
 import kotlinx.android.synthetic.main.item_upload_page.*
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.pm.PackageManager
 import android.net.Uri
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.TextView
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageTask
-import com.google.firebase.storage.UploadTask
-import com.honegroupp.familyRegister.controller.ItemController.Companion.createItem
+import android.view.View
+import android.widget.*
+
+import com.honegroupp.familyRegister.view.itemList.ItemGridAdapter
+import kotlin.collections.ArrayList
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.backend.FirebaseStorageManager
+import com.honegroupp.familyRegister.controller.ItemController
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
-class ItemUploadActivity : AppCompatActivity() {
+class ItemUploadActivity : AppCompatActivity(){
     val GALLERY_REQUEST_CODE = 123
     var imagePathList = ArrayList<String>()
-    var numberOfImages = 0
-    lateinit var uid: String
+    var allImageUri= ArrayList<Uri>()
+    lateinit var uid :String
+
+    var itemPrivacyPosition: Int = 0
+    private val READ_PERMISSION_CODE: Int = 1000
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.item_upload_page)
+
         uid = intent.getStringExtra("UserID")
         val categoryName = intent.getStringExtra("categoryPath").toString()
 
@@ -48,40 +57,190 @@ class ItemUploadActivity : AppCompatActivity() {
             spinner.adapter = adapter
         }
 
+        //set up the grid view
+        // Get an instance of base adapter
+        val adapter = ItemGridAdapter(this,allImageUri)
 
-        itemChooseImage.setOnClickListener {
-            selectImageInAlbum()
-        }
+        // Set the grid view adapter
+        itemGridView.adapter = adapter
 
-        addItemConfirm.setOnClickListener {
 
-            //            need to CHECK empty logic
-            if (item_name_input.text.toString() == "") {
-                Toast.makeText(this, "Item name should not leave blank", Toast.LENGTH_SHORT).show()
-            } else if (numberOfImages == 0) {
-                Toast.makeText(this, "Please select at least one image", Toast.LENGTH_SHORT).show()
-            } else if (!legalDate(text_date)) {
-                Toast.makeText(this, "Please pick a date for item", Toast.LENGTH_SHORT).show()
-            } else if (numberOfImages != imagePathList.size) {
-//                Toast.makeText(this, numberOfImages.toString() +" " + imagePathList.size.toString(),Toast.LENGTH_SHORT).show()
-                Toast.makeText(this, "Please wait for uploading image", Toast.LENGTH_SHORT).show()
-            } else {
-                createItem(
-                    this,
-                    item_name_input,
-                    item_description_input,
-                    uid,
-                    categoryName,
-                    imagePathList,
-                    spinner.selectedItemPosition == 0,
-                    text_date.text.toString()
-                )
-            }
+
+        addItemConfirm.setOnClickListener{
+            itemPrivacyPosition = spinner.selectedItemPosition
+
+            progressBarRound.visibility = View.VISIBLE
+            //check input
+            checkInputAndUpload(categoryName)
         }
 
         // set date picker
         setDatePicker(text_date)
     }
+
+
+
+
+    //Over Android M version, need to request EXTERNAL STORAGE permission in order to save image
+    override fun onRequestPermissionsResult(requestCode: Int,permissions: Array<out String>,grantResults: IntArray){
+        when(requestCode){
+            READ_PERMISSION_CODE ->{
+                if(grantResults.isNotEmpty()&& grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+                    Toast.makeText(this,getString(R.string.get_read_permission),Toast.LENGTH_SHORT).show()
+                    selectImageInAlbum()
+                }else{
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+
+    /*create the item and upload*/
+    fun uploadItem(categoryName:String){
+
+        ItemController.createItem(
+            this,
+            this.item_name_input,
+            this.item_description_input,
+            this.uid,
+            categoryName,
+            this.imagePathList,
+            this.itemPrivacyPosition == 0,
+            this.text_date.text.toString()
+        )
+    }
+
+
+
+   /*
+   use the phone API to get images from the album
+   */
+    fun selectImageInAlbum() {
+
+        //reset the image url list
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+
+        // ask for multiple images picker
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        startActivityForResult(intent, GALLERY_REQUEST_CODE)
+    }
+
+    /*
+    process when receive the result of image selection
+    */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result code is RESULT_OK only if the user selects an Image
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                GALLERY_REQUEST_CODE -> {
+
+//                    adding multiple image
+                    if (data != null) {
+
+
+                        var allUris : ArrayList<Uri> = arrayListOf()
+
+                        if (data.getClipData() != null) {
+
+                            //handle multiple images
+                            val count = data.getClipData()!!.getItemCount()
+
+                            for (i in 0 until count) {
+                                var uri = data.getClipData()!!.getItemAt(i).uri
+                                if (uri != null) {
+
+                                    //add into Uri List
+                                    allImageUri.add(uri)
+                                    allUris.add(uri)
+                                }
+                            }
+
+                            //selecting single image from album
+                        } else if (data.getData() != null) {
+
+                            val uri = data.getData()
+                            if (uri != null) {
+
+                                allUris.add(uri)
+
+                                //add into Uri List
+                                allImageUri.add(uri)
+                            }
+                        }
+
+
+                        // Get an instance of base adapter
+                        val adapter = ItemGridAdapter(this,allImageUri)
+
+                        // Set the grid view adapter
+                        itemGridView.adapter = adapter
+
+
+                    }else{
+                        Toast.makeText(this,"Error",Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+    }
+
+
+
+   /*
+   remove already selected items from the list, update the view
+   */
+    fun removeItem(position:Int){
+
+       allImageUri.removeAt(position)
+
+       // reset the grid view adapter
+       val adapter = ItemGridAdapter(this, allImageUri)
+       itemGridView.adapter = adapter
+
+   }
+
+    /*
+    This method check the input is valid and upload to firebase if it is valid
+    */
+    private fun checkInputAndUpload(categoryName:String){
+
+        // need to check item name is not empty
+        if(item_name_input.text.toString() == ""){
+            Toast.makeText(this,getString(R.string.item_name_should_not_leave_blank),Toast.LENGTH_SHORT).show()
+
+        //check at least one photo is added
+        }else if(allImageUri.size == 0) {
+            Toast.makeText(this,getString(R.string.please_select_at_least_one_image), Toast.LENGTH_SHORT).show()
+
+        }else if(!legalDate(text_date)){
+            Toast.makeText(this, getString(R.string.please_pick_date_for_item), Toast.LENGTH_SHORT).show()
+
+        }else {
+            //upload uri to firebase
+            FirebaseStorageManager.uploadToFirebase(allImageUri, categoryName,this)
+        }
+
+    }
+
+
+    /**
+    * Update the progress bar and display the progress message
+    **/
+    fun displayProgress(){
+        val percent = imagePathList.size*100/(imagePathList.size + allImageUri.size)
+        progressBarText.text = percent.toString() + " %,  " +
+                getString(com.honegroupp.familyRegister.R.string.uploading) +
+                (imagePathList.size+1).toString()+
+                getString(com.honegroupp.familyRegister.R.string.of)+
+                (imagePathList.size + allImageUri.size).toString() + " " +
+                getString(com.honegroupp.familyRegister.R.string.image)
+    }
+
 
     /**
      * This method validate whether the text of a given textView is a valid date or not.
@@ -98,10 +257,22 @@ class ItemUploadActivity : AppCompatActivity() {
         }
     }
 
+
     /**
      * This method is responsible for setting date picker.
      * */
     private fun setDatePicker(textView: TextView) {
+
+        //set cursor invisible
+        textView.isCursorVisible = false
+
+        //disable keyboard because select date
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textView.setShowSoftInputOnFocus(false);
+        } else {
+            textView.setTextIsSelectable(true);
+        }
+
         var cal = Calendar.getInstance()
         val dateSetListener =
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
@@ -124,75 +295,4 @@ class ItemUploadActivity : AppCompatActivity() {
         }
     }
 
-    //use the phone API to get thr image from the album
-    private fun selectImageInAlbum() {
-
-        //reset the image url list
-        imagePathList.clear()
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-        // ask for multiple images picker
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        startActivityForResult(intent, GALLERY_REQUEST_CODE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        // Result code is RESULT_OK only if the user selects an Image
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                GALLERY_REQUEST_CODE -> {
-
-//                    adding multiple image
-                    if (data != null) {
-                        if (data.getClipData() != null) {
-
-                            //handle multiple images
-                            val count = data.getClipData()!!.getItemCount()
-                            numberOfImages = count
-
-
-                            for (i in 0 until count) {
-                                val uri = data.getClipData()!!.getItemAt(i).uri
-                                if (uri != null) {
-                                    uploadtofirebase(uri)
-                                }
-                            }
-                        } else if (data.getData() != null) {
-                            //handle single image
-                            numberOfImages = 1
-
-                            val uri = data.getData()
-                            if (uri != null) {
-                                uploadtofirebase(uri)
-                            }
-                        }
-                        Toast.makeText(this, numberOfImages.toString(), Toast.LENGTH_LONG).show()
-                    } else {
-                        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun uploadtofirebase(selectedImage: Uri) {
-        val uploadPath = " "
-        val firebaseStore = FirebaseStorage.getInstance()
-        val ref =
-            FirebaseStorage.getInstance().reference.child(uploadPath + System.currentTimeMillis())
-        var uploadTask: StorageTask<UploadTask.TaskSnapshot>? = ref.putFile(selectedImage!!)
-            .addOnSuccessListener {
-                //add item logic
-
-                ref.downloadUrl.addOnCompleteListener() { taskSnapshot ->
-
-                    var url = taskSnapshot.result
-
-                    this.imagePathList.add(url.toString())
-
-                }
-            }
-    }
 }
