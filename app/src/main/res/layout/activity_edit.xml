@@ -11,6 +11,7 @@
 
         <GridView
             android:id="@+id/editImagesGrid"
+            android:nestedScrollingEnabled="true"
             android:layout_width="match_parent"
             android:layout_height="680px"
             android:horizontalSpacing="10dp"

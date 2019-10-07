@@ -5,124 +5,115 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp"
+        android:orientation="vertical">
+
+        <GridView
+            android:id="@+id/itemGridView"
+            android:layout_width="match_parent"
+            android:layout_height="680px"
+            android:horizontalSpacing="10dp"
+            android:numColumns="3"
+            android:verticalSpacing="10dp" />
 
         <LinearLayout
+            android:layout_margin = "5dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="15dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation = "horizontal">
 
-            <GridView
-                android:id="@+id/itemGridView"
+            <ProgressBar
+                android:id="@+id/progressBarRound"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/progressBarText"
+                android:layout_margin = "5dp"
+                android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:layout_height="680px"
-                android:horizontalSpacing="10dp"
-                android:numColumns="3"
-                android:verticalSpacing="10dp" />
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
-                android:layout_margin = "5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation = "horizontal">
+                android:orientation="vertical">
 
-                <ProgressBar
-                    android:id="@+id/progressBarRound"
-                    style="@style/Widget.AppCompat.ProgressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="invisible"
-                    android:max="100" />
-
-
-                <TextView
-                    android:id="@+id/progressBarText"
-                    android:layout_margin = "5dp"
-                    android:layout_gravity="center_vertical"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/spinner"
+                    android:layout_below="@id/itemGridView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+                    android:layout_height="wrap_content">
+                    <Spinner
+                        android:id="@+id/privacy_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:spinnerMode="dropdown"
+                        android:visibility="visible" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/itemName"
+                    android:layout_below="@id/spinner"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/spinner"
-                        android:layout_below="@id/itemGridView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <Spinner
-                            android:id="@+id/privacy_spinner"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:spinnerMode="dropdown"
-                            android:visibility="visible" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/itemName"
-                        android:layout_below="@id/spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/item_name_input"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/type_item_name"
-                            android:inputType="text" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/itemDescription"
-                        android:layout_below="@id/itemName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/item_description_input"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/type_item_description"
-                            android:inputType="textMultiLine" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/itemDate"
-                        android:layout_below="@id/itemDescription"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/text_date"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="none"
-                            android:hint="@string/please_pick_date_for_item" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-
-                    <Button
-                        android:id="@+id/addItemConfirm"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/item_name_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/text_date"
-                        android:backgroundTint="@color/colorAccent"
-                        android:text="@string/add_item"
-                        android:textColor="@color/textColorPrimary" />
-                </LinearLayout>
-            </ScrollView>
+                        android:hint="@string/type_item_name"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/itemDescription"
+                    android:layout_below="@id/itemName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/item_description_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/type_item_description"
+                        android:inputType="textMultiLine" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/itemDate"
+                    android:layout_below="@id/itemDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/text_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:hint="@string/please_pick_date_for_item" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/addItemConfirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_date"
+                    android:backgroundTint="@color/colorAccent"
+                    android:text="@string/add_item"
+                    android:textColor="@color/textColorPrimary" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 </LinearLayout >

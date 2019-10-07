@@ -31,8 +31,10 @@ class ItemEditGridAdapter:BaseAdapter{
 
 
     override fun getView(position:Int, convertView: View?, parent: ViewGroup?): View {
+
         val uriPosition = position - detailImageUrls.size
         val urlMaxPosition = detailImageUrls.size - 1
+        val currentIsUrl = position <= urlMaxPosition
         // Inflate the view
         val inflater = parent?.context?.
             getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -53,11 +55,12 @@ class ItemEditGridAdapter:BaseAdapter{
             imageView.setPadding(100,100,100,100)
             val layoutParams = RelativeLayout.LayoutParams(110, 110)
 //            imageView.layoutParams = layoutParams
-        } else if (position <= urlMaxPosition) {
+        } else if (currentIsUrl) {
             Picasso.get()
-                    .load(detailImageUrls[position])
-                    .placeholder(R.mipmap.loading_jewellery)
-                    .into(imageView)
+                .load(detailImageUrls[position])
+                .placeholder(R.mipmap.loading_jewellery)
+                .resize(360,360)
+                .into(imageView)
         } else {
 
             //get the orientation and make sure image are at its original orientation
@@ -127,8 +130,10 @@ class ItemEditGridAdapter:BaseAdapter{
             }
 
             cancelButton.setOnClickListener {
-                if (position > urlMaxPosition) {
-                    context!!.removeItem(uriPosition)
+                if (currentIsUrl) {
+                    context!!.removeItem(currentIsUrl, position)
+                } else {
+                    context!!.removeItem(currentIsUrl, uriPosition)
                 }
             }
         }
