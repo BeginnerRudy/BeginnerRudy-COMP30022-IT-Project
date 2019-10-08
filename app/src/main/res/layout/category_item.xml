@@ -40,7 +40,7 @@
                     android:layout_marginTop="10dp"
                     android:text="My Pictures"
                     android:textColor="#FFF"
-                    android:textSize="8pt" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/txt_category_count"
@@ -50,7 +50,7 @@
                     android:text="0"
                     android:textColor="#B9B1B1"
 
-                    android:textSize="8pt" />
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
