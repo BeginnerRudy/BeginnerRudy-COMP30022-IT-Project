@@ -21,7 +21,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
-import com.honegroupp.familyRegister.model.Hash
+import com.honegroupp.familyRegister.utility.Hash
 import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.utility.ThreadController
 
