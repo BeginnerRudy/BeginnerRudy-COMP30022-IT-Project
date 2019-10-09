@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.TypedArrayUtils.getText
 import com.google.firebase.database.DataSnapshot
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
@@ -47,7 +48,7 @@ class ItemController {
             )
             item.store(uid, categoryName)
 
-            Toast.makeText(mContext, "Item Stored successfully", Toast.LENGTH_SHORT).show()
+            Toast.makeText(mContext, mContext.getText(R.string.Item_create_success), Toast.LENGTH_SHORT).show()
         }
 
         /**

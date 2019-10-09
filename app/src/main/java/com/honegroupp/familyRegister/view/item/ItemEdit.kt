@@ -154,14 +154,14 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                         detailImageUrls.add(url.toString())
                         numSuccess += 1
 
-                        databaseRef
-                            .child(FirebaseDatabaseManager.FAMILY_PATH)
-                            .child(currFamilyId)
-                            .child("items")
-                            .child(itemKey)
-                            .child("imageURLs")
-                            .setValue(detailImageUrls)
                         if (numSuccess == allImageUri.size){
+                            databaseRef
+                                .child(FirebaseDatabaseManager.FAMILY_PATH)
+                                .child(currFamilyId)
+                                .child("items")
+                                .child(itemKey)
+                                .child("imageURLs")
+                                .setValue(detailImageUrls)
                             toast(getString(R.string.upload_success) + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
                             Log.d("eeeenimgupload", detailImageUrls.toString())
                         } else {

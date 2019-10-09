@@ -72,6 +72,7 @@
     <string name="uploading">Uploading</string>
     <string name="upload_complete">Upload Complete</string>
     <string name="upload_success">Upload Success!</string>
+    <string name="Item_create_success">Item Created successfully!</string>
     <string name="of">" of "</string>
     <string name="finished">finished</string>
     <string name="image">image</string>
