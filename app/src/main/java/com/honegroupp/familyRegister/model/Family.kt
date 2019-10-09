@@ -289,15 +289,10 @@ data class Family(
                     items.add(currItem)
                 }
 
-                // notify the adapter to update
-                itemListAdapter.notifyDataSetChanged()
-                // Make the progress bar invisible
-                mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
-                    View.INVISIBLE
-                mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
-                    View.INVISIBLE
             }
 
+            // notify the adapter to update
+            itemListAdapter.notifyDataSetChanged()
             if (itemKeys.isEmpty()) {
                 // Make the progress bar invisible
                 mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
@@ -305,6 +300,13 @@ data class Family(
 
                 mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
                     View.VISIBLE
+            }else{
+
+                // Make the progress bar invisible
+                mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
+                    View.INVISIBLE
+                mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
+                    View.INVISIBLE
             }
         }
 
