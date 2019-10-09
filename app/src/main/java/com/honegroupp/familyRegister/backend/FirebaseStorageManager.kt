@@ -19,7 +19,6 @@ class FirebaseStorageManager{
 
         fun uploadToFirebase(allImageUri: ArrayList<Uri>, categoryName:String, activity:ItemUploadActivity) {
             var numSuccess = 0
-            var
             for (uri in allImageUri){
 
 
@@ -49,10 +48,9 @@ class FirebaseStorageManager{
                         //add item logic
                         ref.downloadUrl.addOnCompleteListener() { taskSnapshot ->
                             numSuccess += 1
+                            var url = taskSnapshot.result
+                            activity.imagePathList.add(url.toString())
                             if (numSuccess == allImageUri.size){
-                                var url = taskSnapshot.result
-                                activity.imagePathList.add(url.toString())
-
                                 //Create Item And Upload
                                 activity.uploadItem(categoryName)
 
