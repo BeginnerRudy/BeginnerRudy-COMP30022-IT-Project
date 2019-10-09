@@ -29,7 +29,7 @@ open class ContainerActivity : AppCompatActivity(), ContainerAdapter.OnItemClick
     }
 
     override fun onDeleteClick(itemId: String) {
-        ItemListController.deleteItems(uid, categoryName, this, itemId)
+        ItemListController.deleteItems(uid, categoryName, itemId)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

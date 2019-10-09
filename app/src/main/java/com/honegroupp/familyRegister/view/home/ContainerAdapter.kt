@@ -136,7 +136,7 @@ open class ContainerAdapter(
             p2: ContextMenu.ContextMenuInfo?
         ) {
             p0?.setHeaderTitle("Select Action")
-            val delete = p0?.add(Menu.NONE, 1, 1, R.string.delete_from_this_category)
+            val delete = p0?.add(Menu.NONE, 1, 1, R.string.complete_delete)
 
 
             delete?.setOnMenuItemClickListener(this)
