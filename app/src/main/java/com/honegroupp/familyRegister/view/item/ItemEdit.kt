@@ -124,8 +124,6 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
         val uploadPath = " "
         var numSuccess = 0
         for (uri in allImageUri){
-            //upload the progress bar
-            displayProgress()
 
             //get firebase storage reference
             val ref =
@@ -163,28 +161,16 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                                 .child(itemKey)
                                 .child("imageURLs")
                                 .setValue(detailImageUrls)
-                            toast(getString(R.string.uploading) + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+                            toast(getString(R.string.upload_success) + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
                             Log.d("eeeenimgupload", detailImageUrls.toString())
+                        } else {
+                            toast(getString(R.string.upload_complete) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+                            Log.d("eeeenimg", detailImageUrls.toString())
                         }
-                        toast(getString(R.string.uploading) + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
-                        Log.d("eeeenimg", detailImageUrls.toString())
                     }
                 }
         }
-    }
-
-    /**
-     * Update the progress bar and display the progress message
-     **/
-    fun displayProgress(){
-        val numNewImages = allImageUri.size
-        val percent = numNewImages*100/(numNewImages + allImageUri.size)
-        editProgressBarText.text = percent.toString() + " %,  " +
-                getString(R.string.uploading) +
-                (numNewImages+1).toString()+
-                getString(R.string.of)+
-                (numNewImages + allImageUri.size).toString() + " " +
-                getString(R.string.image)
+        toast(getString(R.string.uploading) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

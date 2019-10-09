@@ -48,8 +48,6 @@ class ItemController {
             item.store(uid, categoryName)
 
             Toast.makeText(mContext, "Item Stored successfully", Toast.LENGTH_SHORT).show()
-            // Go back to the previous activity
-            mContext.finish()
         }
 
         /**

@@ -223,22 +223,10 @@ class ItemUploadActivity : AppCompatActivity(){
         }else {
             //upload uri to firebase
             FirebaseStorageManager.uploadToFirebase(allImageUri, categoryName,this)
+
+            this.finish()
         }
 
-    }
-
-
-    /**
-    * Update the progress bar and display the progress message
-    **/
-    fun displayProgress(){
-        val percent = imagePathList.size*100/(imagePathList.size + allImageUri.size)
-        progressBarText.text = percent.toString() + " %,  " +
-                getString(com.honegroupp.familyRegister.R.string.uploading) +
-                (imagePathList.size+1).toString()+
-                getString(com.honegroupp.familyRegister.R.string.of)+
-                (imagePathList.size + allImageUri.size).toString() + " " +
-                getString(com.honegroupp.familyRegister.R.string.image)
     }
 
 
@@ -293,6 +281,10 @@ class ItemUploadActivity : AppCompatActivity(){
                 cal.get(Calendar.DAY_OF_MONTH)
             ).show()
         }
+    }
+
+    fun toast(msg: String, duration: Int) {
+        Toast.makeText(this, msg, duration).show()
     }
 
 }

@@ -2,9 +2,12 @@ package com.honegroupp.familyRegister.backend
 
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
+import android.widget.Toast
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
+import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.utility.CompressionUtil
 import com.honegroupp.familyRegister.utility.FilePathUtil
 import com.honegroupp.familyRegister.utility.ImageRotateUtil
@@ -15,14 +18,10 @@ class FirebaseStorageManager{
         private const val uploadPath = " "
 
         fun uploadToFirebase(allImageUri: ArrayList<Uri>, categoryName:String, activity:ItemUploadActivity) {
-            if (allImageUri.size == 0){
+            var numSuccess = 0
+            var
+            for (uri in allImageUri){
 
-                //Create Item And Upload
-                activity.uploadItem(categoryName)
-
-            }else {
-                //upload the progress bar
-                activity.displayProgress()
 
                 //get firebase storage reference
                 val ref =
@@ -30,7 +29,6 @@ class FirebaseStorageManager{
                         .reference.child(uploadPath + System.currentTimeMillis())
 
                 //convert first image in list to bitmap
-                val uri = allImageUri[0]
                 val path = FilePathUtil.getFilePathFromContentUri(uri, activity)
                 val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
                 val bitmap = MediaStore.Images.Media.getBitmap(activity.contentResolver, uri)
@@ -45,22 +43,27 @@ class FirebaseStorageManager{
                 val data = CompressionUtil.compressImage(orientedScaledBitmap)
 
                 //upload the compressed image
-                var uploadTask: StorageTask<UploadTask.TaskSnapshot>? = ref.putBytes(data)
+                ref.putBytes(data)
                     .addOnSuccessListener {
-
-                        //remove the uploaded Item
-                        allImageUri.removeAt(0)
 
                         //add item logic
                         ref.downloadUrl.addOnCompleteListener() { taskSnapshot ->
-                            var url = taskSnapshot.result
-                            activity.imagePathList.add(url.toString())
+                            numSuccess += 1
+                            if (numSuccess == allImageUri.size){
+                                var url = taskSnapshot.result
+                                activity.imagePathList.add(url.toString())
 
-                            //recursively upload next image
-                            this.uploadToFirebase(allImageUri,categoryName,activity)
+                                //Create Item And Upload
+                                activity.uploadItem(categoryName)
+
+                                activity.toast(activity.getString(R.string.upload_success) + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+                            } else {
+                                activity.toast(activity.getString(R.string.upload_complete) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+                            }
                         }
                     }
             }
+            activity.toast(activity.getString(R.string.uploading) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
         }
     }
 }

@@ -70,6 +70,8 @@
     <string name="item_name_should_not_leave_blank">Item name should not leave blank</string>
     <string name="please_select_at_least_one_image">Please select at least one image</string>
     <string name="uploading">Uploading</string>
+    <string name="upload_complete">Upload Complete</string>
+    <string name="upload_success">Upload Success!</string>
     <string name="of">" of "</string>
     <string name="finished">finished</string>
     <string name="image">image</string>
