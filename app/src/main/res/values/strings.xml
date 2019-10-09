@@ -70,6 +70,9 @@
     <string name="item_name_should_not_leave_blank">Item name should not leave blank</string>
     <string name="please_select_at_least_one_image">Please select at least one image</string>
     <string name="uploading">Uploading</string>
+    <string name="upload_complete">Upload Complete</string>
+    <string name="upload_success">Upload Success!</string>
+    <string name="Item_create_success">Item Created successfully!</string>
     <string name="of">" of "</string>
     <string name="finished">finished</string>
     <string name="image">image</string>
@@ -86,5 +89,9 @@
     <string name="no_items_for_the_show_page">No Items For The Show Page</string>
     <string name="reset_email_message">The reset password email has been sent, please click the link in the email to reset your email.</string>
     <string name="password_rest_success">Email reset successful!</string>
+    <string name="letter">Letter</string>
+    <string name="instrument">Instrument</string>
+    <string name="photo">Photo</string>
+    <string name="others">Others</string>
     <string name="complete_delete">Delete from category and all</string>
 </resources>

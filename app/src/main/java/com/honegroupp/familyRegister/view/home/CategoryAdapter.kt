@@ -1,7 +1,6 @@
 package com.honegroupp.familyRegister.view.home
 
 
-import android.content.Context
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -25,9 +24,20 @@ class CategoryAdapter(val uid: String, private val items: ArrayList<Category>, v
         return CategoryViewHolder(v)
     }
 
+    fun changelanguage(categoryName : String): String {
+        var categoryNameString = ""
+        when (categoryName) {
+            "Letter" -> categoryNameString = mActivity.getString(R.string.letter)
+            "Instrument" -> categoryNameString = mActivity.getString(R.string.instrument)
+            "Photo" -> categoryNameString = mActivity.getString(R.string.photo)
+            "Others" -> categoryNameString = mActivity.getString(R.string.others)
+        }
+        return categoryNameString
+    }
+
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val currCategory = items[position]
-        holder.textViewName.text = currCategory.name
+        holder.textViewName.text = changelanguage(currCategory.name)
         holder.textViewCount.text = currCategory.count.toString()
 
         // Load image to ImageView via its URL from Firebase Storage
