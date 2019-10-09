@@ -4,11 +4,14 @@ package com.honegroupp.familyRegister.view.authentication
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.honegroupp.familyRegister.IDoubleClickToExit
+import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.AuthenticationController
 import com.honegroupp.familyRegister.utility.EmailPathSwitch
 import com.honegroupp.familyRegister.model.User
@@ -25,6 +28,8 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+
         // Choose authentication providers
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
@@ -37,10 +42,11 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
+                .setTheme(R.style.LoginTheme)
                 .setTosAndPrivacyPolicyUrls(
                     "https://en.wikipedia.org/wiki/SLD_resolution",
                     "https://example.com/privacy.html"
-                )
+                ).setIsSmartLockEnabled(false)
                 .build(),
             RC_SIGN_IN
         )
@@ -67,6 +73,7 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                 }
 
                 val relativePath = EmailPathSwitch.emailToPath(userContact)
+
 
                 AuthenticationController.storeUser(this, User(username =  user!!.displayName as String), relativePath)
 

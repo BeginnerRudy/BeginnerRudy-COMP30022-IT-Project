@@ -12,6 +12,10 @@ import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
@@ -25,11 +29,13 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.honegroupp.familyRegister.utility.CompressionUtil
+import com.honegroupp.familyRegister.utility.EmailPathSwitch
 import com.honegroupp.familyRegister.utility.FilePathUtil
 import com.honegroupp.familyRegister.utility.ImageRotateUtil
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationChangeDialog
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationEnterPasswordDialog
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationViewDialog
+import kotlinx.android.synthetic.main.activity_account.*
 import kotlinx.android.synthetic.main.item_upload_page.*
 import java.text.ParseException
 
@@ -38,14 +44,13 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
     LocationViewDialog.OnChangeClickListener, LocationChangeDialog.OnChangeConfirmClickListener {
 
     val GALLERY_REQUEST_CODE = 123
-    val passwordLocation = "1"
-    var enteredPassword = ""
     var itemLocation = "Bedside ddtable first drawer"
     var allImageUri = ArrayList<Uri>()
     var detailImageUrls = ArrayList<String>()
     var deleteImageUrls = ArrayList<String>()
 
     lateinit var databaseRef: DatabaseReference
+    lateinit var uid: String
     lateinit var itemKey: String
     lateinit var currFamilyId: String
 
@@ -61,13 +66,49 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
         openLocationChangeDialog()
     }
 
-    override fun applyPasswords(password: String) {
-        enteredPassword = password
-        if (passwordLocation == enteredPassword) {
-            openLocationViewDialog()
-        } else {
-            toast(getString(R.string.edit_location_password_incorrect), Toast.LENGTH_LONG)
+
+    /*
+    Compare the password, if the password is correct, show the location view dialog
+     */
+    override fun applyPasswords(enteredPassword: String, dialog: LocationEnterPasswordDialog) {
+
+        //check emptyness of password
+        if(enteredPassword != "") {
+
+            //get user and uid
+            val user = FirebaseAuth.getInstance().currentUser
+
+            // Get auth credentials from the user for re-authentication. The example below shows
+            // email and password credentials but there are multiple possible providers,
+            // such as GoogleAuthProvider or FacebookAuthProvider.
+            val credential: AuthCredential = EmailAuthProvider
+                .getCredential(EmailPathSwitch.pathToEmail(uid!!), enteredPassword)
+
+
+            //use firebase to re authenticate the password
+            user?.reauthenticate(credential)
+                ?.addOnCompleteListener(OnCompleteListener<Void> { task ->
+                    if (task.isSuccessful) {
+
+                        //close the old dialog
+                        dialog.dismiss()
+
+                        //open the new dialog
+                        openLocationViewDialog()
+                    } else {
+
+                        //password is incorrect
+                        toast(
+                            getString(R.string.edit_location_password_incorrect),
+                            Toast.LENGTH_LONG
+                        )
+                    }
+                })
+        }else{
+            //password is blank
+            toast(getString(R.string.password_cannot_be_blank),Toast.LENGTH_SHORT)
         }
+
     }
 
     /*
@@ -192,6 +233,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
         setContentView(R.layout.activity_edit)
 
         // get extra from Item Detail(DetailSlide)
+        uid = intent.getStringExtra("uid")
         itemKey = intent.getStringExtra("ItemKey").toString()
         currFamilyId = intent.getStringExtra("FamilyId").toString()
 

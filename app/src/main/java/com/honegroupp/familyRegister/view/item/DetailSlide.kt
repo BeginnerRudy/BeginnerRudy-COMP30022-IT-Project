@@ -104,6 +104,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     // start editing
     override fun onEditClick(itemKey: String?) {
         val intent = Intent(this, ItemEdit::class.java)
+        intent.putExtra("uid", detailUserId)
         intent.putExtra("ItemKey", itemKey)
         intent.putExtra("FamilyId", detailFamilyId)
 

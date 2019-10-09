@@ -48,6 +48,8 @@ class DetailImagesSliderAdapter(val items: ArrayList<String>, val canDelete: Boo
         Picasso.get()
             .load(currItemUrls)
             .placeholder(R.mipmap.loading_jewellery)
+            .fit()
+            .centerCrop()
             .into(slideImageView)
 
         view.findViewById<ImageView>(R.id.detail_images).setOnClickListener{

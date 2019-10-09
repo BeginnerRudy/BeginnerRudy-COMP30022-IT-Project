@@ -40,9 +40,12 @@ class LocationEnterPasswordDialog : AppCompatDialogFragment() {
 
         editTextPassword = view.findViewById(R.id.edit_password)
         view.findViewById<Button>(R.id.view_button).setOnClickListener(){
+
             val password = editTextPassword!!.text.toString()
-            listener!!.applyPasswords(password)
-            this.dismiss()
+
+           //check the correctness of password
+            listener!!.applyPasswords(password,this)
+
         }
 
         return builder.create()
@@ -60,6 +63,6 @@ class LocationEnterPasswordDialog : AppCompatDialogFragment() {
     }
 
     interface OnViewClickerListener {
-        fun applyPasswords(password: String)
+        fun applyPasswords(password: String,dialog:LocationEnterPasswordDialog)
     }
 }
