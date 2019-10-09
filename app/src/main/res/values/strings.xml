@@ -86,4 +86,8 @@
     <string name="no_items_for_the_show_page">No Items For The Show Page</string>
     <string name="reset_email_message">The reset password email has been sent, please click the link in the email to reset your email.</string>
     <string name="password_rest_success">Email reset successful!</string>
+    <string name="letter">Letter</string>
+    <string name="instrument">Instrument</string>
+    <string name="photo">Photo</string>
+    <string name="others">Others</string>
 </resources>
