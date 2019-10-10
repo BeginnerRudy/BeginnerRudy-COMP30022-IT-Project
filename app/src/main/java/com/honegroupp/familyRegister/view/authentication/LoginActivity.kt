@@ -63,19 +63,22 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                 val user = FirebaseAuth.getInstance().currentUser
 
 
-                var userContact : String = "D_ERROR"
+                var userContact = "Default"
+                var userName = "Default"
                 if (user != null) {
-                    if (user.email != null)
+                    if (user.email != null) {
                         userContact = user.email.toString()
-                    else if (user.phoneNumber != null) {
-                        userContact = user.email.toString()
+                        userName = user!!.displayName as String
+                    }else if (user.phoneNumber != null) {
+                        userContact = user.phoneNumber.toString()
+                        userName = user.phoneNumber.toString()
                     }
                 }
 
                 val relativePath = EmailPathSwitch.emailToPath(userContact)
 
 
-                AuthenticationController.storeUser(this, User(username =  user!!.displayName as String), relativePath)
+                AuthenticationController.storeUser(this, User(username = userName), relativePath)
 
             } else if (response == null) {
                 // If the user press back button, exit the app
