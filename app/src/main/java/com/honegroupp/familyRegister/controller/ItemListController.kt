@@ -15,6 +15,7 @@ import com.honegroupp.familyRegister.model.Family
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.view.home.ContainerActivity
 import com.honegroupp.familyRegister.view.home.ContainerAdapter
+import com.honegroupp.familyRegister.view.item.DetailSlide
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 import kotlinx.android.synthetic.main.activity_item_list.*
 
@@ -73,7 +74,7 @@ class ItemListController {
                 //sort logic
                 adapter.items.sortBy { it.itemName }
                 //update sort order
-                mActivity.sortOrder = "name_asc"
+                mActivity.sortOrder = DetailSlide.NAME_ASCENDING
                 // update the UI layer
                 updateRecyclerView(adapter, drawer_sort_layout)
                 true
@@ -82,7 +83,7 @@ class ItemListController {
                 //sort logic
                 adapter.items.sortByDescending { it.itemName }
                 //update sort order
-                mActivity.sortOrder = "name_desc"
+                mActivity.sortOrder = DetailSlide.NAME_DESCENDING
                 // update the UI layer
                 updateRecyclerView(adapter, drawer_sort_layout)
                 true
@@ -91,7 +92,7 @@ class ItemListController {
                 //sort logic
                 adapter.items.sortBy { it.date }
                 //update sort order
-                mActivity.sortOrder = "time_asc"
+                mActivity.sortOrder = DetailSlide.TIME_ASCENDING
                 // update the UI layer
                 updateRecyclerView(adapter, drawer_sort_layout)
                 true
@@ -100,7 +101,7 @@ class ItemListController {
                 //sort logic
                 adapter.items.sortByDescending { it.date }
                 //update sort order
-                mActivity.sortOrder = "time_desc"
+                mActivity.sortOrder = DetailSlide.TIME_DESCENDING
                 // update the UI layer
                 updateRecyclerView(adapter, drawer_sort_layout)
                 true
