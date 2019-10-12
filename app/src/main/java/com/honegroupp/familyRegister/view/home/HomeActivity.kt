@@ -117,7 +117,9 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         }
 
         nav_view.menu.findItem(R.id.nav_view_family).setOnMenuItemClickListener {
-            toast("Clicked view family")
+            val intent = Intent(this, ViewFamilyActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
             true
         }
 

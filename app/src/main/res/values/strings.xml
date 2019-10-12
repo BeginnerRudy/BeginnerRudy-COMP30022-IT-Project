@@ -94,4 +94,5 @@
     <string name="photo">Photo</string>
     <string name="others">Others</string>
     <string name="complete_delete">Delete from category and all</string>
+    <string name="family">Family</string>
 </resources>
