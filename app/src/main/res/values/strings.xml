@@ -105,4 +105,7 @@
     <string name="sort_name_desc">Descending sort by item name</string>
     <string name="sort_time_asc">Ascending sort by date</string>
     <string name="sort_time_desc">Descending sort by date</string>
+    <string name="new_family_name">New Family Name</string>
+    <string name="new_family_password">New Family Password</string>
+    <string name="reauth">Please enter your account password first:</string>
 </resources>

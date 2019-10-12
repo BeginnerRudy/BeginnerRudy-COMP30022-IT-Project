@@ -106,4 +106,7 @@
     <string name="sort_name_desc">按物品名称正序排列(倒序)</string>
     <string name="sort_time_asc">按时间排列(正序)</string>
     <string name="sort_time_desc">按时间排列(倒序)</string>
+    <string name="new_family_name">新的家庭名称</string>
+    <string name="new_family_password">新的家庭密码</string>
+    <string name="reauth">请先输入您的个人账户密码：</string>
 </resources>

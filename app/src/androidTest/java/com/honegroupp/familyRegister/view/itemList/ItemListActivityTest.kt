@@ -35,8 +35,8 @@ class ItemListActivityTest{
         fun setup() {
             // things to execute once and keep around for the class
             intent = Intent()
-            val uid = "hduan1@qq=com"
-            val username = "Haoran Duan"
+            val uid = "qqqqqqqq@qq=com"
+            val username = "qqqqqqqq"
             intent.putExtra("UserID", uid)
             intent.putExtra("UserName", username)
 

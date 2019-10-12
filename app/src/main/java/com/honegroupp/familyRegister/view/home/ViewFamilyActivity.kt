@@ -42,7 +42,7 @@ class ViewFamilyActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListene
                 return true
             }
             R.id.change_family_pws -> {
-                val familyNameChangeDialog = FamilyNameChangeDialog("Change pwd")
+                val familyNameChangeDialog = UserReAuthDialog(uid, this)
                 familyNameChangeDialog.show(supportFragmentManager, "Location Change Dialog")
                 return true
             }

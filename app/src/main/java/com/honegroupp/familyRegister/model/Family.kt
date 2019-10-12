@@ -580,7 +580,10 @@ data class Family(
             val familyIdView: TextView = mActivity.findViewById(R.id.family_id)
             val familyNameView: TextView = mActivity.findViewById(R.id.family_name)
 
-            familyIdView.text = "${mActivity.getString(R.string.family_id_show)}  ${EmailPathSwitch.pathToEmail(familyId)}"
+            familyIdView.text =
+                "${mActivity.getString(R.string.family_id_show)}  ${EmailPathSwitch.pathToEmail(
+                    familyId
+                )}"
             familyNameView.text = "${mActivity.getString(R.string.family_name_show)}  $familyName"
 
             // retrieve user's uids in current family
@@ -599,6 +602,59 @@ data class Family(
             // set this user to the adapter
             adapter.notifyDataSetChanged()
         }
-    }
 
+        /**
+         * This method is responsible for change the family name
+         *
+         * */
+        fun changeName(uid: String, newFamilyName: String) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
+                callbackChangeName(uid, newFamilyName, d)
+            }
+        }
+
+        /**
+         * This method the callback for change the family name
+         *
+         * */
+        private fun callbackChangeName(
+            uid: String,
+            newFamilyName: String,
+            dataSnapshot: DataSnapshot
+        ) {
+            val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+            val familyNamePath = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/familyName"
+
+            FirebaseDatabase.getInstance().getReference(familyNamePath).setValue(newFamilyName)
+        }
+
+
+        /**
+         * This method is responsible for change the family password
+         *
+         * */
+        fun changePassword(uid: String, newFamilyPassword: String) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
+                callbackChangePassword(uid, newFamilyPassword, d)
+            }
+        }
+
+        /**
+         * This method the callback for change the family password
+         *
+         * */
+        private fun callbackChangePassword(
+            uid: String,
+            newFamilyPassword: String,
+            dataSnapshot: DataSnapshot
+        ) {
+            val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+            val familyNamePath = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/password"
+
+            FirebaseDatabase.getInstance().getReference(familyNamePath)
+                .setValue(Hash.applyHash(newFamilyPassword))
+        }
+    }
 }

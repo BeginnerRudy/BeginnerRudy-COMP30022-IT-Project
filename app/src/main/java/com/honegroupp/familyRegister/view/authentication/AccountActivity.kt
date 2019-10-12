@@ -59,6 +59,7 @@ class AccountActivity : AppCompatActivity() {
             // such as GoogleAuthProvider or FacebookAuthProvider.
 
             val password = enterPassword.text.toString()
+
             val credential: AuthCredential = EmailAuthProvider
                 .getCredential(EmailPathSwitch.pathToEmail(uid), password)
 
