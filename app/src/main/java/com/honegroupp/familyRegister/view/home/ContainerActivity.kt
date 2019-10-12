@@ -18,7 +18,7 @@ open class ContainerActivity : AppCompatActivity(), ContainerAdapter.OnItemClick
     lateinit var familyId: String
     lateinit var path: String
     lateinit var categoryName: String
-    var sortOrder: String = "default"
+    var sortOrder: String = DetailSlide.SORT_DEFAULT
 
     override fun onItemClick(position: Int) {
         val intent = Intent(this, DetailSlide::class.java)

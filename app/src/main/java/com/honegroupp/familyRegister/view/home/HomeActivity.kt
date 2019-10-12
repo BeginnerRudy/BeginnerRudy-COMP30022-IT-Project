@@ -47,6 +47,7 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         intent.putExtra("FamilyId", familyId)
         intent.putExtra("PositionList", position.toString())
         intent.putExtra("CategoryNameList", categoryName)
+        intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
         startActivity(intent)
     }
 

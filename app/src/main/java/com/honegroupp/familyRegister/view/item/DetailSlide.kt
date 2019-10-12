@@ -36,6 +36,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         const val SHOW_PAGE_SIGNAL = -2
         const val CATEGORY_SIGNAL = 0
         const val STORAGE_PERMISSION_CODE: Int = 1000
+        const val SORT_DEFAULT = "default"
         const val NAME_ASCENDING = "name_asc"
         const val NAME_DESCENDING = "name_desc"
         const val TIME_ASCENDING = "time_asc"
@@ -60,7 +61,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     private var storage: FirebaseStorage = FirebaseStorage.getInstance()
 
     // Sort items use sort method
-    fun sortItem(sortOrder: String){
+    private fun sortItem(sortOrder: String){
         when (sortOrder) {
             NAME_ASCENDING -> itemUploads.sortBy { it.itemName }
             NAME_DESCENDING -> itemUploads.sortByDescending { it.itemName }
