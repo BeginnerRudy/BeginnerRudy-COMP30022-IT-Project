@@ -33,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="right"
+                android:visibility="invisible"
                 android:background="@android:drawable/ic_menu_edit" />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>

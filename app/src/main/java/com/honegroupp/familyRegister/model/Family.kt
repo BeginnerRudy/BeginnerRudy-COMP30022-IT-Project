@@ -3,6 +3,7 @@ package com.honegroupp.familyRegister.model
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -579,6 +580,11 @@ data class Family(
             // set the value of textview
             val familyIdView: TextView = mActivity.findViewById(R.id.family_id)
             val familyNameView: TextView = mActivity.findViewById(R.id.family_name)
+
+            // if the user id is the same as the family id then it is the owner of the family, he/she has the right to modify the family
+            if (uid == familyId){
+                mActivity.findViewById<ImageButton>(R.id.btn_family_setting).visibility = View.VISIBLE
+            }
 
             familyIdView.text =
                 "${mActivity.getString(R.string.family_id_show)}  ${EmailPathSwitch.pathToEmail(
