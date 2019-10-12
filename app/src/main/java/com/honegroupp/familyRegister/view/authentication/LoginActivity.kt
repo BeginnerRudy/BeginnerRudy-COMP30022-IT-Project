@@ -43,8 +43,8 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                 .setAvailableProviders(providers)
                 .setTheme(R.style.LoginTheme)
                 .setTosAndPrivacyPolicyUrls(
-                    "https://h1teamdeveloper.wixsite.com/term-of-service",
-                    "https://h1teamdeveloper.wixsite.com/privacy-policy").setIsSmartLockEnabled(false)
+                    getString(R.string.term_of_service_url),
+                    getString(R.string.privacy_policy_url)).setIsSmartLockEnabled(false)
                 .build(),
             RC_SIGN_IN
         )

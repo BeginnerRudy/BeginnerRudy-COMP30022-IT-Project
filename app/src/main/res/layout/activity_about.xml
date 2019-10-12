@@ -48,11 +48,11 @@
 
     <Button
         android:id="@+id/view_privacy_policy"
-        android:layout_width="5dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_date"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:backgroundTint="@color/colorPrimaryLight"
         android:text="@string/privacy_policy"
         android:textColor="@color/textColorPrimary" />
