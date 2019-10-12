@@ -19,6 +19,10 @@ data class Item(
     @get:PropertyName("itemDescription")
     var itemDescription: String = "",
 
+    @set:PropertyName("itemMaterial")
+    @get:PropertyName("itemMaterial")
+    var itemMaterial: String = "",
+
     @set:PropertyName("itemOwnerUID")
     @get:PropertyName("itemOwnerUID")
     var itemOwnerUID: String = "",

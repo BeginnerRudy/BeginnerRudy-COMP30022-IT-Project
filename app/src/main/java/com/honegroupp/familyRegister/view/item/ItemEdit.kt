@@ -279,6 +279,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                 Log.d("ggggginitdatalis", "init")
                 findViewById<EditText>(R.id.editName).setText(currItem.itemName)
                 findViewById<EditText>(R.id.editDescription).setText(currItem.itemDescription)
+                findViewById<EditText>(R.id.editMaterial).setText(currItem.itemMaterial)
                 findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
 
                 // set position click
@@ -356,6 +357,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                         val updatedItem = Item(
                             itemName = editName.text.toString(),
                             itemDescription = editDescription.text.toString(),
+                            itemMaterial = editMaterial.text.toString(),
                             itemOwnerUID = currItemOwner,
                             imageURLs = detailImageUrls,
                             isPublic = spinner.selectedItemPosition == 0,

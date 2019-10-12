@@ -86,6 +86,19 @@
                 android:inputType="textMultiLine" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/itemMaterial"
+            android:layout_below="@id/editInputDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editMaterial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/type_item_material" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <RelativeLayout
             android:id="@+id/edit_snipper_bar"
             android:layout_below="@id/itemDescription"
