@@ -109,5 +109,9 @@
     <string name="term_of_service_url" translatable="false">https://h1teamdeveloper.wixsite.com/term-of-service</string>
     <string name="privacy_policy_url" translatable="false">https://h1teamdeveloper.wixsite.com/privacy-policy</string>
     <string name="type_item_material">Please enter item material</string>
-    <string name="material">Material</string>>
+    <string name="material">Material</string>
+    <string name="update_user_info">Update user information</string>
+    <string name="edit_user_info">Edit</string>
+    <string name="username">Name</string>
+    <string name="please_enter_name">Please enter name</string>
 </resources>
