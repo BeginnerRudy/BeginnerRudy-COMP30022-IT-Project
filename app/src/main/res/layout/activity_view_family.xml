@@ -39,19 +39,17 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="0dp"
-        android:layout_marginTop="16dp"
         android:layout_height="150dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp">
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="16dp"
+        app:cardElevation="0dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/border"
-            >
+            android:background="@drawable/border">
 
             <TextView
                 android:id="@+id/family_name"
@@ -60,7 +58,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="36dp"
-                android:text="Family name: "
+                android:text="@string/family_name_show"
                 android:textSize="20dp" />
 
             <TextView
@@ -70,10 +68,18 @@
                 android:layout_below="@id/family_name"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Family id:"
+                android:text="@string/family_id_show"
                 android:textSize="20dp" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:text="@string/family_members"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/family_member_recycler_view"

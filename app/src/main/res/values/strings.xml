@@ -95,4 +95,9 @@
     <string name="others">Others</string>
     <string name="complete_delete">Delete from category and all</string>
     <string name="family">Family</string>
+    <string name="family_name_show">Family name:</string>
+    <string name="family_id_show">Family id:</string>
+    <string name="family_members">Family members</string>
+    <string name="change_family_name">Change Family Name</string>
+    <string name="change_family_password">Change Family Password</string>
 </resources>

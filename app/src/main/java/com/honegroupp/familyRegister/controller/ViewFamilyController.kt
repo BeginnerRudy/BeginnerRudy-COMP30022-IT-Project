@@ -1,6 +1,5 @@
 package com.honegroupp.familyRegister.controller
 
-import android.util.Log
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.honegroupp.familyRegister.R
@@ -11,7 +10,11 @@ import com.honegroupp.familyRegister.view.home.ViewFamilyAdapter
 
 class ViewFamilyController {
     companion object{
-        fun showAllMembers(uid:String, mActivity: ViewFamilyActivity){
+        /**
+         * This method is responsible for show all family member in the view family page.
+         *
+         * */
+        fun showAllMembersAndInfo(uid:String, mActivity: ViewFamilyActivity){
             // a list to store user in the current family
             val users = ArrayList<User>()
 
@@ -24,7 +27,7 @@ class ViewFamilyController {
             recyclerView.setHasFixedSize(true)
             recyclerView.layoutManager = GridLayoutManager(mActivity, 1)
 
-            Family.showAllMembers(uid, adapter, users)
+            Family.showAllMembersAndInfo(uid, adapter, mActivity, users)
         }
     }
 }

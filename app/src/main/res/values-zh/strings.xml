@@ -95,4 +95,9 @@
     <string name="photo">照片</string>
     <string name="others">其他</string>
     <string name="family">家庭</string>
+    <string name="family_name_show">家庭名称：</string>
+    <string name="family_id_show">家庭ID：</string>
+    <string name="family_members">家庭成员</string>
+    <string name="change_family_name">更改家庭名称</string>
+    <string name="change_family_password">更改家庭密码</string>
 </resources>

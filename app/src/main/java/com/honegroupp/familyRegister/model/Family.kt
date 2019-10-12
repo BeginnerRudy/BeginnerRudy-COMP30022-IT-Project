@@ -2,22 +2,19 @@ package com.honegroupp.familyRegister.model
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.utility.EmailPathSwitch
 import com.honegroupp.familyRegister.utility.Hash
 import com.honegroupp.familyRegister.view.home.*
-import com.honegroupp.familyRegister.view.item.DetailSlide
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 
@@ -551,13 +548,14 @@ data class Family(
          * This method is responsible for showing all the family member in the user's family
          *
          * */
-        fun showAllMembers(
+        fun showAllMembersAndInfo(
             uid: String, adapter: ViewFamilyAdapter,
+            mActivity: ViewFamilyActivity,
             users: ArrayList<User>
         ) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
-                callbackShowAllMembers(uid, adapter, users, d)
+                callbackShowAllMembersAndInfo(uid, adapter, users, mActivity, d)
             }
         }
 
@@ -565,13 +563,25 @@ data class Family(
          * This method is responsible for interacting with the database to showi all the family
          * member in the user's family
          * */
-        private fun callbackShowAllMembers(
+        private fun callbackShowAllMembersAndInfo(
             uid: String,
             adapter: ViewFamilyAdapter,
             users: ArrayList<User>,
+            mActivity: ViewFamilyActivity,
             dataSnapshot: DataSnapshot
         ) {
             val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+
+            // get family name
+            val familyName =
+                dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(familyId).child("familyName").value as String
+
+            // set the value of textview
+            val familyIdView: TextView = mActivity.findViewById(R.id.family_id)
+            val familyNameView: TextView = mActivity.findViewById(R.id.family_name)
+
+            familyIdView.text = "${mActivity.getString(R.string.family_id_show)}  ${EmailPathSwitch.pathToEmail(familyId)}"
+            familyNameView.text = "${mActivity.getString(R.string.family_name_show)}  $familyName"
 
             // retrieve user's uids in current family
             val path = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/members/"
