@@ -1,7 +1,5 @@
 package com.honegroupp.familyRegister.view.item
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +14,6 @@ import android.widget.*
 import com.honegroupp.familyRegister.view.itemList.ItemGridAdapter
 import kotlin.collections.ArrayList
 import android.os.Build
-import androidx.annotation.RequiresApi
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseStorageManager
 import com.honegroupp.familyRegister.controller.ItemController
@@ -26,12 +23,12 @@ import java.util.*
 
 
 class ItemUploadActivity : AppCompatActivity(){
-    val GALLERY_REQUEST_CODE = 123
+    private val GALLERY_REQUEST_CODE = 123
     var imagePathList = ArrayList<String>()
-    var allImageUri= ArrayList<Uri>()
-    lateinit var uid :String
+    private var allImageUri= ArrayList<Uri>()
+    private lateinit var uid :String
 
-    var itemPrivacyPosition: Int = 0
+    private var itemPrivacyPosition: Int = 0
     private val READ_PERMISSION_CODE: Int = 1000
 
 
@@ -39,7 +36,7 @@ class ItemUploadActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.item_upload_page)
 
-        uid = intent.getStringExtra("UserID")
+        uid = intent.getStringExtra("UserID").toString()
         val categoryName = intent.getStringExtra("categoryPath").toString()
 
         //set up the spinner (select public and privacy)
@@ -78,9 +75,6 @@ class ItemUploadActivity : AppCompatActivity(){
         setDatePicker(text_date)
     }
 
-
-
-
     //Over Android M version, need to request EXTERNAL STORAGE permission in order to save image
     override fun onRequestPermissionsResult(requestCode: Int,permissions: Array<out String>,grantResults: IntArray){
         when(requestCode){
@@ -96,7 +90,6 @@ class ItemUploadActivity : AppCompatActivity(){
         }
     }
 
-
     /*create the item and upload*/
     fun uploadItem(categoryName:String){
 
@@ -111,8 +104,6 @@ class ItemUploadActivity : AppCompatActivity(){
             this.text_date.text.toString()
         )
     }
-
-
 
    /*
    use the phone API to get images from the album
@@ -143,7 +134,7 @@ class ItemUploadActivity : AppCompatActivity(){
                     if (data != null) {
 
 
-                        var allUris : ArrayList<Uri> = arrayListOf()
+                        val allUris : ArrayList<Uri> = arrayListOf()
 
                         if (data.getClipData() != null) {
 
@@ -189,8 +180,6 @@ class ItemUploadActivity : AppCompatActivity(){
         }
     }
 
-
-
    /*
    remove already selected items from the list, update the view
    */
@@ -229,7 +218,6 @@ class ItemUploadActivity : AppCompatActivity(){
 
     }
 
-
     /**
      * This method validate whether the text of a given textView is a valid date or not.
      * */
@@ -244,7 +232,6 @@ class ItemUploadActivity : AppCompatActivity(){
             false
         }
     }
-
 
     /**
      * This method is responsible for setting date picker.

@@ -10,7 +10,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -30,111 +29,34 @@ import kotlinx.android.synthetic.main.slide_background.*
 import java.io.File
 import java.io.FileOutputStream
 
+@Suppress("DEPRECATION")
 class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener{
-    override fun onBackClick() {
-        finish()
-    }
-
     companion object {
         const val ALL_PAGE_SIGNAL = -1
         const val SHOW_PAGE_SIGNAL = -2
         const val CATEGORY_SIGNAL = 0
-        private const val STORAGE_PERMISSION_CODE: Int = 1000
+        const val STORAGE_PERMISSION_CODE: Int = 1000
     }
 
     private var downloadUrl :String = ""
 
-    lateinit var mSlideViewPager : ViewPager
-    lateinit var sliderAdapter: DetailSliderAdapter
+    private lateinit var mSlideViewPager : ViewPager
 
-    lateinit var detailUserId: String
-    lateinit var detailFamilyId: String
+    private lateinit var detailFamilyId: String
 
-    lateinit var pathItem: String
-    lateinit var databaseReferenceItem: DatabaseReference
-    lateinit var dbListenerItem: ValueEventListener
-    var itemUploads: ArrayList<Item> = ArrayList()
+    private lateinit var databaseReferenceItem: DatabaseReference
+    private lateinit var dbListenerItem: ValueEventListener
+    private var itemUploads: ArrayList<Item> = ArrayList()
 
-    var isInCategory: Boolean = false
-    lateinit var pathCategory: String
-    lateinit var databaseReferenceCategory: DatabaseReference
-    lateinit var dbListenerCategory: ValueEventListener
-    var categoryUploads: ArrayList<Category> = ArrayList()
+    private var isInCategory: Boolean = false
+    private lateinit var databaseReferenceCategory: DatabaseReference
+    private lateinit var dbListenerCategory: ValueEventListener
+    private var categoryUploads: ArrayList<Category> = ArrayList()
 
-    var storage: FirebaseStorage = FirebaseStorage.getInstance()
-
-
-
-    // open Detail Image page when image is clicked
-    override fun onItemClick(position: Int) {
-        val intent = Intent(this, DImageSlide::class.java)
-        intent.putExtra("PositionDetail", position.toString())
-        intent.putExtra("ItemKey", itemUploads[mSlideViewPager.currentItem].key)
-        intent.putExtra("FamilyId", detailFamilyId)
-        this.startActivity(intent)
-    }
-
-    override fun onDeleteClick(position: Int) {
-        if (itemUploads[mSlideViewPager.currentItem].imageURLs.size > 1){
-            // use url create reference of image to be deleted
-            val deleteUrl = itemUploads[mSlideViewPager.currentItem].imageURLs[position]
-            val imageRef = storage.getReferenceFromUrl(deleteUrl)
-
-            // Delete image and its tile from Fitrbase Storage
-            imageRef.delete()
-                .addOnSuccessListener {
-                    // Delete image url from Firebase Real-time Database
-                    removeItemUrl(position)
-                    toast(getString(R.string.detail_delete_success), Toast.LENGTH_SHORT)
-                }
-                .addOnFailureListener {
-                    toast(getString(R.string.detail_delete_fail), Toast.LENGTH_SHORT)
-                }
-        }
-    }
-
-    fun removeItemUrl(position: Int){
-        itemUploads[mSlideViewPager.currentItem].imageURLs.removeAt(position)
-        databaseReferenceItem
-            .child(itemUploads[mSlideViewPager.currentItem].key.toString())
-            .child("imageURLs")
-            .setValue(itemUploads[mSlideViewPager.currentItem].imageURLs)
-    }
-
-    // start editing
-    override fun onEditClick(itemKey: String?) {
-        val intent = Intent(this, ItemEdit::class.java)
-        intent.putExtra("ItemKey", itemKey)
-        intent.putExtra("FamilyId", detailFamilyId)
-
-        this.startActivity(intent)
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        // hide status bar
-        hideStatusBar()
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-
-        // hide status bar
-        hideStatusBar()
-    }
-
-    private fun hideStatusBar(){
-        // Hide the status bar.
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        // Remember that you should never show the action bar if the
-        // status bar is hidden, so hide that too if necessary.
-        actionBar?.hide()
-    }
+    private var storage: FirebaseStorage = FirebaseStorage.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         // hide status bar
         hideStatusBar()
 
@@ -148,7 +70,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         val positionList = intent.getStringExtra("PositionList").toInt()
 
         // get userID for setting firbase database reference for items and categories
-        detailUserId= intent.getStringExtra("UserID")
+        val detailUserId= intent.getStringExtra("UserID").toString()
 
         // get position of current category for setting Current page item
         val categoryIndexList= intent.getStringExtra("CategoryNameList").toInt()
@@ -166,7 +88,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
         // adapter of items for ViewPager, set listener in adapter for listening click action
         mSlideViewPager = findViewById(R.id.detail_slideViewPager)
-        sliderAdapter = DetailSliderAdapter(itemUploads, detailUserId, this)
+        val sliderAdapter = DetailSliderAdapter(itemUploads, detailUserId, this)
         mSlideViewPager.adapter = sliderAdapter
         sliderAdapter.listener = this@DetailSlide
 
@@ -174,13 +96,13 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         var alreadySet = false
 
         // database Reference for Item
-        pathItem = "Family/$detailFamilyId/items"
+        val pathItem = "Family/$detailFamilyId/items"
         databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
 
         // get category information if this activity is activated in category page
         if (isInCategory) {
             // database Reference for Category
-            pathCategory = "Family/$detailFamilyId/categories"
+            val pathCategory = "Family/$detailFamilyId/categories"
             databaseReferenceCategory = FirebaseDatabase.getInstance().getReference(pathCategory)
 
             // listener for category on firebase, realtime change categories(categoryUploads)
@@ -211,7 +133,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
             override fun onDataChange(p0: DataSnapshot) {
                 itemUploads.clear()
-                sliderAdapter.notifyDataSetChanged()
 
                 // get all items and put into items(itemUploads) if user has access
                 p0.children.forEach {
@@ -263,7 +184,76 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
     }
 
+    override fun onBackClick() {
+        finish()
+    }
 
+    // open Detail Image page when image is clicked
+    override fun onItemClick(position: Int) {
+        val intent = Intent(this, DImageSlide::class.java)
+        intent.putExtra("PositionDetail", position.toString())
+        intent.putExtra("ItemKey", itemUploads[mSlideViewPager.currentItem].key)
+        intent.putExtra("FamilyId", detailFamilyId)
+        this.startActivity(intent)
+    }
+
+    override fun onDeleteClick(position: Int) {
+        if (itemUploads[mSlideViewPager.currentItem].imageURLs.size > 1){
+            // use url create reference of image to be deleted
+            val deleteUrl = itemUploads[mSlideViewPager.currentItem].imageURLs[position]
+            val imageRef = storage.getReferenceFromUrl(deleteUrl)
+
+            // Delete image and its tile from Fitrbase Storage
+            imageRef.delete()
+                .addOnSuccessListener {
+                    // Delete image url from Firebase Real-time Database
+                    removeItemUrl(position)
+                    toast(getString(R.string.detail_delete_success), Toast.LENGTH_SHORT)
+                }
+                .addOnFailureListener {
+                    toast(getString(R.string.detail_delete_fail), Toast.LENGTH_SHORT)
+                }
+        }
+    }
+
+    private fun removeItemUrl(position: Int){
+        itemUploads[mSlideViewPager.currentItem].imageURLs.removeAt(position)
+        databaseReferenceItem
+            .child(itemUploads[mSlideViewPager.currentItem].key.toString())
+            .child("imageURLs")
+            .setValue(itemUploads[mSlideViewPager.currentItem].imageURLs)
+    }
+
+    // start editing
+    override fun onEditClick(itemKey: String?) {
+        val intent = Intent(this, ItemEdit::class.java)
+        intent.putExtra("ItemKey", itemKey)
+        intent.putExtra("FamilyId", detailFamilyId)
+
+        this.startActivity(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // hide status bar
+        hideStatusBar()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+
+        // hide status bar
+        hideStatusBar()
+    }
+
+    private fun hideStatusBar(){
+        // Hide the status bar.
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        actionBar?.hide()
+    }
 
     /**
      * share use Bitmap from ImageVIew
@@ -280,7 +270,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
             fOut.flush()
             fOut.close()
             file.setReadable(true, false)
-            val intent = Intent(android.content.Intent.ACTION_SEND)
+            val intent = Intent(Intent.ACTION_SEND)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             intent.putExtra(Intent.EXTRA_TEXT, "name")
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file))
@@ -359,8 +349,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         }
     }
 
-
-
     override fun onDestroy() {
         super.onDestroy()
         databaseReferenceItem.removeEventListener(dbListenerItem)
@@ -369,7 +357,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         }
     }
 
-    fun toast(msg: String, duration: Int) {
+    private fun toast(msg: String, duration: Int) {
         Toast.makeText(this, msg, duration).show()
     }
 }

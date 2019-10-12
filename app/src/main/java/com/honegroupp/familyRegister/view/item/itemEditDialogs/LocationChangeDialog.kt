@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import com.honegroupp.familyRegister.R
 
 
-class LocationChangeDialog(val itemLocation: String) : AppCompatDialogFragment() {
+class LocationChangeDialog(private val itemLocation: String) : AppCompatDialogFragment() {
     private var listener: OnChangeConfirmClickListener? = null
 
     override fun onCreateView(
