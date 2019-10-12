@@ -2,7 +2,7 @@ package com.honegroupp.familyRegister.controller
 
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import com.honegroupp.utility.SearchMethod
+import com.honegroupp.familyRegister.utility.SearchMethod
 
 
 /**
@@ -12,7 +12,8 @@ import com.honegroupp.utility.SearchMethod
 class   SearchController {
     companion object {
 
-        val searchMethod: SearchMethod = SearchMethod()
+        val searchMethod: SearchMethod =
+            SearchMethod()
 
         //TODO 1 user could create one item each time
         /**

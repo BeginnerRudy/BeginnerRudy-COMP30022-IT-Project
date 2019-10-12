@@ -7,7 +7,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ItemListController
 import com.honegroupp.familyRegister.view.home.ContainerActivity
-import com.honegroupp.familyRegister.utility.SearchActivity
+import com.honegroupp.familyRegister.view.search.SearchActivity
 import kotlinx.android.synthetic.main.activity_item_list.*
 
 class ItemListActivity : ContainerActivity() {

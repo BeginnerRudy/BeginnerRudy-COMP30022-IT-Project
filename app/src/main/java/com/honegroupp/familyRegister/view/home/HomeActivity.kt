@@ -23,7 +23,7 @@ import com.honegroupp.familyRegister.view.authentication.AccountActivity
 import android.widget.TextView
 import com.honegroupp.familyRegister.view.item.DetailSlide
 
-import com.honegroupp.familyRegister.utility.SearchActivity
+import com.honegroupp.familyRegister.view.search.SearchActivity
 
 
 @Suppress("DEPRECATION")

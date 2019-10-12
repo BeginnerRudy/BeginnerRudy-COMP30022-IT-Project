@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.utility
+package com.honegroupp.familyRegister.view.search
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -1,9 +1,8 @@
 package com.honegroupp.familyRegister
 
 
-import android.content.ClipData
 import com.honegroupp.familyRegister.model.Item
-import com.honegroupp.utility.SearchMethod
+import com.honegroupp.familyRegister.utility.SearchMethod
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -47,7 +46,8 @@ class SearchTest {
     fun searchExistItemByFullName(){
         val query: String = "happy"
         val itemList: ArrayList<Item> = generateTestList()
-        val searchMethod: SearchMethod = SearchMethod()
+        val searchMethod: SearchMethod =
+            SearchMethod()
         val newList: ArrayList<Item> = searchMethod.search(query, itemList)
         var result: Boolean = false
         for (item in newList){
@@ -66,7 +66,8 @@ class SearchTest {
     fun searchNotExistItem(){
         val query = "banana"
         val itemList: ArrayList<Item> = generateTestList()
-        val searchMethod: SearchMethod = SearchMethod()
+        val searchMethod: SearchMethod =
+            SearchMethod()
         val newList: ArrayList<Item> = searchMethod.search(query, itemList)
         var result: Boolean = false
         for (item in newList){
@@ -85,7 +86,8 @@ class SearchTest {
     fun searchExistItemBySubName(){
         val query: String = "hap"
         val itemList: ArrayList<Item> = generateTestList()
-        val searchMethod: SearchMethod = SearchMethod()
+        val searchMethod: SearchMethod =
+            SearchMethod()
         val newList: ArrayList<Item> = searchMethod.search(query, itemList)
         var result: Boolean = false
         for (item in newList){
