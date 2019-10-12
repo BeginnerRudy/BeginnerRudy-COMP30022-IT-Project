@@ -12,7 +12,7 @@
         android:theme="@style/MyMaterialTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".view.utility.SearchActivity"
+            android:name=".utility.SearchActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".view.authentication.AccountActivity"
             android:screenOrientation="portrait" />

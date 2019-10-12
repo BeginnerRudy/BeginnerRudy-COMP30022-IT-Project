@@ -1,17 +1,12 @@
-package com.honegroupp.familyRegister.view.utility
+package com.honegroupp.familyRegister.utility
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.SearchView
-import android.widget.Toast
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.SearchController
-import com.honegroupp.familyRegister.view.item.DetailSlide
 import kotlinx.android.synthetic.main.activity_search.*
-import kotlin.properties.Delegates
 
 class SearchActivity : AppCompatActivity() {
 

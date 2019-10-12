@@ -1,11 +1,9 @@
 package com.honegroupp.familyRegister.view.home
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -23,13 +21,9 @@ import com.honegroupp.familyRegister.controller.AuthenticationController
 import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 import android.widget.TextView
-import androidx.core.view.marginRight
-import androidx.fragment.app.findFragment
 import com.honegroupp.familyRegister.view.item.DetailSlide
 
-import com.honegroupp.familyRegister.view.utility.SearchActivity
-import kotlinx.android.synthetic.main.activity_item_list.*
-import kotlinx.android.synthetic.main.nav_header_main.*
+import com.honegroupp.familyRegister.utility.SearchActivity
 
 
 @Suppress("DEPRECATION")
@@ -86,7 +80,7 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         search.layoutParams = Toolbar.LayoutParams(Gravity.RIGHT)
 
         search_icon.setOnClickListener {
-            val intent = Intent(this,SearchActivity::class.java)
+            val intent = Intent(this, SearchActivity::class.java)
             intent.putExtra("UserID", userID)
             intent.putExtra("Category", DetailSlide.ALL_PAGE_SIGNAL.toString())
             startActivity(intent)

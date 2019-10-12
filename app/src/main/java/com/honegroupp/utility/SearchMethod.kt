@@ -1,17 +1,13 @@
 package com.honegroupp.utility
 
 import android.content.Intent
-import android.util.Log
 import android.widget.ListView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import com.google.firebase.database.DataSnapshot
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.view.item.DetailSlide
-import com.honegroupp.familyRegister.view.utility.ListViewAapter
-import com.honegroupp.familyRegister.view.utility.SearchActivity
+import com.honegroupp.familyRegister.utility.ListViewAapter
 
 class SearchMethod{
 
