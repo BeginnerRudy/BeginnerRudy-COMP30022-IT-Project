@@ -82,6 +82,7 @@ class SearchMethod{
             intent.putExtra("PositionList", listView.adapter.getItemId(position).toString())
             intent.putExtra("CategoryNameList", category.toString())
             intent.putExtra("FamilyId", currFamilyId)
+            intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
             mActivity.startActivity(intent)
         }
     }
@@ -169,6 +170,7 @@ class SearchMethod{
             intent.putExtra("PositionList", itemPositionMap[element].toString())
             intent.putExtra("CategoryNameList", category.toString())
             intent.putExtra("FamilyId", currFamilyId)
+            intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
             mActivity.startActivity(intent)
         }
     }

@@ -28,10 +28,13 @@ class ItemDetailTest {
         val uid = "`123"
         val position = 0
         val categoryName = 0
+        val currFamilyId = "aaa"
         val intent = Intent(activity, DetailSlide::class.java)
         intent.putExtra("UserID", uid)
         intent.putExtra("PositionList", position)
         intent.putExtra("CategoryNameList", categoryName)
+        intent.putExtra("FamilyId", currFamilyId)
+        intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
         activity.startActivity(intent)
 //        activity.startDownloading()
     }
