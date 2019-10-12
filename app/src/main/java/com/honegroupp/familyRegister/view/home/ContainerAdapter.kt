@@ -43,6 +43,7 @@ open class ContainerAdapter(
         val currItem = items[position]
 
         holder.textViewName.text = currItem.itemName
+        holder.textViewTime.text = currItem.date
         // Load image to ImageView via its URL from Firebase Storage
         if (currItem.imageURLs.size > 0){
             Picasso.get()
@@ -96,6 +97,8 @@ open class ContainerAdapter(
         View.OnCreateContextMenuListener,
         MenuItem.OnMenuItemClickListener {
         val textViewName: TextView = viewItem.findViewById(R.id.txt_name)
+
+        val textViewTime: TextView = viewItem.findViewById(R.id.item_time)
 
         val imageView: ImageView = viewItem.findViewById(R.id.img_upload)
 
