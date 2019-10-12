@@ -2,24 +2,20 @@ package com.honegroupp.familyRegister.model
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
-import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.utility.EmailPathSwitch
 import com.honegroupp.familyRegister.utility.Hash
-import com.honegroupp.familyRegister.view.home.ContainerActivity
-import com.honegroupp.familyRegister.view.home.ContainerAdapter
-import com.honegroupp.familyRegister.view.item.DetailSlide
+import com.honegroupp.familyRegister.view.home.*
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 
@@ -300,7 +296,7 @@ data class Family(
 
                 mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
                     View.VISIBLE
-            }else{
+            } else {
 
                 // Make the progress bar invisible
                 mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
@@ -548,6 +544,123 @@ data class Family(
                 }
             }
         }
-    }
 
+        /**
+         * This method is responsible for showing all the family member in the user's family
+         *
+         * */
+        fun showAllMembersAndInfo(
+            uid: String, adapter: ViewFamilyAdapter,
+            mActivity: ViewFamilyActivity,
+            users: ArrayList<User>
+        ) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
+                callbackShowAllMembersAndInfo(uid, adapter, users, mActivity, d)
+            }
+        }
+
+        /**
+         * This method is responsible for interacting with the database to showi all the family
+         * member in the user's family
+         * */
+        private fun callbackShowAllMembersAndInfo(
+            uid: String,
+            adapter: ViewFamilyAdapter,
+            users: ArrayList<User>,
+            mActivity: ViewFamilyActivity,
+            dataSnapshot: DataSnapshot
+        ) {
+            val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+
+            // get family name
+            val familyName =
+                dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(familyId).child("familyName").value as String
+
+            // set the value of textview
+            val familyIdView: TextView = mActivity.findViewById(R.id.family_id)
+            val familyNameView: TextView = mActivity.findViewById(R.id.family_name)
+
+            // if the user id is the same as the family id then it is the owner of the family, he/she has the right to modify the family
+            if (uid == familyId){
+                mActivity.findViewById<ImageButton>(R.id.btn_family_setting).visibility = View.VISIBLE
+            }
+
+            familyIdView.text =
+                "${mActivity.getString(R.string.family_id_show)}  ${EmailPathSwitch.pathToEmail(
+                    familyId
+                )}"
+            familyNameView.text = "${mActivity.getString(R.string.family_name_show)}  $familyName"
+
+            // retrieve user's uids in current family
+            val path = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/members/"
+
+            val currUserUids = dataSnapshot.child(path).value as ArrayList<String>
+
+            // retrieve user and add it to a list
+            users.clear()
+            for (uid in currUserUids) {
+                val currUser =
+                    dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).getValue(User::class.java) as User
+                users.add(currUser)
+            }
+
+            // set this user to the adapter
+            adapter.notifyDataSetChanged()
+        }
+
+        /**
+         * This method is responsible for change the family name
+         *
+         * */
+        fun changeName(uid: String, newFamilyName: String) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
+                callbackChangeName(uid, newFamilyName, d)
+            }
+        }
+
+        /**
+         * This method the callback for change the family name
+         *
+         * */
+        private fun callbackChangeName(
+            uid: String,
+            newFamilyName: String,
+            dataSnapshot: DataSnapshot
+        ) {
+            val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+            val familyNamePath = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/familyName"
+
+            FirebaseDatabase.getInstance().getReference(familyNamePath).setValue(newFamilyName)
+        }
+
+
+        /**
+         * This method is responsible for change the family password
+         *
+         * */
+        fun changePassword(uid: String, newFamilyPassword: String) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
+                callbackChangePassword(uid, newFamilyPassword, d)
+            }
+        }
+
+        /**
+         * This method the callback for change the family password
+         *
+         * */
+        private fun callbackChangePassword(
+            uid: String,
+            newFamilyPassword: String,
+            dataSnapshot: DataSnapshot
+        ) {
+            val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+            val familyNamePath = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/password"
+
+            FirebaseDatabase.getInstance().getReference(familyNamePath)
+                .setValue(Hash.applyHash(newFamilyPassword))
+        }
+    }
 }

@@ -13,10 +13,13 @@ import com.honegroupp.familyRegister.controller.ShowPageController
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 
-class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val context: Context) : PagerAdapter(),
-    DetailImagesSliderAdapter.OnItemClickerListener {
+class DetailSliderAdapter(
+    private val items: ArrayList<Item>,
+    private val userId: String,
+    private val context: Context
+) : PagerAdapter(),
+    DetailImagesSliderAdapter.OnItemImageClickerListener {
 
-    lateinit var imagesSlideViewPager : ViewPager
     var listener: OnItemClickerListener? = null
 
     interface OnItemClickerListener {
@@ -46,7 +49,7 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val co
         val view: View = layoutInflater.inflate(R.layout.slide_detail_layout, container, false)
 
         // set slides of images
-        imagesSlideViewPager = view.findViewById(R.id.detail_images_slideViewPager)
+        var imagesSlideViewPager = view.findViewById<ViewPager>(R.id.detail_images_slideViewPager)
         var imagesSliderAdapter = DetailImagesSliderAdapter(
             items[position].imageURLs,
             items[position].itemOwnerUID == userId,
@@ -109,7 +112,6 @@ class DetailSliderAdapter(val items: ArrayList<Item>, val userId: String, val co
         container.addView(view)
         return view
     }
-
 
     // on share click in menu
     override fun onShareClick(imageView: ImageView) {

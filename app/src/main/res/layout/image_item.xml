@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -24,18 +23,27 @@
 
         <TextView
             android:id="@+id/txt_name"
-            android:layout_below="@+id/img_upload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
+            android:layout_below="@+id/img_upload"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
-            android:paddingBottom="8dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
             android:paddingLeft="8dp"
+            android:paddingBottom="8dp"
             android:text="Name"
             android:textColor="@android:color/black"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/item_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_upload"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="8dp"
+            android:gravity="center"/>
 
         <com.github.ivbaranov.mfb.MaterialFavoriteButton
             android:id="@+id/item_list_favorite_button"

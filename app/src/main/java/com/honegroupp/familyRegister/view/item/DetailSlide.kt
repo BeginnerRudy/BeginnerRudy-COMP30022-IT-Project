@@ -10,7 +10,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -30,33 +29,31 @@ import kotlinx.android.synthetic.main.slide_background.*
 import java.io.File
 import java.io.FileOutputStream
 
+@Suppress("DEPRECATION")
 class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener{
-    override fun onBackClick() {
-        finish()
-    }
-
     companion object {
         const val ALL_PAGE_SIGNAL = -1
         const val SHOW_PAGE_SIGNAL = -2
         const val CATEGORY_SIGNAL = 0
-        private const val STORAGE_PERMISSION_CODE: Int = 1000
+        const val STORAGE_PERMISSION_CODE: Int = 1000
+        const val SORT_DEFAULT = "default"
+        const val NAME_ASCENDING = "name_asc"
+        const val NAME_DESCENDING = "name_desc"
+        const val TIME_ASCENDING = "time_asc"
+        const val TIME_DESCENDING = "time_desc"
     }
 
     private var downloadUrl :String = ""
 
-    lateinit var mSlideViewPager : ViewPager
-    lateinit var sliderAdapter: DetailSliderAdapter
-
+    private lateinit var mSlideViewPager : ViewPager
     lateinit var detailUserId: String
     lateinit var detailFamilyId: String
 
-    lateinit var pathItem: String
     lateinit var databaseReferenceItem: DatabaseReference
     lateinit var dbListenerItem: ValueEventListener
     var itemUploads: ArrayList<Item> = ArrayList()
 
     var isInCategory: Boolean = false
-    lateinit var pathCategory: String
     lateinit var databaseReferenceCategory: DatabaseReference
     lateinit var dbListenerCategory: ValueEventListener
     var categoryUploads: ArrayList<Category> = ArrayList()
@@ -64,6 +61,157 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     var storage: FirebaseStorage = FirebaseStorage.getInstance()
 
 
+
+
+    // Sort items use sort method
+    private fun sortItem(sortOrder: String) {
+        when (sortOrder) {
+            NAME_ASCENDING -> itemUploads.sortBy { it.itemName }
+            NAME_DESCENDING -> itemUploads.sortByDescending { it.itemName }
+            TIME_ASCENDING -> itemUploads.sortBy { it.date }
+            TIME_DESCENDING -> itemUploads.sortByDescending { it.date }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // hide status bar
+        hideStatusBar()
+
+        setContentView(R.layout.slide_background)
+
+        // StrictMode for share
+        val builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
+
+        // get position of item clicked in item list for setting Current page item
+        val positionList = intent.getStringExtra("PositionList").toInt()
+
+        // get userID for setting firbase database reference for items and categories
+        val detailUserId= intent.getStringExtra("UserID").toString()
+
+        // get position of current category for setting Current page item
+        val categoryIndexList= intent.getStringExtra("CategoryNameList").toInt()
+
+        // get sort method
+        val sortOrder = intent.getStringExtra("SortOrder").toString()
+
+        if (categoryIndexList >= CATEGORY_SIGNAL ){
+            isInCategory = true
+        }
+
+        // get position of current category for setting Current page item
+        detailFamilyId= intent.getStringExtra("FamilyId")
+
+        Log.d("dddddddpoli", positionList.toString())
+        Log.d("ddddddduid", detailUserId.toString())
+        Log.d("dddddddcat", categoryIndexList.toString())
+        Log.d("ddddddddetai", detailFamilyId.toString())
+
+        // adapter of items for ViewPager, set listener in adapter for listening click action
+        mSlideViewPager = findViewById(R.id.detail_slideViewPager)
+        val sliderAdapter = DetailSliderAdapter(itemUploads, detailUserId, this)
+        mSlideViewPager.adapter = sliderAdapter
+        sliderAdapter.listener = this@DetailSlide
+
+        // whether item position is already set, View Pager pages cannot be set until it is ready
+        var alreadySet = false
+
+        // database Reference for Item
+        val pathItem = "Family/$detailFamilyId/items"
+        databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
+
+        // get category information if this activity is activated in category page
+        if (isInCategory) {
+            // database Reference for Category
+            val pathCategory = "Family/$detailFamilyId/categories"
+            databaseReferenceCategory = FirebaseDatabase.getInstance().getReference(pathCategory)
+
+            // listener for category on firebase, realtime change categories(categoryUploads)
+            dbListenerCategory =
+                databaseReferenceCategory.addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                        toast(p0.message, Toast.LENGTH_SHORT)
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        categoryUploads.clear()
+
+                        // get all categories and put into categories(categoryUploads)
+                        p0.children.forEach {
+                            val currCategoryUpload = it.getValue(Category::class.java) as Category
+                            categoryUploads.add(currCategoryUpload)
+                        }
+                        sliderAdapter.notifyDataSetChanged()
+                    }
+                })
+        }
+
+        // listener for items on firebase, realtime change items(itemUploads)
+        dbListenerItem = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                toast(p0.message, Toast.LENGTH_SHORT)
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                itemUploads.clear()
+
+                // get all items and put into items(itemUploads) if user has access
+                p0.children.forEach {
+                    val currItemUpload = it.getValue(Item::class.java) as Item
+                    currItemUpload.key = it.key
+
+                    // wait for categories(categoryUploads) is get from database
+                    if (categoryUploads.size != 0 || !isInCategory){
+                        if (isInCategory) {
+                            // check item in current category
+                            if (currItemUpload.key in categoryUploads[categoryIndexList].itemKeys){
+                                // check item is visible, if not check user is owner
+                                if (currItemUpload.isPublic) {
+                                    itemUploads.add(currItemUpload)
+                                } else if (currItemUpload.itemOwnerUID == detailUserId){
+                                    itemUploads.add(currItemUpload)
+                                }
+                            }
+                        } else if (categoryIndexList == ALL_PAGE_SIGNAL) {
+                            Log.d("ccccindexalll", categoryIndexList.toString())
+                            itemUploads.add(currItemUpload)
+                        } else if (categoryIndexList == SHOW_PAGE_SIGNAL){
+                            Log.d("ccccindexssss", categoryIndexList.toString())
+
+                            if (detailUserId in currItemUpload.showPageUids.keys){
+                                itemUploads.add(currItemUpload)
+                            }
+                        }
+                    }
+                }
+
+                // sort Item according to Sort order
+                sortItem(sortOrder)
+
+                // Notify ViewPager to update
+                if (itemUploads.size == 0) {
+                    text_view_empty_detail.visibility = View.VISIBLE
+                } else {
+                    text_view_empty_detail.visibility = View.INVISIBLE
+                }
+                sliderAdapter.notifyDataSetChanged()
+
+                // set Item to be seen first in View Page when items(itemUploads) is ready
+                if (itemUploads.size > 0) {
+                    if (!alreadySet){
+                        mSlideViewPager.currentItem = positionList
+                        alreadySet = true
+                    }
+                }
+            }
+        })
+
+    }
+
+    override fun onBackClick() {
+        finish()
+    }
 
     // open Detail Image page when image is clicked
     override fun onItemClick(position: Int) {
@@ -93,7 +241,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         }
     }
 
-    fun removeItemUrl(position: Int){
+    private fun removeItemUrl(position: Int){
         itemUploads[mSlideViewPager.currentItem].imageURLs.removeAt(position)
         databaseReferenceItem
             .child(itemUploads[mSlideViewPager.currentItem].key.toString())
@@ -132,139 +280,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         // status bar is hidden, so hide that too if necessary.
         actionBar?.hide()
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // hide status bar
-        hideStatusBar()
-
-        setContentView(R.layout.slide_background)
-
-        // StrictMode for share
-        val builder = StrictMode.VmPolicy.Builder()
-        StrictMode.setVmPolicy(builder.build())
-
-        // get position of item clicked in item list for setting Current page item
-        val positionList = intent.getStringExtra("PositionList").toInt()
-
-        // get userID for setting firbase database reference for items and categories
-        detailUserId= intent.getStringExtra("UserID")
-
-        // get position of current category for setting Current page item
-        val categoryIndexList= intent.getStringExtra("CategoryNameList").toInt()
-        if (categoryIndexList >= CATEGORY_SIGNAL ){
-            isInCategory = true
-        }
-
-        // get position of current category for setting Current page item
-        detailFamilyId= intent.getStringExtra("FamilyId")
-
-        Log.d("dddddddpoli", positionList.toString())
-        Log.d("ddddddduid", detailUserId.toString())
-        Log.d("dddddddcat", categoryIndexList.toString())
-        Log.d("ddddddddetai", detailFamilyId.toString())
-
-        // adapter of items for ViewPager, set listener in adapter for listening click action
-        mSlideViewPager = findViewById(R.id.detail_slideViewPager)
-        sliderAdapter = DetailSliderAdapter(itemUploads, detailUserId, this)
-        mSlideViewPager.adapter = sliderAdapter
-        sliderAdapter.listener = this@DetailSlide
-
-        // whether item position is already set, View Pager pages cannot be set until it is ready
-        var alreadySet = false
-
-        // database Reference for Item
-        pathItem = "Family/$detailFamilyId/items"
-        databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
-
-        // get category information if this activity is activated in category page
-        if (isInCategory) {
-            // database Reference for Category
-            pathCategory = "Family/$detailFamilyId/categories"
-            databaseReferenceCategory = FirebaseDatabase.getInstance().getReference(pathCategory)
-
-            // listener for category on firebase, realtime change categories(categoryUploads)
-            dbListenerCategory =
-                databaseReferenceCategory.addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(p0: DatabaseError) {
-                        toast(p0.message, Toast.LENGTH_SHORT)
-                    }
-
-                    override fun onDataChange(p0: DataSnapshot) {
-                        categoryUploads.clear()
-
-                        // get all categories and put into categories(categoryUploads)
-                        p0.children.forEach {
-                            val currCategoryUpload = it.getValue(Category::class.java) as Category
-                            categoryUploads.add(currCategoryUpload)
-                        }
-                        sliderAdapter.notifyDataSetChanged()
-                    }
-                })
-        }
-
-        // listener for items on firebase, realtime change items(itemUploads)
-        dbListenerItem = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-                toast(p0.message, Toast.LENGTH_SHORT)
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
-                itemUploads.clear()
-                sliderAdapter.notifyDataSetChanged()
-
-                // get all items and put into items(itemUploads) if user has access
-                p0.children.forEach {
-                    val currItemUpload = it.getValue(Item::class.java) as Item
-                    currItemUpload.key = it.key
-
-                    // wait for categories(categoryUploads) is get from database
-                    if (categoryUploads.size != 0 || !isInCategory){
-                        if (isInCategory) {
-                            // check item in current category
-                            if (currItemUpload.key in categoryUploads[categoryIndexList].itemKeys){
-                                // check item is visible, if not check user is owner
-                                if (currItemUpload.isPublic) {
-                                    itemUploads.add(currItemUpload)
-                                } else if (currItemUpload.itemOwnerUID == detailUserId){
-                                    itemUploads.add(currItemUpload)
-                                }
-                            }
-                        } else if (categoryIndexList == ALL_PAGE_SIGNAL) {
-                            Log.d("ccccindexalll", categoryIndexList.toString())
-                            itemUploads.add(currItemUpload)
-                        } else if (categoryIndexList == SHOW_PAGE_SIGNAL){
-                            Log.d("ccccindexssss", categoryIndexList.toString())
-
-                            if (detailUserId in currItemUpload.showPageUids.keys){
-                                itemUploads.add(currItemUpload)
-                            }
-                        }
-                    }
-                }
-
-                // Notify ViewPager to update
-                if (itemUploads.size == 0) {
-                    text_view_empty_detail.visibility = View.VISIBLE
-                } else {
-                    text_view_empty_detail.visibility = View.INVISIBLE
-                }
-                sliderAdapter.notifyDataSetChanged()
-
-                // set Item to be seen first in View Page when items(itemUploads) is ready
-                if (itemUploads.size > 0) {
-                    if (!alreadySet){
-                        mSlideViewPager.currentItem = positionList
-                        alreadySet = true
-                    }
-                }
-            }
-        })
-
-    }
-
-
 
     /**
      * share use Bitmap from ImageVIew
@@ -360,8 +375,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         }
     }
 
-
-
     override fun onDestroy() {
         super.onDestroy()
         databaseReferenceItem.removeEventListener(dbListenerItem)
@@ -370,7 +383,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         }
     }
 
-    fun toast(msg: String, duration: Int) {
+    private fun toast(msg: String, duration: Int) {
         Toast.makeText(this, msg, duration).show()
     }
 }

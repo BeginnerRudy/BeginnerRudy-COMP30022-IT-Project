@@ -15,7 +15,11 @@ class FirebaseStorageManager{
     companion object {
         private const val uploadPath = " "
 
-        fun uploadToFirebase(allImageUri: ArrayList<Uri>, categoryName:String, activity:ItemUploadActivity) {
+        fun uploadToFirebase(
+            allImageUri: ArrayList<Uri>,
+            categoryName:String,
+            activity:ItemUploadActivity
+        ) {
             var numSuccess = 0
             for (uri in allImageUri){
 

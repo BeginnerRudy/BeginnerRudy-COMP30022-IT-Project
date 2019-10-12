@@ -1,17 +1,12 @@
-package com.honegroupp.utility
+package com.honegroupp.familyRegister.utility
 
 import android.content.Intent
-import android.util.Log
 import android.widget.ListView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import com.google.firebase.database.DataSnapshot
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.view.item.DetailSlide
-import com.honegroupp.familyRegister.view.utility.ListViewAapter
-import com.honegroupp.familyRegister.view.utility.SearchActivity
 
 class SearchMethod{
 
@@ -87,6 +82,7 @@ class SearchMethod{
             intent.putExtra("PositionList", listView.adapter.getItemId(position).toString())
             intent.putExtra("CategoryNameList", category.toString())
             intent.putExtra("FamilyId", currFamilyId)
+            intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
             mActivity.startActivity(intent)
         }
     }
@@ -174,6 +170,7 @@ class SearchMethod{
             intent.putExtra("PositionList", itemPositionMap[element].toString())
             intent.putExtra("CategoryNameList", category.toString())
             intent.putExtra("FamilyId", currFamilyId)
+            intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
             mActivity.startActivity(intent)
         }
     }
@@ -182,7 +179,7 @@ class SearchMethod{
     fun search(queryText: String, itemList: ArrayList<Item>):ArrayList<Item>{
         val newItemList: ArrayList<Item> = ArrayList()
         for (item in itemList){
-            if (item.itemName.contains(queryText)){
+            if (item.itemName.contains(queryText, ignoreCase = true) || item.date.contains(queryText)){
                 newItemList.add(item);
             }
         }

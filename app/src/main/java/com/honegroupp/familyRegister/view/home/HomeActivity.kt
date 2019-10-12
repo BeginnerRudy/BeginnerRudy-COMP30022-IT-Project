@@ -22,7 +22,7 @@ import com.honegroupp.familyRegister.controller.AuthenticationController
 import android.widget.TextView
 import com.honegroupp.familyRegister.view.item.DetailSlide
 
-import com.honegroupp.familyRegister.view.utility.SearchActivity
+import com.honegroupp.familyRegister.view.search.SearchActivity
 
 
 @Suppress("DEPRECATION")
@@ -46,6 +46,7 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         intent.putExtra("FamilyId", familyId)
         intent.putExtra("PositionList", position.toString())
         intent.putExtra("CategoryNameList", categoryName)
+        intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
         startActivity(intent)
     }
 
@@ -79,7 +80,7 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         search.layoutParams = Toolbar.LayoutParams(Gravity.RIGHT)
 
         search_icon.setOnClickListener {
-            val intent = Intent(this,SearchActivity::class.java)
+            val intent = Intent(this, SearchActivity::class.java)
             intent.putExtra("UserID", userID)
             intent.putExtra("Category", DetailSlide.ALL_PAGE_SIGNAL.toString())
             startActivity(intent)
@@ -111,7 +112,9 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         }
 
         nav_view.menu.findItem(R.id.nav_view_family).setOnMenuItemClickListener {
-            toast("Clicked view family")
+            val intent = Intent(this, ViewFamilyActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
             true
         }
         nav_view.menu.findItem(R.id.help_and_feedback).setOnMenuItemClickListener {

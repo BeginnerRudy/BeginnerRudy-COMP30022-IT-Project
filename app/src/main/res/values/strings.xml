@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Family Memory</string>
+    <string name="app_name">Family Register</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -70,6 +70,9 @@
     <string name="item_name_should_not_leave_blank">Item name should not leave blank</string>
     <string name="please_select_at_least_one_image">Please select at least one image</string>
     <string name="uploading">Uploading</string>
+    <string name="upload_complete">Upload Complete</string>
+    <string name="upload_success">Upload Success!</string>
+    <string name="Item_create_success">Item Created successfully!</string>
     <string name="of">" of "</string>
     <string name="finished">finished</string>
     <string name="image">image</string>
@@ -94,9 +97,6 @@
     <string name="password_cannot_be_blank">Password cannot be blank</string>
     <string name="date">Date</string>
     <string name="description">Item description</string>
-    <string name="upload_complete">Upload complete</string>
-    <string name="Item_create_success">Item create success!</string>
-    <string name="upload_success">Upload success！</string>
     <string name="help_and_feedback"><![CDATA[Help&feedback]]></string>
     <string name="about">About</string>
     <string name="app_version">1.0</string>
@@ -114,4 +114,18 @@
     <string name="edit_user_info">Edit</string>
     <string name="username">Name</string>
     <string name="please_enter_name">Please enter name</string>
+    <string name="family">Family</string>
+    <string name="family_name_show">Family name:</string>
+    <string name="family_id_show">Family id:</string>
+    <string name="family_members">Family members</string>
+    <string name="change_family_name">Change Family Name</string>
+    <string name="change_family_password">Change Family Password</string>
+
+    <string name="sort_name_asc">Ascending sort by item name</string>
+    <string name="sort_name_desc">Descending sort by item name</string>
+    <string name="sort_time_asc">Ascending sort by date</string>
+    <string name="sort_time_desc">Descending sort by date</string>
+    <string name="new_family_name">New Family Name</string>
+    <string name="new_family_password">New Family Password</string>
+    <string name="reauth">Please enter your account password first:</string>
 </resources>

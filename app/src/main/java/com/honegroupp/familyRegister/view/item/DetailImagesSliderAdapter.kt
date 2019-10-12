@@ -9,13 +9,18 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.honegroupp.familyRegister.R
 import com.squareup.picasso.Picasso
 
-class DetailImagesSliderAdapter(val items: ArrayList<String>, val canDelete: Boolean, val context: Context) : PagerAdapter(), View.OnClickListener {
+class DetailImagesSliderAdapter(
+    private val items: ArrayList<String>,
+    private val canDelete: Boolean,
+    private val context: Context
+) : PagerAdapter(), View.OnClickListener {
 
-    var listener: OnItemClickerListener? = null
-    lateinit var currSlideImageView: ImageView
-    var currposition = 0
+    var listener: OnItemImageClickerListener? = null
+    private lateinit var bottomSheetDialog: BottomSheetDialog
+    private lateinit var currSlideImageView: ImageView
+    private var currposition = 0
 
-    interface OnItemClickerListener {
+    interface OnItemImageClickerListener {
         fun onImageClick(position: Int)
         fun onDownloadClick(position: Int)
         fun onShareClick(imageView: ImageView)
@@ -71,8 +76,6 @@ class DetailImagesSliderAdapter(val items: ArrayList<String>, val canDelete: Boo
         return view
     }
 
-    lateinit var bottomSheetDialog: BottomSheetDialog
-
     private fun createBottomSheetDialog() {
         val view = LayoutInflater.from(context).inflate(R.layout.bottom_sheet, null)
         val shareLinearLayout = view.findViewById<LinearLayout>(R.id.shareLinearLayout)
@@ -94,7 +97,7 @@ class DetailImagesSliderAdapter(val items: ArrayList<String>, val canDelete: Boo
         bottomSheetDialog.setContentView(view)
     }
 
-    fun showDialog() {
+    private fun showDialog() {
         bottomSheetDialog.show()
     }
 
@@ -116,7 +119,6 @@ class DetailImagesSliderAdapter(val items: ArrayList<String>, val canDelete: Boo
             }
         }
     }
-
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         container.removeView(`object` as ImageView)
