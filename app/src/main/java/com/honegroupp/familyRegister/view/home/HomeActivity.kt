@@ -24,6 +24,7 @@ import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 import android.widget.TextView
 import androidx.core.view.marginRight
+import androidx.fragment.app.findFragment
 import com.honegroupp.familyRegister.view.item.DetailSlide
 
 import com.honegroupp.familyRegister.view.utility.SearchActivity
@@ -38,6 +39,22 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
     lateinit var userID:String
+
+    override fun onItemClick(position: Int) {
+        if (viewPager.currentItem == 0){
+            categoryName = DetailSlide.ALL_PAGE_SIGNAL.toString()
+        }else if(viewPager.currentItem  == 2){
+            categoryName = DetailSlide.SHOW_PAGE_SIGNAL.toString()
+        }
+
+
+        val intent = Intent(this, DetailSlide::class.java)
+        intent.putExtra("UserID", uid)
+        intent.putExtra("FamilyId", familyId)
+        intent.putExtra("PositionList", position.toString())
+        intent.putExtra("CategoryNameList", categoryName)
+        startActivity(intent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

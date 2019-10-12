@@ -5,9 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ShowPageController
+import com.honegroupp.familyRegister.model.Item
 import kotlinx.android.synthetic.main.activity_item_list.view.*
 
 
@@ -21,10 +25,31 @@ class ShowTabFragment : Fragment() {
 
         // Show all item liked
         val homeActivity = activity as HomeActivity
-        ShowPageController.showAllLiked(homeActivity, homeActivity.userID, this)
+        // set list for liked items
+        val items = ArrayList<Item>()
+
+        val recyclerView =
+            view.findViewById<RecyclerView>(R.id.item_list_recycler_view)
+
+        // Setting the recycler view
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = GridLayoutManager(homeActivity, 2)
+
+
+        // setting one ItemListAdapter
+        val showTabAdapter = ContainerAdapter(items, homeActivity, ContainerAdapter.SHOWPAGE)
+        recyclerView.adapter = showTabAdapter
+
+        // set listener
+        showTabAdapter.listener = homeActivity
+
+
+        ShowPageController.showAllLiked(homeActivity, items, showTabAdapter, homeActivity.userID, this)
 
         // User could not add item from the show page
         view.btn_add.visibility = View.INVISIBLE
+
+        view.btn_search.visibility = View.INVISIBLE
 
         return view
     }

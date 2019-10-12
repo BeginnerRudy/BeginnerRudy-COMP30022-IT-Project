@@ -2,6 +2,7 @@ package com.honegroupp.familyRegister.model
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -15,6 +16,7 @@ import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.utility.Hash
 import com.honegroupp.familyRegister.view.home.ContainerActivity
 import com.honegroupp.familyRegister.view.home.ContainerAdapter
 import com.honegroupp.familyRegister.view.item.DetailSlide
@@ -30,7 +32,7 @@ import com.honegroupp.familyRegister.view.itemList.ItemListActivity
  * @author Tianyi Mo
  * */
 
-data class Family (
+data class Family(
     @set:PropertyName("familyName")
     @get:PropertyName("familyName")
     var familyName: String = "",
@@ -209,13 +211,20 @@ data class Family (
          * This function is responsible for showing all the items in the category
          *
          * */
-        fun showItems(uid: String, categoryName: String, sortOrder: String, mActivity: ItemListActivity) {
+        fun showItems(
+            uid: String,
+            items: ArrayList<Item>,
+            itemListAdapter: ContainerAdapter,
+            categoryName: String,
+            mActivity: ItemListActivity
+        ) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
                 callbackShowItems(
                     uid,
+                    items,
+                    itemListAdapter,
                     categoryName,
-                    sortOrder,
                     mActivity,
                     d
                 )
@@ -227,25 +236,13 @@ data class Family (
          * */
         private fun callbackShowItems(
             uid: String,
+            items: ArrayList<Item>,
+            itemListAdapter: ContainerAdapter,
             categoryName: String,
-            sortOrder: String,
             mActivity: ItemListActivity,
             dataSnapshot: DataSnapshot
         ) {
 
-            // get items of that category
-            var items = ArrayList<Item>()
-
-            val recyclerView = mActivity.findViewById<RecyclerView>(R.id.item_list_recycler_view)
-
-            // Setting the recycler view
-            recyclerView.setHasFixedSize(true)
-            recyclerView.layoutManager = LinearLayoutManager(mActivity)
-
-            // setting one ItemListAdapter
-            val itemListAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.CATEGORY)
-            recyclerView.adapter = itemListAdapter
-            itemListAdapter.listener = mActivity
 
             // get user's family ID
             val currFamilyId =
@@ -292,30 +289,10 @@ data class Family (
                     items.add(currItem)
                 }
 
-                // notify the adapter to update
-                itemListAdapter.notifyDataSetChanged()
-                // Make the progress bar invisible
-                mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
-                    View.INVISIBLE
-                mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
-                    View.INVISIBLE
             }
 
-            //sort logic
-            if (sortOrder=="name_asc"){
-                items.sortBy { it.itemName }
-                itemListAdapter.notifyDataSetChanged()
-            }
-            else if (sortOrder=="name_desc"){
-                items.sortByDescending { it.itemName }
-            }
-            else if (sortOrder=="time_asc"){
-                items.sortBy { it.date }
-            }else if (sortOrder=="time_desc"){
-                items.sortByDescending { it.date }
-            }
-
-
+            // notify the adapter to update
+            itemListAdapter.notifyDataSetChanged()
             if (itemKeys.isEmpty()) {
                 // Make the progress bar invisible
                 mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
@@ -323,6 +300,13 @@ data class Family (
 
                 mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
                     View.VISIBLE
+            }else{
+
+                // Make the progress bar invisible
+                mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
+                    View.INVISIBLE
+                mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
+                    View.INVISIBLE
             }
         }
 
@@ -332,12 +316,11 @@ data class Family (
         fun deleteItem(
             uid: String,
             categoryName: String,
-            mActivity: ContainerActivity,
             itemId: String
         ) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
-                callbackDeleteItem(uid, categoryName, mActivity, itemId, d)
+                callbackDeleteItem(uid, categoryName, itemId, d)
             }
         }
 
@@ -349,7 +332,6 @@ data class Family (
         private fun callbackDeleteItem(
             uid: String,
             categoryName: String,
-            mActivity: ContainerActivity,
             itemId: String,
             dataSnapshot: DataSnapshot
         ) {
@@ -358,13 +340,6 @@ data class Family (
                 dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).child("familyId").getValue(
                     String::class.java
                 ) as String
-
-
-            val countOfCategory = (dataSnapshot
-                .child(FirebaseDatabaseManager.FAMILY_PATH)
-                .child(currFamilyId)
-                .child("categories")
-                .value as ArrayList<Category>).size
 
             // find the category
             val itemKeys = dataSnapshot
@@ -375,17 +350,16 @@ data class Family (
                 .child("itemKeys")
                 .children
 
-//            Toast.makeText(mActivity, itemId, Toast.LENGTH_SHORT).show()
+
             for (itemKey in itemKeys) {
                 // remove item from category only.
                 if (itemKey.value == itemId) {
                     itemKey.ref.setValue(null)
-
                     break
                 }
             }
-            // update itemkeys index first
 
+            // update itemkeys index first
             val itemKeysPath =
                 "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/itemKeys/"
             var categoryItemKeys = dataSnapshot
@@ -400,6 +374,12 @@ data class Family (
             categoryItemKeys.remove(itemId)
 
             FirebaseDatabaseManager.update(itemKeysPath, categoryItemKeys)
+
+            // remove item
+            FirebaseDatabase.getInstance()
+                .getReference("${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/items/")
+                .child(itemId)
+                .removeValue()
 
             // update the item count
             val itemCount = dataSnapshot
@@ -422,13 +402,21 @@ data class Family (
          * This method is responsible for showing all items in the show page
          *
          * */
-        fun displayShowPage(mActivity: HomeActivity, uid: String, currFrag: Fragment) {
+        fun displayShowPage(
+            mActivity: HomeActivity,
+            items: ArrayList<Item>,
+            showTabAdapter: ContainerAdapter,
+            uid: String,
+            currFrag: Fragment
+        ) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
                 callbackDisplayShowPage(
                     uid,
                     mActivity,
                     currFrag,
+                    items,
+                    showTabAdapter,
                     d
                 )
             }
@@ -441,12 +429,12 @@ data class Family (
             uid: String,
             mActivity: HomeActivity,
             currFrag: Fragment,
+            items: ArrayList<Item>,
+            allTabAdapter: ContainerAdapter,
             dataSnapshot: DataSnapshot
         ) {
-            if (currFrag != null && currFrag.isVisible) {
-                // set the categoryName for HomeActivity
-                mActivity.categoryName = DetailSlide.SHOW_PAGE_SIGNAL.toString()
 
+            if (currFrag != null && currFrag.isVisible) {
                 // get user's family ID
                 val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
                 mActivity.familyId = currFamilyId
@@ -459,22 +447,6 @@ data class Family (
                         .child("items")
                         .children
 
-                // set list for liked items
-                val items = ArrayList<Item>()
-
-                val recyclerView =
-                    mActivity.findViewById<RecyclerView>(R.id.item_list_recycler_view)
-
-                // Setting the recycler view
-                recyclerView.setHasFixedSize(true)
-                recyclerView.layoutManager = LinearLayoutManager(mActivity)
-
-                // setting one ItemListAdapter
-                val showTabAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.SHOWPAGE)
-                recyclerView.adapter = showTabAdapter
-
-                // set listener
-                showTabAdapter.listener = mActivity
 
                 // clear items once retrieve item from the database
                 items.clear()
@@ -489,16 +461,19 @@ data class Family (
                     }
                 }
 
+
+                // notify the adapter to update
+                allTabAdapter.notifyDataSetChanged()
+
                 if (items.isEmpty()) {
                     // Make the progress bar invisible
                     mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
                         View.INVISIBLE
 
-                    mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
-                        View.VISIBLE
+                    val text = mActivity.findViewById<TextView>(R.id.text_view_empty_category)
+                    text.text = mActivity.getString(R.string.no_items_for_the_show_page)
+                    text.visibility = View.VISIBLE
                 } else {
-                    // notify the adapter to update
-                    showTabAdapter.notifyDataSetChanged()
                     // Make the progress bar invisible
                     mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
                         View.INVISIBLE
@@ -509,24 +484,29 @@ data class Family (
         }
 
 
-        fun showAll(uid: String, mActivity: HomeActivity, currFrag: Fragment) {
+        fun showAll(
+            uid: String,
+            items: ArrayList<Item>,
+            showTabAdapter: ContainerAdapter,
+            mActivity: HomeActivity,
+            currFrag: Fragment
+        ) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
-                callbackShowAll(uid, mActivity, currFrag, d)
+                callbackShowAll(uid, items, showTabAdapter, mActivity, currFrag, d)
             }
         }
 
 
         private fun callbackShowAll(
             uid: String,
+            items: ArrayList<Item>,
+            showTabAdapter: ContainerAdapter,
             mActivity: HomeActivity,
             currFrag: Fragment,
             dataSnapshot: DataSnapshot
         ) {
             if (currFrag != null && currFrag.isVisible) {
-                // set the categoryName for HomeActivity
-                mActivity.categoryName = DetailSlide.SHOW_PAGE_SIGNAL.toString()
-
                 // get user's family ID
                 val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
                 mActivity.familyId = currFamilyId
@@ -539,23 +519,6 @@ data class Family (
                         .child("items")
                         .children
 
-                // set list for liked items
-                val items = ArrayList<Item>()
-
-                val recyclerView =
-                    mActivity.findViewById<RecyclerView>(R.id.all_item_list_recycler_view)
-
-                // Setting the recycler view
-                recyclerView.setHasFixedSize(true)
-                recyclerView.layoutManager = LinearLayoutManager(mActivity)
-
-                // setting one ItemListAdapter
-                val showTabAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.SHOWPAGE)
-                recyclerView.adapter = showTabAdapter
-
-                // set listener
-                showTabAdapter.listener = mActivity
-
                 // clear items once retrieve item from the database
                 items.clear()
 
@@ -566,6 +529,9 @@ data class Family (
                     items.add(item)
                 }
 
+                // notify the adapter to update
+                showTabAdapter.notifyDataSetChanged()
+
                 if (items.isEmpty()) {
                     // Make the progress bar invisible
                     mActivity.findViewById<ProgressBar>(R.id.all_progress_circular).visibility =
@@ -574,8 +540,6 @@ data class Family (
                     mActivity.findViewById<TextView>(R.id.all_text_view_empty_category).visibility =
                         View.VISIBLE
                 } else {
-                    // notify the adapter to update
-                    showTabAdapter.notifyDataSetChanged()
                     // Make the progress bar invisible
                     mActivity.findViewById<ProgressBar>(R.id.all_progress_circular).visibility =
                         View.INVISIBLE

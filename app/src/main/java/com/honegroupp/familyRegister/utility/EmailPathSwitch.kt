@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.model
+package com.honegroupp.familyRegister.utility
 
 class EmailPathSwitch{
     companion object{

@@ -89,21 +89,27 @@ data class Category(
             ) as String
 
         // get item's last url
-        val url =
+        var urls =
             dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId)
                 .child("items")
                 .child(itemKeys)
                 .child("imageURLs")
-                .children
-                .last()
-                .getValue(String::class.java) as String
-
+                .value
+        if (urls == null){
             Picasso.get()
-                .load(url)
+                .load(R.mipmap.loading_jewellery)
+                .fit()
+                .centerCrop()
+                .into(holder.imageView)
+        } else {
+            urls = urls as ArrayList<String>
+            Picasso.get()
+                .load(urls[urls.size-1])
                 .placeholder(R.mipmap.loading_jewellery)
                 .fit()
                 .centerCrop()
                 .into(holder.imageView)
+        }
 
         holder.imageView.setOnClickListener {
             // Snippet from navigate to the ItemListActivity along with the category path

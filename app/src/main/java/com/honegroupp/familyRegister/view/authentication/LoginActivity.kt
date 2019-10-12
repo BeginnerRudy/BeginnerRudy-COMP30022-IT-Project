@@ -4,19 +4,14 @@ package com.honegroupp.familyRegister.view.authentication
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.honegroupp.familyRegister.IDoubleClickToExit
-import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.AuthenticationController
-import com.honegroupp.familyRegister.model.EmailPathSwitch
+import com.honegroupp.familyRegister.utility.EmailPathSwitch
 import com.honegroupp.familyRegister.model.User
-import com.honegroupp.familyRegister.view.home.HomeActivity
 
 /**
  * This class is responsible for Login functionality.

@@ -1,43 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:layout_margin="4dp"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardElevation="0dp"
+    app:cardPreventCornerOverlap="true">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/img_upload"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@mipmap/code_icon"
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/txt_name"
+            android:layout_below="@+id/img_upload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="8dp"
+            android:paddingLeft="8dp"
             android:text="Name"
             android:textColor="@android:color/black"
-            android:textSize="20sp" />
+            android:textSize="15sp"/>
 
         <com.github.ivbaranov.mfb.MaterialFavoriteButton
             android:id="@+id/item_list_favorite_button"
             android:layout_width="52dp"
             android:layout_height="52dp"
-            android:layout_marginLeft="@dimen/layout_margin_left"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:padding="@dimen/padding_layout"
-            app:mfb_not_favorite_image="@integer/fui_min_password_length"
+            android:layout_below="@+id/img_upload"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="-48dp"
+            android:layout_marginRight="0dp"
             app:mfb_animate_favorite="false"
             app:mfb_animate_unfavorite="false"
+            app:mfb_not_favorite_image="@integer/fui_min_password_length"
             app:mfb_type="heart" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

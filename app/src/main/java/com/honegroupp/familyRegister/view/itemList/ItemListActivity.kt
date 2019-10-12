@@ -27,64 +27,19 @@ class ItemListActivity : ContainerActivity() {
         ItemListController.addItem(uid, categoryName, this)
 
         // show items in the category logic
-        ItemListController.showItems(uid, categoryName, sortOrder, this)
+        ItemListController.showItems(uid, categoryName, navi_sort_view, this)
 
         //jump to search activity
         btn_search.setOnClickListener {
-                val intent = Intent(this, SearchActivity::class.java)
-                intent.putExtra("UserID", uid)
-                intent.putExtra("Category", categoryName)
-                this.startActivity(intent)
-            }
+            val intent = Intent(this, SearchActivity::class.java)
+            intent.putExtra("UserID", uid)
+            intent.putExtra("Category", categoryName)
+            this.startActivity(intent)
+        }
 
         // Press  key to navigate to navigation drawer
         btn_sort.setOnClickListener {
             drawer_sort_layout.openDrawer(GravityCompat.END)
-        }
-
-        //sort by item name ascending
-        navi_sort_view.menu.findItem(R.id.sort_name_asc).setOnMenuItemClickListener{
-            //jump logic
-            val intent = Intent(this, ItemListActivity::class.java)
-
-            intent.putExtra("UserID", uid)
-            intent.putExtra("categoryPath", categoryName)
-            intent.putExtra("sortOrder", "name_asc")
-            startActivity(intent)
-            true
-        }
-
-        //sort by item name descending
-        navi_sort_view.menu.findItem(R.id.sort_name_desc).setOnMenuItemClickListener{
-            val intent = Intent(this, ItemListActivity::class.java)
-
-            intent.putExtra("UserID", uid)
-            intent.putExtra("categoryPath", categoryName)
-            intent.putExtra("sortOrder", "name_desc")
-            startActivity(intent)
-            true
-        }
-
-        //sort by time ascending
-        navi_sort_view.menu.findItem(R.id.sort_time_asc).setOnMenuItemClickListener{
-            val intent = Intent(this, ItemListActivity::class.java)
-
-            intent.putExtra("UserID", uid)
-            intent.putExtra("categoryPath", categoryName)
-            intent.putExtra("sortOrder", "time_asc")
-            startActivity(intent)
-            true
-        }
-
-        //sort by time descending
-        navi_sort_view.menu.findItem(R.id.sort_time_desc).setOnMenuItemClickListener{
-            val intent = Intent(this, ItemListActivity::class.java)
-
-            intent.putExtra("UserID", uid)
-            intent.putExtra("categoryPath", categoryName)
-            intent.putExtra("sortOrder", "time_desc")
-            startActivity(intent)
-            true
         }
 
 
