@@ -28,6 +28,7 @@ import androidx.fragment.app.findFragment
 import com.honegroupp.familyRegister.view.item.DetailSlide
 
 import com.honegroupp.familyRegister.view.utility.SearchActivity
+import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 
 

@@ -94,4 +94,9 @@
     <string name="photo">Photo</string>
     <string name="others">Others</string>
     <string name="complete_delete">Delete from category and all</string>
+
+    <string name="sort_name_asc">Ascending sort by item name</string>
+    <string name="sort_name_desc">Descending sort by item name</string>
+    <string name="sort_time_asc">Ascending sort by date</string>
+    <string name="sort_time_desc">Descending sort by date</string>
 </resources>

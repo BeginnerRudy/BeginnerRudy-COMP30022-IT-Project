@@ -41,4 +41,5 @@ open class ContainerActivity : AppCompatActivity(), ContainerAdapter.OnItemClick
             categoryName = intent.getStringExtra("categoryPath")
         }
     }
+
 }
