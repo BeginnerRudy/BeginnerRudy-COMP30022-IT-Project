@@ -86,9 +86,22 @@
                 android:inputType="textMultiLine" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/itemMaterial"
+            android:layout_below="@id/itemDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editMaterial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/type_item_material" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <RelativeLayout
             android:id="@+id/edit_snipper_bar"
-            android:layout_below="@id/itemDescription"
+            android:layout_below="@id/itemMaterial"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -184,18 +197,28 @@
                 android:inputType="textMultiLine|textNoSuggestions"
                 android:text="@string/edit_pass_down_to"
                 android:textSize="18sp" />
+            <Button
+                android:id="@+id/editConfirm"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edit_passdown_to"
+                android:backgroundTint="@color/colorAccent"
+                android:text="@string/edit_confirm"
+                android:textColor="@color/textColorPrimary" />
 
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/editConfirm"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/edit_pass_down"
-            android:backgroundTint="@color/colorAccent"
-            android:text="@string/edit_confirm"
-            android:textColor="@color/textColorPrimary" />
+<!--        <Button-->
+<!--            android:id="@+id/editConfirm"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@id/edit_pass_down"-->
+<!--            android:backgroundTint="@color/colorAccent"-->
+<!--            android:text="@string/edit_confirm"-->
+<!--            android:textColor="@color/textColorPrimary" />-->
     </RelativeLayout>
 </ScrollView>

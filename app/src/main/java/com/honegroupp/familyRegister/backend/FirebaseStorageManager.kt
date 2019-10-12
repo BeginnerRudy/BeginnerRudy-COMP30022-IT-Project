@@ -2,15 +2,13 @@ package com.honegroupp.familyRegister.backend
 
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageTask
-import com.google.firebase.storage.UploadTask
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.utility.CompressionUtil
 import com.honegroupp.familyRegister.utility.FilePathUtil
 import com.honegroupp.familyRegister.utility.ImageRotateUtil
+import com.honegroupp.familyRegister.view.home.UserEditActivity
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 
 class FirebaseStorageManager{
@@ -66,6 +64,42 @@ class FirebaseStorageManager{
                     }
             }
             activity.toast(activity.getString(R.string.uploading) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+        }
+
+        fun uploadUserImageToFirebase(imageUri: Uri, activity: UserEditActivity) {
+
+            //get firebase storage reference
+            val ref =
+                FirebaseStorage.getInstance()
+                    .reference.child(uploadPath + System.currentTimeMillis())
+
+            //convert first image in list to bitmap
+            val path = FilePathUtil.getFilePathFromContentUri(imageUri, activity)
+            val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
+            val bitmap = MediaStore.Images.Media.getBitmap(activity.contentResolver, imageUri)
+
+            //decrease the resolution
+            val scaledBitmap = CompressionUtil.scaleDown(bitmap, true)
+
+            //correct the orientation of the bitmap
+            val orientedScaledBitmap = ImageRotateUtil.rotateBitmap(scaledBitmap,orientation)
+
+            //compress the image
+            val data = CompressionUtil.compressImage(orientedScaledBitmap)
+
+            //upload the compressed image
+            ref.putBytes(data)
+                .addOnSuccessListener {
+
+                    //add item logic
+                    ref.downloadUrl.addOnCompleteListener() { taskSnapshot ->
+
+                        //when complete, upload the user
+                        var url = taskSnapshot.result
+                        activity.uploadUser(url!!.toString())
+                    }
+                }
+
         }
     }
 }

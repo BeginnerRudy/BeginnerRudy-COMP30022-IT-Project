@@ -12,6 +12,14 @@
             android:id="@+id/nav_view_family"
             android:icon="@drawable/ic_menu_view_family_24dp"
             android:title="@string/view_family" />
+        <item
+            android:id="@+id/help_and_feedback"
+            android:icon="@drawable/ic_help_feedback_black_24dp"
+            android:title="@string/help_and_feedback" />
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/ic_about_black_24dp"
+            android:title="@string/about" />
     </group>
 
 </menu>

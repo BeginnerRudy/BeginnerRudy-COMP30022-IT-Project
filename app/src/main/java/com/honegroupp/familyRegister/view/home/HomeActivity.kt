@@ -18,7 +18,6 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
-import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 import android.widget.TextView
 import com.honegroupp.familyRegister.view.item.DetailSlide
@@ -114,6 +113,18 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
 
         nav_view.menu.findItem(R.id.nav_view_family).setOnMenuItemClickListener {
             val intent = Intent(this, ViewFamilyActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
+            true
+        }
+        nav_view.menu.findItem(R.id.help_and_feedback).setOnMenuItemClickListener {
+            val intent = Intent(this, HelpFeedbackActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
+            true
+        }
+        nav_view.menu.findItem(R.id.about).setOnMenuItemClickListener {
+            val intent = Intent(this, AboutActivity::class.java)
             intent.putExtra("UserID", userID)
             startActivity(intent)
             true

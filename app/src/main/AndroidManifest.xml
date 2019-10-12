@@ -14,7 +14,7 @@
         <activity
             android:name=".view.search.SearchActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.authentication.AccountActivity"
+        <activity android:name=".view.home.AccountActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.authentication.LoginActivity"
@@ -46,6 +46,15 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".view.itemList.ItemListActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".view.home.HelpFeedbackActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.home.AboutActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.home.UserDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.home.UserEditActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 

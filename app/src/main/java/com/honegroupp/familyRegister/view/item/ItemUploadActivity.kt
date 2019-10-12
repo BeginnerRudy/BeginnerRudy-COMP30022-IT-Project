@@ -97,6 +97,7 @@ class ItemUploadActivity : AppCompatActivity(){
             this,
             this.item_name_input,
             this.item_description_input,
+            this.item_material_input,
             this.uid,
             categoryName,
             this.imagePathList,

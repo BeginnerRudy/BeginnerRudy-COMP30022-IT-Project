@@ -9,6 +9,7 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.honegroupp.familyRegister.IDoubleClickToExit
+import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.AuthenticationController
 import com.honegroupp.familyRegister.utility.EmailPathSwitch
 import com.honegroupp.familyRegister.model.User
@@ -25,10 +26,11 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+
         // Choose authentication providers
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.PhoneBuilder().build(),
             AuthUI.IdpConfig.GoogleBuilder().build()
         )
 
@@ -37,10 +39,10 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
+                .setTheme(R.style.LoginTheme)
                 .setTosAndPrivacyPolicyUrls(
-                    "https://en.wikipedia.org/wiki/SLD_resolution",
-                    "https://example.com/privacy.html"
-                )
+                    getString(R.string.term_of_service_url),
+                    getString(R.string.privacy_policy_url)).setIsSmartLockEnabled(false)
                 .build(),
             RC_SIGN_IN
         )
@@ -57,18 +59,23 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                 val user = FirebaseAuth.getInstance().currentUser
 
 
-                var userContact : String = "D_ERROR"
+                var userContact = "Default"
+                var userName = "Default"
                 if (user != null) {
-                    if (user.email != null)
+                    if (user.email != null) {
                         userContact = user.email.toString()
-                    else if (user.phoneNumber != null) {
-                        userContact = user.email.toString()
+                        userName = user!!.displayName as String
                     }
+//                    }else if (user.phoneNumber != null) {
+//                        userContact = user.phoneNumber.toString()
+//                        userName = user.phoneNumber.toString()
+//                    }
                 }
 
                 val relativePath = EmailPathSwitch.emailToPath(userContact)
 
-                AuthenticationController.storeUser(this, User(username =  user!!.displayName as String), relativePath)
+
+                AuthenticationController.storeUser(this, User(username = userName), relativePath)
 
             } else if (response == null) {
                 // If the user press back button, exit the app
@@ -76,4 +83,5 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
             }
         }
     }
+
 }

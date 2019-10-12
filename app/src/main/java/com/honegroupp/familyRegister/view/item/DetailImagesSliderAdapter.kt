@@ -53,6 +53,8 @@ class DetailImagesSliderAdapter(
         Picasso.get()
             .load(currItemUrls)
             .placeholder(R.mipmap.loading_jewellery)
+            .fit()
+            .centerCrop()
             .into(slideImageView)
 
         view.findViewById<ImageView>(R.id.detail_images).setOnClickListener{

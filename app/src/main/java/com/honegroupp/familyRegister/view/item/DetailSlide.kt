@@ -46,22 +46,25 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     private var downloadUrl :String = ""
 
     private lateinit var mSlideViewPager : ViewPager
+    lateinit var detailUserId: String
+    lateinit var detailFamilyId: String
 
-    private lateinit var detailFamilyId: String
+    lateinit var databaseReferenceItem: DatabaseReference
+    lateinit var dbListenerItem: ValueEventListener
+    var itemUploads: ArrayList<Item> = ArrayList()
 
-    private lateinit var databaseReferenceItem: DatabaseReference
-    private lateinit var dbListenerItem: ValueEventListener
-    private var itemUploads: ArrayList<Item> = ArrayList()
+    var isInCategory: Boolean = false
+    lateinit var databaseReferenceCategory: DatabaseReference
+    lateinit var dbListenerCategory: ValueEventListener
+    var categoryUploads: ArrayList<Category> = ArrayList()
 
-    private var isInCategory: Boolean = false
-    private lateinit var databaseReferenceCategory: DatabaseReference
-    private lateinit var dbListenerCategory: ValueEventListener
-    private var categoryUploads: ArrayList<Category> = ArrayList()
+    var storage: FirebaseStorage = FirebaseStorage.getInstance()
 
-    private var storage: FirebaseStorage = FirebaseStorage.getInstance()
+
+
 
     // Sort items use sort method
-    private fun sortItem(sortOrder: String){
+    private fun sortItem(sortOrder: String) {
         when (sortOrder) {
             NAME_ASCENDING -> itemUploads.sortBy { it.itemName }
             NAME_DESCENDING -> itemUploads.sortByDescending { it.itemName }
@@ -249,6 +252,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     // start editing
     override fun onEditClick(itemKey: String?) {
         val intent = Intent(this, ItemEdit::class.java)
+        intent.putExtra("uid", detailUserId)
         intent.putExtra("ItemKey", itemKey)
         intent.putExtra("FamilyId", detailFamilyId)
 
@@ -292,7 +296,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
             fOut.flush()
             fOut.close()
             file.setReadable(true, false)
-            val intent = Intent(Intent.ACTION_SEND)
+            val intent = Intent(android.content.Intent.ACTION_SEND)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             intent.putExtra(Intent.EXTRA_TEXT, "name")
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file))

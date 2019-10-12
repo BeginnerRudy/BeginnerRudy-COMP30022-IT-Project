@@ -31,6 +31,9 @@ data class User(
     @set:PropertyName("familyId")
     @get:PropertyName("familyId")
     var familyId: String = "",
+    @set:PropertyName("imageUrl")
+    @get:PropertyName("imageUrl")
+    var imageUrl: String = "",
     @set:PropertyName("isFamilyOwner")
     @get:PropertyName("isFamilyOwner")
     var isFamilyOwner: Boolean = false
@@ -57,7 +60,7 @@ data class User(
      *
      * */
     fun hasFamily(): Boolean {
-        return !(this.familyId == "")
+        return this.familyId != ""
     }
 
     companion object {
