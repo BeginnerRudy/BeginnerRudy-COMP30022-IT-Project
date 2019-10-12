@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import com.honegroupp.familyRegister.R
 
 
-class LocationViewDialog(val itemLocation: String) : AppCompatDialogFragment() {
+class LocationViewDialog(private val itemLocation: String) : AppCompatDialogFragment() {
     private var listener: OnChangeClickListener? = null
 
     override fun onCreateView(

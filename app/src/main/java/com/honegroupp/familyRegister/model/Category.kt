@@ -63,6 +63,8 @@ data class Category(
                 goToItemListActivity.putExtra("UserID", uid)
                 // pass category path to goToItemListActivity
                 goToItemListActivity.putExtra("categoryPath", position.toString())
+                // pass default sort order to next activity
+                goToItemListActivity.putExtra("sortOrder", "default")
                 mActivity.startActivity(goToItemListActivity)
             }
         }
@@ -117,7 +119,10 @@ data class Category(
             goToItemListActivity.putExtra("UserID", uid)
             // pass category path to goToItemListActivity
             goToItemListActivity.putExtra("categoryPath", position.toString())
+            // pass default sort order to next activity
+            goToItemListActivity.putExtra("sortOrder", "default")
             mActivity.startActivity(goToItemListActivity)
+
         }
     }
 }

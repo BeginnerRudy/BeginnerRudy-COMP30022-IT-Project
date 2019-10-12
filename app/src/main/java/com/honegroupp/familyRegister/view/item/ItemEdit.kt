@@ -22,15 +22,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageTask
-import com.google.firebase.storage.UploadTask
 import com.honegroupp.familyRegister.utility.CompressionUtil
 import com.honegroupp.familyRegister.utility.FilePathUtil
 import com.honegroupp.familyRegister.utility.ImageRotateUtil
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationChangeDialog
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationEnterPasswordDialog
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationViewDialog
-import kotlinx.android.synthetic.main.item_upload_page.*
 import java.text.ParseException
 
 
@@ -41,15 +38,16 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
     val passwordLocation = "1"
     var enteredPassword = ""
     var itemLocation = "Bedside ddtable first drawer"
-    var allImageUri = ArrayList<Uri>()
-    var detailImageUrls = ArrayList<String>()
-    var deleteImageUrls = ArrayList<String>()
 
-    lateinit var databaseRef: DatabaseReference
-    lateinit var itemKey: String
-    lateinit var currFamilyId: String
+    private var allImageUri : ArrayList<Uri> = ArrayList()
+    private var detailImageUrls : ArrayList<String> = ArrayList()
+    private var deleteImageUrls : ArrayList<String> = ArrayList()
 
-    var storage: FirebaseStorage = FirebaseStorage.getInstance()
+    private lateinit var databaseRef: DatabaseReference
+    private lateinit var itemKey: String
+    private lateinit var currFamilyId: String
+
+    private var storage: FirebaseStorage = FirebaseStorage.getInstance()
 
     override fun clickOnChangeLocation(newLocation: String) {
         itemLocation = newLocation
@@ -68,110 +66,6 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
         } else {
             toast(getString(R.string.edit_location_password_incorrect), Toast.LENGTH_LONG)
         }
-    }
-
-    /*
-   use the phone API to get images from the album
-   */
-    fun selectImageInAlbum() {
-
-        //reset the image url list
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-
-        // ask for multiple images picker
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        startActivityForResult(intent, GALLERY_REQUEST_CODE)
-    }
-
-    /*
-   remove already selected items from the list, update the view
-   */
-    fun removeItem(currentIsUrl: Boolean, position:Int){
-        if (currentIsUrl){
-            deleteImageUrls.add(detailImageUrls[position])
-            detailImageUrls.removeAt(position)
-        } else {
-            allImageUri.removeAt(position)
-        }
-
-
-        // reset the grid view adapter
-        val adapter = ItemEditGridAdapter(this, detailImageUrls, allImageUri)
-        editImagesGrid.adapter = adapter
-        Log.d("ggggginit1", "init")
-
-
-    }
-
-    fun deleteStorageImages() {
-        for (deleteUrl in deleteImageUrls){
-            // use url create reference of image to be deleted
-            val imageRef = storage.getReferenceFromUrl(deleteUrl)
-
-            // Delete image and its tile from Fitrbase Storage
-            imageRef.delete()
-                .addOnSuccessListener {
-                    toast(getString(R.string.detail_delete_success), Toast.LENGTH_SHORT)
-                }
-                .addOnFailureListener {
-                    toast(getString(R.string.detail_delete_fail), Toast.LENGTH_SHORT)
-                }
-        }
-    }
-
-    fun uploadToFirebase(currItem: Item) {
-        val uploadPath = " "
-        var numSuccess = 0
-        for (uri in allImageUri){
-
-            //get firebase storage reference
-            val ref =
-                FirebaseStorage.getInstance()
-                    .reference.child(uploadPath + System.currentTimeMillis())
-
-            //convert first image in list to bitmap
-            val path = FilePathUtil.getFilePathFromContentUri(uri, this)
-            val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
-            val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
-
-            //decrease the resolution
-            val scaledBitmap = CompressionUtil.scaleDown(bitmap, true)
-
-            //correct the orientation of the bitmap
-            val orientedScaledBitmap = ImageRotateUtil.rotateBitmap(scaledBitmap,orientation)
-
-            //compress the image
-            val data = CompressionUtil.compressImage(orientedScaledBitmap)
-
-            //upload the compressed image
-            ref.putBytes(data)
-                .addOnSuccessListener {
-
-                    //add item logic
-                    ref.downloadUrl.addOnCompleteListener { taskSnapshot ->
-                        var url = taskSnapshot.result
-                        detailImageUrls.add(url.toString())
-                        numSuccess += 1
-
-                        if (numSuccess == allImageUri.size){
-                            databaseRef
-                                .child(FirebaseDatabaseManager.FAMILY_PATH)
-                                .child(currFamilyId)
-                                .child("items")
-                                .child(itemKey)
-                                .child("imageURLs")
-                                .setValue(detailImageUrls)
-                            toast(getString(R.string.upload_success) + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
-                            Log.d("eeeenimgupload", detailImageUrls.toString())
-                        } else {
-                            toast(getString(R.string.upload_complete) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
-                            Log.d("eeeenimg", detailImageUrls.toString())
-                        }
-                    }
-                }
-        }
-        toast(getString(R.string.uploading) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -392,6 +286,110 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
         }
     }
 
+    /*
+   use the phone API to get images from the album
+   */
+    fun selectImageInAlbum() {
+
+        //reset the image url list
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+
+        // ask for multiple images picker
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        startActivityForResult(intent, GALLERY_REQUEST_CODE)
+    }
+
+    /*
+   remove already selected items from the list, update the view
+   */
+    fun removeItem(currentIsUrl: Boolean, position:Int){
+        if (currentIsUrl){
+            deleteImageUrls.add(detailImageUrls[position])
+            detailImageUrls.removeAt(position)
+        } else {
+            allImageUri.removeAt(position)
+        }
+
+
+        // reset the grid view adapter
+        val adapter = ItemEditGridAdapter(this, detailImageUrls, allImageUri)
+        editImagesGrid.adapter = adapter
+        Log.d("ggggginit1", "init")
+
+
+    }
+
+    private fun deleteStorageImages() {
+        for (deleteUrl in deleteImageUrls){
+            // use url create reference of image to be deleted
+            val imageRef = storage.getReferenceFromUrl(deleteUrl)
+
+            // Delete image and its tile from Fitrbase Storage
+            imageRef.delete()
+                .addOnSuccessListener {
+                    toast(getString(R.string.detail_delete_success), Toast.LENGTH_SHORT)
+                }
+                .addOnFailureListener {
+                    toast(getString(R.string.detail_delete_fail), Toast.LENGTH_SHORT)
+                }
+        }
+    }
+
+    fun uploadToFirebase(currItem: Item) {
+        val uploadPath = " "
+        var numSuccess = 0
+        for (uri in allImageUri){
+
+            //get firebase storage reference
+            val ref =
+                FirebaseStorage.getInstance()
+                    .reference.child(uploadPath + System.currentTimeMillis())
+
+            //convert first image in list to bitmap
+            val path = FilePathUtil.getFilePathFromContentUri(uri, this)
+            val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
+            val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
+
+            //decrease the resolution
+            val scaledBitmap = CompressionUtil.scaleDown(bitmap, true)
+
+            //correct the orientation of the bitmap
+            val orientedScaledBitmap = ImageRotateUtil.rotateBitmap(scaledBitmap,orientation)
+
+            //compress the image
+            val data = CompressionUtil.compressImage(orientedScaledBitmap)
+
+            //upload the compressed image
+            ref.putBytes(data)
+                .addOnSuccessListener {
+
+                    //add item logic
+                    ref.downloadUrl.addOnCompleteListener { taskSnapshot ->
+                        var url = taskSnapshot.result
+                        detailImageUrls.add(url.toString())
+                        numSuccess += 1
+
+                        if (numSuccess == allImageUri.size){
+                            databaseRef
+                                .child(FirebaseDatabaseManager.FAMILY_PATH)
+                                .child(currFamilyId)
+                                .child("items")
+                                .child(itemKey)
+                                .child("imageURLs")
+                                .setValue(detailImageUrls)
+                            toast(getString(R.string.upload_success) + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+                            Log.d("eeeenimgupload", detailImageUrls.toString())
+                        } else {
+                            toast(getString(R.string.upload_complete) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+                            Log.d("eeeenimg", detailImageUrls.toString())
+                        }
+                    }
+                }
+        }
+        toast(getString(R.string.uploading) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+    }
+
     private fun openLocationEnterPasswordDialog() {
         val locationEnterPasswordDialog = LocationEnterPasswordDialog()
         locationEnterPasswordDialog.show(supportFragmentManager, "Location Enter Password Dialog")
@@ -459,7 +457,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
         }
     }
 
-    fun toast(msg: String, duration: Int) {
+    private fun toast(msg: String, duration: Int) {
         Toast.makeText(this, msg, duration).show()
     }
 }

@@ -18,17 +18,11 @@ import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.item_upload_page.*
 
 
-class ItemEditGridAdapter:BaseAdapter{
-    private var context : ItemEdit? = null
-    private var allUris: ArrayList<Uri>? = null
-    var detailImageUrls = ArrayList<String>()
-
-    constructor( context: ItemEdit, detailImageUrls: ArrayList<String>, allUris: ArrayList<Uri>){
-        this.context = context
-        this.detailImageUrls = detailImageUrls
-        this.allUris = allUris
-    }
-
+class ItemEditGridAdapter(
+    private val context: ItemEdit,
+    private var detailImageUrls: ArrayList<String>,
+    private val allUris: ArrayList<Uri>
+) : BaseAdapter() {
 
     override fun getView(position:Int, convertView: View?, parent: ViewGroup?): View {
 
@@ -160,6 +154,4 @@ class ItemEditGridAdapter:BaseAdapter{
     private fun isAddButton(position: Int):Boolean{
         return position == count -1
     }
-
-
 }
