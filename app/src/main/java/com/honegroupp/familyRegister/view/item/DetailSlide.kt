@@ -36,6 +36,10 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         const val SHOW_PAGE_SIGNAL = -2
         const val CATEGORY_SIGNAL = 0
         const val STORAGE_PERMISSION_CODE: Int = 1000
+        const val NAME_ASCENDING = "name_asc"
+        const val NAME_DESCENDING = "name_desc"
+        const val TIME_ASCENDING = "time_asc"
+        const val TIME_DESCENDING = "time_desc"
     }
 
     private var downloadUrl :String = ""
@@ -54,6 +58,16 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     private var categoryUploads: ArrayList<Category> = ArrayList()
 
     private var storage: FirebaseStorage = FirebaseStorage.getInstance()
+
+    // Sort items use sort method
+    fun sortItem(sortOrder: String){
+        when (sortOrder) {
+            NAME_ASCENDING -> itemUploads.sortBy { it.itemName }
+            NAME_DESCENDING -> itemUploads.sortByDescending { it.itemName }
+            TIME_ASCENDING -> itemUploads.sortBy { it.date }
+            TIME_DESCENDING -> itemUploads.sortByDescending { it.date }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +88,10 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
         // get position of current category for setting Current page item
         val categoryIndexList= intent.getStringExtra("CategoryNameList").toInt()
+
+        // get sort method
+        val sortOrder = intent.getStringExtra("SortOrder").toString()
+
         if (categoryIndexList >= CATEGORY_SIGNAL ){
             isInCategory = true
         }
@@ -163,6 +181,9 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                         }
                     }
                 }
+
+                // sort Item according to Sort order
+                sortItem(sortOrder)
 
                 // Notify ViewPager to update
                 if (itemUploads.size == 0) {
