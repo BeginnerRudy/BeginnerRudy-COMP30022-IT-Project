@@ -11,7 +11,9 @@ import com.github.chrisbanes.photoview.PhotoView
 import com.honegroupp.familyRegister.R
 import com.squareup.picasso.Picasso
 
-class DImageSliderAdapter(val items: ArrayList<String>, val context: Context) : PagerAdapter() {
+class DImageSliderAdapter(
+    private val items: ArrayList<String>
+) : PagerAdapter() {
     var listener: OnItemClickerListener? = null
 
     interface OnItemClickerListener {
@@ -48,7 +50,6 @@ class DImageSliderAdapter(val items: ArrayList<String>, val context: Context) : 
         )
         return photoView
     }
-
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         container.removeView(`object` as View)

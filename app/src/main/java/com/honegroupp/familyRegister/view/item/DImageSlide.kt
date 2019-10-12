@@ -38,19 +38,14 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
     
     private lateinit var mDotLayout: LinearLayout
     private lateinit var mDots: Array<TextView?>
-    var numDots: Int = 0
-
-    private lateinit var dImageFamilyId: String
-    lateinit var dImageItemKey: String
-    
-    private lateinit var pathItem: String
+    private var numDots: Int = 0
     
     private lateinit var databaseReferenceItem: DatabaseReference
     private lateinit var dbListenerItem: ValueEventListener
 
     private var currPosition: Int = 0
 
-    var itemUrls: ArrayList<String> = ArrayList()
+    private var itemUrls: ArrayList<String> = ArrayList()
 
     override fun onResume() {
         super.onResume()
@@ -80,16 +75,16 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
         currPosition = intent.getStringExtra("PositionDetail").toInt()
 
         // set database reference for itemUrls
-        dImageFamilyId= intent.getStringExtra("FamilyId")
-        dImageItemKey= intent.getStringExtra("ItemKey")
+        val dImageFamilyId= intent.getStringExtra("FamilyId").toString()
+        val dImageItemKey= intent.getStringExtra("ItemKey").toString()
 
         // path of item
-        pathItem = "Family/$dImageFamilyId/items"
+        val pathItem = "Family/$dImageFamilyId/items"
         databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
 
         // adapter of itemUrls for ViewPager, set listener in adapter for listening click action
         mSlideViewPager = findViewById(R.id.dimage_slideViewPager)
-        val dImageSliderAdapter = DImageSliderAdapter(itemUrls,this)
+        val dImageSliderAdapter = DImageSliderAdapter(itemUrls)
         mSlideViewPager.adapter = dImageSliderAdapter
         dImageSliderAdapter.listener = this@DImageSlide
 
@@ -171,7 +166,7 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
      * code change from:
      * https://www.youtube.com/watch?v=byLKoPgB7yA&t=847s
      */
-    fun addDotsIndicator(position: Int){
+    private fun addDotsIndicator(position: Int){
         mDots = arrayOfNulls(numDots)
         mDotLayout.removeAllViews()
         if (numDots > 0) {
@@ -199,7 +194,7 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
      * https://www.youtube.com/watch?v=1tpc3fyEObI&t=2s
      */
     @SuppressLint("SetWorldReadable")
-    fun onShareClick() {
+    private fun onShareClick() {
         this.downloadUrl = itemUrls[mSlideViewPager.currentItem]
         lateinit var bitmapShare : Bitmap
         Picasso.get().load(downloadUrl).into(object : com.squareup.picasso.Target {
@@ -247,7 +242,7 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
         return returnedBitmap
     }
 
-    fun onDownloadClick() {
+    private fun onDownloadClick() {
         this.downloadUrl = itemUrls[mSlideViewPager.currentItem]
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
@@ -304,7 +299,7 @@ class DImageSlide : AppCompatActivity(), DImageSliderAdapter.OnItemClickerListen
         databaseReferenceItem.removeEventListener(dbListenerItem)
     }
 
-    fun toast(msg: String, duration: Int) {
+    private fun toast(msg: String, duration: Int) {
         makeText(this, msg, duration).show()
     }
 }
