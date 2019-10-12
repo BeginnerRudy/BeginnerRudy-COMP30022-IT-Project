@@ -104,4 +104,6 @@
     <string name="dev_email_address">h1.team.developer@gmail.com</string>
     <string name="ask_us_message">Have a question? Ask us.</string>
     <string name="help_message">If you have any question about this app, please contact help team email.</string>
+    <string name="term_of_service">Term of service</string>
+    <string name="privacy_policy">Privicy Policy</string>
 </resources>
