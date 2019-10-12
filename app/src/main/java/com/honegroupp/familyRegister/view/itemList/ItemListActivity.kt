@@ -2,17 +2,12 @@ package com.honegroupp.familyRegister.view.itemList
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
-import android.widget.Toast
 import androidx.core.view.GravityCompat
 import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ItemListController
 import com.honegroupp.familyRegister.view.home.ContainerActivity
-import com.honegroupp.familyRegister.view.item.ItemUploadActivity
-import com.honegroupp.familyRegister.view.utility.SearchActivity
-import kotlinx.android.synthetic.main.activity_home.*
+import com.honegroupp.familyRegister.utility.SearchActivity
 import kotlinx.android.synthetic.main.activity_item_list.*
 
 class ItemListActivity : ContainerActivity() {

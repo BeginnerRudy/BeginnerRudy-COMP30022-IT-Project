@@ -72,6 +72,8 @@ class ItemListController {
             navi_sort_view.menu.findItem(R.id.sort_name_asc).setOnMenuItemClickListener {
                 //sort logic
                 adapter.items.sortBy { it.itemName }
+                //update sort order
+                mActivity.sortOrder = "name_asc"
                 // update the UI layer
                 updateRecyclerView(adapter, drawer_sort_layout)
                 true
@@ -79,6 +81,8 @@ class ItemListController {
             navi_sort_view.menu.findItem(R.id.sort_name_desc).setOnMenuItemClickListener {
                 //sort logic
                 adapter.items.sortByDescending { it.itemName }
+                //update sort order
+                mActivity.sortOrder = "name_desc"
                 // update the UI layer
                 updateRecyclerView(adapter, drawer_sort_layout)
                 true
@@ -86,6 +90,8 @@ class ItemListController {
             navi_sort_view.menu.findItem(R.id.sort_time_asc).setOnMenuItemClickListener {
                 //sort logic
                 adapter.items.sortBy { it.date }
+                //update sort order
+                mActivity.sortOrder = "time_asc"
                 // update the UI layer
                 updateRecyclerView(adapter, drawer_sort_layout)
                 true
@@ -93,6 +99,8 @@ class ItemListController {
             navi_sort_view.menu.findItem(R.id.sort_time_desc).setOnMenuItemClickListener {
                 //sort logic
                 adapter.items.sortByDescending { it.date }
+                //update sort order
+                mActivity.sortOrder = "time_desc"
                 // update the UI layer
                 updateRecyclerView(adapter, drawer_sort_layout)
                 true

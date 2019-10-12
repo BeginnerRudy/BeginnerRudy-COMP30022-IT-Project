@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.view.utility
+package com.honegroupp.familyRegister.utility
 
 import android.content.Context
 import android.view.LayoutInflater
