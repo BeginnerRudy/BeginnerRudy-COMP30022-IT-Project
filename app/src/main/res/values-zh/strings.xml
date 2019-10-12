@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">家庭记忆</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -76,7 +76,10 @@
     </string-array>
     <string name="item_name_should_not_leave_blank">物品名称不能为空</string>
     <string name="please_select_at_least_one_image">请为物品至少选择一张照片</string>
-    <string name="uploading">正在上传第</string>
+    <string name="uploading">正在上传</string>
+    <string name="upload_complete">上传完成</string>
+    <string name="upload_success">上传成功！</string>
+    <string name="Item_create_success">物品上传成功!</string>
     <string name="of">" / "</string>
     <string name="finished">已上传</string>
     <string name="image">张照片</string>
@@ -85,6 +88,8 @@
     <string name="please_pick_date_for_item">请双击选择日期</string>
     <string name="reset_email_message">重置密码的邮件已发送到您的邮箱，请点击邮件中的链接修改密码</string>
     <string name="password_rest_success">密码重置成功</string>
+
+    <string name="complete_delete">完全删除</string>
     <string name="letter">信件</string>
     <string name="instrument">乐器</string>
     <string name="photo">照片</string>
@@ -92,4 +97,11 @@
     <string name="password_cannot_be_blank">密码不可为空</string>
     <string name="date">日期</string>
     <string name="description">描述</string>
+    <string name="help_and_feedback">帮助和反馈</string>
+    <string name="about">关于</string>
+    <string name="app_version">1.0</string>
+    <string name="version">版本</string>
+    <string name="dev_email_address">h1.team.developer@gmail.com</string>
+    <string name="ask_us_message">使用中遇到了问题? 联系我们.</string>
+    <string name="help_message">如果您遇到了关于这个App的任何问题，请发送邮件联系帮助团队。</string>
 </resources>

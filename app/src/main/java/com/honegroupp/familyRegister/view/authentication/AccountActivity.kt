@@ -49,29 +49,7 @@ class AccountActivity : AppCompatActivity() {
                     }
                 }
         }
-        reAuthTesting.setOnClickListener{
 
-
-            val user = FirebaseAuth.getInstance().currentUser
-
-
-            // Get auth credentials from the user for re-authentication. The example below shows
-            // email and password credentials but there are multiple possible providers,
-            // such as GoogleAuthProvider or FacebookAuthProvider.
-
-            val password = enterPassword.text.toString()
-            val credential: AuthCredential = EmailAuthProvider
-                .getCredential(EmailPathSwitch.pathToEmail(uid!!), password)
-
-            user?.reauthenticate(credential)
-                ?.addOnCompleteListener(OnCompleteListener<Void> { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(this,"Success",Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this,"Fail",Toast.LENGTH_SHORT).show()
-                    }
-                })
-        }
 
 
     }

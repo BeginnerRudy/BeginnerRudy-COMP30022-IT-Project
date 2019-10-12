@@ -33,7 +33,6 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
         // Choose authentication providers
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.PhoneBuilder().build(),
             AuthUI.IdpConfig.GoogleBuilder().build()
         )
 
@@ -44,9 +43,8 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                 .setAvailableProviders(providers)
                 .setTheme(R.style.LoginTheme)
                 .setTosAndPrivacyPolicyUrls(
-                    "https://en.wikipedia.org/wiki/SLD_resolution",
-                    "https://example.com/privacy.html"
-                ).setIsSmartLockEnabled(false)
+                    "https://h1teamdeveloper.wixsite.com/term-of-service",
+                    "https://h1teamdeveloper.wixsite.com/privacy-policy").setIsSmartLockEnabled(false)
                 .build(),
             RC_SIGN_IN
         )
@@ -69,10 +67,11 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                     if (user.email != null) {
                         userContact = user.email.toString()
                         userName = user!!.displayName as String
-                    }else if (user.phoneNumber != null) {
-                        userContact = user.phoneNumber.toString()
-                        userName = user.phoneNumber.toString()
                     }
+//                    }else if (user.phoneNumber != null) {
+//                        userContact = user.phoneNumber.toString()
+//                        userName = user.phoneNumber.toString()
+//                    }
                 }
 
                 val relativePath = EmailPathSwitch.emailToPath(userContact)

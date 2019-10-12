@@ -44,12 +44,21 @@ open class ContainerAdapter(
 
         holder.textViewName.text = currItem.itemName
         // Load image to ImageView via its URL from Firebase Storage
-        Picasso.get()
-            .load(currItem.imageURLs[0])
-            .placeholder(R.mipmap.loading_jewellery)
-            .fit()
-            .centerCrop()
-            .into(holder.imageView)
+        if (currItem.imageURLs.size > 0){
+            Picasso.get()
+                .load(currItem.imageURLs[0])
+                .placeholder(R.mipmap.loading_jewellery)
+                .fit()
+                .centerCrop()
+                .into(holder.imageView)
+        } else {
+            Picasso.get()
+                .load(R.mipmap.loading_jewellery)
+                .fit()
+                .centerCrop()
+                .into(holder.imageView)
+        }
+
 
 
         // Add logic for show page
@@ -136,7 +145,7 @@ open class ContainerAdapter(
             p2: ContextMenu.ContextMenuInfo?
         ) {
             p0?.setHeaderTitle("Select Action")
-            val delete = p0?.add(Menu.NONE, 1, 1, R.string.delete_from_this_category)
+            val delete = p0?.add(Menu.NONE, 1, 1, R.string.complete_delete)
 
 
             delete?.setOnMenuItemClickListener(this)

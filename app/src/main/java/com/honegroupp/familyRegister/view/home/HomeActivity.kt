@@ -120,6 +120,18 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
             toast("Clicked view family")
             true
         }
+        nav_view.menu.findItem(R.id.help_and_feedback).setOnMenuItemClickListener {
+            val intent = Intent(this, HelpFeedbackActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
+            true
+        }
+        nav_view.menu.findItem(R.id.about).setOnMenuItemClickListener {
+            val intent = Intent(this, AboutActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
+            true
+        }
 
 
         // Log out

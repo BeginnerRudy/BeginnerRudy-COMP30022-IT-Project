@@ -316,12 +316,11 @@ data class Family(
         fun deleteItem(
             uid: String,
             categoryName: String,
-            mActivity: ContainerActivity,
             itemId: String
         ) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
-                callbackDeleteItem(uid, categoryName, mActivity, itemId, d)
+                callbackDeleteItem(uid, categoryName, itemId, d)
             }
         }
 
@@ -333,7 +332,6 @@ data class Family(
         private fun callbackDeleteItem(
             uid: String,
             categoryName: String,
-            mActivity: ContainerActivity,
             itemId: String,
             dataSnapshot: DataSnapshot
         ) {
@@ -357,12 +355,11 @@ data class Family(
                 // remove item from category only.
                 if (itemKey.value == itemId) {
                     itemKey.ref.setValue(null)
-
                     break
                 }
             }
-            // update itemkeys index first
 
+            // update itemkeys index first
             val itemKeysPath =
                 "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/itemKeys/"
             var categoryItemKeys = dataSnapshot
@@ -377,6 +374,12 @@ data class Family(
             categoryItemKeys.remove(itemId)
 
             FirebaseDatabaseManager.update(itemKeysPath, categoryItemKeys)
+
+            // remove item
+            FirebaseDatabase.getInstance()
+                .getReference("${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/items/")
+                .child(itemId)
+                .removeValue()
 
             // update the item count
             val itemCount = dataSnapshot

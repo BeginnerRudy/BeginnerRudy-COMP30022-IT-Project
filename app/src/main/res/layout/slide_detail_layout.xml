@@ -139,40 +139,31 @@
     </androidx.core.widget.NestedScrollView>
 
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
-        app:itemBackground="@color/colorAccent"
-        app:itemIconTint="@color/colorWhite"
-        app:itemTextColor="@color/colorWhite"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/menu_bottom_navigation" >
-        <com.github.ivbaranov.mfb.MaterialFavoriteButton
-            android:id="@+id/detail_favorite_button22222"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:padding="@dimen/padding_layout"
-            app:mfb_type="heart" />
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
-
 <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--        android:id="@+id/bottom_navigation"-->
+<!--        android:id="@+id/navigationView"-->
 <!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_height="wrap_content"-->
 <!--        android:layout_gravity="bottom"-->
-<!--        android:backgroundTint="@color/colorWhite"-->
+<!--        android:layout_marginStart="0dp"-->
+<!--        android:layout_marginEnd="0dp"-->
+<!--        android:background="?android:attr/windowBackground"-->
 <!--        app:itemBackground="@color/colorAccent"-->
-<!--        app:itemTextColor="@color/colorPrimary"/>-->
-<!--&lt;!&ndash;        app:menu="@menu/bottom_navigation_main"&ndash;&gt;-->
+<!--        app:itemIconTint="@color/colorWhite"-->
+<!--        app:itemTextColor="@color/colorWhite"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:menu="@menu/menu_bottom_navigation" >-->
+<!--        <com.github.ivbaranov.mfb.MaterialFavoriteButton-->
+<!--            android:id="@+id/detail_favorite_button22222"-->
+<!--            android:layout_width="52dp"-->
+<!--            android:layout_height="52dp"-->
+<!--            android:layout_marginTop="@dimen/activity_vertical_margin"-->
+<!--            android:padding="@dimen/padding_layout"-->
+<!--            app:mfb_type="heart" />-->
+<!--    </com.google.android.material.bottomnavigation.BottomNavigationView>-->
+
+
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
