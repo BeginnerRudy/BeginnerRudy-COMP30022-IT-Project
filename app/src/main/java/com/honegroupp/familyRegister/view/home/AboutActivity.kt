@@ -6,6 +6,11 @@ import com.honegroupp.familyRegister.R
 import kotlinx.android.synthetic.main.activity_about.*
 import android.content.Intent
 import android.net.Uri
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ComponentActivity.ExtraData
+
+
 
 
 class AboutActivity : AppCompatActivity() {
@@ -13,6 +18,13 @@ class AboutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar_about_activity)
+        toolbar.title = getString(R.string.about)
+        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_white_24dp)
+        toolbar.setNavigationOnClickListener{
+            finish()
+        }
 
         //click button to view the term of service
         view_term_of_service.setOnClickListener{

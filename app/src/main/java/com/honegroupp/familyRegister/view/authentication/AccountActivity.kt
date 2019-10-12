@@ -27,7 +27,10 @@ class AccountActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.title = getString(R.string.account_capital)
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_white_24dp)
-        setSupportActionBar(toolbar)
+        toolbar.setNavigationOnClickListener{
+            finish()
+        }
+
 
         //get the uid from intent
         val uid = intent.getStringExtra("UserID")
