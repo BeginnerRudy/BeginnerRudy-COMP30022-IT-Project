@@ -1,11 +1,9 @@
 package com.honegroupp.familyRegister.view.home
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -20,15 +18,11 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
-import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 import android.widget.TextView
-import androidx.core.view.marginRight
-import androidx.fragment.app.findFragment
 import com.honegroupp.familyRegister.view.item.DetailSlide
 
 import com.honegroupp.familyRegister.view.utility.SearchActivity
-import kotlinx.android.synthetic.main.nav_header_main.*
 
 
 @Suppress("DEPRECATION")

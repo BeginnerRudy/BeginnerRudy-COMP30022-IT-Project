@@ -12,7 +12,7 @@
         <activity
             android:name=".view.utility.SearchActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.authentication.AccountActivity"
+        <activity android:name=".view.home.AccountActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.authentication.LoginActivity"
@@ -45,6 +45,10 @@
         <activity android:name=".view.home.HelpFeedbackActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".view.home.AboutActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.home.UserDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.home.UserEditActivity"
             android:screenOrientation="portrait"/>
 
     </application>
