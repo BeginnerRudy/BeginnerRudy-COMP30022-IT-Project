@@ -30,7 +30,7 @@ import com.honegroupp.familyRegister.view.itemList.ItemListActivity
  * @author Tianyi Mo
  * */
 
-data class Family(
+data class Family (
     @set:PropertyName("familyName")
     @get:PropertyName("familyName")
     var familyName: String = "",
@@ -209,12 +209,13 @@ data class Family(
          * This function is responsible for showing all the items in the category
          *
          * */
-        fun showItems(uid: String, categoryName: String, mActivity: ItemListActivity) {
+        fun showItems(uid: String, categoryName: String, sortOrder: String, mActivity: ItemListActivity) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
                 callbackShowItems(
                     uid,
                     categoryName,
+                    sortOrder,
                     mActivity,
                     d
                 )
@@ -227,12 +228,13 @@ data class Family(
         private fun callbackShowItems(
             uid: String,
             categoryName: String,
+            sortOrder: String,
             mActivity: ItemListActivity,
             dataSnapshot: DataSnapshot
         ) {
 
             // get items of that category
-            val items = ArrayList<Item>()
+            var items = ArrayList<Item>()
 
             val recyclerView = mActivity.findViewById<RecyclerView>(R.id.item_list_recycler_view)
 
@@ -298,6 +300,21 @@ data class Family(
                 mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
                     View.INVISIBLE
             }
+
+            //sort logic
+            if (sortOrder=="name_asc"){
+                items.sortBy { it.itemName }
+                itemListAdapter.notifyDataSetChanged()
+            }
+            else if (sortOrder=="name_desc"){
+                items.sortByDescending { it.itemName }
+            }
+            else if (sortOrder=="time_asc"){
+                items.sortBy { it.date }
+            }else if (sortOrder=="time_desc"){
+                items.sortByDescending { it.date }
+            }
+
 
             if (itemKeys.isEmpty()) {
                 // Make the progress bar invisible

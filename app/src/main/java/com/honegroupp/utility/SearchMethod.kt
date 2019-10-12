@@ -182,7 +182,7 @@ class SearchMethod{
     fun search(queryText: String, itemList: ArrayList<Item>):ArrayList<Item>{
         val newItemList: ArrayList<Item> = ArrayList()
         for (item in itemList){
-            if (item.itemName.contains(queryText)){
+            if (item.itemName.contains(queryText, ignoreCase = true) || item.date.contains(queryText)){
                 newItemList.add(item);
             }
         }

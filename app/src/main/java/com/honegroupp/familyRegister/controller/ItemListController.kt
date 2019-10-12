@@ -1,5 +1,6 @@
 package com.honegroupp.familyRegister.controller
 
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.honegroupp.familyRegister.model.Family
@@ -16,8 +17,8 @@ class ItemListController{
         /**
          * This method is responsible for showing all the items in the given category
          * */
-        fun showItems(uid: String, categoryName: String, mActivity: ItemListActivity){
-            Family.showItems(uid, categoryName, mActivity)
+        fun showItems(uid: String, categoryName: String, sortOrder: String, mActivity: ItemListActivity){
+            Family.showItems(uid, categoryName, sortOrder, mActivity)
         }
 
         /**
