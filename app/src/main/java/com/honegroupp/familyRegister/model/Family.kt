@@ -14,11 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
-import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.utility.Hash
-import com.honegroupp.familyRegister.view.home.ContainerActivity
-import com.honegroupp.familyRegister.view.home.ContainerAdapter
+import com.honegroupp.familyRegister.view.home.*
 import com.honegroupp.familyRegister.view.item.DetailSlide
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
@@ -300,7 +298,7 @@ data class Family(
 
                 mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
                     View.VISIBLE
-            }else{
+            } else {
 
                 // Make the progress bar invisible
                 mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
@@ -547,6 +545,49 @@ data class Family(
                         View.INVISIBLE
                 }
             }
+        }
+
+        /**
+         * This method is responsible for showing all the family member in the user's family
+         *
+         * */
+        fun showAllMembers(
+            uid: String, adapter: ViewFamilyAdapter,
+            users: ArrayList<User>
+        ) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
+                callbackShowAllMembers(uid, adapter, users, d)
+            }
+        }
+
+        /**
+         * This method is responsible for interacting with the database to showi all the family
+         * member in the user's family
+         * */
+        private fun callbackShowAllMembers(
+            uid: String,
+            adapter: ViewFamilyAdapter,
+            users: ArrayList<User>,
+            dataSnapshot: DataSnapshot
+        ) {
+            val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+
+            // retrieve user's uids in current family
+            val path = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/members/"
+
+            val currUserUids = dataSnapshot.child(path).value as ArrayList<String>
+
+            // retrieve user and add it to a list
+            users.clear()
+            for (uid in currUserUids) {
+                val currUser =
+                    dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).getValue(User::class.java) as User
+                users.add(currUser)
+            }
+
+            // set this user to the adapter
+            adapter.notifyDataSetChanged()
         }
     }
 

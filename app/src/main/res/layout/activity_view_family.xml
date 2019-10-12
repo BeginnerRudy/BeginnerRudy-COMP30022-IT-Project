@@ -5,12 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--    <androidx.cardview.widget.CardView-->
-    <!--        android:id="@+id/family_info_card"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content" />-->
-
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_view_family"
         android:layout_width="match_parent"
@@ -26,9 +20,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/btn_family_setting"
                 android:gravity="center"
                 android:text="@string/family"
-                android:layout_toLeftOf="@+id/btn_family_setting"
                 android:textColor="@color/colorWhite"
                 android:textSize="24dp"
                 android:textStyle="bold" />
@@ -36,28 +30,54 @@
             <ImageButton
                 android:id="@+id/btn_family_setting"
                 android:layout_width="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:layout_gravity="right"
                 android:background="@android:drawable/ic_menu_edit" />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/family_name"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="family name" />
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_height="150dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
 
-    <TextView
-        android:id="@+id/family_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="family id" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/border"
+            >
+
+            <TextView
+                android:id="@+id/family_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="36dp"
+                android:text="Family name: "
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/family_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/family_name"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Family id:"
+                android:textSize="20dp" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/family_member_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>
