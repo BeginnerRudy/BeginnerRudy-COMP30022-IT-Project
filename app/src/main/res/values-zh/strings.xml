@@ -107,4 +107,5 @@
     <string name="term_of_service">服务条款</string>
     <string name="privacy_policy">隐私权政策</string>
     <string name="type_item_material">请输入物品材质</string>
+    <string name="material">材质</string>
 </resources>

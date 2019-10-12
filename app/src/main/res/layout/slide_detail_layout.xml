@@ -92,7 +92,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/detail_description"
+                android:id="@+id/desc_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_date"
@@ -106,12 +106,39 @@
                 android:id="@+id/detail_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/detail_description"
+                android:layout_below="@+id/desc_description"
                 android:layout_marginLeft="@dimen/layout_margin_left"
                 android:layout_marginRight="@dimen/layout_margin_left"
                 android:paddingBottom="@dimen/padding_layout"
                 android:text="_"
                 android:textSize="20sp" />
+
+
+
+            <TextView
+                android:id="@+id/material_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_desc"
+                android:layout_marginLeft="@dimen/layout_margin_left"
+                android:text="@string/material"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/detail_material"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/material_description"
+                android:layout_marginLeft="@dimen/layout_margin_left"
+                android:layout_marginRight="@dimen/layout_margin_left"
+                android:paddingBottom="@dimen/padding_layout"
+                android:text="_"
+                android:textSize="20sp" />
+
+
+
 
             <TextView
                 android:id="@+id/thumbnailUrl"
