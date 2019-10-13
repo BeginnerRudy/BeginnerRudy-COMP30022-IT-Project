@@ -43,7 +43,12 @@ open class ContainerAdapter(
         val currItem = items[position]
 
         holder.textViewName.text = currItem.itemName
-        holder.textViewTime.text = currItem.date
+
+        // show item date
+        val dateParts = currItem.date.split("/")
+        val newDate = dateParts[2] + "." + dateParts[1] + "." + dateParts[0]
+        holder.textViewTime.text = newDate
+
         // Load image to ImageView via its URL from Firebase Storage
         if (currItem.imageURLs.size > 0){
             Picasso.get()
