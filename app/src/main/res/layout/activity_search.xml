@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.honegroupp.familyRegister.view.search.SearchActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.honegroupp.familyRegister.view.search.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:iconifiedByDefault="false"
                 android:inputType="text"
-                android:queryHint="@string/query_hints"/>
+                android:queryHint="@string/query_hints" />
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>

@@ -127,4 +127,5 @@
     <string name="edit_user_info">Edit</string>
     <string name="username">用户名称</string>
     <string name="please_enter_name">请输入名称</string>
+    <string name="owner">家主</string>
 </resources>

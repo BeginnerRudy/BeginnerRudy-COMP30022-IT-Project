@@ -41,7 +41,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="16dp"
             android:gravity="center"
-            android:text="Owner"
+            android:text="@string/owner"
             android:textSize="20dp" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

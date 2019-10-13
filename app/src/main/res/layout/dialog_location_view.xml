@@ -6,23 +6,23 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/view_location_text"
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bedside table first drawer"
         android:layout_centerHorizontal="true"
-        android:textSize="20sp"
-        android:textColor="@color/colorWhite"/>
+        android:layout_marginTop="20dp"
+        android:text="Bedside table first drawer"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/view_location_changeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/view_location_text"
-        android:layout_marginTop="40dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
         android:background="@android:color/black"
         android:text="@string/edit_dialog_confirm_change"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>

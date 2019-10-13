@@ -31,11 +31,11 @@
 
                 <TextView
                     android:id="@+id/search_icon"
-                    android:padding="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
-                    android:drawableRight="@drawable/ic_search_white_24dp" />
+                    android:drawableRight="@drawable/ic_search_white_24dp"
+                    android:padding="8dp" />
 
 
             </androidx.appcompat.widget.Toolbar>
@@ -60,27 +60,27 @@
         app:menu="@menu/activity_main_drawer">
 
         <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/btn_log_out"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/textColorPrimary"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/log_out"
-                android:backgroundTint = "@color/fui_bgEmail"/>
-        </LinearLayout>
+                android:layout_alignParentBottom="true">
 
-    </RelativeLayout>
+                <Button
+                    android:id="@+id/btn_log_out"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="@color/fui_bgEmail"
+                    android:text="@string/log_out"
+                    android:textColor="@color/textColorPrimary" />
+            </LinearLayout>
+
+        </RelativeLayout>
     </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

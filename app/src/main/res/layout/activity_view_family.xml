@@ -17,24 +17,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/btn_family_setting"
-                android:gravity="center"
-                android:text="@string/family"
-                android:textColor="@color/colorWhite"
-                android:textSize="24dp"
-                android:textStyle="bold" />
+            <!--            <TextView-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_toLeftOf="@+id/btn_family_setting"-->
+            <!--                android:gravity="center"-->
+            <!--                android:text="@string/family"-->
+            <!--                android:textColor="@color/colorWhite"-->
+            <!--                android:textSize="24dp"-->
+            <!--                android:textStyle="bold" />-->
 
             <ImageButton
                 android:id="@+id/btn_family_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:backgroundTint="@color/colorPrimary"
                 android:layout_gravity="right"
-                android:visibility="invisible"
-                android:background="@android:drawable/ic_menu_edit" />
+                android:paddingRight="12dp"
+                android:src="@drawable/ic_edit_black_24dp"
+                android:visibility="invisible" />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 

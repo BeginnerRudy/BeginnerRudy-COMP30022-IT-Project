@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -11,44 +12,44 @@
 
         <GridView
             android:id="@+id/editImagesGrid"
-            android:nestedScrollingEnabled="true"
             android:layout_width="match_parent"
             android:layout_height="680px"
             android:horizontalSpacing="10dp"
+            android:nestedScrollingEnabled="true"
             android:numColumns="3"
             android:verticalSpacing="10dp" />
 
         <LinearLayout
             android:id="@+id/editProgressLayout"
-            android:layout_margin = "5dp"
-            android:layout_below="@+id/editImagesGrid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation = "horizontal">
+            android:layout_below="@+id/editImagesGrid"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
 
             <ProgressBar
                 android:id="@+id/editProgressBarRound"
                 style="@style/Widget.AppCompat.ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:max="100" />
+                android:max="100"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/editProgressBarText"
-                android:layout_margin = "5dp"
-                android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp" />
         </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/itemName"
 
-            android:layout_below="@id/editProgressLayout"
-
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editProgressLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editName"
@@ -60,23 +61,23 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editInputDate"
-            android:layout_below="@id/itemName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/itemName">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editItemDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:hint="@string/edit_date" />
+                android:hint="@string/edit_date"
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/itemDescription"
-            android:layout_below="@id/editInputDate"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editInputDate">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editDescription"
@@ -88,9 +89,9 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/itemMaterial"
-            android:layout_below="@id/itemDescription"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/itemDescription">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editMaterial"
@@ -101,19 +102,19 @@
 
         <RelativeLayout
             android:id="@+id/edit_snipper_bar"
-            android:layout_below="@id/itemMaterial"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/itemMaterial">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/edit_snipper_bar_text"
-                android:paddingLeft="@dimen/layout_margin_left"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/edit_visibility"
-                android:inputType="textMultiLine"
                 android:layout_centerVertical="true"
-                android:textSize="18sp"/>
+                android:inputType="textMultiLine"
+                android:paddingLeft="@dimen/layout_margin_left"
+                android:text="@string/edit_visibility"
+                android:textSize="18sp" />
 
             <Spinner
                 android:id="@+id/edit_privacy_spinner"
@@ -129,19 +130,19 @@
 
         <RelativeLayout
             android:id="@+id/edit_location"
-            android:layout_below="@id/edit_snipper_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edit_snipper_bar">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/edit_location_text"
-                android:paddingLeft="@dimen/layout_margin_left"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/edit_location"
-                android:inputType="textMultiLine"
                 android:layout_centerVertical="true"
-                android:textSize="18sp"/>
+                android:inputType="textMultiLine"
+                android:paddingLeft="@dimen/layout_margin_left"
+                android:text="@string/edit_location"
+                android:textSize="18sp" />
 
             <RelativeLayout
                 android:id="@+id/edit_location_layout"
@@ -153,10 +154,10 @@
                 android:layout_toEndOf="@+id/edit_location_text">
 
                 <TextView
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="@dimen/layout_margin_left"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/layout_margin_left"
                     android:text="@string/edit_enter_password_to_view_location" />
 
                 <ImageView
@@ -172,12 +173,12 @@
 
         <RelativeLayout
             android:id="@+id/edit_pass_down"
-            android:paddingTop="@dimen/layout_margin_top_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/edit_location"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="@dimen/layout_margin_right">
+            android:layout_marginEnd="@dimen/layout_margin_right"
+            android:paddingTop="@dimen/layout_margin_top_button">
 
             <Button
                 android:id="@+id/editPassDownBtn"
@@ -197,28 +198,29 @@
                 android:inputType="textMultiLine|textNoSuggestions"
                 android:text="@string/edit_pass_down_to"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/editConfirm"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edit_passdown_to"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
                 android:backgroundTint="@color/colorAccent"
                 android:text="@string/edit_confirm"
                 android:textColor="@color/textColorPrimary" />
 
         </RelativeLayout>
 
-<!--        <Button-->
-<!--            android:id="@+id/editConfirm"-->
-<!--            android:layout_alignParentEnd="true"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_below="@id/edit_pass_down"-->
-<!--            android:backgroundTint="@color/colorAccent"-->
-<!--            android:text="@string/edit_confirm"-->
-<!--            android:textColor="@color/textColorPrimary" />-->
+        <!--        <Button-->
+        <!--            android:id="@+id/editConfirm"-->
+        <!--            android:layout_alignParentEnd="true"-->
+        <!--            android:layout_marginTop="10dp"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_below="@id/edit_pass_down"-->
+        <!--            android:backgroundTint="@color/colorAccent"-->
+        <!--            android:text="@string/edit_confirm"-->
+        <!--            android:textColor="@color/textColorPrimary" />-->
     </RelativeLayout>
 </ScrollView>
