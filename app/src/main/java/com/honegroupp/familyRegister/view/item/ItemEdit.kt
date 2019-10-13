@@ -426,7 +426,11 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                     }
                 }
         }
-        toast(getString(R.string.uploading) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+        if (allImageUri.size > 0) {
+            toast(getString(R.string.uploading) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+        } else {
+            toast(getString(R.string.upload_success), Toast.LENGTH_SHORT)
+        }
     }
 
     private fun openLocationEnterPasswordDialog() {
