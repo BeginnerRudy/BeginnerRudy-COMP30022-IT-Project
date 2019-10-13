@@ -64,6 +64,7 @@ class ItemUploadActivity : AppCompatActivity(){
 
 
         addItemConfirm.setOnClickListener{
+            it.isEnabled = false
             itemPrivacyPosition = spinner.selectedItemPosition
 
             progressBarRound.visibility = View.VISIBLE
