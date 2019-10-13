@@ -23,8 +23,7 @@ class UserDetailActivity : AppCompatActivity() {
         val uid = intent.getStringExtra("UserID")
 
 
-
-        // retrieve Item
+        // retrieve User
         lateinit var currUser: User
         val rootPath = "/"
         databaseRef = FirebaseDatabase.getInstance().getReference(rootPath)

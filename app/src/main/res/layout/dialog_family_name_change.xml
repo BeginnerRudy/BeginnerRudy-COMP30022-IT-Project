@@ -15,19 +15,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:paddingLeft="@dimen/layout_margin_left"
             android:layout_toStartOf="@+id/view_location_change_confirm_Btn"
-            android:hint="@string/new_family_name"/>
+            android:hint="@string/new_family_name"
+            android:paddingLeft="@dimen/layout_margin_left" />
 
         <Button
             android:id="@+id/view_family_name_change_confirm_Btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/layout_margin_right"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/layout_margin_right"
             android:background="@android:color/black"
             android:text="@string/edit_dialog_confirm_change"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
     </RelativeLayout>
 
 </RelativeLayout>

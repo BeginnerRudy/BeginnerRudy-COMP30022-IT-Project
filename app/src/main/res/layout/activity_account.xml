@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.honegroupp.familyRegister.view.home.AccountActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.honegroupp.familyRegister.view.home.AccountActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -18,8 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark">
-        </androidx.appcompat.widget.Toolbar>
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"></androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -27,33 +26,29 @@
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:gravity="center_vertical"
         android:layout_marginLeft="15dp"
+        android:gravity="center_vertical"
         android:text="@string/name"
-        android:textSize="20dp"/>
+        android:textSize="20dp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/darker_gray"/>
+        android:background="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/changePassword"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:gravity="center_vertical"
         android:layout_marginLeft="15dp"
+        android:gravity="center_vertical"
         android:text="@string/change_password"
-        android:textSize="20dp"/>
+        android:textSize="20dp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/darker_gray"/>
-
-
-
-
+        android:background="@android:color/darker_gray" />
 
 
 </LinearLayout>

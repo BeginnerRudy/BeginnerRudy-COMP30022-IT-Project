@@ -1,47 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="15dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="15dp">
 
         <GridView
             android:id="@+id/itemGridView"
-            android:nestedScrollingEnabled="true"
             android:layout_width="match_parent"
             android:layout_height="680px"
             android:horizontalSpacing="10dp"
+            android:nestedScrollingEnabled="true"
             android:numColumns="3"
             android:verticalSpacing="10dp" />
 
         <LinearLayout
-            android:layout_margin = "5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation = "horizontal">
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
 
             <ProgressBar
                 android:id="@+id/progressBarRound"
                 style="@style/Widget.AppCompat.ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:max="100" />
+                android:max="100"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/progressBarText"
-                android:layout_margin = "5dp"
-                android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp" />
         </LinearLayout>
-
 
 
         <LinearLayout
@@ -51,9 +50,10 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/spinner"
-                android:layout_below="@id/itemGridView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/itemGridView">
+
                 <Spinner
                     android:id="@+id/privacy_spinner"
                     android:layout_width="match_parent"
@@ -64,9 +64,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/itemName"
-                android:layout_below="@id/spinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/spinner">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/item_name_input"
@@ -78,9 +78,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/itemDescription"
-                android:layout_below="@id/itemName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/itemName">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/item_description_input"
@@ -93,9 +93,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/itemMaterial"
-                android:layout_below="@id/itemName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/itemName">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/item_material_input"
@@ -106,16 +106,16 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/itemDate"
-                android:layout_below="@id/itemDescription"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/itemDescription">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/text_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:hint="@string/please_pick_date_for_item" />
+                    android:hint="@string/please_pick_date_for_item"
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
@@ -129,4 +129,4 @@
         </LinearLayout>
 
     </LinearLayout>
-</ScrollView >
+</ScrollView>

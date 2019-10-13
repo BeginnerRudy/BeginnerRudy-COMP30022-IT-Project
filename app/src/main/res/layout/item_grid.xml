@@ -3,7 +3,7 @@
     android:id="@+id/item_grid_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:numColumns = "3"
-    android:verticalSpacing="10dp"
+    android:gravity="center"
     android:horizontalSpacing="10dp"
-    android:gravity="center" />
+    android:numColumns="3"
+    android:verticalSpacing="10dp" />

@@ -114,10 +114,8 @@
                 android:textSize="20sp" />
 
 
-
             <TextView
                 android:id="@+id/material_description"
-                android:visibility="invisible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_desc"
@@ -125,11 +123,11 @@
                 android:text="@string/material"
                 android:textColor="#333333"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/detail_material"
-                android:visibility="invisible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/material_description"
@@ -137,9 +135,8 @@
                 android:layout_marginRight="@dimen/layout_margin_left"
                 android:paddingBottom="@dimen/padding_layout"
                 android:text=""
-                android:textSize="20sp" />
-
-
+                android:textSize="20sp"
+                android:visibility="invisible" />
 
 
             <TextView
@@ -168,31 +165,29 @@
     </androidx.core.widget.NestedScrollView>
 
 
-<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--        android:id="@+id/navigationView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom"-->
-<!--        android:layout_marginStart="0dp"-->
-<!--        android:layout_marginEnd="0dp"-->
-<!--        android:background="?android:attr/windowBackground"-->
-<!--        app:itemBackground="@color/colorAccent"-->
-<!--        app:itemIconTint="@color/colorWhite"-->
-<!--        app:itemTextColor="@color/colorWhite"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent"-->
-<!--        app:menu="@menu/menu_bottom_navigation" >-->
-<!--        <com.github.ivbaranov.mfb.MaterialFavoriteButton-->
-<!--            android:id="@+id/detail_favorite_button22222"-->
-<!--            android:layout_width="52dp"-->
-<!--            android:layout_height="52dp"-->
-<!--            android:layout_marginTop="@dimen/activity_vertical_margin"-->
-<!--            android:padding="@dimen/padding_layout"-->
-<!--            app:mfb_type="heart" />-->
-<!--    </com.google.android.material.bottomnavigation.BottomNavigationView>-->
-
-
+    <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+    <!--        android:id="@+id/navigationView"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="bottom"-->
+    <!--        android:layout_marginStart="0dp"-->
+    <!--        android:layout_marginEnd="0dp"-->
+    <!--        android:background="?android:attr/windowBackground"-->
+    <!--        app:itemBackground="@color/colorAccent"-->
+    <!--        app:itemIconTint="@color/colorWhite"-->
+    <!--        app:itemTextColor="@color/colorWhite"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--        app:layout_constraintRight_toRightOf="parent"-->
+    <!--        app:menu="@menu/menu_bottom_navigation" >-->
+    <!--        <com.github.ivbaranov.mfb.MaterialFavoriteButton-->
+    <!--            android:id="@+id/detail_favorite_button22222"-->
+    <!--            android:layout_width="52dp"-->
+    <!--            android:layout_height="52dp"-->
+    <!--            android:layout_marginTop="@dimen/activity_vertical_margin"-->
+    <!--            android:padding="@dimen/padding_layout"-->
+    <!--            app:mfb_type="heart" />-->
+    <!--    </com.google.android.material.bottomnavigation.BottomNavigationView>-->
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
