@@ -46,25 +46,24 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     private var downloadUrl :String = ""
 
     private lateinit var mSlideViewPager : ViewPager
+
     lateinit var detailUserId: String
-    lateinit var detailFamilyId: String
 
-    lateinit var databaseReferenceItem: DatabaseReference
-    lateinit var dbListenerItem: ValueEventListener
-    var itemUploads: ArrayList<Item> = ArrayList()
+    private lateinit var detailFamilyId: String
 
-    var isInCategory: Boolean = false
-    lateinit var databaseReferenceCategory: DatabaseReference
-    lateinit var dbListenerCategory: ValueEventListener
-    var categoryUploads: ArrayList<Category> = ArrayList()
+    private lateinit var databaseReferenceItem: DatabaseReference
+    private lateinit var dbListenerItem: ValueEventListener
+    private var itemUploads: ArrayList<Item> = ArrayList()
 
-    var storage: FirebaseStorage = FirebaseStorage.getInstance()
+    private var isInCategory: Boolean = false
+    private lateinit var databaseReferenceCategory: DatabaseReference
+    private lateinit var dbListenerCategory: ValueEventListener
+    private var categoryUploads: ArrayList<Category> = ArrayList()
 
-
-
+    private var storage: FirebaseStorage = FirebaseStorage.getInstance()
 
     // Sort items use sort method
-    private fun sortItem(sortOrder: String) {
+    private fun sortItem(sortOrder: String){
         when (sortOrder) {
             NAME_ASCENDING -> itemUploads.sortBy { it.itemName }
             NAME_DESCENDING -> itemUploads.sortByDescending { it.itemName }
@@ -88,7 +87,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         val positionList = intent.getStringExtra("PositionList").toInt()
 
         // get userID for setting firbase database reference for items and categories
-        val detailUserId= intent.getStringExtra("UserID").toString()
+        detailUserId= intent.getStringExtra("UserID").toString()
 
         // get position of current category for setting Current page item
         val categoryIndexList= intent.getStringExtra("CategoryNameList").toInt()

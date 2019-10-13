@@ -69,7 +69,6 @@ class DetailSliderAdapter(
 
         val currItemUploads = items[position]
 
-        // slideHeading.setText(currItemUploads.itemName)
         val slideToolbar =
             view.findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.detial_collapsing_toolbar)
         slideToolbar.setTitle(currItemUploads.itemName)
@@ -83,7 +82,7 @@ class DetailSliderAdapter(
         slideDate.text = newDate
 
         //show item material
-        slideMaterial.setText(currItemUploads.itemMaterial)
+        slideMaterial.text = currItemUploads.itemMaterial
 
 
         // set show button, solid heart if it is shown in show page
