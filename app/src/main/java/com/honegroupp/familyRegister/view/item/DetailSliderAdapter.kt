@@ -62,29 +62,31 @@ class DetailSliderAdapter(
         // val slideHeading = view.findViewById<TextView>(R.id.detail_heading)
         val slideDescription = view.findViewById<TextView>(R.id.detail_desc)
         val slideDate = view.findViewById<TextView>(R.id.detail_date)
-        val slideMaterial = view.findViewById<TextView>(R.id.detail_material)
         val showButton = view.findViewById<MaterialFavoriteButton>(R.id.detail_favorite_button)
         showButton.isFavorite = false
         showButton.setFavoriteResource(R.drawable.ic_favorite_red_24dp)
 
         val currItemUploads = items[position]
 
-        // slideHeading.setText(currItemUploads.itemName)
         val slideToolbar =
             view.findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.detial_collapsing_toolbar)
         slideToolbar.setTitle(currItemUploads.itemName)
 
-        //show item description
+        // show item description
         slideDescription.setText(currItemUploads.itemDescription)
 
-        //show item date
-        var dateParts = currItemUploads.date.split("/")
-        var newDate = dateParts[2] + "." + dateParts[1] + "." + dateParts[0]
+        // show item date
+        val dateParts = currItemUploads.date.split("/")
+        val newDate = dateParts[2] + "." + dateParts[1] + "." + dateParts[0]
         slideDate.text = newDate
 
-        //show item material
-        slideMaterial.setText(currItemUploads.itemMaterial)
-
+        // show item material
+        if (currItemUploads.itemMaterial.isNotEmpty()) {
+            view.findViewById<TextView>(R.id.material_description).visibility = View.VISIBLE
+            val slideMaterial = view.findViewById<TextView>(R.id.detail_material)
+            slideMaterial.visibility = View.VISIBLE
+            slideMaterial.text = currItemUploads.itemMaterial
+        }
 
         // set show button, solid heart if it is shown in show page
         if (userId in items[position].showPageUids) {

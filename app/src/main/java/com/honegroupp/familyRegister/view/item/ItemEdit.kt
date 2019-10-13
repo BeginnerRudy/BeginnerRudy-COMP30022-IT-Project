@@ -46,7 +46,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
     private var detailImageUrls : ArrayList<String> = ArrayList()
     private var deleteImageUrls : ArrayList<String> = ArrayList()
     lateinit var databaseRef: DatabaseReference
-    lateinit var uid: String
+    lateinit var currItem: Item
     private lateinit var itemKey: String
     private lateinit var currFamilyId: String
 
@@ -78,7 +78,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
             // email and password credentials but there are multiple possible providers,
             // such as GoogleAuthProvider or FacebookAuthProvider.
             val credential: AuthCredential = EmailAuthProvider
-                .getCredential(EmailPathSwitch.pathToEmail(uid!!), enteredPassword)
+                .getCredential(EmailPathSwitch.pathToEmail(currItem.itemOwnerUID!!), enteredPassword)
 
 
             //use firebase to re authenticate the password
@@ -115,7 +115,6 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
         currFamilyId = intent.getStringExtra("FamilyId").toString()
 
         // retrieve Item
-        lateinit var currItem: Item
         val rootPath = "/"
         databaseRef = FirebaseDatabase.getInstance().getReference(rootPath)
         databaseRef.addValueEventListener(object : ValueEventListener {
