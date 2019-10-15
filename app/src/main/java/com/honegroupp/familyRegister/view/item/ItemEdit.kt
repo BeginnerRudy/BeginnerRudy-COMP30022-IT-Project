@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Point
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -17,16 +18,11 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.model.User
-import kotlinx.android.synthetic.main.activity_edit.*
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
-import com.google.firebase.storage.FirebaseStorage
-
 import com.honegroupp.familyRegister.utility.CompressionUtil
 import com.honegroupp.familyRegister.utility.EmailPathSwitch
 import com.honegroupp.familyRegister.utility.FilePathUtil
@@ -34,7 +30,12 @@ import com.honegroupp.familyRegister.utility.ImageRotateUtil
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationChangeDialog
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationEnterPasswordDialog
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationViewDialog
+import kotlinx.android.synthetic.main.activity_edit.*
 import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.math.ceil
 
 
 class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerListener,
@@ -42,68 +43,15 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
 
     val GALLERY_REQUEST_CODE = 123
     var itemLocation = ""
-    private var allImageUri : ArrayList<Uri> = ArrayList()
-    private var detailImageUrls : ArrayList<String> = ArrayList()
-    private var deleteImageUrls : ArrayList<String> = ArrayList()
+    private var allImageUri: ArrayList<Uri> = ArrayList()
+    private var detailImageUrls: ArrayList<String> = ArrayList()
+    private var deleteImageUrls: ArrayList<String> = ArrayList()
     lateinit var databaseRef: DatabaseReference
     lateinit var currItem: Item
     private lateinit var itemKey: String
     private lateinit var currFamilyId: String
 
     private var storage: FirebaseStorage = FirebaseStorage.getInstance()
-
-    override fun clickOnChangeLocation(newLocation: String) {
-        itemLocation = newLocation
-        openLocationViewDialog()
-    }
-
-    override fun clickOnChangeLocation() {
-        openLocationChangeDialog()
-    }
-
-
-    /*
-    Compare the password, if the password is correct, show the location view dialog
-     */
-    override fun applyPasswords(enteredPassword: String, dialog: LocationEnterPasswordDialog) {
-
-        //check emptyness of password
-        if(enteredPassword != "") {
-
-            //get user and uid
-            val user = FirebaseAuth.getInstance().currentUser
-
-            // Get auth credentials from the user for re-authentication. The example below shows
-            // email and password credentials but there are multiple possible providers,
-            // such as GoogleAuthProvider or FacebookAuthProvider.
-            val credential: AuthCredential = EmailAuthProvider
-                .getCredential(EmailPathSwitch.pathToEmail(currItem.itemOwnerUID!!), enteredPassword)
-
-
-            //use firebase to re authenticate the password
-            user?.reauthenticate(credential)
-                ?.addOnCompleteListener(OnCompleteListener<Void> { task ->
-                    if (task.isSuccessful) {
-
-                        //close the old dialog
-                        dialog.dismiss()
-
-                        //open the new dialog
-                        openLocationViewDialog()
-                    } else {
-
-                        //password is incorrect
-                        toast(
-                            getString(R.string.edit_location_password_incorrect),
-                            Toast.LENGTH_LONG
-                        )
-                    }
-                })
-        }else{
-            //password is blank
-            toast(getString(R.string.password_cannot_be_blank),Toast.LENGTH_SHORT)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,6 +71,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
             }
 
             override fun onDataChange(p0: DataSnapshot) {
+                databaseRef.removeEventListener(this)
                 val t = object : GenericTypeIndicator<ArrayList<String>>() {}
 
                 // get current Item from data snap shot
@@ -144,34 +93,30 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
 
                 // get users username in family, prepare for pass down
                 var userNames: Array<String> = emptyArray()
-                val usersHashMap:HashMap<String, String> = HashMap()
+                val usersHashMap: HashMap<String, String> = HashMap()
                 p0.child("Users").children.forEach {
                     val currUserUploads = it.getValue(User::class.java) as User
 
-                    if (it.key in currFamilyMembers && it.key != currItem.itemOwnerUID){
+                    if (it.key in currFamilyMembers && it.key != currItem.itemOwnerUID) {
                         usersHashMap[currUserUploads.username] = it.key.toString()
                         userNames = userNames.plus(currUserUploads.username)
                     }
                 }
 
                 // set current item to view
-//                Picasso.get()
-//                    .load(currItem.imageURLs[0])
-//                    .placeholder(R.drawable.ic_launcher_foreground)
-//                    .into(editItemImage)
                 for (url in currItem.imageURLs) {
                     detailImageUrls.add(url)
                 }
                 val adapter = ItemEditGridAdapter(this@ItemEdit, detailImageUrls, allImageUri)
                 editImagesGrid.adapter = adapter
+                setGridViewHeight(editImagesGrid)
 
-                //set informations from database
+                //set information from database
                 findViewById<EditText>(R.id.editName).setText(currItem.itemName)
                 findViewById<EditText>(R.id.editDescription).setText(currItem.itemDescription)
                 findViewById<EditText>(R.id.editMaterial).setText(currItem.itemMaterial)
-                findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
+                findViewById<TextView>(R.id.editItemDate).text = currItem.date
                 itemLocation = currItem.itemLocation
-//                findViewById<EditText>(R.id.edit_password).setText(currItem.itemLocation)
 
                 // set position click
                 edit_location_layout.setOnClickListener { openLocationEnterPasswordDialog() }
@@ -180,14 +125,15 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                 var currItemOwner = currItem.itemOwnerUID
 
                 // set passDown dialog
-                editPassDownBtn.setOnClickListener(){
+                editPassDownBtn.setOnClickListener {
                     val mBuilder = AlertDialog.Builder(this@ItemEdit)
-                    mBuilder.setTitle(R.string.edit_pass_down_text).setItems(userNames, DialogInterface.OnClickListener { dialog, which ->
-                        currItemOwner = usersHashMap[userNames[which]].toString()
-                        findViewById<TextView>(R.id.edit_passdown_to).text = userNames[which]
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                    })
+                    mBuilder.setTitle(R.string.edit_pass_down_text)
+                        .setItems(userNames, DialogInterface.OnClickListener { dialog, which ->
+                            currItemOwner = usersHashMap[userNames[which]].toString()
+                            findViewById<TextView>(R.id.edit_passdown_to).text = userNames[which]
+                            // The 'which' argument contains the index position
+                            // of the selected item
+                        })
 
                     // Set the neutral/cancel button click listener
                     mBuilder.setNeutralButton(R.string.edit_cancel) { dialog, which ->
@@ -237,7 +183,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                             Toast.LENGTH_SHORT
                         ).show()
                         //check at least one photo is added
-                    } else if(!legalDate(editItemDate)) {
+                    } else if (!legalDate(editItemDate)) {
                         Toast.makeText(
                             this@ItemEdit,
                             getString(R.string.please_pick_date_for_item),
@@ -259,8 +205,11 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
 
                         // upload to Firebase
                         val itemPath =
-                            FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/" + "items/" + itemKey
-                        val databaseRef = FirebaseDatabase.getInstance().getReference(itemPath)
+                            FirebaseDatabaseManager.FAMILY_PATH + currFamilyId +
+                                    "/" + "items/" + itemKey
+                        val databaseRef = FirebaseDatabase.
+                            getInstance().
+                            getReference(itemPath)
 
                         databaseRef.child("").setValue(updatedItem)
 
@@ -275,7 +224,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
     /*
     process when receive the result of image selection
     */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         // Result code is RESULT_OK only if the user selects an Image
@@ -285,15 +234,15 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
 
                     // adding multiple image
                     if (data != null) {
-                        var allUris : ArrayList<Uri> = arrayListOf()
+                        var allUris: ArrayList<Uri> = arrayListOf()
 
-                        if (data.getClipData() != null) {
+                        if (data.clipData != null) {
 
                             //handle multiple images
-                            val count = data.getClipData()!!.getItemCount()
+                            val count = data.clipData!!.itemCount
 
                             for (i in 0 until count) {
-                                var uri = data.getClipData()!!.getItemAt(i).uri
+                                var uri = data.clipData!!.getItemAt(i).uri
                                 if (uri != null) {
 
                                     //add into Uri List
@@ -303,8 +252,8 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                             }
 
                             //selecting single image from album
-                        } else if (data.getData() != null) {
-                            val uri = data.getData()
+                        } else if (data.data != null) {
+                            val uri = data.data
                             if (uri != null) {
 
                                 allUris.add(uri)
@@ -319,9 +268,12 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
 
                         // Set the grid view adapter
                         editImagesGrid.adapter = adapter
-                        Log.d("ggggginitselectimg", "init")
-                    }else{
-                        Toast.makeText(this,"Error",Toast.LENGTH_LONG).show()
+
+                        //update the gridview height
+                        setGridViewHeight(editImagesGrid)
+
+                    } else {
+                        Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -345,8 +297,8 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
     /*
    remove already selected items from the list, update the view
    */
-    fun removeItem(currentIsUrl: Boolean, position:Int){
-        if (currentIsUrl){
+    fun removeItem(currentIsUrl: Boolean, position: Int) {
+        if (currentIsUrl) {
             deleteImageUrls.add(detailImageUrls[position])
             detailImageUrls.removeAt(position)
         } else {
@@ -357,13 +309,17 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
         // reset the grid view adapter
         val adapter = ItemEditGridAdapter(this, detailImageUrls, allImageUri)
         editImagesGrid.adapter = adapter
+
+        //update the grid view height
+        setGridViewHeight(editImagesGrid)
+
         Log.d("ggggginit1", "init")
 
 
     }
 
     private fun deleteStorageImages() {
-        for (deleteUrl in deleteImageUrls){
+        for (deleteUrl in deleteImageUrls) {
             // use url create reference of image to be deleted
             val imageRef = storage.getReferenceFromUrl(deleteUrl)
 
@@ -381,7 +337,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
     fun uploadToFirebase(currItem: Item) {
         val uploadPath = " "
         var numSuccess = 0
-        for (uri in allImageUri){
+        for (uri in allImageUri) {
 
             //get firebase storage reference
             val ref =
@@ -397,7 +353,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
             val scaledBitmap = CompressionUtil.scaleDown(bitmap, true)
 
             //correct the orientation of the bitmap
-            val orientedScaledBitmap = ImageRotateUtil.rotateBitmap(scaledBitmap,orientation)
+            val orientedScaledBitmap = ImageRotateUtil.rotateBitmap(scaledBitmap, orientation)
 
             //compress the image
             val data = CompressionUtil.compressImage(orientedScaledBitmap)
@@ -412,7 +368,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                         detailImageUrls.add(url.toString())
                         numSuccess += 1
 
-                        if (numSuccess == allImageUri.size){
+                        if (numSuccess == allImageUri.size) {
                             databaseRef
                                 .child(FirebaseDatabaseManager.FAMILY_PATH)
                                 .child(currFamilyId)
@@ -420,17 +376,26 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                                 .child(itemKey)
                                 .child("imageURLs")
                                 .setValue(detailImageUrls)
-                            toast(getString(R.string.upload_success) + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+                            toast(
+                                getString(R.string.upload_success) + numSuccess.toString() + "/" + allImageUri.size.toString(),
+                                Toast.LENGTH_SHORT
+                            )
                             Log.d("eeeenimgupload", detailImageUrls.toString())
                         } else {
-                            toast(getString(R.string.upload_complete) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+                            toast(
+                                getString(R.string.upload_complete) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(),
+                                Toast.LENGTH_SHORT
+                            )
                             Log.d("eeeenimg", detailImageUrls.toString())
                         }
                     }
                 }
         }
         if (allImageUri.size > 0) {
-            toast(getString(R.string.uploading) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+            toast(
+                getString(R.string.uploading) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(),
+                Toast.LENGTH_SHORT
+            )
         } else {
             toast(getString(R.string.upload_success), Toast.LENGTH_SHORT)
         }
@@ -506,4 +471,79 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
     private fun toast(msg: String, duration: Int) {
         Toast.makeText(this, msg, duration).show()
     }
+
+
+    override fun clickOnChangeLocation(newLocation: String) {
+        itemLocation = newLocation
+        openLocationViewDialog()
+    }
+
+    override fun clickOnChangeLocation() {
+        openLocationChangeDialog()
+    }
+
+
+    /*
+    Compare the password, if the password is correct, show the location view dialog
+     */
+    override fun applyPasswords(enteredPassword: String, dialog: LocationEnterPasswordDialog) {
+
+        //check emptyness of password
+        if (enteredPassword != "") {
+
+            //get user and uid
+            val user = FirebaseAuth.getInstance().currentUser
+
+            // Get auth credentials from the user for re-authentication. The example below shows
+            // email and password credentials but there are multiple possible providers,
+            // such as GoogleAuthProvider or FacebookAuthProvider.
+            val credential: AuthCredential = EmailAuthProvider
+                .getCredential(
+                    EmailPathSwitch.pathToEmail(currItem.itemOwnerUID),
+                    enteredPassword
+                )
+
+
+            //use firebase to re authenticate the password
+            user?.reauthenticate(credential)
+                ?.addOnCompleteListener(OnCompleteListener<Void> { task ->
+                    if (task.isSuccessful) {
+
+                        //close the old dialog
+                        dialog.dismiss()
+
+                        //open the new dialog
+                        openLocationViewDialog()
+                    } else {
+
+                        //password is incorrect
+                        toast(
+                            getString(R.string.edit_location_password_incorrect),
+                            Toast.LENGTH_LONG
+                        )
+                    }
+                })
+        } else {
+            //password is blank
+            toast(getString(R.string.password_cannot_be_blank), Toast.LENGTH_SHORT)
+        }
+    }
+
+    /*get the screen pixel size and calculated the image size*/
+    private fun getScreenWidth(): Int {
+        val display = this.windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+        return size.x
+    }
+
+    /*change the height of gridview according to the number of images
+    */
+    private fun setGridViewHeight(gridView: GridView) {
+        val columnsNumber = (ceil(gridView.adapter.count * 1.0 / 3)).toInt()
+        val cloumnHeight = ceil(getScreenWidth() * 1.0 / 3).toInt()
+        gridView.layoutParams.height = columnsNumber * cloumnHeight
+
+    }
+
 }

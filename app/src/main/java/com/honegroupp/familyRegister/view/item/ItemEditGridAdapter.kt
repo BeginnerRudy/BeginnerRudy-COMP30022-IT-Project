@@ -35,12 +35,12 @@ class ItemEditGridAdapter(
         var view = inflater.inflate(R.layout.upload_image,null)
 
         //get the width of image
-        var imageWidth = getImageWidth()
+//        var imageWidth = getImageWidth()
 
         //set imageView size
-        val imageView = view.findViewById<ImageView>(R.id.upload_image)
-        val linearLayout = RelativeLayout.LayoutParams(imageWidth, imageWidth)
-        imageView.layoutParams = linearLayout
+        val imageView = view.findViewById<GridViewItem>(R.id.upload_image)
+//        val linearLayout = RelativeLayout.LayoutParams(imageWidth, imageWidth)
+//        imageView.layoutParams = linearLayout
 
         when {
             isAddButton(position) -> {
@@ -51,13 +51,15 @@ class ItemEditGridAdapter(
                 imageView.setImageResource(R.drawable.add_thin_grey_512)
                 imageView.setPadding(100,100,100,100)
 
+
             }
             currentIsUrl -> //show the image
-                Picasso.get()
-                    .load(detailImageUrls[position])
-                    .placeholder(R.mipmap.loading_jewellery)
-                    .resize(imageWidth,imageWidth)
-                    .into(imageView)
+                Picasso.get().
+                    load(detailImageUrls[position]).
+                    placeholder(R.mipmap.loading_jewellery).
+                    resize(1000,1000).
+                    centerCrop().
+                    into(imageView)
             else -> {
 
                 //get the orientation and make sure image are at its original orientation
@@ -68,7 +70,7 @@ class ItemEditGridAdapter(
                 //load the image the the view
                 Picasso.get().
                     load(uri).
-                    resize(imageWidth, imageWidth).
+                    resize(1000,1000).
                     centerCrop().
                     rotate(orientation).
                     into(imageView)
