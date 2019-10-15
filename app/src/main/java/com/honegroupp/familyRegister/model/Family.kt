@@ -297,19 +297,6 @@ data class Family(
             )
         }
 
-        private fun sortItems(sortOrder: String, items: ArrayList<Item>) {
-            when (sortOrder) {
-                ContainerActivity.NAME_ASCENDING -> //sort by name ascending
-                    items.sortBy { it.itemName }
-                ContainerActivity.NAME_DESCENDING -> //sort by name descending
-                    items.sortByDescending { it.itemName }
-                ContainerActivity.TIME_ASCENDING -> //sort by time ascending
-                    items.sortBy { it.date }
-                ContainerActivity.TIME_DESCENDING -> //sort by time descending
-                    items.sortByDescending { it.date }
-            }
-        }
-
         /**
          * Delete item from family
          * */
@@ -536,39 +523,6 @@ data class Family(
         }
 
         /**
-         * This method is responsible for updating the UI layer after retrieving the data from
-         * the Firebase Database.
-         *
-         * */
-
-        private fun updateUI(
-            adapter: ContainerAdapter,
-            items: ArrayList<Item>,
-            mActivity: ContainerActivity,
-            progressBarId: Int,
-            emptyTextViewId: Int
-        ) {
-            // notify the adapter to update
-            adapter.notifyDataSetChanged()
-
-            // update the UI according to the state of items, whether it is empty.
-            if (items.isEmpty()) {
-                // Make the progress bar invisible
-                mActivity.findViewById<ProgressBar>(progressBarId).visibility =
-                    View.INVISIBLE
-
-                mActivity.findViewById<TextView>(emptyTextViewId).visibility =
-                    View.VISIBLE
-            } else {
-                // Make the progress bar invisible
-                mActivity.findViewById<ProgressBar>(progressBarId).visibility =
-                    View.INVISIBLE
-                mActivity.findViewById<TextView>(emptyTextViewId).visibility =
-                    View.INVISIBLE
-            }
-        }
-
-        /**
          * This method is responsible for showing all the family member in the user's family
          *
          * */
@@ -686,5 +640,56 @@ data class Family(
             FirebaseDatabase.getInstance().getReference(familyNamePath)
                 .setValue(Hash.applyHash(newFamilyPassword))
         }
+
+        /**
+         * This method is responsible for sort the items according the the sortorder
+         *
+         * */
+        private fun sortItems(sortOrder: String, items: ArrayList<Item>) {
+            when (sortOrder) {
+                ContainerActivity.NAME_ASCENDING -> //sort by name ascending
+                    items.sortBy { it.itemName }
+                ContainerActivity.NAME_DESCENDING -> //sort by name descending
+                    items.sortByDescending { it.itemName }
+                ContainerActivity.TIME_ASCENDING -> //sort by time ascending
+                    items.sortBy { it.date }
+                ContainerActivity.TIME_DESCENDING -> //sort by time descending
+                    items.sortByDescending { it.date }
+            }
+        }
+
+        /**
+         * This method is responsible for updating the UI layer after retrieving the data from
+         * the Firebase Database.
+         *
+         * */
+
+        private fun updateUI(
+            adapter: ContainerAdapter,
+            items: ArrayList<Item>,
+            mActivity: ContainerActivity,
+            progressBarId: Int,
+            emptyTextViewId: Int
+        ) {
+            // notify the adapter to update
+            adapter.notifyDataSetChanged()
+
+            // update the UI according to the state of items, whether it is empty.
+            if (items.isEmpty()) {
+                // Make the progress bar invisible
+                mActivity.findViewById<ProgressBar>(progressBarId).visibility =
+                    View.INVISIBLE
+
+                mActivity.findViewById<TextView>(emptyTextViewId).visibility =
+                    View.VISIBLE
+            } else {
+                // Make the progress bar invisible
+                mActivity.findViewById<ProgressBar>(progressBarId).visibility =
+                    View.INVISIBLE
+                mActivity.findViewById<TextView>(emptyTextViewId).visibility =
+                    View.INVISIBLE
+            }
+        }
+
     }
 }
