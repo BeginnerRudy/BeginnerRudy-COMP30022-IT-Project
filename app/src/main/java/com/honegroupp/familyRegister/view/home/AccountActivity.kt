@@ -50,7 +50,7 @@ class AccountActivity : AppCompatActivity() {
                 }
         }
 
-        name.setOnClickListener{
+        change_user_photo.setOnClickListener{
             val intent = Intent(this, UserDetailActivity::class.java)
             intent.putExtra("UserID", uid)
             startActivity(intent)

@@ -28,7 +28,6 @@ import com.honegroupp.familyRegister.view.item.DetailSlide
 
 import com.honegroupp.familyRegister.view.search.SearchActivity
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.user_activity.*
 
 
 @Suppress("DEPRECATION")
