@@ -128,5 +128,6 @@
     <string name="username">用户名称</string>
     <string name="please_enter_name">请输入名称</string>
     <string name="owner">家主</string>
+    <string name="change_user_photo">修改用户名称和头像</string>
 
 </resources>

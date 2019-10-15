@@ -9,10 +9,8 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -20,17 +18,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
-import com.honegroupp.familyRegister.backend.FirebaseStorageManager
 import com.honegroupp.familyRegister.backend.FirebaseStorageManager.Companion.uploadUserImageToFirebase
-import com.honegroupp.familyRegister.controller.AuthenticationController
 import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.utility.FilePathUtil
 import com.honegroupp.familyRegister.utility.ImageRotateUtil
-import com.honegroupp.familyRegister.view.family.FamilyActivity
-import com.honegroupp.familyRegister.view.itemList.ItemGridAdapter
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_upload_page.*
-import kotlinx.android.synthetic.main.nav_header_main.*
 import kotlinx.android.synthetic.main.user_edit_activity.*
 
 
@@ -68,7 +60,6 @@ class UserEditActivity : AppCompatActivity() {
                 .into(imageView)
         }
 
-
         choose_image.setOnClickListener {
             if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
 
@@ -100,7 +91,7 @@ class UserEditActivity : AppCompatActivity() {
     /*
     use the phone API to get single images from the album
     */
-    fun selectSingleImageInAlbum() {
+    private fun selectSingleImageInAlbum() {
 
         //reset the image url list
         val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -133,10 +124,18 @@ class UserEditActivity : AppCompatActivity() {
                         //Find the image
                         val imageView = findViewById<ImageView>(R.id.user_image_edit)
 
-                        //load the image the the view,
+                        //load the image the the view, get the orientation
                         val path = FilePathUtil.getFilePathFromContentUri(uri!!,this)
-                        val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
-                        Picasso.get().load(uri).resize(330, 310).centerCrop().rotate(orientation).into(imageView)
+                        val orientation = ImageRotateUtil.
+                            getCameraPhotoOrientation(path!!).toFloat()
+
+                        //load the image
+                        Picasso.get().
+                            load(uri).
+                            fit().
+                            centerCrop().
+                            rotate(orientation).
+                            into(imageView)
 
                         this.uri = uri
 
@@ -154,7 +153,9 @@ class UserEditActivity : AppCompatActivity() {
             READ_PERMISSION_CODE ->{
                 if(grantResults.isNotEmpty()&& grantResults[0] == PackageManager.PERMISSION_GRANTED){
 
-                    Toast.makeText(this,getString(R.string.get_read_permission),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,
+                        getString(R.string.get_read_permission),
+                        Toast.LENGTH_SHORT).show()
                     selectSingleImageInAlbum()
                 }else{
                     Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show()
@@ -187,8 +188,6 @@ class UserEditActivity : AppCompatActivity() {
                 // Use the uid to construct the user's uiq path on database
                 databaseRef.child(uid).setValue(user)
                 this@UserEditActivity.finish()
-
-
             }
         })
 
