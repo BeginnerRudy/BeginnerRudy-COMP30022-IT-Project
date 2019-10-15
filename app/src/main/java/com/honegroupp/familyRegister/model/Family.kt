@@ -2,24 +2,22 @@ package com.honegroupp.familyRegister.model
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.utility.Hash
-import com.honegroupp.familyRegister.view.home.ContainerActivity
 import com.honegroupp.familyRegister.view.home.ContainerAdapter
-import com.honegroupp.familyRegister.view.item.DetailSlide
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 
@@ -110,6 +108,7 @@ data class Family(
         val intent = Intent(mActivity, HomeActivity::class.java)
         intent.putExtra("UserID", uid)
         intent.putExtra("UserName", username)
+
         mActivity.startActivity(intent)
     }
 
@@ -532,6 +531,8 @@ data class Family(
                 // notify the adapter to update
                 showTabAdapter.notifyDataSetChanged()
 
+                sortItem(mActivity, showTabAdapter, items)
+
                 if (items.isEmpty()) {
                     // Make the progress bar invisible
                     mActivity.findViewById<ProgressBar>(R.id.all_progress_circular).visibility =
@@ -546,6 +547,49 @@ data class Family(
                     mActivity.findViewById<TextView>(R.id.all_text_view_empty_category).visibility =
                         View.INVISIBLE
                 }
+            }
+        }
+
+        /**
+         * function for sort items
+         * */
+        private fun sortItem(mActivity: HomeActivity,adapter: ContainerAdapter, items : ArrayList<Item>){
+            val drawer_layout = mActivity.findViewById<DrawerLayout>(R.id.drawer_layout)
+            val naviView = mActivity.findViewById<NavigationView>(R.id.navi_all_sort_view)
+            naviView.menu.findItem(R.id.sort_name_asc).setOnMenuItemClickListener {
+                //sort logic
+                adapter.items.sortBy { it.itemName }
+                //update sort order
+                mActivity.sortOrder = "name_asc"
+                adapter.notifyDataSetChanged()
+                true
+            }
+            naviView.menu.findItem(R.id.sort_name_desc).setOnMenuItemClickListener {
+                //sort logic
+                adapter.items.sortByDescending { it.itemName }
+                //update sort order
+                mActivity.sortOrder = "name_asc"
+                // update the UI layer
+                adapter.notifyDataSetChanged()
+                true
+            }
+            naviView.menu.findItem(R.id.sort_time_asc).setOnMenuItemClickListener {
+                //sort logic
+                adapter.items.sortBy { it.date }
+                //update sort order
+                mActivity.sortOrder = "name_asc"
+                // update the UI layer
+                adapter.notifyDataSetChanged()
+                true
+            }
+            naviView.menu.findItem(R.id.sort_time_desc).setOnMenuItemClickListener {
+                //sort logic
+                adapter.items.sortByDescending { it.date }
+                //update sort order
+                mActivity.sortOrder = "name_asc"
+                // update the UI layer
+                adapter.notifyDataSetChanged()
+                true
             }
         }
     }

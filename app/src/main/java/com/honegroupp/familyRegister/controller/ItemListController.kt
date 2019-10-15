@@ -17,6 +17,7 @@ import com.honegroupp.familyRegister.view.home.ContainerActivity
 import com.honegroupp.familyRegister.view.home.ContainerAdapter
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 import kotlinx.android.synthetic.main.activity_item_list.*
+import java.nio.ByteOrder
 
 class ItemListController {
     companion object {
@@ -31,6 +32,7 @@ class ItemListController {
             uid: String,
             categoryName: String,
             navi_sort_view: NavigationView,
+            sortOrder: String,
             mActivity: ItemListActivity
         ) {
 
@@ -47,6 +49,10 @@ class ItemListController {
             val itemListAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.CATEGORY)
             recyclerView.adapter = itemListAdapter
             itemListAdapter.listener = mActivity
+
+            //update the sort logic
+            Toast.makeText(mActivity, sortOrder, Toast.LENGTH_SHORT).show()
+            updateSort(itemListAdapter, sortOrder, mActivity)
 
             // set the sorter logic
             sortItem(mActivity, itemListAdapter, navi_sort_view)
@@ -107,6 +113,26 @@ class ItemListController {
             }
 
         }
+
+        private fun updateSort(adapter: ContainerAdapter, sortOrder: String, mActivity: ItemListActivity){
+            if (sortOrder == "name_asc"){
+                //sort logic
+                adapter.items.sortBy { it.itemName }
+            }
+            else if (sortOrder == "name_desc") {
+                //sort logic
+                adapter.items.sortByDescending { it.itemName }
+            }
+            else if (sortOrder == "time_asc") {
+                //sort logic
+                adapter.items.sortBy { it.date }
+            }
+            else if (sortOrder == "time_desc"){
+                //sort logic
+                adapter.items.sortByDescending { it.date }
+            }
+        }
+
 
         fun updateRecyclerView(adapter: ContainerAdapter, drawer_sort_layout:DrawerLayout){
             // hide the item

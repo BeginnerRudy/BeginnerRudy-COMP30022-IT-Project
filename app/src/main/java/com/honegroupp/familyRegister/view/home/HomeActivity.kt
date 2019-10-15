@@ -24,6 +24,7 @@ import android.widget.TextView
 import com.honegroupp.familyRegister.view.item.DetailSlide
 
 import com.honegroupp.familyRegister.view.search.SearchActivity
+import kotlinx.android.synthetic.main.activity_item_list.*
 
 
 @Suppress("DEPRECATION")
@@ -93,6 +94,11 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
             drawer_layout.openDrawer(GravityCompat.START)
         }
 
+        //click sort button
+        btn_all_sort.setOnClickListener {
+            drawer_layout.openDrawer(GravityCompat.END)
+        }
+
         //display User Name
         val headerView = nav_view.getHeaderView(0)
         val navUsername = headerView.findViewById(R.id.nav_userName) as TextView
@@ -115,7 +121,6 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
             toast("Clicked view family")
             true
         }
-
 
         // Log out
         AuthenticationController.logout(btn_log_out, this)
