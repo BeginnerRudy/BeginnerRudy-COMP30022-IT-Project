@@ -52,12 +52,12 @@ class ItemListController {
         /**
          * This method is responsible for delete the items in the given category
          * */
-        fun deleteItems(uid: String, categoryName: String, itemId: String) {
-            Family.deleteItem(uid, categoryName, itemId)
+        fun deleteItems(uid: String, categoryName: String, itemId: String, mActivity: AppCompatActivity) {
+            Family.deleteItem(uid, categoryName, itemId, mActivity)
         }
 
         //activity adapter
-        fun sortItem(
+        private fun sortItem(
             mActivity: ItemListActivity,
             adapter: ContainerAdapter
         ) {
