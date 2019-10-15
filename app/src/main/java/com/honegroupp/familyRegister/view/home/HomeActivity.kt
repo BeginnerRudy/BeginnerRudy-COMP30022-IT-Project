@@ -39,6 +39,7 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
     private lateinit var viewPager: ViewPager
     lateinit var userID:String
 
+
     override fun onItemClick(position: Int) {
         if (viewPager.currentItem == 0){
             categoryName = DetailSlide.ALL_PAGE_SIGNAL.toString()
@@ -52,7 +53,8 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         intent.putExtra("FamilyId", familyId)
         intent.putExtra("PositionList", position.toString())
         intent.putExtra("CategoryNameList", categoryName)
-        intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
+        // TODO delete
+//        intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
         startActivity(intent)
     }
 

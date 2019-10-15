@@ -284,8 +284,11 @@ data class Family(
                 } else if (currItem.itemOwnerUID == mActivity.uid) {
                     items.add(currItem)
                 }
-
             }
+            // Make the progress bar invisible
+
+            // sort the current item according to current app's sort order
+            sortItems(mActivity.sortOrder, items)
 
             // notify the adapter to update
             itemListAdapter.notifyDataSetChanged()
@@ -297,12 +300,24 @@ data class Family(
                 mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
                     View.VISIBLE
             } else {
-
                 // Make the progress bar invisible
                 mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
                     View.INVISIBLE
                 mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
                     View.INVISIBLE
+            }
+        }
+
+        private fun sortItems(sortOrder: String, items: ArrayList<Item>) {
+            when (sortOrder) {
+                ContainerActivity.NAME_ASCENDING -> //sort by name ascending
+                    items.sortBy { it.itemName }
+                ContainerActivity.NAME_DESCENDING -> //sort by name descending
+                    items.sortByDescending { it.itemName }
+                ContainerActivity.TIME_ASCENDING -> //sort by time ascending
+                    items.sortBy { it.date }
+                ContainerActivity.TIME_DESCENDING -> //sort by time descending
+                    items.sortByDescending { it.date }
             }
         }
 
@@ -457,6 +472,8 @@ data class Family(
                     }
                 }
 
+                // sort the current item according to current app's sort order
+                sortItems(mActivity.sortOrder, items)
 
                 // notify the adapter to update
                 allTabAdapter.notifyDataSetChanged()
@@ -515,6 +532,9 @@ data class Family(
                         .child("items")
                         .children
 
+                // sort the current item according to current app's sort order
+                sortItems(mActivity.sortOrder, items)
+
                 // clear items once retrieve item from the database
                 items.clear()
 
@@ -524,6 +544,7 @@ data class Family(
                     item.key = it.key.toString()
                     items.add(item)
                 }
+
 
                 // notify the adapter to update
                 showTabAdapter.notifyDataSetChanged()
@@ -582,8 +603,9 @@ data class Family(
             val familyNameView: TextView = mActivity.findViewById(R.id.family_name)
 
             // if the user id is the same as the family id then it is the owner of the family, he/she has the right to modify the family
-            if (uid == familyId){
-                mActivity.findViewById<ImageButton>(R.id.btn_family_setting).visibility = View.VISIBLE
+            if (uid == familyId) {
+                mActivity.findViewById<ImageButton>(R.id.btn_family_setting).visibility =
+                    View.VISIBLE
             }
 
             familyIdView.text =
