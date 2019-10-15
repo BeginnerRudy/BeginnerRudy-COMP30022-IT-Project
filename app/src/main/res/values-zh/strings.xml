@@ -100,8 +100,6 @@
     <string name="family_members">家庭成员</string>
     <string name="change_family_name">更改家庭名称</string>
     <string name="change_family_password">更改家庭密码</string>
-
-
     <string name="sort_name_asc">按物品名称排列(正序)</string>
     <string name="sort_name_desc">按物品名称正序排列(倒序)</string>
     <string name="sort_time_asc">按时间排列(正序)</string>
@@ -128,5 +126,6 @@
     <string name="username">用户名称</string>
     <string name="please_enter_name">请输入名称</string>
     <string name="owner">家主</string>
+    <string name="change_user_photo">修改用户名称和头像</string>
 
 </resources>
