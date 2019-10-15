@@ -226,6 +226,10 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
                         .into(imageView)
                 }
 
+                imageView.setOnClickListener{
+
+                }
+
 
 
 

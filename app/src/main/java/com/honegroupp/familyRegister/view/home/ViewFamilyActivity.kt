@@ -1,9 +1,10 @@
 package com.honegroupp.familyRegister.view.home
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.MenuItem
-import android.widget.ImageButton
 import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.honegroupp.familyRegister.R
@@ -30,8 +31,14 @@ class ViewFamilyActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListene
         // display all family member and family info
         ViewFamilyController.showAllMembersAndInfo(uid, this)
 
+        //show menu when click the button
+        val familyEdit = findViewById<TextView>(R.id.btn_family_setting)
 
-        findViewById<ImageButton>(R.id.btn_family_setting).setOnClickListener {
+        //right align
+        familyEdit.layoutParams = Toolbar.LayoutParams(Gravity.RIGHT)
+
+        //click familyEdit button
+        familyEdit.setOnClickListener {
             val popupMenu = PopupMenu(this, it)
             popupMenu.inflate(R.menu.family_menu)
 
@@ -57,7 +64,6 @@ class ViewFamilyActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListene
                 return true
             }
         }
-
         return false
     }
 
