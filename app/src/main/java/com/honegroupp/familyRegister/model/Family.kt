@@ -593,33 +593,27 @@ data class Family(
                     mActivity.findViewById(R.id.family_name)
 
             // if the user id is the same as the family id then it is the owner of the family, he/she has the right to modify the family
-            if (uid == familyId) {
-                mActivity.findViewById<ImageButton>(R.id.btn_family_setting)
-                    .visibility =
-                        View.VISIBLE
+            if (uid == familyId){
+                mActivity.findViewById<TextView>(R.id.btn_family_setting).visibility = View.VISIBLE
+
             }
 
             familyIdView.text =
-                    "${mActivity.getString(R.string.family_id_show)}  ${EmailPathSwitch.pathToEmail(
-                        familyId
-                    )}"
-            familyNameView.text =
-                    "${mActivity.getString(R.string.family_name_show)}  $familyName"
+                "${mActivity.getString(R.string.family_id_show)}  ${EmailPathSwitch.pathToEmail(
+                    familyId
+                )}"
+            familyNameView.text = "${mActivity.getString(R.string.family_name_show)}  $familyName"
 
             // retrieve user's uids in current family
-            val path =
-                    "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/members/"
+            val path = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/members/"
 
-            val currUserUids =
-                    dataSnapshot.child(path).value as ArrayList<String>
+            val currUserUids = dataSnapshot.child(path).value as ArrayList<String>
 
             // retrieve user and add it to a list
             users.clear()
             for (uid in currUserUids) {
                 val currUser =
-                        dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(
-                            uid
-                        ).getValue(User::class.java) as User
+                    dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).getValue(User::class.java) as User
                 users.add(currUser)
             }
 
@@ -647,13 +641,10 @@ data class Family(
             newFamilyName: String,
             dataSnapshot: DataSnapshot
         ) {
-            val familyId =
-                    FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
-            val familyNamePath =
-                    "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/familyName"
+            val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+            val familyNamePath = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/familyName"
 
-            FirebaseDatabase.getInstance().getReference(familyNamePath)
-                .setValue(newFamilyName)
+            FirebaseDatabase.getInstance().getReference(familyNamePath).setValue(newFamilyName)
         }
 
 
@@ -677,10 +668,8 @@ data class Family(
             newFamilyPassword: String,
             dataSnapshot: DataSnapshot
         ) {
-            val familyId =
-                    FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
-            val familyNamePath =
-                    "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/password"
+            val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+            val familyNamePath = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/password"
 
             FirebaseDatabase.getInstance().getReference(familyNamePath)
                 .setValue(Hash.applyHash(newFamilyPassword))
@@ -723,16 +712,16 @@ data class Family(
             if (items.isEmpty()) {
                 // Make the progress bar invisible
                 mActivity.findViewById<ProgressBar>(progressBarId).visibility =
-                        View.INVISIBLE
+                    View.INVISIBLE
 
                 mActivity.findViewById<TextView>(emptyTextViewId).visibility =
-                        View.VISIBLE
+                    View.VISIBLE
             } else {
                 // Make the progress bar invisible
                 mActivity.findViewById<ProgressBar>(progressBarId).visibility =
-                        View.INVISIBLE
+                    View.INVISIBLE
                 mActivity.findViewById<TextView>(emptyTextViewId).visibility =
-                        View.INVISIBLE
+                    View.INVISIBLE
             }
         }
 

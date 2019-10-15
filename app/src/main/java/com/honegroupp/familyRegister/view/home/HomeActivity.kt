@@ -227,10 +227,6 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
                         .centerCrop()
                         .into(imageView)
                 }
-
-
-
-
             }
         })
     }
