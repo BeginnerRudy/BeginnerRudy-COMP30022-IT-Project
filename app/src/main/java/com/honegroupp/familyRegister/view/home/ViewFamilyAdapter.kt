@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.User
+import com.squareup.picasso.Picasso
 
 /**
  * This class is responsible for the adapter of the recycler in the ViewFamilyActivity
@@ -34,6 +35,14 @@ class ViewFamilyAdapter(
             holder.isOwnerText.visibility = View.INVISIBLE
         }
 
+        if (users[position].imageUrl != ""){
+            Picasso.get()
+                .load(users[position].imageUrl)
+                .placeholder(R.mipmap.loading_jewellery)
+                .fit()
+                .centerCrop()
+                .into(holder.memberImage)
+        }
         holder.memberName.visibility = View.VISIBLE
         holder.memberName.text = currUser.username
     }
@@ -45,6 +54,7 @@ class ViewFamilyAdapter(
     }
 
     inner class ViewHolder(viewItem: View) : RecyclerView.ViewHolder(viewItem) {
+        val memberImage: ImageView = viewItem.findViewById(R.id.member_image)
         val memberName: TextView = viewItem.findViewById(R.id.member_name)
         val ownerStar: ImageView = viewItem.findViewById(R.id.owner_star)
         val isOwnerText: TextView = viewItem.findViewById(R.id.is_owner)
