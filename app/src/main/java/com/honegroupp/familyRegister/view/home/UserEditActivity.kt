@@ -23,7 +23,7 @@ import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.utility.FilePathUtil
 import com.honegroupp.familyRegister.utility.ImageRotateUtil
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.user_edit_activity.*
+import kotlinx.android.synthetic.main.activity_user_edit.*
 
 
 class UserEditActivity : AppCompatActivity() {
@@ -37,7 +37,7 @@ class UserEditActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.user_edit_activity)
+        setContentView(R.layout.activity_user_edit)
 
         //get the uid from intent
         uid = intent.getStringExtra("UserID")

@@ -4,12 +4,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
+import androidx.appcompat.widget.Toolbar
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.User
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.user_activity.*
+import kotlinx.android.synthetic.main.activity_user.*
 
 
 class UserDetailActivity : AppCompatActivity() {
@@ -17,7 +18,15 @@ class UserDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.user_activity)
+        setContentView(R.layout.activity_user)
+
+        // Configure the toolbar setting
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.title = getString(R.string.change_user_photo)
+        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_white_24dp)
+        toolbar.setNavigationOnClickListener{
+            finish()
+        }
 
         //get the uid from intent
         val uid = intent.getStringExtra("UserID")
