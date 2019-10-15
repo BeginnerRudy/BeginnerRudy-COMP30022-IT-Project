@@ -61,6 +61,10 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        // Press  key to navigate to navigation drawer
+        btn_home_sort.setOnClickListener {
+            drawer_layout.openDrawer(GravityCompat.END)
+        }
 
         //get User ID
         userID = intent.getStringExtra("UserID")

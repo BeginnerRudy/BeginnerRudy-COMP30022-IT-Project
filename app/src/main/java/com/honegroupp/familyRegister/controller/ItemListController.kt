@@ -44,7 +44,7 @@ class ItemListController {
             itemListAdapter.listener = mActivity
 
             // set the sorter logic
-            sortItem(mActivity, itemListAdapter, navi_sort_view, mActivity.sortOrder)
+            sortItem(mActivity, itemListAdapter, navi_sort_view)
 
             // show the items
             Family.showItems(uid, items, itemListAdapter, categoryName, mActivity)
@@ -61,8 +61,7 @@ class ItemListController {
         fun sortItem(
             mActivity: ItemListActivity,
             adapter: ContainerAdapter,
-            navi_sort_view: NavigationView,
-            sortOrder: String
+            navi_sort_view: NavigationView
         ) {
             val drawerSortLayout = mActivity.findViewById<DrawerLayout>(R.id.drawer_sort_layout)
             navi_sort_view.menu.findItem(R.id.sort_name_asc).setOnMenuItemClickListener {

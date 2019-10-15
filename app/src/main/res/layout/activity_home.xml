@@ -10,11 +10,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_home_sort"
+            android:layout_width="317dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:clickable="true"
+            app:backgroundTint="#03A9F4"
+            android:tint="@color/fui_bgGoogle"
+            app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:backgroundTint="#03A9F4"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        </androidx.viewpager.widget.ViewPager>
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -48,6 +62,7 @@
                 app:tabMode="fixed" />
 
         </com.google.android.material.appbar.AppBarLayout>
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -82,5 +97,14 @@
 
         </RelativeLayout>
     </com.google.android.material.navigation.NavigationView>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navi_home_sort_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_toStartOf="@+id/btn_home_sort"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/sort_menu"></com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

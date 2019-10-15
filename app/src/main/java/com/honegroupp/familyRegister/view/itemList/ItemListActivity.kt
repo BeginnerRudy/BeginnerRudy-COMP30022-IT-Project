@@ -23,7 +23,7 @@ class ItemListActivity : ContainerActivity() {
         ItemListController.addItem(uid, categoryName, this)
 
         // show items in the category logic
-        ItemListController.showItems(uid, categoryName, navi_sort_view, sortOrder, this)
+        ItemListController.showItems(uid, categoryName, navi_sort_view, this)
 
         //jump to search activity
         btn_search.setOnClickListener {
