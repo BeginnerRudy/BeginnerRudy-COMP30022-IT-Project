@@ -17,7 +17,7 @@ import com.honegroupp.familyRegister.utility.FilePathUtil
 
 
 class ItemEditGridAdapter(
-    private val context: ItemEdit,
+    private val context: ItemEditActivity,
     private var detailImageUrls: ArrayList<String>,
     private val allUris: ArrayList<Uri>
 ) : BaseAdapter() {

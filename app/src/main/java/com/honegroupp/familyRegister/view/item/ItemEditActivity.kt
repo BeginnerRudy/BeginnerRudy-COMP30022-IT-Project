@@ -38,7 +38,7 @@ import kotlin.collections.ArrayList
 import kotlin.math.ceil
 
 
-class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerListener,
+class ItemEditActivity : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerListener,
     LocationViewDialog.OnChangeClickListener, LocationChangeDialog.OnChangeConfirmClickListener {
 
     val GALLERY_REQUEST_CODE = 123
@@ -107,7 +107,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                 for (url in currItem.imageURLs) {
                     detailImageUrls.add(url)
                 }
-                val adapter = ItemEditGridAdapter(this@ItemEdit, detailImageUrls, allImageUri)
+                val adapter = ItemEditGridAdapter(this@ItemEditActivity, detailImageUrls, allImageUri)
                 editImagesGrid.adapter = adapter
                 setGridViewHeight(editImagesGrid)
 
@@ -126,7 +126,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
 
                 // set passDown dialog
                 editPassDownBtn.setOnClickListener {
-                    val mBuilder = AlertDialog.Builder(this@ItemEdit)
+                    val mBuilder = AlertDialog.Builder(this@ItemEditActivity)
                     mBuilder.setTitle(R.string.edit_pass_down_text)
                         .setItems(userNames, DialogInterface.OnClickListener { dialog, which ->
                             currItemOwner = usersHashMap[userNames[which]].toString()
@@ -156,7 +156,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
 
                 // Create an ArrayAdapter using the string array and a default spinner layout
                 ArrayAdapter.createFromResource(
-                    this@ItemEdit,
+                    this@ItemEditActivity,
                     R.array.privacy_options,
                     android.R.layout.simple_spinner_item
                 ).also { adapter ->
@@ -178,14 +178,14 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                     // need to check item name is not empty
                     if (editName.text.toString() == "") {
                         Toast.makeText(
-                            this@ItemEdit,
+                            this@ItemEditActivity,
                             getString(R.string.item_name_should_not_leave_blank),
                             Toast.LENGTH_SHORT
                         ).show()
                         //check at least one photo is added
                     } else if (!legalDate(editItemDate)) {
                         Toast.makeText(
-                            this@ItemEdit,
+                            this@ItemEditActivity,
                             getString(R.string.please_pick_date_for_item),
                             Toast.LENGTH_SHORT
                         ).show()
@@ -214,7 +214,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                         databaseRef.child("").setValue(updatedItem)
 
                         // Go back to the previous activity
-                        this@ItemEdit.finish()
+                        this@ItemEditActivity.finish()
                     }
                 }
             }

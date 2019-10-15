@@ -70,7 +70,7 @@ class DetailSliderAdapter(
 
         val slideToolbar =
             view.findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.detial_collapsing_toolbar)
-        slideToolbar.setTitle(currItemUploads.itemName)
+        slideToolbar.title = currItemUploads.itemName
 
         // show item description
         slideDescription.setText(currItemUploads.itemDescription)
