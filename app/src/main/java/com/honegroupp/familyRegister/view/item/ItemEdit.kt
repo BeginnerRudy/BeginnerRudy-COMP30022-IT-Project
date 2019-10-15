@@ -41,7 +41,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
     LocationViewDialog.OnChangeClickListener, LocationChangeDialog.OnChangeConfirmClickListener {
 
     val GALLERY_REQUEST_CODE = 123
-    var itemLocation = "Bedside ddtable first drawer"
+    var itemLocation = ""
     private var allImageUri : ArrayList<Uri> = ArrayList()
     private var detailImageUrls : ArrayList<String> = ArrayList()
     private var deleteImageUrls : ArrayList<String> = ArrayList()
@@ -54,7 +54,6 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
 
     override fun clickOnChangeLocation(newLocation: String) {
         itemLocation = newLocation
-        toast(itemLocation, Toast.LENGTH_SHORT)
         openLocationViewDialog()
     }
 
@@ -165,11 +164,14 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                 }
                 val adapter = ItemEditGridAdapter(this@ItemEdit, detailImageUrls, allImageUri)
                 editImagesGrid.adapter = adapter
-                Log.d("ggggginitdatalis", "init")
+
+                //set informations from database
                 findViewById<EditText>(R.id.editName).setText(currItem.itemName)
                 findViewById<EditText>(R.id.editDescription).setText(currItem.itemDescription)
                 findViewById<EditText>(R.id.editMaterial).setText(currItem.itemMaterial)
                 findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
+                itemLocation = currItem.itemLocation
+//                findViewById<EditText>(R.id.edit_password).setText(currItem.itemLocation)
 
                 // set position click
                 edit_location_layout.setOnClickListener { openLocationEnterPasswordDialog() }
@@ -247,6 +249,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                             itemName = editName.text.toString(),
                             itemDescription = editDescription.text.toString(),
                             itemMaterial = editMaterial.text.toString(),
+                            itemLocation = itemLocation,
                             itemOwnerUID = currItemOwner,
                             imageURLs = detailImageUrls,
                             isPublic = spinner.selectedItemPosition == 0,

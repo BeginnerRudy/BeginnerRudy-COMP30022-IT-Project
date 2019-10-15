@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
@@ -92,7 +91,6 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
             true
         }
 
-
         // Press Hamburger key to navigate to navigation drawer
         toolbar.setNavigationOnClickListener {
             drawer_layout.openDrawer(GravityCompat.START)
@@ -138,6 +136,16 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         }
         // Log out
         AuthenticationController.logout(btn_log_out, this)
+
+        //click can see user detail (image and info)
+        val headerView = nav_view.getHeaderView(0)
+        val imageView = headerView.findViewById<ImageView>(R.id.nav_imageView)
+        imageView.setOnClickListener{
+            val intent = Intent(this, UserDetailActivity::class.java)
+            intent.putExtra("UserID", uid)
+            startActivity(intent)
+
+        }
 
     }
 
@@ -225,14 +233,6 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
                         .centerCrop()
                         .into(imageView)
                 }
-
-                imageView.setOnClickListener{
-
-                }
-
-
-
-
             }
         })
     }
