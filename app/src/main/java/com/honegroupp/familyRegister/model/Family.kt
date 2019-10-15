@@ -49,7 +49,14 @@ data class Family(
     var items: HashMap<String, Item> = HashMap()
 ) {
     /*This constructor has no parameter, which is used to create CategoryUpload while retrieve data from database*/
-    constructor() : this("", "", "", ArrayList(), ArrayList(), HashMap<String, Item>())
+    constructor() : this(
+        "",
+        "",
+        "",
+        ArrayList(),
+        ArrayList(),
+        HashMap<String, Item>()
+    )
 
     /**
      * This method is responsible for storing Family to the database.
@@ -161,7 +168,9 @@ data class Family(
             } else {
                 // Get family
                 val family =
-                    dataSnapshot.child(familyIdInputModified).getValue(Family::class.java) as Family
+                        dataSnapshot.child(familyIdInputModified).getValue(
+                            Family::class.java
+                        ) as Family
                 // Check password
                 if (family.password != Hash.applyHash(familyPasswordInput)) {
                     Toast.makeText(
@@ -191,9 +200,14 @@ data class Family(
          * This method is responsible for showing the items in the item list
          *
          * */
-        fun addItem(uid: String, categoryName: String, mActivity: AppCompatActivity) {
+        fun addItem(
+            uid: String,
+            categoryName: String,
+            mActivity: AppCompatActivity
+        ) {
             // go to upload new item
-            val addButton = mActivity.findViewById<FloatingActionButton>(R.id.btn_add)
+            val addButton =
+                    mActivity.findViewById<FloatingActionButton>(R.id.btn_add)
             addButton.setOnClickListener {
                 val intent = Intent(mActivity, ItemUploadActivity::class.java)
                 intent.putExtra("UserID", uid)
@@ -242,17 +256,21 @@ data class Family(
 
             // get user's family ID
             val currFamilyId =
-                dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).child("familyId").getValue(
-                    String::class.java
-                ) as String
+                    dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(
+                        uid
+                    ).child("familyId").getValue(
+                        String::class.java
+                    ) as String
 
             // set familyID
             mActivity.familyId = currFamilyId
 
             // get item keys for the given category as an ArrayList
             val itemKeysSnapshot =
-                dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId)
-                    .child("categories").child(categoryName).child("itemKeys")
+                    dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH)
+                        .child(currFamilyId)
+                        .child("categories").child(categoryName)
+                        .child("itemKeys")
 
             var itemKeys = if (!itemKeysSnapshot.hasChildren()) {
                 // the item keys is empty
@@ -269,12 +287,12 @@ data class Family(
             for (key in itemKeys) {
                 // get item by each key
                 val currItem =
-                    dataSnapshot
-                        .child(FirebaseDatabaseManager.FAMILY_PATH)
-                        .child(currFamilyId)
-                        .child("items")
-                        .child(key)
-                        .getValue(Item::class.java) as Item
+                        dataSnapshot
+                            .child(FirebaseDatabaseManager.FAMILY_PATH)
+                            .child(currFamilyId)
+                            .child("items")
+                            .child(key)
+                            .getValue(Item::class.java) as Item
 
                 currItem.key = key
 
@@ -324,9 +342,11 @@ data class Family(
         ) {
             // get user's family ID
             val currFamilyId =
-                dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).child("familyId").getValue(
-                    String::class.java
-                ) as String
+                    dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(
+                        uid
+                    ).child("familyId").getValue(
+                        String::class.java
+                    ) as String
 
             // find the category
             val itemKeys = dataSnapshot
@@ -348,7 +368,7 @@ data class Family(
 
             // update itemkeys index first
             val itemKeysPath =
-                "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/itemKeys/"
+                    "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/itemKeys/"
             var categoryItemKeys = dataSnapshot
                 .child(FirebaseDatabaseManager.FAMILY_PATH)
                 .child(currFamilyId)
@@ -357,7 +377,8 @@ data class Family(
                 .child("itemKeys")
                 .value as ArrayList<String>
 
-            categoryItemKeys = categoryItemKeys.filterNotNull() as ArrayList<String>
+            categoryItemKeys =
+                    categoryItemKeys.filterNotNull() as ArrayList<String>
             categoryItemKeys.remove(itemId)
 
             FirebaseDatabaseManager.update(itemKeysPath, categoryItemKeys)
@@ -377,7 +398,7 @@ data class Family(
                 .child("itemKeys")
                 .childrenCount
             val countReference =
-                "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/count"
+                    "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/count"
             FirebaseDatabase.getInstance().getReference(countReference)
                 .setValue(itemCount - 1)
 
@@ -391,7 +412,6 @@ data class Family(
          * */
         fun displayShowPage(
             mActivity: HomeActivity,
-            items: ArrayList<Item>,
             showTabAdapter: ContainerAdapter,
             uid: String,
             currFrag: Fragment
@@ -402,7 +422,6 @@ data class Family(
                     uid,
                     mActivity,
                     currFrag,
-                    items,
                     showTabAdapter,
                     d
                 )
@@ -416,27 +435,27 @@ data class Family(
             uid: String,
             mActivity: HomeActivity,
             currFrag: Fragment,
-            items: ArrayList<Item>,
             allTabAdapter: ContainerAdapter,
             dataSnapshot: DataSnapshot
         ) {
 
             if (currFrag != null && currFrag.isVisible) {
                 // get user's family ID
-                val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+                val currFamilyId = FirebaseDatabaseManager
+                    .getFamilyIDByUID(uid, dataSnapshot)
                 mActivity.familyId = currFamilyId
 
                 // get items from the family
                 val allItems =
-                    dataSnapshot
-                        .child(FirebaseDatabaseManager.FAMILY_PATH)
-                        .child(currFamilyId)
-                        .child("items")
-                        .children
+                        dataSnapshot
+                            .child(FirebaseDatabaseManager.FAMILY_PATH)
+                            .child(currFamilyId)
+                            .child("items")
+                            .children
 
 
                 // clear items once retrieve item from the database
-                items.clear()
+                allTabAdapter.items.clear()
 
                 allItems.forEach {
                     val item = it.getValue(Item::class.java) as Item
@@ -444,17 +463,17 @@ data class Family(
                     // add it to the items, check item is visible, if not check user is owner
                     if (item.showPageUids.contains(uid)) {
                         item.key = it.key.toString()
-                        items.add(item)
+                        allTabAdapter.items.add(item)
                     }
                 }
 
                 // sort the current item according to current app's sort order
-                sortItems(mActivity.sortOrder, items)
+                sortItems(mActivity.sortOrderShow, allTabAdapter.items)
 
                 // update the UI
                 updateUI(
                     allTabAdapter,
-                    items,
+                    allTabAdapter.items,
                     mActivity,
                     R.id.progress_circular,
                     R.id.item_list_empty
@@ -465,56 +484,62 @@ data class Family(
 
         fun showAll(
             uid: String,
-            items: ArrayList<Item>,
             showTabAdapter: ContainerAdapter,
             mActivity: HomeActivity,
             currFrag: Fragment
         ) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
-                callbackShowAll(uid, items, showTabAdapter, mActivity, currFrag, d)
+                callbackShowAll(
+                    uid,
+                    showTabAdapter,
+                    mActivity,
+                    currFrag,
+                    d
+                )
             }
         }
 
 
         private fun callbackShowAll(
             uid: String,
-            items: ArrayList<Item>,
             showTabAdapter: ContainerAdapter,
             mActivity: HomeActivity,
             currFrag: Fragment,
             dataSnapshot: DataSnapshot
         ) {
             if (currFrag != null && currFrag.isVisible) {
+
                 // get user's family ID
-                val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+                val currFamilyId = FirebaseDatabaseManager
+                    .getFamilyIDByUID(uid, dataSnapshot)
                 mActivity.familyId = currFamilyId
 
                 // get items from the family
                 val allItems =
-                    dataSnapshot
-                        .child(FirebaseDatabaseManager.FAMILY_PATH)
-                        .child(currFamilyId)
-                        .child("items")
-                        .children
+                        dataSnapshot
+                            .child(FirebaseDatabaseManager.FAMILY_PATH)
+                            .child(currFamilyId)
+                            .child("items")
+                            .children
 
-                // sort the current item according to current app's sort order
-                sortItems(mActivity.sortOrder, items)
 
                 // clear items once retrieve item from the database
-                items.clear()
+                showTabAdapter.items.clear()
 
                 allItems.forEach {
                     val item = it.getValue(Item::class.java) as Item
 
                     item.key = it.key.toString()
-                    items.add(item)
+                    showTabAdapter.items.add(item)
                 }
+                // sort the current item according to current app's sort order
+                sortItems(mActivity.sortOrderAll, showTabAdapter.items)
 
                 // update the UI
                 updateUI(
                     showTabAdapter,
-                    items,
+                    showTabAdapter.items,
                     mActivity,
                     R.id.all_progress_circular,
                     R.id.all_text_view_empty
@@ -548,15 +573,19 @@ data class Family(
             mActivity: ViewFamilyActivity,
             dataSnapshot: DataSnapshot
         ) {
-            val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+            val familyId =
+                    FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
 
             // get family name
             val familyName =
-                dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(familyId).child("familyName").value as String
+                    dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(
+                        familyId
+                    ).child("familyName").value as String
 
             // set the value of textview
             val familyIdView: TextView = mActivity.findViewById(R.id.family_id)
-            val familyNameView: TextView = mActivity.findViewById(R.id.family_name)
+            val familyNameView: TextView =
+                    mActivity.findViewById(R.id.family_name)
 
             // if the user id is the same as the family id then it is the owner of the family, he/she has the right to modify the family
             if (uid == familyId){

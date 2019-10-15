@@ -1,7 +1,6 @@
 package com.honegroupp.familyRegister.model
 
 import android.content.Intent
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.PropertyName
@@ -38,9 +37,9 @@ data class Category(
         mActivity: AppCompatActivity,
         position: Int, uid: String
     ) {
-//        var url = DEFAULT_COVER
+        //        var url = DEFAULT_COVER
         if (itemKeys.isNotEmpty()) {
-            val lastItemKey = itemKeys.last()
+            val firstItemKey = itemKeys[0]
             val rootPath = "/"
             FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
                 callbackGetCoverURL(
@@ -48,25 +47,39 @@ data class Category(
                     mActivity,
                     position,
                     uid,
-                    lastItemKey,
+                    firstItemKey,
                     d
                 )
             }
-        }else{
-// TODO too much duplication
-            holder.imageView.setImageResource(R.drawable.fui_ic_googleg_color_24dp)
-            holder.imageView.setOnClickListener {
-                // Snippet from navigate to the ItemListActivity along with the category path
-                val goToItemListActivity = Intent(mActivity, ItemListActivity::class.java)
+        } else {
+            holder.imageView
+                .setImageResource(R.drawable.ic_image_grey_24dp)
+            navigateToItemListActivity(holder, mActivity, uid, position)
+        }
+    }
 
-                //  pass user id to next activity
-                goToItemListActivity.putExtra("UserID", uid)
-                // pass category path to goToItemListActivity
-                goToItemListActivity.putExtra("categoryPath", position.toString())
-                // pass default sort order to next activity
-                goToItemListActivity.putExtra("sortOrder", "default")
-                mActivity.startActivity(goToItemListActivity)
-            }
+    /**
+     * This method is responsible for going to the ItemListActivity
+     *
+     * */
+    private fun navigateToItemListActivity(
+        holder: CategoryAdapter.CategoryViewHolder,
+        mActivity: AppCompatActivity,
+        uid: String,
+        position: Int
+    ) {
+        holder.imageView.setOnClickListener {
+            // Snippet from navigate to the ItemListActivity along with the category path
+            val goToItemListActivity =
+                    Intent(mActivity, ItemListActivity::class.java)
+
+            //  pass user id to next activity
+            goToItemListActivity.putExtra("UserID", uid)
+            // pass category path to goToItemListActivity
+            goToItemListActivity.putExtra("categoryPath", position.toString())
+            // pass default sort order to next activity
+            goToItemListActivity.putExtra("sortOrder", "default")
+            mActivity.startActivity(goToItemListActivity)
         }
     }
 
@@ -84,18 +97,20 @@ data class Category(
     ) {
         // get user's family ID
         val currFamilyId =
-            dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).child("familyId").getValue(
-                String::class.java
-            ) as String
+                dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).child(
+                    "familyId").getValue(
+                    String::class.java
+                ) as String
 
         // get item's last url
         var urls =
-            dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId)
-                .child("items")
-                .child(itemKeys)
-                .child("imageURLs")
-                .value
-        if (urls == null){
+                dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH)
+                    .child(currFamilyId)
+                    .child("items")
+                    .child(itemKeys)
+                    .child("imageURLs")
+                    .value
+        if (urls == null) {
             Picasso.get()
                 .load(R.mipmap.loading_jewellery)
                 .fit()
@@ -104,25 +119,13 @@ data class Category(
         } else {
             urls = urls as ArrayList<String>
             Picasso.get()
-                .load(urls[urls.size-1])
+                .load(urls[0])
                 .placeholder(R.mipmap.loading_jewellery)
                 .fit()
                 .centerCrop()
                 .into(holder.imageView)
         }
 
-        holder.imageView.setOnClickListener {
-            // Snippet from navigate to the ItemListActivity along with the category path
-            val goToItemListActivity = Intent(mActivity, ItemListActivity::class.java)
-
-            //  pass user id to next activity
-            goToItemListActivity.putExtra("UserID", uid)
-            // pass category path to goToItemListActivity
-            goToItemListActivity.putExtra("categoryPath", position.toString())
-            // pass default sort order to next activity
-            goToItemListActivity.putExtra("sortOrder", "default")
-            mActivity.startActivity(goToItemListActivity)
-
-        }
+        navigateToItemListActivity(holder, mActivity, uid, position)
     }
 }

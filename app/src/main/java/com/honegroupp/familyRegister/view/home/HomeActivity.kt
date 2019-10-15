@@ -22,6 +22,8 @@ import com.honegroupp.familyRegister.controller.AuthenticationController
 import android.widget.TextView
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.controller.HomeController
+import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.view.item.DetailSlide
 
@@ -35,13 +37,27 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
     private lateinit var toolbar: Toolbar
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
-    lateinit var userID:String
+    lateinit var userID: String
+
+    var sortOrderAll = ContainerActivity.SORT_DEFAULT
+    var sortOrderShow = ContainerActivity.SORT_DEFAULT
+
+
+
+    // set items adapter for show page
+    private val showItems = ArrayList<Item>()
+    val showTabAdapter =
+            ContainerAdapter(showItems, this, ContainerAdapter.SHOWPAGE)
+
+    // set items adapter for show page
+    private val allItems = ArrayList<Item>()
+    val allTabAdapter = ContainerAdapter(allItems, this, ContainerAdapter.ALL)
 
 
     override fun onItemClick(position: Int) {
-        if (viewPager.currentItem == 0){
+        if (viewPager.currentItem == 0) {
             categoryName = DetailSlide.ALL_PAGE_SIGNAL.toString()
-        }else if(viewPager.currentItem  == 2){
+        } else if (viewPager.currentItem == 2) {
             categoryName = DetailSlide.SHOW_PAGE_SIGNAL.toString()
         }
 
@@ -52,7 +68,7 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         intent.putExtra("PositionList", position.toString())
         intent.putExtra("CategoryNameList", categoryName)
         // TODO delete
-//        intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
+        //        intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
         startActivity(intent)
     }
 
@@ -60,6 +76,10 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        // Press  key to navigate to navigation drawer
+        btn_home_sort.setOnClickListener {
+            drawer_layout.openDrawer(GravityCompat.END)
+        }
 
         //get User ID
         userID = intent.getStringExtra("UserID")
@@ -75,7 +95,7 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         viewPager = findViewById(R.id.viewpager)
-        setupViewPager(viewPager)
+        val viewPagerAdapter = setupViewPager(viewPager)
 
         tabLayout = findViewById(R.id.tabs)
         tabLayout.setupWithViewPager(viewPager)
@@ -99,14 +119,7 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         }
 
 
-//        //display User Name
-//        val headerView = nav_view.getHeaderView(0)
-//        val navUsername = headerView.findViewById(R.id.nav_userName) as TextView
-//        navUsername.text = username
-//
-//        // display the user id
-//        val navUserEmail = headerView.findViewById(R.id.nav_userEmail) as TextView
-//        navUserEmail.text = userID.replace("=", ".")
+        //        //display User information
         displayUserInfo(uid)
 
 
@@ -118,18 +131,20 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
             true
         }
 
-        nav_view.menu.findItem(R.id.nav_view_family).setOnMenuItemClickListener {
-            val intent = Intent(this, ViewFamilyActivity::class.java)
-            intent.putExtra("UserID", userID)
-            startActivity(intent)
-            true
-        }
-        nav_view.menu.findItem(R.id.help_and_feedback).setOnMenuItemClickListener {
-            val intent = Intent(this, HelpFeedbackActivity::class.java)
-            intent.putExtra("UserID", userID)
-            startActivity(intent)
-            true
-        }
+        nav_view.menu.findItem(R.id.nav_view_family)
+            .setOnMenuItemClickListener {
+                val intent = Intent(this, ViewFamilyActivity::class.java)
+                intent.putExtra("UserID", userID)
+                startActivity(intent)
+                true
+            }
+        nav_view.menu.findItem(R.id.help_and_feedback)
+            .setOnMenuItemClickListener {
+                val intent = Intent(this, HelpFeedbackActivity::class.java)
+                intent.putExtra("UserID", userID)
+                startActivity(intent)
+                true
+            }
         nav_view.menu.findItem(R.id.about).setOnMenuItemClickListener {
             val intent = Intent(this, AboutActivity::class.java)
             intent.putExtra("UserID", userID)
@@ -142,21 +157,29 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         //click can see user detail (image and info)
         val headerView = nav_view.getHeaderView(0)
         val imageView = headerView.findViewById<ImageView>(R.id.nav_imageView)
-        imageView.setOnClickListener{
+        imageView.setOnClickListener {
             val intent = Intent(this, UserDetailActivity::class.java)
             intent.putExtra("UserID", uid)
             startActivity(intent)
 
         }
 
+        // set the sort logic for both show and all page
+        val allTabFragment = viewPagerAdapter.getItem(0) as AllTabFragment
+        HomeController.sortItem(allTabFragment, allTabAdapter, showTabAdapter, this)
     }
 
-    private fun setupViewPager(viewPager: ViewPager) {
+    private fun setupViewPager(viewPager: ViewPager): ViewPagerAdapter {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(AllTabFragment(), getString(R.string.all))
-        adapter.addFragment(CategoriesTabFragment(), getString(R.string.category))
-        adapter.addFragment(ShowTabFragment(), getString(R.string.show))
+        adapter
+            .addFragment(AllTabFragment(allTabAdapter), getString(R.string.all))
+        adapter
+            .addFragment(CategoriesTabFragment(), getString(R.string.category))
+        adapter.addFragment(
+            ShowTabFragment(showTabAdapter),
+            getString(R.string.show))
         viewPager.adapter = adapter
+        return adapter
     }
 
     internal inner class ViewPagerAdapter(manager: FragmentManager) :
@@ -192,7 +215,7 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
     /*
     Display the user name, email address, and the user image
      */
-    private fun displayUserInfo(uid:String){
+    private fun displayUserInfo(uid: String) {
         // retrieve User
         lateinit var currUser: User
         val rootPath = "/"
@@ -215,19 +238,22 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
 
                 //display User Name on the header
                 val headerView = nav_view.getHeaderView(0)
-                val navUsername = headerView.findViewById(R.id.nav_userName) as TextView
+                val navUsername =
+                        headerView.findViewById(R.id.nav_userName) as TextView
                 navUsername.text = currUser.username
 
                 // display the user id on the header
-                val navUserEmail = headerView.findViewById(R.id.nav_userEmail) as TextView
+                val navUserEmail =
+                        headerView.findViewById(R.id.nav_userEmail) as TextView
                 navUserEmail.text = userID.replace("=", ".")
 
                 //get the image URL
-                val imageView = headerView.findViewById<ImageView>(R.id.nav_imageView)
+                val imageView =
+                        headerView.findViewById<ImageView>(R.id.nav_imageView)
                 val imageUrl = currUser.imageUrl
 
                 // Load image to ImageView via its URL from Firebase Storage
-                if(imageUrl!="") {
+                if (imageUrl != "") {
                     Picasso.get()
                         .load(imageUrl)
                         .placeholder(R.mipmap.loading_jewellery)

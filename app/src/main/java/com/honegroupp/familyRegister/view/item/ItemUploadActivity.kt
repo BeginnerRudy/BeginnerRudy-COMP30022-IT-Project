@@ -38,9 +38,10 @@ class ItemUploadActivity : AppCompatActivity(){
 
         uid = intent.getStringExtra("UserID").toString()
         val categoryName = intent.getStringExtra("categoryPath").toString()
+        val sortOrder = intent.getStringExtra("SortOrder")
 
         //set up the spinner (select public and privacy)
-        val spinner: Spinner = findViewById(R.id.privacy_spinner)
+        val spinner: Spinner = this.findViewById(R.id.privacy_spinner)
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
