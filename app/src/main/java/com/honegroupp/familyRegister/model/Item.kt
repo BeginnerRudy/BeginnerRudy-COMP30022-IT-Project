@@ -27,10 +27,13 @@ data class Item(
     @get:PropertyName("itemOwnerUID")
     var itemOwnerUID: String = "",
 
+    @set:PropertyName("itemLocation")
+    @get:PropertyName("itemLocation")
+    var itemLocation:  String = "",
+
     @set:PropertyName("imageURLs")
     @get:PropertyName("imageURLs")
     var imageURLs: ArrayList<String> = ArrayList(),
-
 
     @set:PropertyName("isPublic")
     @get:PropertyName("isPublic")
