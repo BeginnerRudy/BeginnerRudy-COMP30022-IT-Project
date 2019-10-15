@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_item_list.*
 
 class ItemListActivity : ContainerActivity() {
     var storage: FirebaseStorage = FirebaseStorage.getInstance()
+    var sortOrder: String = SORT_DEFAULT
 
     override fun onCreate(savedInstanceState: Bundle?) {
 

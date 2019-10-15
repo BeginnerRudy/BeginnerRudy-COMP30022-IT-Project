@@ -412,7 +412,6 @@ data class Family(
          * */
         fun displayShowPage(
             mActivity: HomeActivity,
-            items: ArrayList<Item>,
             showTabAdapter: ContainerAdapter,
             uid: String,
             currFrag: Fragment
@@ -423,7 +422,6 @@ data class Family(
                     uid,
                     mActivity,
                     currFrag,
-                    items,
                     showTabAdapter,
                     d
                 )
@@ -437,7 +435,6 @@ data class Family(
             uid: String,
             mActivity: HomeActivity,
             currFrag: Fragment,
-            items: ArrayList<Item>,
             allTabAdapter: ContainerAdapter,
             dataSnapshot: DataSnapshot
         ) {
@@ -458,7 +455,7 @@ data class Family(
 
 
                 // clear items once retrieve item from the database
-                items.clear()
+                allTabAdapter.items.clear()
 
                 allItems.forEach {
                     val item = it.getValue(Item::class.java) as Item
@@ -466,17 +463,17 @@ data class Family(
                     // add it to the items, check item is visible, if not check user is owner
                     if (item.showPageUids.contains(uid)) {
                         item.key = it.key.toString()
-                        items.add(item)
+                        allTabAdapter.items.add(item)
                     }
                 }
 
                 // sort the current item according to current app's sort order
-                sortItems(mActivity.sortOrder, items)
+                sortItems(mActivity.sortOrderShow, allTabAdapter.items)
 
                 // update the UI
                 updateUI(
                     allTabAdapter,
-                    items,
+                    allTabAdapter.items,
                     mActivity,
                     R.id.progress_circular,
                     R.id.item_list_empty
@@ -487,7 +484,6 @@ data class Family(
 
         fun showAll(
             uid: String,
-            items: ArrayList<Item>,
             showTabAdapter: ContainerAdapter,
             mActivity: HomeActivity,
             currFrag: Fragment
@@ -496,7 +492,6 @@ data class Family(
             FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
                 callbackShowAll(
                     uid,
-                    items,
                     showTabAdapter,
                     mActivity,
                     currFrag,
@@ -508,13 +503,13 @@ data class Family(
 
         private fun callbackShowAll(
             uid: String,
-            items: ArrayList<Item>,
             showTabAdapter: ContainerAdapter,
             mActivity: HomeActivity,
             currFrag: Fragment,
             dataSnapshot: DataSnapshot
         ) {
             if (currFrag != null && currFrag.isVisible) {
+
                 // get user's family ID
                 val currFamilyId = FirebaseDatabaseManager
                     .getFamilyIDByUID(uid, dataSnapshot)
@@ -528,23 +523,23 @@ data class Family(
                             .child("items")
                             .children
 
-                // sort the current item according to current app's sort order
-                sortItems(mActivity.sortOrder, items)
 
                 // clear items once retrieve item from the database
-                items.clear()
+                showTabAdapter.items.clear()
 
                 allItems.forEach {
                     val item = it.getValue(Item::class.java) as Item
 
                     item.key = it.key.toString()
-                    items.add(item)
+                    showTabAdapter.items.add(item)
                 }
+                // sort the current item according to current app's sort order
+                sortItems(mActivity.sortOrderAll, showTabAdapter.items)
 
                 // update the UI
                 updateUI(
                     showTabAdapter,
-                    items,
+                    showTabAdapter.items,
                     mActivity,
                     R.id.all_progress_circular,
                     R.id.all_text_view_empty

@@ -102,7 +102,11 @@ class ItemListController {
 
         }
 
-        fun updateRecyclerView(adapter: ContainerAdapter, drawer_sort_layout: DrawerLayout) {
+        /**
+         * This method is responsible for updating the corresponding recycler view
+         *
+         * */
+        private fun updateRecyclerView(adapter: ContainerAdapter, drawer_sort_layout: DrawerLayout) {
             // hide the item
             drawer_sort_layout.closeDrawer(GravityCompat.END)
             // update the recycler view
