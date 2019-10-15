@@ -14,11 +14,22 @@ import com.honegroupp.familyRegister.view.itemList.ItemListActivity
  *
  * */
 open class ContainerActivity : AppCompatActivity(), ContainerAdapter.OnItemClickerListener {
+
+    companion object {
+
+        const val SORT_DEFAULT = "default"
+        const val NAME_ASCENDING = "name_asc"
+        const val NAME_DESCENDING = "name_desc"
+        const val TIME_ASCENDING = "time_asc"
+        const val TIME_DESCENDING = "time_desc"
+    }
+
     lateinit var uid: String
     lateinit var familyId: String
     lateinit var path: String
     lateinit var categoryName: String
-    var sortOrder: String = DetailSlide.SORT_DEFAULT
+    var sortOrder: String = SORT_DEFAULT
+
 
     override fun onItemClick(position: Int) {
         val intent = Intent(this, DetailSlide::class.java)
