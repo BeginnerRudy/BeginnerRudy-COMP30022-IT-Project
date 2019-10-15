@@ -21,7 +21,7 @@ class UserDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user)
 
         // Configure the toolbar setting
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar_user_activity)
         toolbar.title = getString(R.string.change_user_photo)
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_white_24dp)
         toolbar.setNavigationOnClickListener{
