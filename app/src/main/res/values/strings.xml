@@ -130,4 +130,5 @@
     <string name="reauth">Please enter your account password first:</string>
     <string name="owner">Owner</string>
     <string name="change_user_photo">Change user name and image</string>
+    <string name="please_enter_location">Please enter item storage location (only visible by yourself)</string>
 </resources>
