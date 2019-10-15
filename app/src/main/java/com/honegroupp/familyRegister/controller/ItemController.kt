@@ -31,6 +31,7 @@ class ItemController {
             mContext: AppCompatActivity,
             itemName: EditText,
             itemDescription: EditText,
+            itemMaterial:EditText,
             uid: String,
             categoryName: String,
             imageURLs: ArrayList<String>,
@@ -41,6 +42,7 @@ class ItemController {
             val item = Item(
                 itemName = itemName.text.toString(),
                 itemDescription = itemDescription.text.toString(),
+                itemMaterial = itemMaterial.text.toString(),
                 itemOwnerUID = uid,
                 imageURLs = imageURLs,
                 isPublic = isPublic,

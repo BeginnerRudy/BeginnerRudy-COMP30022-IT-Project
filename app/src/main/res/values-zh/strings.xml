@@ -94,10 +94,38 @@
     <string name="instrument">乐器</string>
     <string name="photo">照片</string>
     <string name="others">其他</string>
-
-
+    <string name="family">家庭</string>
+    <string name="family_name_show">家庭名称：</string>
+    <string name="family_id_show">家庭ID：</string>
+    <string name="family_members">家庭成员</string>
+    <string name="change_family_name">更改家庭名称</string>
+    <string name="change_family_password">更改家庭密码</string>
     <string name="sort_name_asc">按物品名称排列(正序)</string>
     <string name="sort_name_desc">按物品名称正序排列(倒序)</string>
     <string name="sort_time_asc">按时间排列(正序)</string>
     <string name="sort_time_desc">按时间排列(倒序)</string>
+    <string name="new_family_name">新的家庭名称</string>
+    <string name="new_family_password">新的家庭密码</string>
+    <string name="reauth">请先输入您的个人账户密码：</string>
+    <string name="password_cannot_be_blank">密码不可为空</string>
+    <string name="date">日期</string>
+    <string name="description">描述</string>
+    <string name="help_and_feedback">帮助和反馈</string>
+    <string name="about">关于</string>
+    <string name="app_version">1.0</string>
+    <string name="version">版本</string>
+    <string name="dev_email_address">h1.team.developer@gmail.com</string>
+    <string name="ask_us_message">使用中遇到了问题? 联系我们.</string>
+    <string name="help_message">如果您遇到了关于这个App的任何问题，请发送邮件联系帮助团队。</string>
+    <string name="term_of_service">服务条款</string>
+    <string name="privacy_policy">隐私权政策</string>
+    <string name="type_item_material">请输入物品材质</string>
+    <string name="material">材质</string>
+    <string name="update_user_info">更新用户信息</string>
+    <string name="edit_user_info">Edit</string>
+    <string name="username">用户名称</string>
+    <string name="please_enter_name">请输入名称</string>
+    <string name="owner">家主</string>
+    <string name="change_user_photo">修改用户名称和头像</string>
+
 </resources>

@@ -24,7 +24,7 @@ class CategoryAdapter(val uid: String, private val items: ArrayList<Category>, v
         return CategoryViewHolder(v)
     }
 
-    fun changelanguage(categoryName : String): String {
+    private fun changelanguage(categoryName : String): String {
         var categoryNameString = ""
         when (categoryName) {
             "Letter" -> categoryNameString = mActivity.getString(R.string.letter)

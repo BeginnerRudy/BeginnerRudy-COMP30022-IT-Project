@@ -25,6 +25,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Category
 import com.honegroupp.familyRegister.model.Item
+import com.honegroupp.familyRegister.view.home.ContainerActivity
 import kotlinx.android.synthetic.main.slide_background.*
 import java.io.File
 import java.io.FileOutputStream
@@ -42,6 +43,8 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
     private lateinit var mSlideViewPager : ViewPager
 
+    lateinit var detailUserId: String
+
     private lateinit var detailFamilyId: String
 
     private lateinit var databaseReferenceItem: DatabaseReference
@@ -54,6 +57,16 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     private var categoryUploads: ArrayList<Category> = ArrayList()
 
     private var storage: FirebaseStorage = FirebaseStorage.getInstance()
+
+    // Sort items use sort method
+    private fun sortItem(sortOrder: String){
+        when (sortOrder) {
+            ContainerActivity.NAME_ASCENDING -> itemUploads.sortBy { it.itemName }
+            ContainerActivity.NAME_DESCENDING -> itemUploads.sortByDescending { it.itemName }
+            ContainerActivity.TIME_ASCENDING -> itemUploads.sortBy { it.date }
+            ContainerActivity.TIME_DESCENDING -> itemUploads.sortByDescending { it.date }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,10 +83,11 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         val positionList = intent.getStringExtra("PositionList").toInt()
 
         // get userID for setting firbase database reference for items and categories
-        val detailUserId= intent.getStringExtra("UserID").toString()
+        detailUserId= intent.getStringExtra("UserID").toString()
 
         // get position of current category for setting Current page item
         val categoryIndexList= intent.getStringExtra("CategoryNameList").toInt()
+
         if (categoryIndexList >= CATEGORY_SIGNAL ){
             isInCategory = true
         }
@@ -172,6 +186,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                 }
                 sliderAdapter.notifyDataSetChanged()
 
+
                 // set Item to be seen first in View Page when items(itemUploads) is ready
                 if (itemUploads.size > 0) {
                     if (!alreadySet){
@@ -227,6 +242,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     // start editing
     override fun onEditClick(itemKey: String?) {
         val intent = Intent(this, ItemEdit::class.java)
+        intent.putExtra("uid", detailUserId)
         intent.putExtra("ItemKey", itemKey)
         intent.putExtra("FamilyId", detailFamilyId)
 
@@ -270,7 +286,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
             fOut.flush()
             fOut.close()
             file.setReadable(true, false)
-            val intent = Intent(Intent.ACTION_SEND)
+            val intent = Intent(android.content.Intent.ACTION_SEND)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             intent.putExtra(Intent.EXTRA_TEXT, "name")
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file))

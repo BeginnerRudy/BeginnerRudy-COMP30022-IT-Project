@@ -8,7 +8,6 @@
     tools:context=".view.item.DetailSlide">
 
 
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/dimage_slideViewPager"
         android:layout_width="match_parent"
@@ -43,8 +42,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:padding="20dp"
         android:background="@null"
+        android:padding="20dp"
         app:srcCompat="@drawable/download"
         tools:ignore="VectorDrawableCompat" />
 
@@ -62,7 +61,6 @@
         android:padding="20dp"
         app:srcCompat="@drawable/ic_menu_white_share"
         tools:ignore="VectorDrawableCompat" />
-
 
 
 </RelativeLayout>

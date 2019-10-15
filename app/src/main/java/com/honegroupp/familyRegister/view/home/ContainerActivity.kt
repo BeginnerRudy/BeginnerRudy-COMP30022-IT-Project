@@ -14,11 +14,21 @@ import com.honegroupp.familyRegister.view.itemList.ItemListActivity
  *
  * */
 open class ContainerActivity : AppCompatActivity(), ContainerAdapter.OnItemClickerListener {
+
+    companion object {
+
+        const val SORT_DEFAULT = "default"
+        const val NAME_ASCENDING = "name_asc"
+        const val NAME_DESCENDING = "name_desc"
+        const val TIME_ASCENDING = "time_asc"
+        const val TIME_DESCENDING = "time_desc"
+    }
+
     lateinit var uid: String
     lateinit var familyId: String
     lateinit var path: String
     lateinit var categoryName: String
-    lateinit var sortOrder: String
+    var sortOrder: String = SORT_DEFAULT
 
 
     override fun onItemClick(position: Int) {
@@ -42,13 +52,6 @@ open class ContainerActivity : AppCompatActivity(), ContainerAdapter.OnItemClick
 
         if (this is ItemListActivity) {
             categoryName = intent.getStringExtra("categoryPath")
-            val order = intent.getStringExtra("SortOrder")
-            if (order == null){
-                sortOrder = "default"
-            }
-            else{
-                sortOrder = order
-            }
         }
     }
 

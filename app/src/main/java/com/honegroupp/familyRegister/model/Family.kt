@@ -3,21 +3,19 @@ package com.honegroupp.familyRegister.model
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
-import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.utility.EmailPathSwitch
 import com.honegroupp.familyRegister.utility.Hash
-import com.honegroupp.familyRegister.view.home.ContainerAdapter
+import com.honegroupp.familyRegister.view.home.*
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 
@@ -108,7 +106,6 @@ data class Family(
         val intent = Intent(mActivity, HomeActivity::class.java)
         intent.putExtra("UserID", uid)
         intent.putExtra("UserName", username)
-
         mActivity.startActivity(intent)
     }
 
@@ -287,26 +284,17 @@ data class Family(
                 } else if (currItem.itemOwnerUID == mActivity.uid) {
                     items.add(currItem)
                 }
-
             }
 
-            // notify the adapter to update
-            itemListAdapter.notifyDataSetChanged()
-            if (itemKeys.isEmpty()) {
-                // Make the progress bar invisible
-                mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
-                    View.INVISIBLE
+            // sort the current item according to current app's sort order
+            sortItems(mActivity.sortOrder, items)
 
-                mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
-                    View.VISIBLE
-            }else{
-
-                // Make the progress bar invisible
-                mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
-                    View.INVISIBLE
-                mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
-                    View.INVISIBLE
-            }
+            // update the UI
+            updateUI(
+                itemListAdapter, items, mActivity,
+                R.id.progress_circular,
+                R.id.item_list_empty
+            )
         }
 
         /**
@@ -460,25 +448,17 @@ data class Family(
                     }
                 }
 
+                // sort the current item according to current app's sort order
+                sortItems(mActivity.sortOrder, items)
 
-                // notify the adapter to update
-                allTabAdapter.notifyDataSetChanged()
-
-                if (items.isEmpty()) {
-                    // Make the progress bar invisible
-                    mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
-                        View.INVISIBLE
-
-                    val text = mActivity.findViewById<TextView>(R.id.text_view_empty_category)
-                    text.text = mActivity.getString(R.string.no_items_for_the_show_page)
-                    text.visibility = View.VISIBLE
-                } else {
-                    // Make the progress bar invisible
-                    mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
-                        View.INVISIBLE
-                    mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
-                        View.INVISIBLE
-                }
+                // update the UI
+                updateUI(
+                    allTabAdapter,
+                    items,
+                    mActivity,
+                    R.id.progress_circular,
+                    R.id.item_list_empty
+                )
             }
         }
 
@@ -518,6 +498,9 @@ data class Family(
                         .child("items")
                         .children
 
+                // sort the current item according to current app's sort order
+                sortItems(mActivity.sortOrder, items)
+
                 // clear items once retrieve item from the database
                 items.clear()
 
@@ -528,70 +511,185 @@ data class Family(
                     items.add(item)
                 }
 
-                // notify the adapter to update
-                showTabAdapter.notifyDataSetChanged()
-
-                sortItem(mActivity, showTabAdapter, items)
-
-                if (items.isEmpty()) {
-                    // Make the progress bar invisible
-                    mActivity.findViewById<ProgressBar>(R.id.all_progress_circular).visibility =
-                        View.INVISIBLE
-
-                    mActivity.findViewById<TextView>(R.id.all_text_view_empty_category).visibility =
-                        View.VISIBLE
-                } else {
-                    // Make the progress bar invisible
-                    mActivity.findViewById<ProgressBar>(R.id.all_progress_circular).visibility =
-                        View.INVISIBLE
-                    mActivity.findViewById<TextView>(R.id.all_text_view_empty_category).visibility =
-                        View.INVISIBLE
-                }
+                // update the UI
+                updateUI(
+                    showTabAdapter,
+                    items,
+                    mActivity,
+                    R.id.all_progress_circular,
+                    R.id.all_text_view_empty
+                )
             }
         }
 
         /**
-         * function for sort items
+         * This method is responsible for showing all the family member in the user's family
+         *
          * */
-        private fun sortItem(mActivity: HomeActivity,adapter: ContainerAdapter, items : ArrayList<Item>){
-            val drawer_layout = mActivity.findViewById<DrawerLayout>(R.id.drawer_layout)
-            val naviView = mActivity.findViewById<NavigationView>(R.id.navi_all_sort_view)
-            naviView.menu.findItem(R.id.sort_name_asc).setOnMenuItemClickListener {
-                //sort logic
-                adapter.items.sortBy { it.itemName }
-                //update sort order
-                mActivity.sortOrder = "name_asc"
-                adapter.notifyDataSetChanged()
-                true
-            }
-            naviView.menu.findItem(R.id.sort_name_desc).setOnMenuItemClickListener {
-                //sort logic
-                adapter.items.sortByDescending { it.itemName }
-                //update sort order
-                mActivity.sortOrder = "name_asc"
-                // update the UI layer
-                adapter.notifyDataSetChanged()
-                true
-            }
-            naviView.menu.findItem(R.id.sort_time_asc).setOnMenuItemClickListener {
-                //sort logic
-                adapter.items.sortBy { it.date }
-                //update sort order
-                mActivity.sortOrder = "name_asc"
-                // update the UI layer
-                adapter.notifyDataSetChanged()
-                true
-            }
-            naviView.menu.findItem(R.id.sort_time_desc).setOnMenuItemClickListener {
-                //sort logic
-                adapter.items.sortByDescending { it.date }
-                //update sort order
-                mActivity.sortOrder = "name_asc"
-                // update the UI layer
-                adapter.notifyDataSetChanged()
-                true
+        fun showAllMembersAndInfo(
+            uid: String, adapter: ViewFamilyAdapter,
+            mActivity: ViewFamilyActivity,
+            users: ArrayList<User>
+        ) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
+                callbackShowAllMembersAndInfo(uid, adapter, users, mActivity, d)
             }
         }
-    }
 
+        /**
+         * This method is responsible for interacting with the database to showi all the family
+         * member in the user's family
+         * */
+        private fun callbackShowAllMembersAndInfo(
+            uid: String,
+            adapter: ViewFamilyAdapter,
+            users: ArrayList<User>,
+            mActivity: ViewFamilyActivity,
+            dataSnapshot: DataSnapshot
+        ) {
+            val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+
+            // get family name
+            val familyName =
+                dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(familyId).child("familyName").value as String
+
+            // set the value of textview
+            val familyIdView: TextView = mActivity.findViewById(R.id.family_id)
+            val familyNameView: TextView = mActivity.findViewById(R.id.family_name)
+
+            // if the user id is the same as the family id then it is the owner of the family, he/she has the right to modify the family
+            if (uid == familyId){
+                mActivity.findViewById<TextView>(R.id.btn_family_setting).visibility = View.VISIBLE
+
+            }
+
+            familyIdView.text =
+                "${mActivity.getString(R.string.family_id_show)}  ${EmailPathSwitch.pathToEmail(
+                    familyId
+                )}"
+            familyNameView.text = "${mActivity.getString(R.string.family_name_show)}  $familyName"
+
+            // retrieve user's uids in current family
+            val path = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/members/"
+
+            val currUserUids = dataSnapshot.child(path).value as ArrayList<String>
+
+            // retrieve user and add it to a list
+            users.clear()
+            for (uid in currUserUids) {
+                val currUser =
+                    dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).getValue(User::class.java) as User
+                users.add(currUser)
+            }
+
+            // set this user to the adapter
+            adapter.notifyDataSetChanged()
+        }
+
+        /**
+         * This method is responsible for change the family name
+         *
+         * */
+        fun changeName(uid: String, newFamilyName: String) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
+                callbackChangeName(uid, newFamilyName, d)
+            }
+        }
+
+        /**
+         * This method the callback for change the family name
+         *
+         * */
+        private fun callbackChangeName(
+            uid: String,
+            newFamilyName: String,
+            dataSnapshot: DataSnapshot
+        ) {
+            val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+            val familyNamePath = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/familyName"
+
+            FirebaseDatabase.getInstance().getReference(familyNamePath).setValue(newFamilyName)
+        }
+
+
+        /**
+         * This method is responsible for change the family password
+         *
+         * */
+        fun changePassword(uid: String, newFamilyPassword: String) {
+            val rootPath = "/"
+            FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
+                callbackChangePassword(uid, newFamilyPassword, d)
+            }
+        }
+
+        /**
+         * This method the callback for change the family password
+         *
+         * */
+        private fun callbackChangePassword(
+            uid: String,
+            newFamilyPassword: String,
+            dataSnapshot: DataSnapshot
+        ) {
+            val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+            val familyNamePath = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/password"
+
+            FirebaseDatabase.getInstance().getReference(familyNamePath)
+                .setValue(Hash.applyHash(newFamilyPassword))
+        }
+
+        /**
+         * This method is responsible for sort the items according the the sortorder
+         *
+         * */
+        private fun sortItems(sortOrder: String, items: ArrayList<Item>) {
+            when (sortOrder) {
+                ContainerActivity.NAME_ASCENDING -> //sort by name ascending
+                    items.sortBy { it.itemName }
+                ContainerActivity.NAME_DESCENDING -> //sort by name descending
+                    items.sortByDescending { it.itemName }
+                ContainerActivity.TIME_ASCENDING -> //sort by time ascending
+                    items.sortBy { it.date }
+                ContainerActivity.TIME_DESCENDING -> //sort by time descending
+                    items.sortByDescending { it.date }
+            }
+        }
+
+        /**
+         * This method is responsible for updating the UI layer after retrieving the data from
+         * the Firebase Database.
+         *
+         * */
+
+        private fun updateUI(
+            adapter: ContainerAdapter,
+            items: ArrayList<Item>,
+            mActivity: ContainerActivity,
+            progressBarId: Int,
+            emptyTextViewId: Int
+        ) {
+            // notify the adapter to update
+            adapter.notifyDataSetChanged()
+
+            // update the UI according to the state of items, whether it is empty.
+            if (items.isEmpty()) {
+                // Make the progress bar invisible
+                mActivity.findViewById<ProgressBar>(progressBarId).visibility =
+                    View.INVISIBLE
+
+                mActivity.findViewById<TextView>(emptyTextViewId).visibility =
+                    View.VISIBLE
+            } else {
+                // Make the progress bar invisible
+                mActivity.findViewById<ProgressBar>(progressBarId).visibility =
+                    View.INVISIBLE
+                mActivity.findViewById<TextView>(emptyTextViewId).visibility =
+                    View.INVISIBLE
+            }
+        }
+
+    }
 }

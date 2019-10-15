@@ -39,8 +39,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="170dp"
         android:background="@drawable/button_round_join"
-        android:textColor="@color/textColorPrimary"
         android:text="@string/join_family"
+        android:textColor="@color/textColorPrimary"
         app:srcCompat="@mipmap/code_icon" />
 
 </RelativeLayout>

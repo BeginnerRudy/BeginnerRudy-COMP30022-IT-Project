@@ -31,11 +31,11 @@
 
                 <TextView
                     android:id="@+id/search_icon"
-                    android:padding="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
-                    android:drawableRight="@drawable/ic_search_white_24dp" />
+                    android:drawableRight="@drawable/ic_search_white_24dp"
+                    android:padding="8dp" />
 
 
             </androidx.appcompat.widget.Toolbar>
@@ -48,25 +48,6 @@
                 app:tabMode="fixed" />
 
         </com.google.android.material.appbar.AppBarLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btn_all_sort"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="351dp"
-            android:layout_marginTop="589dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="13dp"
-            android:clickable="true"
-            android:tint="#00FFFFFF"
-            app:backgroundTint="#03A9F4"
-            app:srcCompat="@android:drawable/ic_menu_sort_by_size"
-            android:focusable="true" />
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -79,37 +60,27 @@
         app:menu="@menu/activity_main_drawer">
 
         <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/btn_log_out"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/textColorPrimary"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/log_out"
-                android:backgroundTint = "@color/fui_bgEmail"/>
+                android:layout_alignParentBottom="true">
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/btn_log_out"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="@color/fui_bgEmail"
+                    android:text="@string/log_out"
+                    android:textColor="@color/textColorPrimary" />
+            </LinearLayout>
 
-    </RelativeLayout>
+        </RelativeLayout>
     </com.google.android.material.navigation.NavigationView>
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navi_all_sort_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_toStartOf="@+id/btn_all_sort"
-        android:fitsSystemWindows="true"
-        app:menu="@menu/sort_menu"></com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

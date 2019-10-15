@@ -12,6 +12,10 @@ import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
@@ -22,7 +26,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import com.google.firebase.storage.FirebaseStorage
+
 import com.honegroupp.familyRegister.utility.CompressionUtil
+import com.honegroupp.familyRegister.utility.EmailPathSwitch
 import com.honegroupp.familyRegister.utility.FilePathUtil
 import com.honegroupp.familyRegister.utility.ImageRotateUtil
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationChangeDialog
@@ -35,15 +41,12 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
     LocationViewDialog.OnChangeClickListener, LocationChangeDialog.OnChangeConfirmClickListener {
 
     val GALLERY_REQUEST_CODE = 123
-    val passwordLocation = "1"
-    var enteredPassword = ""
     var itemLocation = "Bedside ddtable first drawer"
-
     private var allImageUri : ArrayList<Uri> = ArrayList()
     private var detailImageUrls : ArrayList<String> = ArrayList()
     private var deleteImageUrls : ArrayList<String> = ArrayList()
-
-    private lateinit var databaseRef: DatabaseReference
+    lateinit var databaseRef: DatabaseReference
+    lateinit var currItem: Item
     private lateinit var itemKey: String
     private lateinit var currFamilyId: String
 
@@ -59,12 +62,47 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
         openLocationChangeDialog()
     }
 
-    override fun applyPasswords(password: String) {
-        enteredPassword = password
-        if (passwordLocation == enteredPassword) {
-            openLocationViewDialog()
-        } else {
-            toast(getString(R.string.edit_location_password_incorrect), Toast.LENGTH_LONG)
+
+    /*
+    Compare the password, if the password is correct, show the location view dialog
+     */
+    override fun applyPasswords(enteredPassword: String, dialog: LocationEnterPasswordDialog) {
+
+        //check emptyness of password
+        if(enteredPassword != "") {
+
+            //get user and uid
+            val user = FirebaseAuth.getInstance().currentUser
+
+            // Get auth credentials from the user for re-authentication. The example below shows
+            // email and password credentials but there are multiple possible providers,
+            // such as GoogleAuthProvider or FacebookAuthProvider.
+            val credential: AuthCredential = EmailAuthProvider
+                .getCredential(EmailPathSwitch.pathToEmail(currItem.itemOwnerUID!!), enteredPassword)
+
+
+            //use firebase to re authenticate the password
+            user?.reauthenticate(credential)
+                ?.addOnCompleteListener(OnCompleteListener<Void> { task ->
+                    if (task.isSuccessful) {
+
+                        //close the old dialog
+                        dialog.dismiss()
+
+                        //open the new dialog
+                        openLocationViewDialog()
+                    } else {
+
+                        //password is incorrect
+                        toast(
+                            getString(R.string.edit_location_password_incorrect),
+                            Toast.LENGTH_LONG
+                        )
+                    }
+                })
+        }else{
+            //password is blank
+            toast(getString(R.string.password_cannot_be_blank),Toast.LENGTH_SHORT)
         }
     }
 
@@ -77,7 +115,6 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
         currFamilyId = intent.getStringExtra("FamilyId").toString()
 
         // retrieve Item
-        lateinit var currItem: Item
         val rootPath = "/"
         databaseRef = FirebaseDatabase.getInstance().getReference(rootPath)
         databaseRef.addValueEventListener(object : ValueEventListener {
@@ -131,6 +168,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                 Log.d("ggggginitdatalis", "init")
                 findViewById<EditText>(R.id.editName).setText(currItem.itemName)
                 findViewById<EditText>(R.id.editDescription).setText(currItem.itemDescription)
+                findViewById<EditText>(R.id.editMaterial).setText(currItem.itemMaterial)
                 findViewById<TextView>(R.id.editItemDate).setText(currItem.date)
 
                 // set position click
@@ -208,6 +246,7 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                         val updatedItem = Item(
                             itemName = editName.text.toString(),
                             itemDescription = editDescription.text.toString(),
+                            itemMaterial = editMaterial.text.toString(),
                             itemOwnerUID = currItemOwner,
                             imageURLs = detailImageUrls,
                             isPublic = spinner.selectedItemPosition == 0,
@@ -387,7 +426,11 @@ class ItemEdit : AppCompatActivity(), LocationEnterPasswordDialog.OnViewClickerL
                     }
                 }
         }
-        toast(getString(R.string.uploading) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+        if (allImageUri.size > 0) {
+            toast(getString(R.string.uploading) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(), Toast.LENGTH_SHORT)
+        } else {
+            toast(getString(R.string.upload_success), Toast.LENGTH_SHORT)
+        }
     }
 
     private fun openLocationEnterPasswordDialog() {

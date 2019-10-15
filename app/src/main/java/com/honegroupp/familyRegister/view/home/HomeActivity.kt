@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -18,13 +19,15 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
-import com.honegroupp.familyRegister.view.authentication.AccountActivity
 
 import android.widget.TextView
+import com.google.firebase.database.*
+import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.view.item.DetailSlide
 
 import com.honegroupp.familyRegister.view.search.SearchActivity
-import kotlinx.android.synthetic.main.activity_item_list.*
+import com.squareup.picasso.Picasso
 
 
 @Suppress("DEPRECATION")
@@ -34,6 +37,7 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
     lateinit var userID:String
+
 
     override fun onItemClick(position: Int) {
         if (viewPager.currentItem == 0){
@@ -48,6 +52,8 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         intent.putExtra("FamilyId", familyId)
         intent.putExtra("PositionList", position.toString())
         intent.putExtra("CategoryNameList", categoryName)
+        // TODO delete
+//        intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
         startActivity(intent)
     }
 
@@ -94,19 +100,16 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
             drawer_layout.openDrawer(GravityCompat.START)
         }
 
-        //click sort button
-        btn_all_sort.setOnClickListener {
-            drawer_layout.openDrawer(GravityCompat.END)
-        }
 
-        //display User Name
-        val headerView = nav_view.getHeaderView(0)
-        val navUsername = headerView.findViewById(R.id.nav_userName) as TextView
-        navUsername.text = username
-
-        // display the user id
-        val navUserEmail = headerView.findViewById(R.id.nav_userEmail) as TextView
-        navUserEmail.text = userID.replace("=", ".")
+//        //display User Name
+//        val headerView = nav_view.getHeaderView(0)
+//        val navUsername = headerView.findViewById(R.id.nav_userName) as TextView
+//        navUsername.text = username
+//
+//        // display the user id
+//        val navUserEmail = headerView.findViewById(R.id.nav_userEmail) as TextView
+//        navUserEmail.text = userID.replace("=", ".")
+        displayUserInfo(uid)
 
 
         // Interaction with menuitems contained in the navigation drawer
@@ -118,14 +121,25 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         }
 
         nav_view.menu.findItem(R.id.nav_view_family).setOnMenuItemClickListener {
-            toast("Clicked view family")
+            val intent = Intent(this, ViewFamilyActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
             true
         }
-
+        nav_view.menu.findItem(R.id.help_and_feedback).setOnMenuItemClickListener {
+            val intent = Intent(this, HelpFeedbackActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
+            true
+        }
+        nav_view.menu.findItem(R.id.about).setOnMenuItemClickListener {
+            val intent = Intent(this, AboutActivity::class.java)
+            intent.putExtra("UserID", userID)
+            startActivity(intent)
+            true
+        }
         // Log out
         AuthenticationController.logout(btn_log_out, this)
-
-        // Click any item has family concepts, then navigate to FamilyActivity
 
     }
 
@@ -167,7 +181,53 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         doubleClickToExit(this)
     }
 
-    private fun toast(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    /*
+    Display the user name, email address, and the user image
+     */
+    private fun displayUserInfo(uid:String){
+        // retrieve User
+        lateinit var currUser: User
+        val rootPath = "/"
+
+        var databaseRef = FirebaseDatabase.getInstance().getReference(rootPath)
+        databaseRef.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                //Don't ignore errors!
+                Log.d("TAG", p0.message)
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                val t = object : GenericTypeIndicator<ArrayList<String>>() {}
+
+                // get current Item from data snap shot
+                currUser = p0
+                    .child(FirebaseDatabaseManager.USER_PATH)
+                    .child(uid)
+                    .getValue(User::class.java) as User
+
+                //display User Name on the header
+                val headerView = nav_view.getHeaderView(0)
+                val navUsername = headerView.findViewById(R.id.nav_userName) as TextView
+                navUsername.text = currUser.username
+
+                // display the user id on the header
+                val navUserEmail = headerView.findViewById(R.id.nav_userEmail) as TextView
+                navUserEmail.text = userID.replace("=", ".")
+
+                //get the image URL
+                val imageView = headerView.findViewById<ImageView>(R.id.nav_imageView)
+                val imageUrl = currUser.imageUrl
+
+                // Load image to ImageView via its URL from Firebase Storage
+                if(imageUrl!="") {
+                    Picasso.get()
+                        .load(imageUrl)
+                        .placeholder(R.mipmap.loading_jewellery)
+                        .fit()
+                        .centerCrop()
+                        .into(imageView)
+                }
+            }
+        })
     }
 }

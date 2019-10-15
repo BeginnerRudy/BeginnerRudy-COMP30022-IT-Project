@@ -31,6 +31,7 @@ open class ContainerAdapter(
 
     var listener: OnItemClickerListener? = null
 
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -43,6 +44,12 @@ open class ContainerAdapter(
         val currItem = items[position]
 
         holder.textViewName.text = currItem.itemName
+
+        // show item date
+        val dateParts = currItem.date.split("/")
+        val newDate = dateParts[2] + "." + dateParts[1] + "." + dateParts[0]
+        holder.textViewTime.text = newDate
+
         // Load image to ImageView via its URL from Firebase Storage
         if (currItem.imageURLs.size > 0){
             Picasso.get()
@@ -96,6 +103,8 @@ open class ContainerAdapter(
         View.OnCreateContextMenuListener,
         MenuItem.OnMenuItemClickListener {
         val textViewName: TextView = viewItem.findViewById(R.id.txt_name)
+
+        val textViewTime: TextView = viewItem.findViewById(R.id.item_time)
 
         val imageView: ImageView = viewItem.findViewById(R.id.img_upload)
 

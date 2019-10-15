@@ -12,14 +12,14 @@
     <style name="LoginTheme" parent="FirebaseUI">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:windowBackground">@color/colorWhite</item>
+        <item name="android:windowBackground">@drawable/login_background_sea</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="HeaderBar">
+        <item name="android:background">#303F9F</item>
+    </style>
 
-
-
-
-
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"></style>
 </resources>

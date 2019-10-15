@@ -94,9 +94,40 @@
     <string name="photo">Photo</string>
     <string name="others">Others</string>
     <string name="complete_delete">Delete from category and all</string>
+    <string name="password_cannot_be_blank">Password cannot be blank</string>
+    <string name="date">Date</string>
+    <string name="description">Item description</string>
+    <string name="help_and_feedback"><![CDATA[Help&feedback]]></string>
+    <string name="about">About</string>
+    <string name="app_version">1.0</string>
+    <string name="version">Version</string>
+    <string name="dev_email_address">h1.team.developer@gmail.com</string>
+    <string name="ask_us_message">Have a question? Ask us.</string>
+    <string name="help_message">If you have any question about this app, please contact help team email.</string>
+    <string name="term_of_service">Term of service</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="term_of_service_url" translatable="false">https://h1teamdeveloper.wixsite.com/term-of-service</string>
+    <string name="privacy_policy_url" translatable="false">https://h1teamdeveloper.wixsite.com/privacy-policy</string>
+    <string name="type_item_material">Please enter item material</string>
+    <string name="material">Material</string>
+    <string name="update_user_info">Update user information</string>
+    <string name="edit_user_info">Edit</string>
+    <string name="username">Name</string>
+    <string name="please_enter_name">Please enter name</string>
+    <string name="family">Family</string>
+    <string name="family_name_show">Family name:</string>
+    <string name="family_id_show">Family id:</string>
+    <string name="family_members">Family members</string>
+    <string name="change_family_name">Change Family Name</string>
+    <string name="change_family_password">Change Family Password</string>
 
     <string name="sort_name_asc">Ascending sort by item name</string>
     <string name="sort_name_desc">Descending sort by item name</string>
     <string name="sort_time_asc">Ascending sort by date</string>
     <string name="sort_time_desc">Descending sort by date</string>
+    <string name="new_family_name">New Family Name</string>
+    <string name="new_family_password">New Family Password</string>
+    <string name="reauth">Please enter your account password first:</string>
+    <string name="owner">Owner</string>
+    <string name="change_user_photo">Change user name and image</string>
 </resources>

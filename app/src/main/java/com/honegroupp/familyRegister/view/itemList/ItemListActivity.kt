@@ -3,6 +3,7 @@ package com.honegroupp.familyRegister.view.itemList
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.GravityCompat
+import android.view.Menu
 import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ItemListController
@@ -39,4 +40,5 @@ class ItemListActivity : ContainerActivity() {
 
 
     }
+
 }

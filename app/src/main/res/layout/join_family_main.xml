@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp">
+
         <TextView
             android:id="@+id/familyJoinDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/merriweather_regular"
             android:text="@string/please_enter_family_id_password"
-            android:textSize="24dp"
-            android:fontFamily="@font/merriweather_regular"></TextView>
-
+            android:textSize="24dp"></TextView>
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -37,13 +38,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/familyJoinPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/familyJoinName"
-            app:passwordToggleEnabled = "true"
+            app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/colorAccent">
 
             <com.google.android.material.textfield.TextInputEditText

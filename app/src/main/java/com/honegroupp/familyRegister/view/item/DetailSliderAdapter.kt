@@ -68,14 +68,25 @@ class DetailSliderAdapter(
 
         val currItemUploads = items[position]
 
-        // slideHeading.setText(currItemUploads.itemName)
         val slideToolbar =
             view.findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.detial_collapsing_toolbar)
         slideToolbar.setTitle(currItemUploads.itemName)
+
+        // show item description
         slideDescription.setText(currItemUploads.itemDescription)
-        var dateParts = currItemUploads.date.split("/")
-        var newDate = dateParts[2] + "." + dateParts[1] + "." + dateParts[0]
+
+        // show item date
+        val dateParts = currItemUploads.date.split("/")
+        val newDate = dateParts[2] + "." + dateParts[1] + "." + dateParts[0]
         slideDate.text = newDate
+
+        // show item material
+        if (currItemUploads.itemMaterial.isNotEmpty()) {
+            view.findViewById<TextView>(R.id.material_description).visibility = View.VISIBLE
+            val slideMaterial = view.findViewById<TextView>(R.id.detail_material)
+            slideMaterial.visibility = View.VISIBLE
+            slideMaterial.text = currItemUploads.itemMaterial
+        }
 
         // set show button, solid heart if it is shown in show page
         if (userId in items[position].showPageUids) {

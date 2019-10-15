@@ -45,7 +45,7 @@ class DetailImagesSliderAdapter(
         val layoutInflater:LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_detail_images_layout, container, false)
 
-        var slideImageView = view.findViewById<ImageView>(R.id.detail_images)
+        val slideImageView = view.findViewById<ImageView>(R.id.detail_images)
 
         val currItemUrls = items[position]
 
@@ -53,6 +53,8 @@ class DetailImagesSliderAdapter(
         Picasso.get()
             .load(currItemUrls)
             .placeholder(R.mipmap.loading_jewellery)
+            .fit()
+            .centerCrop()
             .into(slideImageView)
 
         view.findViewById<ImageView>(R.id.detail_images).setOnClickListener{

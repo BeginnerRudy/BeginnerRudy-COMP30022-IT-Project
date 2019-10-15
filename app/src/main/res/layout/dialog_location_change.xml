@@ -6,38 +6,38 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/view_location_change_text"
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bedside table first drawer"
         android:layout_centerHorizontal="true"
-        android:textSize="20sp"
-        android:textColor="@color/colorWhite"/>
+        android:layout_marginTop="20dp"
+        android:text="Bedside table first drawer"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_below="@id/view_location_change_text">
+        android:layout_below="@id/view_location_change_text"
+        android:layout_marginTop="40dp">
 
         <EditText
             android:id="@+id/new_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:paddingLeft="@dimen/layout_margin_left"
             android:layout_toStartOf="@+id/view_location_change_confirm_Btn"
-            android:hint="@string/edit_dialog_new_location"/>
+            android:hint="@string/edit_dialog_new_location"
+            android:paddingLeft="@dimen/layout_margin_left" />
 
         <Button
             android:id="@+id/view_location_change_confirm_Btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/layout_margin_right"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/layout_margin_right"
             android:background="@android:color/black"
             android:text="@string/edit_dialog_confirm_change"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
     </RelativeLayout>
 
 </RelativeLayout>
