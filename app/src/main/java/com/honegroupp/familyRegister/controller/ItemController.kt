@@ -32,6 +32,7 @@ class ItemController {
             itemName: EditText,
             itemDescription: EditText,
             itemMaterial:EditText,
+            itemLocation:EditText,
             uid: String,
             categoryName: String,
             imageURLs: ArrayList<String>,
@@ -43,6 +44,7 @@ class ItemController {
                 itemName = itemName.text.toString(),
                 itemDescription = itemDescription.text.toString(),
                 itemMaterial = itemMaterial.text.toString(),
+                itemLocation = itemLocation.text.toString(),
                 itemOwnerUID = uid,
                 imageURLs = imageURLs,
                 isPublic = isPublic,
@@ -64,7 +66,8 @@ class ItemController {
             uid: String,
             imageURLs: ArrayList<String>,
             isPublic: Boolean,
-            categoryName: String
+            categoryName: String,
+            location:String
         ) {
 
             val item = Item(
@@ -72,7 +75,8 @@ class ItemController {
                 itemDescription = itemDescription.text.toString(),
                 itemOwnerUID = uid,
                 imageURLs = imageURLs,
-                isPublic = isPublic
+                isPublic = isPublic,
+                itemLocation = location
             )
             item.edit(uid, categoryName)
 

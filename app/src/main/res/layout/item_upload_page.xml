@@ -162,6 +162,18 @@
             </RelativeLayout>
 
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/item_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/itemDescription">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/item_location_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/please_enter_location" />
+            </com.google.android.material.textfield.TextInputLayout>
             <Button
                 android:id="@+id/addItemConfirm"
                 android:layout_width="match_parent"
