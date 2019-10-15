@@ -559,9 +559,9 @@ data class Family(
             val familyNameView: TextView = mActivity.findViewById(R.id.family_name)
 
             // if the user id is the same as the family id then it is the owner of the family, he/she has the right to modify the family
-            if (uid == familyId) {
-                mActivity.findViewById<ImageButton>(R.id.btn_family_setting).visibility =
-                    View.VISIBLE
+            if (uid == familyId){
+                mActivity.findViewById<TextView>(R.id.btn_family_setting).visibility = View.VISIBLE
+
             }
 
             familyIdView.text =
