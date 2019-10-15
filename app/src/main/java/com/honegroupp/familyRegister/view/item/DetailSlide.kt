@@ -88,9 +88,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         // get position of current category for setting Current page item
         val categoryIndexList= intent.getStringExtra("CategoryNameList").toInt()
 
-        // get sort method
-        val sortOrder = intent.getStringExtra("SortOrder").toString()
-
         if (categoryIndexList >= CATEGORY_SIGNAL ){
             isInCategory = true
         }
@@ -181,9 +178,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                     }
                 }
 
-                // sort Item according to Sort order
-                sortItem(sortOrder)
-
                 // Notify ViewPager to update
                 if (itemUploads.size == 0) {
                     text_view_empty_detail.visibility = View.VISIBLE
@@ -191,6 +185,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                     text_view_empty_detail.visibility = View.INVISIBLE
                 }
                 sliderAdapter.notifyDataSetChanged()
+
 
                 // set Item to be seen first in View Page when items(itemUploads) is ready
                 if (itemUploads.size > 0) {
