@@ -321,11 +321,12 @@ data class Family(
         fun deleteItem(
             uid: String,
             categoryName: String,
-            itemId: String
+            itemId: String,
+            mActivity: AppCompatActivity
         ) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
-                callbackDeleteItem(uid, categoryName, itemId, d)
+                callbackDeleteItem(uid, categoryName, itemId, mActivity, d)
             }
         }
 
@@ -338,6 +339,7 @@ data class Family(
             uid: String,
             categoryName: String,
             itemId: String,
+            mActivity: AppCompatActivity,
             dataSnapshot: DataSnapshot
         ) {
             // get user's family ID
@@ -348,59 +350,79 @@ data class Family(
                         String::class.java
                     ) as String
 
-            // find the category
-            val itemKeys = dataSnapshot
+            // get the item first
+            val item = dataSnapshot
                 .child(FirebaseDatabaseManager.FAMILY_PATH)
                 .child(currFamilyId)
-                .child("categories")
-                .child(categoryName)
-                .child("itemKeys")
-                .children
-
-
-            for (itemKey in itemKeys) {
-                // remove item from category only.
-                if (itemKey.value == itemId) {
-                    itemKey.ref.setValue(null)
-                    break
-                }
-            }
-
-            // update itemkeys index first
-            val itemKeysPath =
-                    "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/itemKeys/"
-            var categoryItemKeys = dataSnapshot
-                .child(FirebaseDatabaseManager.FAMILY_PATH)
-                .child(currFamilyId)
-                .child("categories")
-                .child(categoryName)
-                .child("itemKeys")
-                .value as ArrayList<String>
-
-            categoryItemKeys =
-                    categoryItemKeys.filterNotNull() as ArrayList<String>
-            categoryItemKeys.remove(itemId)
-
-            FirebaseDatabaseManager.update(itemKeysPath, categoryItemKeys)
-
-            // remove item
-            FirebaseDatabase.getInstance()
-                .getReference("${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/items/")
+                .child("items")
                 .child(itemId)
-                .removeValue()
+                .getValue(Item::class.java) as Item
 
-            // update the item count
-            val itemCount = dataSnapshot
-                .child(FirebaseDatabaseManager.FAMILY_PATH)
-                .child(currFamilyId)
-                .child("categories")
-                .child(categoryName)
-                .child("itemKeys")
-                .childrenCount
-            val countReference =
-                    "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/count"
-            FirebaseDatabase.getInstance().getReference(countReference)
-                .setValue(itemCount - 1)
+            // if the user is the item owner, delete
+            if (item.itemOwnerUID == uid) {
+                // find the category
+                val itemKeys = dataSnapshot
+                    .child(FirebaseDatabaseManager.FAMILY_PATH)
+                    .child(currFamilyId)
+                    .child("categories")
+                    .child(categoryName)
+                    .child("itemKeys")
+                    .children
+
+
+                for (itemKey in itemKeys) {
+                    // remove item from category only.
+                    if (itemKey.value == itemId) {
+                        itemKey.ref.setValue(null)
+                        break
+                    }
+                }
+
+
+                // update itemkeys index first
+                val itemKeysPath =
+                        "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/itemKeys/"
+                var categoryItemKeys = dataSnapshot
+                    .child(FirebaseDatabaseManager.FAMILY_PATH)
+                    .child(currFamilyId)
+                    .child("categories")
+                    .child(categoryName)
+                    .child("itemKeys")
+                    .value as ArrayList<String>
+
+                categoryItemKeys =
+                        categoryItemKeys.filterNotNull() as ArrayList<String>
+                categoryItemKeys.remove(itemId)
+
+                FirebaseDatabaseManager.update(itemKeysPath, categoryItemKeys)
+
+                // remove item
+                FirebaseDatabase.getInstance()
+                    .getReference("${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/items/")
+                    .child(itemId)
+                    .removeValue()
+
+                // update the item count
+                val itemCount = dataSnapshot
+                    .child(FirebaseDatabaseManager.FAMILY_PATH)
+                    .child(currFamilyId)
+                    .child("categories")
+                    .child(categoryName)
+                    .child("itemKeys")
+                    .childrenCount
+                val countReference =
+                        "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/categories/$categoryName/count"
+                FirebaseDatabase.getInstance().getReference(countReference)
+                    .setValue(itemCount - 1)
+
+            }
+            // otherwise, show the warning dialog
+            else {
+                val familyNameChangeDialog = FamilyNameChangeDialog(uid)
+                familyNameChangeDialog.show(
+                    mActivity.supportFragmentManager,
+                    "Location Change Dialog")
+            }
 
 
         }
@@ -588,27 +610,32 @@ data class Family(
                     mActivity.findViewById(R.id.family_name)
 
             // if the user id is the same as the family id then it is the owner of the family, he/she has the right to modify the family
-            if (uid == familyId){
-                mActivity.findViewById<TextView>(R.id.btn_family_setting).visibility = View.VISIBLE
+            if (uid == familyId) {
+                mActivity.findViewById<TextView>(R.id.btn_family_setting)
+                    .visibility = View.VISIBLE
 
             }
 
             familyIdView.text =
-                "${mActivity.getString(R.string.family_id_show)}  ${EmailPathSwitch.pathToEmail(
-                    familyId
-                )}"
-            familyNameView.text = "${mActivity.getString(R.string.family_name_show)}  $familyName"
+                    "${mActivity.getString(R.string.family_id_show)}  ${EmailPathSwitch.pathToEmail(
+                        familyId
+                    )}"
+            familyNameView.text =
+                    "${mActivity.getString(R.string.family_name_show)}  $familyName"
 
             // retrieve user's uids in current family
-            val path = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/members/"
+            val path =
+                    "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/members/"
 
-            val currUserUids = dataSnapshot.child(path).value as ArrayList<String>
+            val currUserUids =
+                    dataSnapshot.child(path).value as ArrayList<String>
 
             // retrieve user and add it to a list
             users.clear()
             for (uid in currUserUids) {
                 val currUser =
-                    dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).getValue(User::class.java) as User
+                        dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(
+                            uid).getValue(User::class.java) as User
                 users.add(currUser)
             }
 
@@ -636,10 +663,13 @@ data class Family(
             newFamilyName: String,
             dataSnapshot: DataSnapshot
         ) {
-            val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
-            val familyNamePath = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/familyName"
+            val familyId =
+                    FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+            val familyNamePath =
+                    "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/familyName"
 
-            FirebaseDatabase.getInstance().getReference(familyNamePath).setValue(newFamilyName)
+            FirebaseDatabase.getInstance().getReference(familyNamePath)
+                .setValue(newFamilyName)
         }
 
 
@@ -663,8 +693,10 @@ data class Family(
             newFamilyPassword: String,
             dataSnapshot: DataSnapshot
         ) {
-            val familyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
-            val familyNamePath = "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/password"
+            val familyId =
+                    FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+            val familyNamePath =
+                    "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/password"
 
             FirebaseDatabase.getInstance().getReference(familyNamePath)
                 .setValue(Hash.applyHash(newFamilyPassword))
@@ -707,16 +739,16 @@ data class Family(
             if (items.isEmpty()) {
                 // Make the progress bar invisible
                 mActivity.findViewById<ProgressBar>(progressBarId).visibility =
-                    View.INVISIBLE
+                        View.INVISIBLE
 
                 mActivity.findViewById<TextView>(emptyTextViewId).visibility =
-                    View.VISIBLE
+                        View.VISIBLE
             } else {
                 // Make the progress bar invisible
                 mActivity.findViewById<ProgressBar>(progressBarId).visibility =
-                    View.INVISIBLE
+                        View.INVISIBLE
                 mActivity.findViewById<TextView>(emptyTextViewId).visibility =
-                    View.INVISIBLE
+                        View.INVISIBLE
             }
         }
 

@@ -84,7 +84,6 @@ open class ContainerAdapter(
                 showButton.isFavorite = true
             }
         }
-
     }
 
     override fun getItemCount(): Int {
