@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -39,9 +40,8 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
     private lateinit var viewPager: ViewPager
     lateinit var userID: String
 
-    var sortOrderAll = ContainerActivity.SORT_DEFAULT
-    var sortOrderShow = ContainerActivity.SORT_DEFAULT
-
+    var sortOrderAll = SORT_DEFAULT
+    var sortOrderShow = SORT_DEFAULT
 
 
     // set items adapter for show page
@@ -67,8 +67,6 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         intent.putExtra("FamilyId", familyId)
         intent.putExtra("PositionList", position.toString())
         intent.putExtra("CategoryNameList", categoryName)
-        // TODO delete
-        //        intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
         startActivity(intent)
     }
 
@@ -96,6 +94,35 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
 
         viewPager = findViewById(R.id.viewpager)
         val viewPagerAdapter = setupViewPager(viewPager)
+
+        // set the sort logic for both show and all page
+        val allTabFragment = viewPagerAdapter.getItem(0) as AllTabFragment
+        HomeController
+            .sortItem(allTabFragment, allTabAdapter, showTabAdapter, this)
+
+        // set when the btn_home_button should be displayed
+        viewPager
+            .addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
+                    // so nothing
+                }
+
+                override fun onPageSelected(position: Int) {
+                    when (position) {
+                        0 -> btn_home_sort.visibility = View.VISIBLE
+                        1 -> btn_home_sort.visibility = View.INVISIBLE
+                        2 -> btn_home_sort.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onPageScrollStateChanged(state: Int) {
+
+                }
+            })
 
         tabLayout = findViewById(R.id.tabs)
         tabLayout.setupWithViewPager(viewPager)
@@ -164,9 +191,7 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
 
         }
 
-        // set the sort logic for both show and all page
-        val allTabFragment = viewPagerAdapter.getItem(0) as AllTabFragment
-        HomeController.sortItem(allTabFragment, allTabAdapter, showTabAdapter, this)
+
     }
 
     private fun setupViewPager(viewPager: ViewPager): ViewPagerAdapter {
