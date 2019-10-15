@@ -1,7 +1,6 @@
 package com.honegroupp.familyRegister.model
 
 import android.content.Intent
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.PropertyName
@@ -40,7 +39,7 @@ data class Category(
     ) {
         //        var url = DEFAULT_COVER
         if (itemKeys.isNotEmpty()) {
-            val lastItemKey = itemKeys.last()
+            val firstItemKey = itemKeys[0]
             val rootPath = "/"
             FirebaseDatabaseManager.retrieve(rootPath) { d: DataSnapshot ->
                 callbackGetCoverURL(
@@ -48,7 +47,7 @@ data class Category(
                     mActivity,
                     position,
                     uid,
-                    lastItemKey,
+                    firstItemKey,
                     d
                 )
             }
@@ -120,7 +119,7 @@ data class Category(
         } else {
             urls = urls as ArrayList<String>
             Picasso.get()
-                .load(urls[urls.size - 1])
+                .load(urls[0])
                 .placeholder(R.mipmap.loading_jewellery)
                 .fit()
                 .centerCrop()

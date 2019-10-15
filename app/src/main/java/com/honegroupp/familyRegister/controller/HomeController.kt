@@ -36,9 +36,11 @@ class HomeController {
                     adapter.items.sortBy { it.itemName }
                     //update sort order
                     if (allTabFragment.isVisible) {
-                        mActivity.sortOrderAll = ContainerActivity.NAME_ASCENDING
+                        mActivity.sortOrderAll =
+                                ContainerActivity.NAME_ASCENDING
                     } else {
-                        mActivity.sortOrderShow = ContainerActivity.NAME_ASCENDING
+                        mActivity.sortOrderShow =
+                                ContainerActivity.NAME_ASCENDING
                     }
                     // update the UI layer
                     updateRecyclerView(adapter, drawerSortLayout)
@@ -57,14 +59,17 @@ class HomeController {
                     adapter.items.sortByDescending { it.itemName }
                     //update sort order
                     if (allTabFragment.isVisible) {
-                        mActivity.sortOrderAll = ContainerActivity.NAME_DESCENDING
+                        mActivity.sortOrderAll =
+                                ContainerActivity.NAME_DESCENDING
                     } else {
-                        mActivity.sortOrderShow = ContainerActivity.NAME_DESCENDING
+                        mActivity.sortOrderShow =
+                                ContainerActivity.NAME_DESCENDING
                     }
                     // update the UI layer
                     updateRecyclerView(adapter, drawerSortLayout)
                     true
                 }
+
             navi_sort_view.menu.findItem(R.id.sort_time_asc)
                 .setOnMenuItemClickListener {
                     val adapter = if (allTabFragment.isVisible) {
@@ -77,9 +82,11 @@ class HomeController {
 
                     //update sort order
                     if (allTabFragment.isVisible) {
-                        mActivity.sortOrderAll = ContainerActivity.TIME_ASCENDING
+                        mActivity.sortOrderAll =
+                                ContainerActivity.TIME_ASCENDING
                     } else {
-                        mActivity.sortOrderShow = ContainerActivity.TIME_ASCENDING
+                        mActivity.sortOrderShow =
+                                ContainerActivity.TIME_ASCENDING
                     }
 
                     // update the UI layer
@@ -98,9 +105,11 @@ class HomeController {
 
                     //update sort order
                     if (allTabFragment.isVisible) {
-                        mActivity.sortOrderAll = ContainerActivity.TIME_DESCENDING
+                        mActivity.sortOrderAll =
+                                ContainerActivity.TIME_DESCENDING
                     } else {
-                        mActivity.sortOrderShow = ContainerActivity.TIME_DESCENDING
+                        mActivity.sortOrderShow =
+                                ContainerActivity.TIME_DESCENDING
                     }
 
                     // update the UI layer
