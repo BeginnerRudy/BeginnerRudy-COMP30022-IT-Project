@@ -62,40 +62,69 @@
                     android:visibility="visible" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/itemName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/spinner">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/item_name_input"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/itemName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/type_item_name"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:paddingLeft="@dimen/layout_margin_left">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/itemDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/itemName">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/item_name_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/type_item_name"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/item_description_input"
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/itemName_red_star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:textColor="@color/colorRed"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/itemDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/type_item_description"
-                    android:inputType="textMultiLine" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:paddingLeft="@dimen/layout_margin_left">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/item_description_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/type_item_description"
+                        android:inputType="textMultiLine" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/itemDescription_red_star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:textColor="@color/colorRed"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
 
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/itemMaterial"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/itemName">
+                android:paddingLeft="@dimen/layout_margin_left">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/item_material_input"
@@ -104,19 +133,34 @@
                     android:hint="@string/type_item_material" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/itemDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/itemDescription">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/text_date"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/itemDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/please_pick_date_for_item"
-                    android:inputType="none" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:paddingLeft="@dimen/layout_margin_left">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/text_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/please_pick_date_for_item"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_date_red_star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:textColor="@color/colorRed"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
 
             <Button
                 android:id="@+id/addItemConfirm"

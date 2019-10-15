@@ -122,7 +122,7 @@
     <string name="type_item_material">请输入物品材质</string>
     <string name="material">材质</string>
     <string name="update_user_info">更新用户信息</string>
-    <string name="edit_user_info">Edit</string>
+    <string name="edit_user_info">编辑</string>
     <string name="username">用户名称</string>
     <string name="please_enter_name">请输入名称</string>
     <string name="owner">家主</string>
