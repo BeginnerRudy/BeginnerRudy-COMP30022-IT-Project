@@ -31,6 +31,7 @@ open class ContainerAdapter(
 
     var listener: OnItemClickerListener? = null
 
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

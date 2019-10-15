@@ -25,6 +25,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Category
 import com.honegroupp.familyRegister.model.Item
+import com.honegroupp.familyRegister.view.home.ContainerActivity
 import kotlinx.android.synthetic.main.slide_background.*
 import java.io.File
 import java.io.FileOutputStream
@@ -36,11 +37,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         const val SHOW_PAGE_SIGNAL = -2
         const val CATEGORY_SIGNAL = 0
         const val STORAGE_PERMISSION_CODE: Int = 1000
-        const val SORT_DEFAULT = "default"
-        const val NAME_ASCENDING = "name_asc"
-        const val NAME_DESCENDING = "name_desc"
-        const val TIME_ASCENDING = "time_asc"
-        const val TIME_DESCENDING = "time_desc"
     }
 
     private var downloadUrl :String = ""
@@ -65,10 +61,10 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     // Sort items use sort method
     private fun sortItem(sortOrder: String){
         when (sortOrder) {
-            NAME_ASCENDING -> itemUploads.sortBy { it.itemName }
-            NAME_DESCENDING -> itemUploads.sortByDescending { it.itemName }
-            TIME_ASCENDING -> itemUploads.sortBy { it.date }
-            TIME_DESCENDING -> itemUploads.sortByDescending { it.date }
+            ContainerActivity.NAME_ASCENDING -> itemUploads.sortBy { it.itemName }
+            ContainerActivity.NAME_DESCENDING -> itemUploads.sortByDescending { it.itemName }
+            ContainerActivity.TIME_ASCENDING -> itemUploads.sortBy { it.date }
+            ContainerActivity.TIME_DESCENDING -> itemUploads.sortByDescending { it.date }
         }
     }
 
@@ -91,9 +87,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
         // get position of current category for setting Current page item
         val categoryIndexList= intent.getStringExtra("CategoryNameList").toInt()
-
-        // get sort method
-        val sortOrder = intent.getStringExtra("SortOrder").toString()
 
         if (categoryIndexList >= CATEGORY_SIGNAL ){
             isInCategory = true
@@ -185,9 +178,6 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                     }
                 }
 
-                // sort Item according to Sort order
-                sortItem(sortOrder)
-
                 // Notify ViewPager to update
                 if (itemUploads.size == 0) {
                     text_view_empty_detail.visibility = View.VISIBLE
@@ -195,6 +185,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                     text_view_empty_detail.visibility = View.INVISIBLE
                 }
                 sliderAdapter.notifyDataSetChanged()
+
 
                 // set Item to be seen first in View Page when items(itemUploads) is ready
                 if (itemUploads.size > 0) {

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.Item
+import com.honegroupp.familyRegister.view.home.ContainerActivity
 import com.honegroupp.familyRegister.view.item.DetailSlide
 
 class SearchMethod{
@@ -82,7 +83,7 @@ class SearchMethod{
             intent.putExtra("PositionList", listView.adapter.getItemId(position).toString())
             intent.putExtra("CategoryNameList", category.toString())
             intent.putExtra("FamilyId", currFamilyId)
-            intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
+            intent.putExtra("SortOrder", ContainerActivity.SORT_DEFAULT)
             mActivity.startActivity(intent)
         }
     }
@@ -170,7 +171,7 @@ class SearchMethod{
             intent.putExtra("PositionList", itemPositionMap[element].toString())
             intent.putExtra("CategoryNameList", category.toString())
             intent.putExtra("FamilyId", currFamilyId)
-            intent.putExtra("SortOrder", DetailSlide.SORT_DEFAULT)
+            intent.putExtra("SortOrder", ContainerActivity.SORT_DEFAULT)
             mActivity.startActivity(intent)
         }
     }

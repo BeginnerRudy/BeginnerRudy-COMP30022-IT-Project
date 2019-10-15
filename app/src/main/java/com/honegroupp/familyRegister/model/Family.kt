@@ -284,26 +284,17 @@ data class Family(
                 } else if (currItem.itemOwnerUID == mActivity.uid) {
                     items.add(currItem)
                 }
-
             }
 
-            // notify the adapter to update
-            itemListAdapter.notifyDataSetChanged()
-            if (itemKeys.isEmpty()) {
-                // Make the progress bar invisible
-                mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
-                    View.INVISIBLE
+            // sort the current item according to current app's sort order
+            sortItems(mActivity.sortOrder, items)
 
-                mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
-                    View.VISIBLE
-            } else {
-
-                // Make the progress bar invisible
-                mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
-                    View.INVISIBLE
-                mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
-                    View.INVISIBLE
-            }
+            // update the UI
+            updateUI(
+                itemListAdapter, items, mActivity,
+                R.id.progress_circular,
+                R.id.item_list_empty
+            )
         }
 
         /**
@@ -457,25 +448,17 @@ data class Family(
                     }
                 }
 
+                // sort the current item according to current app's sort order
+                sortItems(mActivity.sortOrder, items)
 
-                // notify the adapter to update
-                allTabAdapter.notifyDataSetChanged()
-
-                if (items.isEmpty()) {
-                    // Make the progress bar invisible
-                    mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
-                        View.INVISIBLE
-
-                    val text = mActivity.findViewById<TextView>(R.id.text_view_empty_category)
-                    text.text = mActivity.getString(R.string.no_items_for_the_show_page)
-                    text.visibility = View.VISIBLE
-                } else {
-                    // Make the progress bar invisible
-                    mActivity.findViewById<ProgressBar>(R.id.progress_circular).visibility =
-                        View.INVISIBLE
-                    mActivity.findViewById<TextView>(R.id.text_view_empty_category).visibility =
-                        View.INVISIBLE
-                }
+                // update the UI
+                updateUI(
+                    allTabAdapter,
+                    items,
+                    mActivity,
+                    R.id.progress_circular,
+                    R.id.item_list_empty
+                )
             }
         }
 
@@ -515,6 +498,9 @@ data class Family(
                         .child("items")
                         .children
 
+                // sort the current item according to current app's sort order
+                sortItems(mActivity.sortOrder, items)
+
                 // clear items once retrieve item from the database
                 items.clear()
 
@@ -525,23 +511,14 @@ data class Family(
                     items.add(item)
                 }
 
-                // notify the adapter to update
-                showTabAdapter.notifyDataSetChanged()
-
-                if (items.isEmpty()) {
-                    // Make the progress bar invisible
-                    mActivity.findViewById<ProgressBar>(R.id.all_progress_circular).visibility =
-                        View.INVISIBLE
-
-                    mActivity.findViewById<TextView>(R.id.all_text_view_empty_category).visibility =
-                        View.VISIBLE
-                } else {
-                    // Make the progress bar invisible
-                    mActivity.findViewById<ProgressBar>(R.id.all_progress_circular).visibility =
-                        View.INVISIBLE
-                    mActivity.findViewById<TextView>(R.id.all_text_view_empty_category).visibility =
-                        View.INVISIBLE
-                }
+                // update the UI
+                updateUI(
+                    showTabAdapter,
+                    items,
+                    mActivity,
+                    R.id.all_progress_circular,
+                    R.id.all_text_view_empty
+                )
             }
         }
 
@@ -584,6 +561,7 @@ data class Family(
             // if the user id is the same as the family id then it is the owner of the family, he/she has the right to modify the family
             if (uid == familyId){
                 mActivity.findViewById<TextView>(R.id.btn_family_setting).visibility = View.VISIBLE
+
             }
 
             familyIdView.text =
@@ -662,5 +640,56 @@ data class Family(
             FirebaseDatabase.getInstance().getReference(familyNamePath)
                 .setValue(Hash.applyHash(newFamilyPassword))
         }
+
+        /**
+         * This method is responsible for sort the items according the the sortorder
+         *
+         * */
+        private fun sortItems(sortOrder: String, items: ArrayList<Item>) {
+            when (sortOrder) {
+                ContainerActivity.NAME_ASCENDING -> //sort by name ascending
+                    items.sortBy { it.itemName }
+                ContainerActivity.NAME_DESCENDING -> //sort by name descending
+                    items.sortByDescending { it.itemName }
+                ContainerActivity.TIME_ASCENDING -> //sort by time ascending
+                    items.sortBy { it.date }
+                ContainerActivity.TIME_DESCENDING -> //sort by time descending
+                    items.sortByDescending { it.date }
+            }
+        }
+
+        /**
+         * This method is responsible for updating the UI layer after retrieving the data from
+         * the Firebase Database.
+         *
+         * */
+
+        private fun updateUI(
+            adapter: ContainerAdapter,
+            items: ArrayList<Item>,
+            mActivity: ContainerActivity,
+            progressBarId: Int,
+            emptyTextViewId: Int
+        ) {
+            // notify the adapter to update
+            adapter.notifyDataSetChanged()
+
+            // update the UI according to the state of items, whether it is empty.
+            if (items.isEmpty()) {
+                // Make the progress bar invisible
+                mActivity.findViewById<ProgressBar>(progressBarId).visibility =
+                    View.INVISIBLE
+
+                mActivity.findViewById<TextView>(emptyTextViewId).visibility =
+                    View.VISIBLE
+            } else {
+                // Make the progress bar invisible
+                mActivity.findViewById<ProgressBar>(progressBarId).visibility =
+                    View.INVISIBLE
+                mActivity.findViewById<TextView>(emptyTextViewId).visibility =
+                    View.INVISIBLE
+            }
+        }
+
     }
 }
