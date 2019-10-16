@@ -1,31 +1,29 @@
 package com.honegroupp.familyRegister.utility
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.provider.MediaStore
 import java.io.ByteArrayOutputStream
 
-class CompressionUtil{
+class CompressionUtil {
 
-    companion object{
+    companion object {
 
 
         val IMAGA_QUALITY = 30
-        val MAX_RESOLUTION : Float = 2016f
+        val MAX_RESOLUTION: Float = 2016f
 
         //compress the image
-        fun compressImage(scaledBitmap: Bitmap):ByteArray{
+        fun compressImage(scaledBitmap: Bitmap): ByteArray {
             val bytes = ByteArrayOutputStream()
-            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, IMAGA_QUALITY, bytes)
+            scaledBitmap
+                .compress(Bitmap.CompressFormat.JPEG, IMAGA_QUALITY, bytes)
             return bytes.toByteArray()
         }
 
         /*Decrease the resolution of image to reduce the size*/
         fun scaleDown(
-            realImage: Bitmap,filter: Boolean): Bitmap {
-            val maxImageSize:Float = MAX_RESOLUTION
+            realImage: Bitmap, filter: Boolean
+        ): Bitmap {
+            val maxImageSize: Float = MAX_RESOLUTION
             val ratio = Math.min(
                 maxImageSize / realImage.width,
                 maxImageSize / realImage.height
