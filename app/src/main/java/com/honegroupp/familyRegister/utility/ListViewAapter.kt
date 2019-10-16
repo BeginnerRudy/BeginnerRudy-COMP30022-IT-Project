@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso
 class ListViewAapter(val items: ArrayList<Item>, val mActivity:AppCompatActivity): BaseAdapter(){
 
     private val nameList : ArrayList<String> = ArrayList()
+    private val dateList : ArrayList<String> = ArrayList()
     private val imageURLList : ArrayList<String> = ArrayList()
 
     override fun getCount(): Int {
@@ -32,12 +33,14 @@ class ListViewAapter(val items: ArrayList<Item>, val mActivity:AppCompatActivity
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         val layout : View = View.inflate(mActivity, R.layout.item_listview, null)
         val picture : ImageView = layout.findViewById(R.id.picture)
-        val name : TextView = layout.findViewById(R.id.name)
+        val name : TextView = layout.findViewById(R.id.search_name)
+        val date : TextView = layout.findViewById(R.id.search_date)
 
         for (item in items){
 
             imageURLList.add(item.imageURLs[0])
             nameList.add(item.itemName)
+            dateList.add(item.date)
         }
 
         //set image to imageView
@@ -49,6 +52,7 @@ class ListViewAapter(val items: ArrayList<Item>, val mActivity:AppCompatActivity
                 .into(picture)
 
         name.text = nameList[position]
+        date.text = dateList[position]
 
         return layout
     }
