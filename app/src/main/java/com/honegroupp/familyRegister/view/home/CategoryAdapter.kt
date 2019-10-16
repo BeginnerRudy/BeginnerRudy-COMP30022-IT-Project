@@ -14,23 +14,34 @@ import com.honegroupp.familyRegister.model.Category
  *
  * */
 
-class CategoryAdapter(val uid: String, private val items: ArrayList<Category>, val mActivity: AppCompatActivity) :
+class CategoryAdapter(
+    val uid: String,
+    private val items: ArrayList<Category>,
+    val mActivity: AppCompatActivity
+) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     var listener: OnItemClickerListener? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val v = LayoutInflater.from(mActivity).inflate(R.layout.category_item, parent, false)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): CategoryViewHolder {
+        val v = LayoutInflater.from(mActivity)
+            .inflate(R.layout.category_item, parent, false)
         return CategoryViewHolder(v)
     }
 
-    private fun changelanguage(categoryName : String): String {
+    private fun changelanguage(categoryName: String): String {
         var categoryNameString = ""
         when (categoryName) {
-            "Letter" -> categoryNameString = mActivity.getString(R.string.letter)
-            "Instrument" -> categoryNameString = mActivity.getString(R.string.instrument)
+            "Letter" -> categoryNameString =
+                    mActivity.getString(R.string.letter)
+            "Instrument" -> categoryNameString =
+                    mActivity.getString(R.string.instrument)
             "Photo" -> categoryNameString = mActivity.getString(R.string.photo)
-            "Others" -> categoryNameString = mActivity.getString(R.string.others)
+            "Others" -> categoryNameString =
+                    mActivity.getString(R.string.others)
         }
         return categoryNameString
     }
@@ -41,7 +52,15 @@ class CategoryAdapter(val uid: String, private val items: ArrayList<Category>, v
         holder.textViewCount.text = currCategory.count.toString()
 
         // Load image to ImageView via its URL from Firebase Storage
-        currCategory.setCoverURL(holder,mActivity, position, uid)
+    val categoryName =
+                when (position) {
+                    0 -> "Letter"
+                    1 -> "Photo"
+                    2 -> "Instrument"
+                    3 -> "Others"
+                    else -> "BUG"
+                }
+        currCategory.setCoverURL(holder, mActivity, position, uid, changelanguage(categoryName))
     }
 
     override fun getItemCount(): Int {
@@ -56,12 +75,16 @@ class CategoryAdapter(val uid: String, private val items: ArrayList<Category>, v
         fun onSaveClick(position: Int)
     }
 
-    inner class CategoryViewHolder(val viewItem: View) : RecyclerView.ViewHolder(viewItem),
+    inner class CategoryViewHolder(val viewItem: View) :
+        RecyclerView.ViewHolder(viewItem),
         View.OnClickListener,
         View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
-        val textViewName: TextView = viewItem.findViewById(R.id.txt_category_name)
-        val textViewCount: TextView = viewItem.findViewById(R.id.txt_category_count)
-        val imageView: ImageView = viewItem.findViewById(R.id.img_category_cover)
+        val textViewName: TextView =
+                viewItem.findViewById(R.id.txt_category_name)
+        val textViewCount: TextView =
+                viewItem.findViewById(R.id.txt_category_count)
+        val imageView: ImageView =
+                viewItem.findViewById(R.id.img_category_cover)
 
         init {
             viewItem.setOnClickListener(this)
