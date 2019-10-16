@@ -46,9 +46,12 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:contentInsetStart="72dp"
                 app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/arrow_left" />
+                app:navigationIcon="@drawable/arrow_left"
+                app:titleTextColor="#999999" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
+
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -62,19 +65,35 @@
             android:paddingLeft="12dp"
             android:paddingRight="12dp">
 
+            <TextView
+                android:id="@+id/item_name"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/layout_margin_left"
+                android:layout_toLeftOf="@+id/detail_favorite_button"
+                android:gravity="center_vertical"
+                android:shadowColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:shadowDy="2"
+                android:shadowRadius="2"
+                android:text="Name"
+                android:textSize="24sp" />
+
             <com.github.ivbaranov.mfb.MaterialFavoriteButton
                 android:id="@+id/detail_favorite_button"
                 android:layout_width="52dp"
                 android:layout_height="52dp"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:padding="@dimen/padding_layout"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_vertical"
                 app:mfb_type="heart" />
+
 
             <TextView
                 android:id="@+id/date_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/detail_favorite_button"
+                android:layout_below="@+id/item_name"
                 android:layout_marginLeft="@dimen/layout_margin_left"
                 android:text="@string/date"
                 android:textColor="#333333"

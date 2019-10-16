@@ -10,12 +10,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        <com.honegroupp.familyRegister.view.item.GridViewItem xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/upload_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"></ImageView>
+            android:scaleType="centerCrop"></com.honegroupp.familyRegister.view.item.GridViewItem>
 
         <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"

@@ -35,7 +35,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".view.item.DImageSlide"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.item.ItemEdit"
+        <activity android:name=".view.item.ItemEditActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".view.family.FamilyCreateActivity"
             android:screenOrientation="portrait"/>

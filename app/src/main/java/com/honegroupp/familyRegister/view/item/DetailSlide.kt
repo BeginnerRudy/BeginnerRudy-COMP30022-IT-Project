@@ -11,7 +11,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
@@ -19,6 +18,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -31,7 +31,8 @@ import java.io.File
 import java.io.FileOutputStream
 
 @Suppress("DEPRECATION")
-class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListener{
+class DetailSlide : AppCompatActivity(),
+                    DetailSliderAdapter.OnItemClickerListener {
     companion object {
         const val ALL_PAGE_SIGNAL = -1
         const val SHOW_PAGE_SIGNAL = -2
@@ -39,9 +40,9 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         const val STORAGE_PERMISSION_CODE: Int = 1000
     }
 
-    private var downloadUrl :String = ""
+    private var downloadUrl: String = ""
 
-    private lateinit var mSlideViewPager : ViewPager
+    private lateinit var mSlideViewPager: ViewPager
 
     lateinit var detailUserId: String
 
@@ -59,12 +60,18 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     private var storage: FirebaseStorage = FirebaseStorage.getInstance()
 
     // Sort items use sort method
-    private fun sortItem(sortOrder: String){
+    private fun sortItem(sortOrder: String) {
         when (sortOrder) {
-            ContainerActivity.NAME_ASCENDING -> itemUploads.sortBy { it.itemName }
-            ContainerActivity.NAME_DESCENDING -> itemUploads.sortByDescending { it.itemName }
+            ContainerActivity.NAME_ASCENDING -> itemUploads.sortBy {
+                it.itemName
+            }
+            ContainerActivity.NAME_DESCENDING -> itemUploads.sortByDescending {
+                it.itemName
+            }
             ContainerActivity.TIME_ASCENDING -> itemUploads.sortBy { it.date }
-            ContainerActivity.TIME_DESCENDING -> itemUploads.sortByDescending { it.date }
+            ContainerActivity.TIME_DESCENDING -> itemUploads.sortByDescending {
+                it.date
+            }
         }
     }
 
@@ -83,17 +90,18 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         val positionList = intent.getStringExtra("PositionList").toInt()
 
         // get userID for setting firbase database reference for items and categories
-        detailUserId= intent.getStringExtra("UserID").toString()
+        detailUserId = intent.getStringExtra("UserID").toString()
 
         // get position of current category for setting Current page item
-        val categoryIndexList= intent.getStringExtra("CategoryNameList").toInt()
+        val categoryIndexList =
+                intent.getStringExtra("CategoryNameList").toInt()
 
-        if (categoryIndexList >= CATEGORY_SIGNAL ){
+        if (categoryIndexList >= CATEGORY_SIGNAL) {
             isInCategory = true
         }
 
         // get position of current category for setting Current page item
-        detailFamilyId= intent.getStringExtra("FamilyId")
+        detailFamilyId = intent.getStringExtra("FamilyId")
 
         Log.d("dddddddpoli", positionList.toString())
         Log.d("ddddddduid", detailUserId.toString())
@@ -111,91 +119,101 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
         // database Reference for Item
         val pathItem = "Family/$detailFamilyId/items"
-        databaseReferenceItem = FirebaseDatabase.getInstance().getReference(pathItem)
+        databaseReferenceItem =
+                FirebaseDatabase.getInstance().getReference(pathItem)
 
         // get category information if this activity is activated in category page
         if (isInCategory) {
             // database Reference for Category
             val pathCategory = "Family/$detailFamilyId/categories"
-            databaseReferenceCategory = FirebaseDatabase.getInstance().getReference(pathCategory)
+            databaseReferenceCategory =
+                    FirebaseDatabase.getInstance().getReference(pathCategory)
 
             // listener for category on firebase, realtime change categories(categoryUploads)
             dbListenerCategory =
-                databaseReferenceCategory.addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(p0: DatabaseError) {
-                        toast(p0.message, Toast.LENGTH_SHORT)
-                    }
+                    databaseReferenceCategory
+                        .addValueEventListener(object : ValueEventListener {
+                            override fun onCancelled(p0: DatabaseError) {
+                                toast(p0.message, Toast.LENGTH_SHORT)
+                            }
 
-                    override fun onDataChange(p0: DataSnapshot) {
-                        categoryUploads.clear()
+                            override fun onDataChange(p0: DataSnapshot) {
+                                categoryUploads.clear()
 
-                        // get all categories and put into categories(categoryUploads)
-                        p0.children.forEach {
-                            val currCategoryUpload = it.getValue(Category::class.java) as Category
-                            categoryUploads.add(currCategoryUpload)
-                        }
-                        sliderAdapter.notifyDataSetChanged()
-                    }
-                })
+                                // get all categories and put into categories(categoryUploads)
+                                p0.children.forEach {
+                                    val currCategoryUpload =
+                                            it.getValue(Category::class.java) as Category
+                                    categoryUploads.add(currCategoryUpload)
+                                }
+                                sliderAdapter.notifyDataSetChanged()
+                            }
+                        })
         }
 
         // listener for items on firebase, realtime change items(itemUploads)
-        dbListenerItem = databaseReferenceItem.addValueEventListener(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-                toast(p0.message, Toast.LENGTH_SHORT)
-            }
+        dbListenerItem = databaseReferenceItem
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                    toast(p0.message, Toast.LENGTH_SHORT)
+                }
 
-            override fun onDataChange(p0: DataSnapshot) {
-                itemUploads.clear()
+                override fun onDataChange(p0: DataSnapshot) {
+                    itemUploads.clear()
 
-                // get all items and put into items(itemUploads) if user has access
-                p0.children.forEach {
-                    val currItemUpload = it.getValue(Item::class.java) as Item
-                    currItemUpload.key = it.key
+                    // get all items and put into items(itemUploads) if user has access
+                    p0.children.forEach {
+                        val currItemUpload =
+                                it.getValue(Item::class.java) as Item
+                        currItemUpload.key = it.key
 
-                    // wait for categories(categoryUploads) is get from database
-                    if (categoryUploads.size != 0 || !isInCategory){
-                        if (isInCategory) {
-                            // check item in current category
-                            if (currItemUpload.key in categoryUploads[categoryIndexList].itemKeys){
-                                // check item is visible, if not check user is owner
-                                if (currItemUpload.isPublic) {
-                                    itemUploads.add(currItemUpload)
-                                } else if (currItemUpload.itemOwnerUID == detailUserId){
+                        // wait for categories(categoryUploads) is get from database
+                        if (categoryUploads.size != 0 || !isInCategory) {
+                            if (isInCategory) {
+                                // check item in current category
+                                if (currItemUpload.key in categoryUploads[categoryIndexList].itemKeys) {
+                                    // check item is visible, if not check user is owner
+                                    if (currItemUpload.isPublic) {
+                                        itemUploads.add(currItemUpload)
+                                    } else if (currItemUpload.itemOwnerUID == detailUserId) {
+                                        itemUploads.add(currItemUpload)
+                                    }
+                                }
+                            } else if (categoryIndexList == ALL_PAGE_SIGNAL) {
+                                Log.d(
+                                    "ccccindexalll",
+                                    categoryIndexList.toString())
+                                itemUploads.add(currItemUpload)
+                            } else if (categoryIndexList == SHOW_PAGE_SIGNAL) {
+                                Log.d(
+                                    "ccccindexssss",
+                                    categoryIndexList.toString())
+
+                                if (detailUserId in currItemUpload.showPageUids.keys) {
                                     itemUploads.add(currItemUpload)
                                 }
                             }
-                        } else if (categoryIndexList == ALL_PAGE_SIGNAL) {
-                            Log.d("ccccindexalll", categoryIndexList.toString())
-                            itemUploads.add(currItemUpload)
-                        } else if (categoryIndexList == SHOW_PAGE_SIGNAL){
-                            Log.d("ccccindexssss", categoryIndexList.toString())
+                        }
+                    }
 
-                            if (detailUserId in currItemUpload.showPageUids.keys){
-                                itemUploads.add(currItemUpload)
-                            }
+                    // Notify ViewPager to update
+                    if (itemUploads.size == 0) {
+                        text_view_empty_detail.visibility = View.VISIBLE
+                    } else {
+                        text_view_empty_detail.visibility = View.INVISIBLE
+                    }
+                    sliderAdapter.notifyDataSetChanged()
+
+
+                    // set Item to be seen first in View Page when items(itemUploads) is ready
+                    if (itemUploads.size > 0) {
+                        if (!alreadySet) {
+                            mSlideViewPager.currentItem = positionList
+                            alreadySet = true
                         }
                     }
                 }
-
-                // Notify ViewPager to update
-                if (itemUploads.size == 0) {
-                    text_view_empty_detail.visibility = View.VISIBLE
-                } else {
-                    text_view_empty_detail.visibility = View.INVISIBLE
-                }
-                sliderAdapter.notifyDataSetChanged()
-
-
-                // set Item to be seen first in View Page when items(itemUploads) is ready
-                if (itemUploads.size > 0) {
-                    if (!alreadySet){
-                        mSlideViewPager.currentItem = positionList
-                        alreadySet = true
-                    }
-                }
-            }
-        })
+            })
 
     }
 
@@ -213,9 +231,10 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     }
 
     override fun onDeleteClick(position: Int) {
-        if (itemUploads[mSlideViewPager.currentItem].imageURLs.size > 1){
+        if (itemUploads[mSlideViewPager.currentItem].imageURLs.size > 1) {
             // use url create reference of image to be deleted
-            val deleteUrl = itemUploads[mSlideViewPager.currentItem].imageURLs[position]
+            val deleteUrl =
+                    itemUploads[mSlideViewPager.currentItem].imageURLs[position]
             val imageRef = storage.getReferenceFromUrl(deleteUrl)
 
             // Delete image and its tile from Fitrbase Storage
@@ -223,15 +242,19 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
                 .addOnSuccessListener {
                     // Delete image url from Firebase Real-time Database
                     removeItemUrl(position)
-                    toast(getString(R.string.detail_delete_success), Toast.LENGTH_SHORT)
+                    toast(
+                        getString(R.string.detail_delete_success),
+                        Toast.LENGTH_SHORT)
                 }
                 .addOnFailureListener {
-                    toast(getString(R.string.detail_delete_fail), Toast.LENGTH_SHORT)
+                    toast(
+                        getString(R.string.detail_delete_fail),
+                        Toast.LENGTH_SHORT)
                 }
         }
     }
 
-    private fun removeItemUrl(position: Int){
+    private fun removeItemUrl(position: Int) {
         itemUploads[mSlideViewPager.currentItem].imageURLs.removeAt(position)
         databaseReferenceItem
             .child(itemUploads[mSlideViewPager.currentItem].key.toString())
@@ -241,7 +264,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
     // start editing
     override fun onEditClick(itemKey: String?) {
-        val intent = Intent(this, ItemEdit::class.java)
+        val intent = Intent(this, ItemEditActivity::class.java)
         intent.putExtra("uid", detailUserId)
         intent.putExtra("ItemKey", itemKey)
         intent.putExtra("FamilyId", detailFamilyId)
@@ -263,7 +286,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
         hideStatusBar()
     }
 
-    private fun hideStatusBar(){
+    private fun hideStatusBar() {
         // Hide the status bar.
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         // Remember that you should never show the action bar if the
@@ -280,7 +303,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     override fun onShareClick(imageView: ImageView) {
         val bitmap = getBitmapFromView(imageView)
         try {
-            val file = File(this.externalCacheDir,"family_remember.png")
+            val file = File(this.externalCacheDir, "family_remember.png")
             val fOut = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut)
             fOut.flush()
@@ -292,7 +315,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file))
             intent.type = "image/png"
             startActivity(Intent.createChooser(intent, "Share image via"))
-        } catch (e: Exception ) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -302,11 +325,12 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
      * code change from:
      * https://stackoverflow.com/questions/14492354/create-bitmap-from-view-makes-view-disappear-how-to-get-view-canvas
      */
-    private fun getBitmapFromView(view: View ): Bitmap {
-        val returnedBitmap: Bitmap = Bitmap.createBitmap(view.width, view.height,Bitmap.Config.ARGB_8888)
+    private fun getBitmapFromView(view: View): Bitmap {
+        val returnedBitmap: Bitmap = Bitmap
+            .createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(returnedBitmap)
         val bgDrawable = view.background
-        if (bgDrawable!=null) {
+        if (bgDrawable != null) {
             bgDrawable.draw(canvas)
         } else {
             canvas.drawColor(Color.WHITE)
@@ -317,19 +341,22 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
     // download when click in menu
     override fun onDownloadClick(position: Int) {
-        downloadUrl = itemUploads[mSlideViewPager.currentItem].imageURLs[position]
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
-            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_DENIED){
+        downloadUrl =
+                itemUploads[mSlideViewPager.currentItem].imageURLs[position]
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_DENIED) {
 
                 //permission denied
-                requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),STORAGE_PERMISSION_CODE)
-            }else{
+                requestPermissions(
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    STORAGE_PERMISSION_CODE)
+            } else {
                 //permission already granted
                 startDownloading()
 
             }
-        }else{
+        } else {
             //system os less than mashmallow
             startDownloading()
         }
@@ -337,29 +364,39 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
 
     //download the image to local album of the device
     private fun startDownloading() {
-        Log.d("SAVEinging","")
+        Log.d("SAVEinging", "")
         //download request
         val request = DownloadManager.Request(Uri.parse(downloadUrl))
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+        request
+            .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
         request.setTitle("Download")
         request.setDescription("The file is downloading...")
         request.allowScanningByMediaScanner()
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DCIM,"${System.currentTimeMillis()}")
+        request
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        request.setDestinationInExternalPublicDir(
+            Environment.DIRECTORY_DCIM,
+            "${System.currentTimeMillis()}")
         //get download service and enqueue file
-        val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val manager =
+                getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         manager.enqueue(request)
     }
 
     //Over Android M version, need to request EXTERNAL STORAGE permission in order to save image
-    override fun onRequestPermissionsResult(requestCode: Int,permissions: Array<out String>,grantResults: IntArray){
-        when(requestCode){
-            STORAGE_PERMISSION_CODE ->{
-                if(grantResults.isNotEmpty()&& grantResults[0] == PackageManager.PERMISSION_GRANTED){
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            STORAGE_PERMISSION_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission from the popup was granted, perform download
                     startDownloading()
-                }else{
-                    Toast.makeText(this,"Permission Denied",Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG)
+                        .show()
                 }
             }
         }
@@ -368,7 +405,7 @@ class DetailSlide : AppCompatActivity(), DetailSliderAdapter.OnItemClickerListen
     override fun onDestroy() {
         super.onDestroy()
         databaseReferenceItem.removeEventListener(dbListenerItem)
-        if (isInCategory){
+        if (isInCategory) {
             databaseReferenceCategory.removeEventListener(dbListenerCategory)
         }
     }

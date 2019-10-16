@@ -13,43 +13,18 @@
         <GridView
             android:id="@+id/editImagesGrid"
             android:layout_width="match_parent"
-            android:layout_height="680px"
+            android:layout_height="200dp"
             android:horizontalSpacing="10dp"
             android:nestedScrollingEnabled="true"
             android:numColumns="3"
             android:verticalSpacing="10dp" />
 
-        <LinearLayout
-            android:id="@+id/editProgressLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/editImagesGrid"
-            android:layout_margin="5dp"
-            android:orientation="horizontal">
-
-            <ProgressBar
-                android:id="@+id/editProgressBarRound"
-                style="@style/Widget.AppCompat.ProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:max="100"
-                android:visibility="invisible" />
-
-            <TextView
-                android:id="@+id/editProgressBarText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp" />
-        </LinearLayout>
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/itemName"
-
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
-            android:layout_below="@id/editProgressLayout">
+            android:layout_below="@id/editImagesGrid">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editName"
@@ -211,16 +186,5 @@
                 android:textColor="@color/textColorPrimary" />
 
         </RelativeLayout>
-
-        <!--        <Button-->
-        <!--            android:id="@+id/editConfirm"-->
-        <!--            android:layout_alignParentEnd="true"-->
-        <!--            android:layout_marginTop="10dp"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_below="@id/edit_pass_down"-->
-        <!--            android:backgroundTint="@color/colorAccent"-->
-        <!--            android:text="@string/edit_confirm"-->
-        <!--            android:textColor="@color/textColorPrimary" />-->
     </RelativeLayout>
 </ScrollView>
