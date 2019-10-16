@@ -56,9 +56,9 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
 
     override fun onItemClick(position: Int) {
         if (viewPager.currentItem == 0) {
-            categoryName = DetailSlide.ALL_PAGE_SIGNAL.toString()
+            categoryPosition = DetailSlide.ALL_PAGE_SIGNAL.toString()
         } else if (viewPager.currentItem == 2) {
-            categoryName = DetailSlide.SHOW_PAGE_SIGNAL.toString()
+            categoryPosition = DetailSlide.SHOW_PAGE_SIGNAL.toString()
         }
 
 
@@ -66,7 +66,7 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         intent.putExtra("UserID", uid)
         intent.putExtra("FamilyId", familyId)
         intent.putExtra("PositionList", position.toString())
-        intent.putExtra("CategoryNameList", categoryName)
+        intent.putExtra("CategoryNameList", categoryPosition)
         startActivity(intent)
     }
 
