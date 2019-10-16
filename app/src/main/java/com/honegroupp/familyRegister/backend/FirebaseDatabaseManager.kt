@@ -29,8 +29,6 @@ class FirebaseDatabaseManager() {
         fun retrieve(path: String, callback: (DataSnapshot) -> Unit) {
             val databaseRef = FirebaseDatabase.getInstance().getReference(path)
             // retrieve data
-
-
             databaseRef.addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
                     //Don't ignore errors!

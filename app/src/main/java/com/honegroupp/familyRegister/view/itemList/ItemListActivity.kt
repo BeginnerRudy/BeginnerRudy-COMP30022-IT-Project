@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.GravityCompat
 import android.view.Menu
+import android.view.Window
 import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ItemListController
@@ -19,6 +20,7 @@ class ItemListActivity : ContainerActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_list)
+
 
         // add item logic
         ItemListController.addItem(uid, categoryName, this)

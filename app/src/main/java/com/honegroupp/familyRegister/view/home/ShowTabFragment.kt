@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ShowPageController
-import com.honegroupp.familyRegister.model.Item
 import kotlinx.android.synthetic.main.activity_item_list.view.*
+import android.widget.RelativeLayout
+
+
 
 
 class ShowTabFragment(private val showTabAdapter: ContainerAdapter) : Fragment() {
@@ -23,6 +25,11 @@ class ShowTabFragment(private val showTabAdapter: ContainerAdapter) : Fragment()
         // Inflate the layout for this fragment
         val view =
                 inflater.inflate(R.layout.activity_item_list, container, false)
+
+        // Align the recycler view to the top of the parent
+        val params = view.item_list_recycler_view.layoutParams as RelativeLayout.LayoutParams
+        params.addRule(RelativeLayout.ALIGN_PARENT_TOP)
+        view.item_list_recycler_view.layoutParams = params
 
         // Show all item liked
         val homeActivity = activity as HomeActivity
