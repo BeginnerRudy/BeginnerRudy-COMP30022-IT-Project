@@ -45,6 +45,8 @@
     <string name="detail_delete">Delete</string>
     <string name="detail_delete_success">Image deleted</string>
     <string name="detail_delete_fail">Failed for deleting the item</string>
+    <string name="edit_last_original_image_cannot_delete">Cannot delete
+    last original image</string>
     <string name="edit_confirm">CONFIRM CHANGE</string>
     <string name="edit_date">Click to change date time</string>
     <string name="edit_visibility">Visibility</string>

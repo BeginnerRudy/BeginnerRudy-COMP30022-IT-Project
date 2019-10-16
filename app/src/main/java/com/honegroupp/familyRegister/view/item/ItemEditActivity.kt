@@ -299,8 +299,12 @@ class ItemEditActivity : AppCompatActivity(), LocationEnterPasswordDialog.OnView
    */
     fun removeItem(currentIsUrl: Boolean, position: Int) {
         if (currentIsUrl) {
-            deleteImageUrls.add(detailImageUrls[position])
-            detailImageUrls.removeAt(position)
+            if (detailImageUrls.size == 1){
+                toast(getString(R.string.edit_last_original_image_cannot_delete), Toast.LENGTH_SHORT)
+            } else {
+                deleteImageUrls.add(detailImageUrls[position])
+                detailImageUrls.removeAt(position)
+            }
         } else {
             allImageUri.removeAt(position)
         }
@@ -343,7 +347,6 @@ class ItemEditActivity : AppCompatActivity(), LocationEnterPasswordDialog.OnView
             val ref =
                 FirebaseStorage.getInstance()
                     .reference.child(uploadPath + System.currentTimeMillis())
-
             //convert first image in list to bitmap
             val path = FilePathUtil.getFilePathFromContentUri(uri, this)
             val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()

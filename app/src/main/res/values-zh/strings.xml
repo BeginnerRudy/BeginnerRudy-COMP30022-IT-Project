@@ -44,6 +44,7 @@
     <string name="detail_delete">删除</string>
     <string name="detail_delete_success">图片删除成功</string>
     <string name="detail_delete_fail">图片删除失败</string>
+    <string name="edit_last_original_image_cannot_delete">至少得留最后一张原图</string>
     <string name="edit_confirm">确定</string>
     <string name="edit_date">点击更改日期</string>
     <string name="edit_visibility">可见</string>

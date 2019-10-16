@@ -66,7 +66,7 @@ class ItemUploadActivity : AppCompatActivity() {
         setGridViewHeight(itemGridView)
 
         addItemConfirm.setOnClickListener {
-            it.isEnabled = false
+//            it.isEnabled = false
             itemPrivacyPosition = spinner.selectedItemPosition
 
             //            progressBarRound.visibility = View.VISIBLE
@@ -239,6 +239,8 @@ class ItemUploadActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT).show()
 
         } else {
+            addItemConfirm.isEnabled = false
+
             //upload uri to firebase
             FirebaseStorageManager
                 .uploadToFirebase(allImageUri, categoryName, this)
