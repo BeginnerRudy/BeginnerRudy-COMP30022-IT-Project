@@ -15,7 +15,7 @@ import com.honegroupp.familyRegister.model.Item
 import kotlinx.android.synthetic.main.activity_item_list.view.*
 
 
-class ShowTabFragment : Fragment() {
+class ShowTabFragment(private val showTabAdapter: ContainerAdapter) : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,9 +26,6 @@ class ShowTabFragment : Fragment() {
 
         // Show all item liked
         val homeActivity = activity as HomeActivity
-        // set list for liked items
-        val items = ArrayList<Item>()
-
         val recyclerView =
                 view.findViewById<RecyclerView>(R.id.item_list_recycler_view)
 
@@ -38,8 +35,6 @@ class ShowTabFragment : Fragment() {
 
 
         // setting one ItemListAdapter
-        val showTabAdapter =
-                ContainerAdapter(items, homeActivity, ContainerAdapter.SHOWPAGE)
         recyclerView.adapter = showTabAdapter
 
         // set listener
@@ -48,7 +43,6 @@ class ShowTabFragment : Fragment() {
 
         ShowPageController.showAllLiked(
             homeActivity,
-            items,
             showTabAdapter,
             homeActivity.userID,
             this

@@ -104,7 +104,7 @@
     <string name="dev_email_address">h1.team.developer@gmail.com</string>
     <string name="ask_us_message">Have a question? Ask us.</string>
     <string name="help_message">If you have any question about this app, please contact help team email.</string>
-    <string name="term_of_service">Term of service</string>
+    <string name="term_of_service">Terms of service</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="term_of_service_url" translatable="false">https://h1teamdeveloper.wixsite.com/term-of-service</string>
     <string name="privacy_policy_url" translatable="false">https://h1teamdeveloper.wixsite.com/privacy-policy</string>
@@ -131,4 +131,6 @@
     <string name="owner">Owner</string>
     <string name="change_user_photo">Change user name and image</string>
     <string name="please_enter_location">Please enter item storage location (only visible by yourself)</string>
+    <string name="you_have_not_permission_to_delete_this_item_since_you_are_not_the_owner_of_this_item">You have not permission to delete this item, since you are not the owner of this item.</string>
+    <string name="tip">Tip</string>
 </resources>

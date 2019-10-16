@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_item_list.*
 
 class ItemListActivity : ContainerActivity() {
     var storage: FirebaseStorage = FirebaseStorage.getInstance()
+    var sortOrder: String = SORT_DEFAULT
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -23,7 +24,7 @@ class ItemListActivity : ContainerActivity() {
         ItemListController.addItem(uid, categoryName, this)
 
         // show items in the category logic
-        ItemListController.showItems(uid, categoryName, navi_sort_view, this)
+        ItemListController.showItems(uid, categoryName, this)
 
         //jump to search activity
         btn_search.setOnClickListener {
