@@ -26,19 +26,24 @@ class FirebaseStorageManager {
 
                 //get firebase storage reference
                 val ref =
-                    FirebaseStorage.getInstance()
-                        .reference.child(uploadPath + System.currentTimeMillis())
+                        FirebaseStorage.getInstance()
+                            .reference
+                            .child(uploadPath + System.currentTimeMillis())
 
                 //convert first image in list to bitmap
                 val path = FilePathUtil.getFilePathFromContentUri(uri, activity)
-                val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
-                val bitmap = MediaStore.Images.Media.getBitmap(activity.contentResolver, uri)
+                val orientation =
+                        ImageRotateUtil.getCameraPhotoOrientation(path!!)
+                            .toFloat()
+                val bitmap = MediaStore.Images.Media
+                    .getBitmap(activity.contentResolver, uri)
 
                 //decrease the resolution
                 val scaledBitmap = CompressionUtil.scaleDown(bitmap, true)
 
                 //correct the orientation of the bitmap
-                val orientedScaledBitmap = ImageRotateUtil.rotateBitmap(scaledBitmap, orientation)
+                val orientedScaledBitmap =
+                        ImageRotateUtil.rotateBitmap(scaledBitmap, orientation)
 
                 //compress the image
                 val data = CompressionUtil.compressImage(orientedScaledBitmap)
@@ -48,25 +53,26 @@ class FirebaseStorageManager {
                     .addOnSuccessListener {
 
                         //add item logic
-                        ref.downloadUrl.addOnCompleteListener() { taskSnapshot ->
-                            numSuccess += 1
-                            var url = taskSnapshot.result
-                            activity.imagePathList.add(url.toString())
-                            if (numSuccess == allImageUri.size) {
-                                //Create Item And Upload
-                                activity.uploadItem(categoryName)
+                        ref.downloadUrl
+                            .addOnCompleteListener() { taskSnapshot ->
+                                numSuccess += 1
+                                var url = taskSnapshot.result
+                                activity.imagePathList.add(url.toString())
+                                if (numSuccess == allImageUri.size) {
+                                    //Create Item And Upload
+                                    activity.uploadItem(categoryName)
 
-                                activity.toast(
-                                    activity.getString(R.string.upload_success) + numSuccess.toString() + "/" + allImageUri.size.toString(),
-                                    Toast.LENGTH_SHORT
-                                )
-                            } else {
-                                activity.toast(
-                                    activity.getString(R.string.upload_complete) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(),
-                                    Toast.LENGTH_SHORT
-                                )
+                                    activity.toast(
+                                        activity.getString(R.string.upload_success) + numSuccess.toString() + "/" + allImageUri.size.toString(),
+                                        Toast.LENGTH_SHORT
+                                    )
+                                } else {
+                                    activity.toast(
+                                        activity.getString(R.string.upload_complete) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(),
+                                        Toast.LENGTH_SHORT
+                                    )
+                                }
                             }
-                        }
                     }
             }
             activity.toast(
@@ -75,23 +81,31 @@ class FirebaseStorageManager {
             )
         }
 
-        fun uploadUserImageToFirebase(imageUri: Uri, activity: UserEditActivity) {
+        fun uploadUserImageToFirebase(
+            imageUri: Uri,
+            activity: UserEditActivity
+        ) {
 
             //get firebase storage reference
             val ref =
-                FirebaseStorage.getInstance()
-                    .reference.child(uploadPath + System.currentTimeMillis())
+                    FirebaseStorage.getInstance()
+                        .reference
+                        .child(uploadPath + System.currentTimeMillis())
 
             //convert first image in list to bitmap
-            val path = FilePathUtil.getFilePathFromContentUri(imageUri, activity)
-            val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
-            val bitmap = MediaStore.Images.Media.getBitmap(activity.contentResolver, imageUri)
+            val path =
+                    FilePathUtil.getFilePathFromContentUri(imageUri, activity)
+            val orientation =
+                    ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
+            val bitmap = MediaStore.Images.Media
+                .getBitmap(activity.contentResolver, imageUri)
 
             //decrease the resolution
             val scaledBitmap = CompressionUtil.scaleDown(bitmap, true)
 
             //correct the orientation of the bitmap
-            val orientedScaledBitmap = ImageRotateUtil.rotateBitmap(scaledBitmap, orientation)
+            val orientedScaledBitmap =
+                    ImageRotateUtil.rotateBitmap(scaledBitmap, orientation)
 
             //compress the image
             val data = CompressionUtil.compressImage(orientedScaledBitmap)

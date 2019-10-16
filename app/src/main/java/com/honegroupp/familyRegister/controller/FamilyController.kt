@@ -43,21 +43,30 @@ class FamilyController {
             }
             // check if first password entered
             else if (password.text.toString() == "") {
-                Toast.makeText(mContext, mContext.getString(R.string.please_enter_the_password), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    mContext,
+                    mContext.getString(R.string.please_enter_the_password),
+                    Toast.LENGTH_SHORT).show()
                 passwordAgain.text = null
                 return false
             }
 
             // check if repeated password entered
             else if (passwordAgain.text.toString() == "") {
-                Toast.makeText(mContext, mContext.getString(R.string.please_enter_the_password_again), Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    mContext,
+                    mContext.getString(R.string.please_enter_the_password_again),
+                    Toast.LENGTH_SHORT)
                     .show()
                 return false
             }
 
             // check are these two passwords identical
             else if (password.text.toString() != passwordAgain.text.toString()) {
-                Toast.makeText(mContext, mContext.getString(R.string.two_password_are_not_same), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    mContext,
+                    mContext.getString(R.string.two_password_are_not_same),
+                    Toast.LENGTH_SHORT).show()
                 password.text = null
                 passwordAgain.text = null
                 return false
@@ -99,7 +108,10 @@ class FamilyController {
             family.store(mActivity, uid, username)
 
             // Show a toast to remind the user
-            Toast.makeText(mActivity, mActivity.getString(R.string.family_created_successfully), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                mActivity,
+                mActivity.getString(R.string.family_created_successfully),
+                Toast.LENGTH_SHORT).show()
         }
 
 
@@ -111,14 +123,19 @@ class FamilyController {
             familyId: EditText,
             password: EditText,
             uid: String,
-            username:String
+            username: String
         ) {
             // Extract input as String
             val familyIdInput = familyId.text.toString()
             val familyPasswordInput = password.text.toString()
 
             // Join family
-            Family.joinFamily(mActivity, familyIdInput, familyPasswordInput, uid, username)
+            Family.joinFamily(
+                mActivity,
+                familyIdInput,
+                familyPasswordInput,
+                uid,
+                username)
         }
 
 
