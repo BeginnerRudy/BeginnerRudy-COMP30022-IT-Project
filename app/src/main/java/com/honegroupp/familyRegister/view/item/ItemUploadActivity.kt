@@ -14,7 +14,6 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseStorageManager
 import com.honegroupp.familyRegister.controller.ItemController
 import com.honegroupp.familyRegister.view.itemList.ItemGridAdapter
-import kotlinx.android.synthetic.main.activity_edit.*
 import kotlinx.android.synthetic.main.item_upload_page.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -188,6 +187,9 @@ class ItemUploadActivity : AppCompatActivity() {
 
                         // Set the grid view adapter
                         itemGridView.adapter = adapter
+
+                        //update gridview height
+                        setGridViewHeight(itemGridView)
 
 
                     } else {

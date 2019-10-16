@@ -59,7 +59,7 @@ class DetailSliderAdapter(
         imagesSliderAdapter.listener = this
 
 
-        // val slideHeading = view.findViewById<TextView>(R.id.detail_heading)
+        val slideName = view.findViewById<TextView>(R.id.item_name)
         val slideDescription = view.findViewById<TextView>(R.id.detail_desc)
         val slideDate = view.findViewById<TextView>(R.id.detail_date)
         val showButton = view.findViewById<MaterialFavoriteButton>(R.id.detail_favorite_button)
@@ -68,12 +68,16 @@ class DetailSliderAdapter(
 
         val currItemUploads = items[position]
 
-        val slideToolbar =
-            view.findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.detial_collapsing_toolbar)
-        slideToolbar.title = currItemUploads.itemName
+//        val slideToolbar =
+//            view.findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.detial_collapsing_toolbar)
+//        slideToolbar.title = currItemUploads.itemName
+
+
+        // show item name
+        slideName.text = currItemUploads.itemName
 
         // show item description
-        slideDescription.setText(currItemUploads.itemDescription)
+        slideDescription.text = currItemUploads.itemDescription
 
         // show item date
         val dateParts = currItemUploads.date.split("/")
