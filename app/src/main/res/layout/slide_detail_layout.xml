@@ -46,7 +46,7 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:contentInsetStart="72dp"
                 app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/ic_chevron_left_white_24dp"
+                app:navigationIcon="@drawable/ic_keyboard_arrow_left_white_black_24dp"
                 app:titleTextColor="#999999" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
