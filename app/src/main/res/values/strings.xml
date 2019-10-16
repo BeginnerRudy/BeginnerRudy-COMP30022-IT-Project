@@ -104,7 +104,7 @@
     <string name="dev_email_address">h1.team.developer@gmail.com</string>
     <string name="ask_us_message">Have a question? Ask us.</string>
     <string name="help_message">If you have any question about this app, please contact help team email.</string>
-    <string name="term_of_service">Term of service</string>
+    <string name="term_of_service">Terms of service</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="term_of_service_url" translatable="false">https://h1teamdeveloper.wixsite.com/term-of-service</string>
     <string name="privacy_policy_url" translatable="false">https://h1teamdeveloper.wixsite.com/privacy-policy</string>

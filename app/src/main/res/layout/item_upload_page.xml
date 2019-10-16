@@ -14,33 +14,34 @@
         <GridView
             android:id="@+id/itemGridView"
             android:layout_width="match_parent"
-            android:layout_height="680px"
+            android:layout_height="200dp"
             android:horizontalSpacing="10dp"
             android:nestedScrollingEnabled="true"
             android:numColumns="3"
             android:verticalSpacing="10dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:orientation="horizontal">
+<!--progress bar-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:orientation="horizontal">-->
 
-            <ProgressBar
-                android:id="@+id/progressBarRound"
-                style="@style/Widget.AppCompat.ProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:max="100"
-                android:visibility="invisible" />
+<!--            <ProgressBar-->
+<!--                android:id="@+id/progressBarRound"-->
+<!--                style="@style/Widget.AppCompat.ProgressBar"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:max="100"-->
+<!--                android:visibility="invisible" />-->
 
-            <TextView
-                android:id="@+id/progressBarText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp" />
-        </LinearLayout>
+<!--            <TextView-->
+<!--                android:id="@+id/progressBarText"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center_vertical"-->
+<!--                android:layout_margin="5dp" />-->
+<!--        </LinearLayout>-->
 
 
         <LinearLayout
@@ -166,7 +167,7 @@
                 android:id="@+id/item_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/itemDescription">
+                android:paddingLeft="@dimen/layout_margin_left">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/item_location_input"
@@ -174,8 +175,10 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/please_enter_location" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <Button
                 android:id="@+id/addItemConfirm"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_date"
