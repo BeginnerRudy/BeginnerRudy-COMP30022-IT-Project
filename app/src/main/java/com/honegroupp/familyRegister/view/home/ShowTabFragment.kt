@@ -1,21 +1,19 @@
 package com.honegroupp.familyRegister.view.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ShowPageController
-import com.honegroupp.familyRegister.model.Item
 import kotlinx.android.synthetic.main.activity_item_list.view.*
 
 
-class ShowTabFragment(private val showTabAdapter: ContainerAdapter) : Fragment() {
+class ShowTabFragment(private val showTabAdapter: ContainerAdapter) :
+    Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

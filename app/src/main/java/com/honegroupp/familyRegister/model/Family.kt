@@ -19,6 +19,7 @@ import com.honegroupp.familyRegister.utility.Hash
 import com.honegroupp.familyRegister.view.home.*
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
+import com.honegroupp.familyRegister.view.itemList.NoPermissonToDeleteDialog
 
 /**
  * This class is responsible for storing data and business logic for Family
@@ -419,7 +420,7 @@ data class Family(
             }
             // otherwise, show the warning dialog
             else {
-                val familyNameChangeDialog = FamilyNameChangeDialog(uid)
+                val familyNameChangeDialog = NoPermissonToDeleteDialog()
                 familyNameChangeDialog.show(
                     mActivity.supportFragmentManager,
                     "Location Change Dialog")

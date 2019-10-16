@@ -31,13 +31,12 @@ class NoPermissonToDeleteDialog() : AppCompatDialogFragment() {
         val builder = AlertDialog.Builder(context as Context)
 
         val inflater = activity!!.layoutInflater
-        val view = inflater.inflate(R.layout.dialog_family_name_change, null)
+        val view = inflater.inflate(R.layout.dialog_no_permission_delete, null)
 
 
         builder.setView(view)
             .setTitle(getString(R.string.tip)
             )
-            .setPositiveButton(R.string.edit_ok) { _, _ -> }
 
         view.findViewById<Button>(R.id.ok_button).setOnClickListener{
             // make the dialog disappear
