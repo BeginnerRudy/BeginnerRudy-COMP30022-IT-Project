@@ -486,7 +486,7 @@ class ItemEditActivity : AppCompatActivity(), LocationEnterPasswordDialog.OnView
     /*
     Compare the password, if the password is correct, show the location view dialog
      */
-    override fun applyPasswords(enteredPassword: String, dialog: LocationEnterPasswordDialog) {
+    override fun verifyPasswords(enteredPassword: String, dialog: LocationEnterPasswordDialog) {
 
         //check emptyness of password
         if (enteredPassword != "") {
