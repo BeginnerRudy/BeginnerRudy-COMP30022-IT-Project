@@ -127,7 +127,7 @@
     <string name="username">用户名称</string>
     <string name="please_enter_name">请输入名称</string>
     <string name="owner">家主</string>
-    <string name="change_user_photo">修改用户名称和头像</string>
+    <string name="change_user_photo">用户名称和头像</string>
     <string name="please_enter_location">请输入物品存放地点（仅自己可见）</string>
     <string
         name="you_have_not_permission_to_delete_this_item_since_you_are_not_the_owner_of_this_item">您没有权限删除此物品，　因为您不是此物品的所有者．</string>
