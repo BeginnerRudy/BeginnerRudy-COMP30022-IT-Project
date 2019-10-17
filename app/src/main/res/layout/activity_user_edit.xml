@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="20dp"
-        app:cardCornerRadius="12dp">
+        app:cardCornerRadius="100dp">
 
         <ImageView
             android:id="@+id/user_image_edit"

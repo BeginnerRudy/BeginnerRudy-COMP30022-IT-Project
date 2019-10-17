@@ -72,5 +72,6 @@ class ItemController {
         ) {
             Item.uploadImageToFirebaseStorage(allImageUri, categoryName, activity)
         }
+
     }
 }

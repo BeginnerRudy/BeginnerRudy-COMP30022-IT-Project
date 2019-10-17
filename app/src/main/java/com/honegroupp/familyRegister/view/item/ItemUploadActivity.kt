@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.backend.FirebaseStorageManager
 import com.honegroupp.familyRegister.controller.ItemController
 import com.honegroupp.familyRegister.view.itemList.ItemGridAdapter
 import kotlinx.android.synthetic.main.item_upload_page.*
@@ -66,7 +65,7 @@ class ItemUploadActivity : AppCompatActivity() {
         setGridViewHeight(itemGridView)
 
         addItemConfirm.setOnClickListener {
-            it.isEnabled = false
+//            it.isEnabled = false
             itemPrivacyPosition = spinner.selectedItemPosition
 
             //            progressBarRound.visibility = View.VISIBLE
@@ -239,6 +238,8 @@ class ItemUploadActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT).show()
 
         } else {
+            addItemConfirm.isEnabled = false
+
             //upload uri to firebase
             ItemController.uploadImageToStorage(allImageUri, categoryName, this)
             this.finish()

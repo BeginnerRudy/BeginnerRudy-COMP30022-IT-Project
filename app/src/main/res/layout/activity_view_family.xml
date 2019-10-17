@@ -86,6 +86,7 @@
         android:layout_marginLeft="16dp"
         android:text="@string/family_members"
         android:textSize="20dp"
+        android:layout_marginBottom="5dp"
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView

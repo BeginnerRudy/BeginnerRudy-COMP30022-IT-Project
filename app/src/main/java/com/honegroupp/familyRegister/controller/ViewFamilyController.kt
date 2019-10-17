@@ -20,7 +20,8 @@ class ViewFamilyController {
 
             // setting the recycler view
             val recyclerView =
-                mActivity.findViewById<RecyclerView>(R.id.family_member_recycler_view)
+                    mActivity
+                        .findViewById<RecyclerView>(R.id.family_member_recycler_view)
             val adapter = ViewFamilyAdapter(users, mActivity)
             recyclerView.adapter = adapter
 

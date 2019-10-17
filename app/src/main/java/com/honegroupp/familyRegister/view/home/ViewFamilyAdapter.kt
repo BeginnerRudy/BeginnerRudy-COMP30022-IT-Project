@@ -47,7 +47,6 @@ class ViewFamilyAdapter(
         holder.memberName.text = currUser.username
     }
 
-
     override fun getItemCount(): Int {
         Log.d("ABCDEFG", users.size.toString())
         return users.size

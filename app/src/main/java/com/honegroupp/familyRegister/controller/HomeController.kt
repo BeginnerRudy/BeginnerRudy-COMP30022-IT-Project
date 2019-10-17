@@ -4,7 +4,10 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.view.home.*
+import com.honegroupp.familyRegister.view.home.AllTabFragment
+import com.honegroupp.familyRegister.view.home.ContainerActivity
+import com.honegroupp.familyRegister.view.home.ContainerAdapter
+import com.honegroupp.familyRegister.view.home.HomeActivity
 
 class HomeController {
     companion object {

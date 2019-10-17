@@ -3,16 +3,16 @@ package com.honegroupp.familyRegister.backend
 import android.content.Intent
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.honegroupp.familyRegister.model.User
-import com.honegroupp.familyRegister.model.Family
-import com.google.firebase.database.DataSnapshot
 import com.honegroupp.familyRegister.model.Category
-import com.honegroupp.familyRegister.view.home.HomeActivity
+import com.honegroupp.familyRegister.model.Family
 import com.honegroupp.familyRegister.model.Item
+import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.view.family.FamilyActivity
+import com.honegroupp.familyRegister.view.home.HomeActivity
 
 
 class FirebaseDatabaseManager() {
@@ -69,7 +69,8 @@ class FirebaseDatabaseManager() {
          * This method is responsible for uploading the given user to  the database when user login.
          * */
         fun uploadUser(mActivity: AppCompatActivity, uid: String, user: User) {
-            val databaseRef = FirebaseDatabase.getInstance().getReference(USER_PATH)
+            val databaseRef =
+                    FirebaseDatabase.getInstance().getReference(USER_PATH)
 
             databaseRef.addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
@@ -92,7 +93,9 @@ class FirebaseDatabaseManager() {
                             // If the user has no family go to FamilyActivity
                             // otherwise go to HomeActivity
                             if (currUser.hasFamily()) {
-                                intent = Intent(mActivity, HomeActivity::class.java)
+                                intent = Intent(
+                                    mActivity,
+                                    HomeActivity::class.java)
                                 username = currUser.username
                             }
                         }
@@ -122,7 +125,8 @@ class FirebaseDatabaseManager() {
          * This method is responsible for uploading given family to specified path of the database.
          * */
         fun uploadFamily(family: Family, uid: String) {
-            val databaseRef = FirebaseDatabase.getInstance().getReference(FAMILY_PATH)
+            val databaseRef =
+                    FirebaseDatabase.getInstance().getReference(FAMILY_PATH)
             databaseRef.child(family.familyId).setValue(family)
         }
 
@@ -143,27 +147,29 @@ class FirebaseDatabaseManager() {
 
             // add current's key to the corresponding category
             val categoryDatabaseReference =
-                FirebaseDatabase.getInstance().getReference(categoryPath)
-            categoryDatabaseReference.addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(p0: DatabaseError) {
-                    //Don't ignore errors!
-                    Log.d("TAG", p0.message)
-                }
+                    FirebaseDatabase.getInstance().getReference(categoryPath)
+            categoryDatabaseReference
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                        //Don't ignore errors!
+                        Log.d("TAG", p0.message)
+                    }
 
-                override fun onDataChange(p0: DataSnapshot) {
-                    // remove listener, since we only want to call this listener once.
-                    categoryDatabaseReference.removeEventListener(this)
+                    override fun onDataChange(p0: DataSnapshot) {
+                        // remove listener, since we only want to call this listener once.
+                        categoryDatabaseReference.removeEventListener(this)
 
-                    val category = p0.child("").getValue(Category::class.java) as Category
-                    // add new item key to category and update counts
-                    category.itemKeys.add(itemKey)
-                    category.count = category.itemKeys.size
+                        val category =
+                                p0.child("").getValue(Category::class.java) as Category
+                        // add new item key to category and update counts
+                        category.itemKeys.add(itemKey)
+                        category.count = category.itemKeys.size
 
-                    // update category to Firebase
-                    update(categoryPath, category)
+                        // update category to Firebase
+                        update(categoryPath, category)
 
-                }
-            })
+                    }
+                })
 
 
             // upload items to the Firebase
@@ -188,27 +194,29 @@ class FirebaseDatabaseManager() {
 
             // add current's key to the corresponding category
             val categoryDatabaseReference =
-                FirebaseDatabase.getInstance().getReference(categoryPath)
-            categoryDatabaseReference.addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(p0: DatabaseError) {
-                    //Don't ignore errors!
-                    Log.d("TAG", p0.message)
-                }
+                    FirebaseDatabase.getInstance().getReference(categoryPath)
+            categoryDatabaseReference
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                        //Don't ignore errors!
+                        Log.d("TAG", p0.message)
+                    }
 
-                override fun onDataChange(p0: DataSnapshot) {
-                    // remove listener, since we only want to call this listener once.
-                    categoryDatabaseReference.removeEventListener(this)
+                    override fun onDataChange(p0: DataSnapshot) {
+                        // remove listener, since we only want to call this listener once.
+                        categoryDatabaseReference.removeEventListener(this)
 
-                    val category = p0.child("").getValue(Category::class.java) as Category
-                    // add new item key to category and update counts
-                    category.itemKeys.add(itemKey)
-                    category.count = category.itemKeys.size
+                        val category =
+                                p0.child("").getValue(Category::class.java) as Category
+                        // add new item key to category and update counts
+                        category.itemKeys.add(itemKey)
+                        category.count = category.itemKeys.size
 
-                    // update category to Firebase
-                    update(categoryPath, category)
+                        // update category to Firebase
+                        update(categoryPath, category)
 
-                }
-            })
+                    }
+                })
 
 
             // upload items to the Firebase
@@ -230,9 +238,10 @@ class FirebaseDatabaseManager() {
          * */
         fun getFamilyIDByUID(uid: String, dataSnapshot: DataSnapshot): String {
             val currFamilyId =
-                dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).child("familyId").getValue(
-                    String::class.java
-                ) as String
+                    dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(
+                        uid).child("familyId").getValue(
+                        String::class.java
+                    ) as String
 
             return currFamilyId
         }

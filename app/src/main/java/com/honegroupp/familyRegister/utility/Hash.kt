@@ -4,15 +4,15 @@ package com.honegroupp.familyRegister.utility
 import java.security.MessageDigest
 
 
-class Hash{
+class Hash {
     companion object {
 
         val salt: String = "BAILLIEU"
         val algorithm = "SHA-256"
 
-        fun applyHash(text: String):String {
+        fun applyHash(text: String): String {
 
-//            add salt to string
+            //            add salt to string
             val newText = text + salt
             val bytes = text.toByteArray()
 
