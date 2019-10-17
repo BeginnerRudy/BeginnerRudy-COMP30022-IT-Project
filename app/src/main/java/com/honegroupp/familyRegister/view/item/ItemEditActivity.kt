@@ -49,7 +49,7 @@ class ItemEditActivity : AppCompatActivity(), LocationEnterPasswordDialog.OnView
     private var deleteImageUrls: ArrayList<String> = ArrayList()
     lateinit var databaseRef: DatabaseReference
     lateinit var currItem: Item
-    private lateinit var itemKey: String
+    lateinit var itemKey: String
     lateinit var currFamilyId: String
 
     private var storage: FirebaseStorage = FirebaseStorage.getInstance()
