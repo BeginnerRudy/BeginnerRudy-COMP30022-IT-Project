@@ -36,7 +36,8 @@ open class ContainerAdapter(
         parent: ViewGroup,
         viewType: Int
     ): ImageViewHolder {
-        val v = LayoutInflater.from(mContext).inflate(R.layout.image_item, parent, false)
+        val v = LayoutInflater.from(mContext)
+            .inflate(R.layout.image_item, parent, false)
         return ImageViewHolder(v)
     }
 
@@ -51,7 +52,7 @@ open class ContainerAdapter(
         holder.textViewTime.text = newDate
 
         // Load image to ImageView via its URL from Firebase Storage
-        if (currItem.imageURLs.size > 0){
+        if (currItem.imageURLs.size > 0) {
             Picasso.get()
                 .load(currItem.imageURLs[0])
                 .placeholder(R.mipmap.loading_jewellery)
@@ -67,7 +68,6 @@ open class ContainerAdapter(
         }
 
 
-
         // Add logic for show page
         val showButton = holder.showButton
         showButton.setOnClickListener {
@@ -75,11 +75,11 @@ open class ContainerAdapter(
         }
 
         // if this user liked this item, make the like image on
-        if (showButton.isFavorite){
+        if (showButton.isFavorite) {
             if (!currItem.showPageUids.containsKey(mContext.uid)) {
                 showButton.isFavorite = false
             }
-        }else{
+        } else {
             if (currItem.showPageUids.containsKey(mContext.uid)) {
                 showButton.isFavorite = true
             }
@@ -108,7 +108,7 @@ open class ContainerAdapter(
         val imageView: ImageView = viewItem.findViewById(R.id.img_upload)
 
         val showButton: MaterialFavoriteButton =
-            viewItem.findViewById(R.id.item_list_favorite_button)
+                viewItem.findViewById(R.id.item_list_favorite_button)
 
         init {
             viewItem.setOnClickListener(this)
@@ -128,7 +128,8 @@ open class ContainerAdapter(
                     listener!!.onItemClick(position)
                 }
             } else {
-                Toast.makeText(mContext, "listener is null", Toast.LENGTH_LONG).show()
+                Toast.makeText(mContext, "listener is null", Toast.LENGTH_LONG)
+                    .show()
             }
         }
 
@@ -138,7 +139,8 @@ open class ContainerAdapter(
                 if (position != RecyclerView.NO_POSITION) {
                     when (p0?.itemId) {
                         1 -> {
-                            listener!!.onDeleteClick(items[position].key.toString())
+                            listener!!
+                                .onDeleteClick(items[position].key.toString())
                             return true
                         }
                     }

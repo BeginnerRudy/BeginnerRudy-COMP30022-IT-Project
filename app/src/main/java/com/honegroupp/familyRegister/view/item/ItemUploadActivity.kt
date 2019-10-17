@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.backend.FirebaseStorageManager
 import com.honegroupp.familyRegister.controller.ItemController
 import com.honegroupp.familyRegister.view.itemList.ItemGridAdapter
 import kotlinx.android.synthetic.main.item_upload_page.*
@@ -242,9 +241,7 @@ class ItemUploadActivity : AppCompatActivity() {
             addItemConfirm.isEnabled = false
 
             //upload uri to firebase
-            FirebaseStorageManager
-                .uploadToFirebase(allImageUri, categoryName, this)
-
+            ItemController.uploadImageToStorage(allImageUri, categoryName, this)
             this.finish()
         }
 

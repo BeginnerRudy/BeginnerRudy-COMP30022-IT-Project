@@ -21,6 +21,7 @@ import com.honegroupp.familyRegister.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
 
 import android.widget.TextView
+import androidx.drawerlayout.widget.DrawerLayout
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.controller.HomeController
@@ -100,7 +101,57 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         HomeController
             .sortItem(allTabFragment, allTabAdapter, showTabAdapter, this)
 
-        // set when the btn_home_button should be displayed
+        // this object is the lisener to disable the navi_home_sort_view
+        val disableNaviHomeSort = object : DrawerLayout.DrawerListener {
+
+            override fun onDrawerStateChanged(arg0: Int) {
+                // do nothing
+            }
+
+            override fun onDrawerSlide(view: View, arg1: Float) {
+                if (view === navi_home_sort_view) {
+                    drawer_layout.setDrawerLockMode(
+                        DrawerLayout.LOCK_MODE_LOCKED_CLOSED, view)
+                }
+            }
+
+            override fun onDrawerOpened(view: View) {
+                if (view === navi_home_sort_view) {
+                    drawer_layout.setDrawerLockMode(
+                        DrawerLayout.LOCK_MODE_LOCKED_CLOSED, view)
+                }
+            }
+
+            override fun onDrawerClosed(view: View) {
+                if (view === navi_home_sort_view) {
+                    drawer_layout.setDrawerLockMode(
+                        DrawerLayout.LOCK_MODE_LOCKED_CLOSED, view)
+                }
+            }
+        }
+
+        // this object is the lisener to enable the navi_home_sort_view
+        val enableNaviHomeSort = object : DrawerLayout.DrawerListener {
+
+            override fun onDrawerStateChanged(arg0: Int) {
+                // do nothing
+            }
+
+            override fun onDrawerSlide(view: View, arg1: Float) {
+                // do nothing
+            }
+
+            override fun onDrawerOpened(view: View) {
+                // do nothing
+            }
+
+            override fun onDrawerClosed(view: View) {
+                // do nothing
+            }
+        }
+
+
+        // set when the btn_home_button and navi_home_sort_view should be displayed
         viewPager
             .addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrolled(
@@ -113,9 +164,18 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
 
                 override fun onPageSelected(position: Int) {
                     when (position) {
-                        0 -> btn_home_sort.visibility = View.VISIBLE
-                        1 -> btn_home_sort.visibility = View.INVISIBLE
-                        2 -> btn_home_sort.visibility = View.VISIBLE
+                        0 -> {
+                            btn_home_sort.visibility = View.VISIBLE
+                            drawer_layout.setDrawerListener(enableNaviHomeSort)
+                        }
+                        1 -> {
+                            btn_home_sort.visibility = View.INVISIBLE
+                            drawer_layout.setDrawerListener(disableNaviHomeSort)
+                        }
+                        2 -> {
+                            btn_home_sort.visibility = View.VISIBLE
+                            drawer_layout.setDrawerListener(enableNaviHomeSort)
+                        }
                     }
                 }
 
@@ -146,7 +206,7 @@ class HomeActivity : ContainerActivity(), IDoubleClickToExit {
         }
 
 
-        //        //display User information
+        //display User information
         displayUserInfo(uid)
 
 
