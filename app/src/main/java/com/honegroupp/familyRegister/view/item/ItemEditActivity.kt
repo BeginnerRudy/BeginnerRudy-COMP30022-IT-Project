@@ -21,6 +21,7 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.backend.FirebaseStorageManager
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.utility.CompressionUtil
@@ -43,13 +44,13 @@ class ItemEditActivity : AppCompatActivity(), LocationEnterPasswordDialog.OnView
 
     val GALLERY_REQUEST_CODE = 123
     var itemLocation = ""
-    private var allImageUri: ArrayList<Uri> = ArrayList()
-    private var detailImageUrls: ArrayList<String> = ArrayList()
+    var allImageUri: ArrayList<Uri> = ArrayList()
+    var detailImageUrls: ArrayList<String> = ArrayList()
     private var deleteImageUrls: ArrayList<String> = ArrayList()
     lateinit var databaseRef: DatabaseReference
     lateinit var currItem: Item
     private lateinit var itemKey: String
-    private lateinit var currFamilyId: String
+    lateinit var currFamilyId: String
 
     private var storage: FirebaseStorage = FirebaseStorage.getInstance()
 
@@ -173,7 +174,7 @@ class ItemEditActivity : AppCompatActivity(), LocationEnterPasswordDialog.OnView
                     deleteStorageImages()
 
                     // upload new images
-                    uploadToFirebase(currItem)
+                    FirebaseStorageManager.uploadEditToFirebase(currItem,this@ItemEditActivity)
 
                     // need to check item name is not empty
                     if (editName.text.toString() == "") {
@@ -333,73 +334,73 @@ class ItemEditActivity : AppCompatActivity(), LocationEnterPasswordDialog.OnView
                 }
         }
     }
-
-    fun uploadToFirebase(currItem: Item) {
-        val uploadPath = " "
-        var numSuccess = 0
-        for (uri in allImageUri) {
-
-            //get firebase storage reference
-            val ref =
-                FirebaseStorage.getInstance()
-                    .reference.child(uploadPath + System.currentTimeMillis())
-
-            //convert first image in list to bitmap
-            val path = FilePathUtil.getFilePathFromContentUri(uri, this)
-            val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
-            val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
-
-            //decrease the resolution
-            val scaledBitmap = CompressionUtil.scaleDown(bitmap, true)
-
-            //correct the orientation of the bitmap
-            val orientedScaledBitmap = ImageRotateUtil.rotateBitmap(scaledBitmap, orientation)
-
-            //compress the image
-            val data = CompressionUtil.compressImage(orientedScaledBitmap)
-
-            //upload the compressed image
-            ref.putBytes(data)
-                .addOnSuccessListener {
-
-                    //add item logic
-                    ref.downloadUrl.addOnCompleteListener { taskSnapshot ->
-                        var url = taskSnapshot.result
-                        detailImageUrls.add(url.toString())
-                        numSuccess += 1
-
-                        if (numSuccess == allImageUri.size) {
-                            databaseRef
-                                .child(FirebaseDatabaseManager.FAMILY_PATH)
-                                .child(currFamilyId)
-                                .child("items")
-                                .child(itemKey)
-                                .child("imageURLs")
-                                .setValue(detailImageUrls)
-                            toast(
-                                getString(R.string.upload_success) + numSuccess.toString() + "/" + allImageUri.size.toString(),
-                                Toast.LENGTH_SHORT
-                            )
-                            Log.d("eeeenimgupload", detailImageUrls.toString())
-                        } else {
-                            toast(
-                                getString(R.string.upload_complete) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(),
-                                Toast.LENGTH_SHORT
-                            )
-                            Log.d("eeeenimg", detailImageUrls.toString())
-                        }
-                    }
-                }
-        }
-        if (allImageUri.size > 0) {
-            toast(
-                getString(R.string.uploading) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(),
-                Toast.LENGTH_SHORT
-            )
-        } else {
-            toast(getString(R.string.upload_success), Toast.LENGTH_SHORT)
-        }
-    }
+//
+//    fun uploadToFirebase(currItem: Item) {
+//        val uploadPath = " "
+//        var numSuccess = 0
+//        for (uri in allImageUri) {
+//
+//            //get firebase storage reference
+//            val ref =
+//                FirebaseStorage.getInstance()
+//                    .reference.child(uploadPath + System.currentTimeMillis())
+//
+//            //convert first image in list to bitmap
+//            val path = FilePathUtil.getFilePathFromContentUri(uri, this)
+//            val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
+//            val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
+//
+//            //decrease the resolution
+//            val scaledBitmap = CompressionUtil.scaleDown(bitmap, true)
+//
+//            //correct the orientation of the bitmap
+//            val orientedScaledBitmap = ImageRotateUtil.rotateBitmap(scaledBitmap, orientation)
+//
+//            //compress the image
+//            val data = CompressionUtil.compressImage(orientedScaledBitmap)
+//
+//            //upload the compressed image
+//            ref.putBytes(data)
+//                .addOnSuccessListener {
+//
+//                    //add item logic
+//                    ref.downloadUrl.addOnCompleteListener { taskSnapshot ->
+//                        var url = taskSnapshot.result
+//                        detailImageUrls.add(url.toString())
+//                        numSuccess += 1
+//
+//                        if (numSuccess == allImageUri.size) {
+//                            databaseRef
+//                                .child(FirebaseDatabaseManager.FAMILY_PATH)
+//                                .child(currFamilyId)
+//                                .child("items")
+//                                .child(itemKey)
+//                                .child("imageURLs")
+//                                .setValue(detailImageUrls)
+//                            toast(
+//                                getString(R.string.upload_success) + numSuccess.toString() + "/" + allImageUri.size.toString(),
+//                                Toast.LENGTH_SHORT
+//                            )
+//                            Log.d("eeeenimgupload", detailImageUrls.toString())
+//                        } else {
+//                            toast(
+//                                getString(R.string.upload_complete) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(),
+//                                Toast.LENGTH_SHORT
+//                            )
+//                            Log.d("eeeenimg", detailImageUrls.toString())
+//                        }
+//                    }
+//                }
+//        }
+//        if (allImageUri.size > 0) {
+//            toast(
+//                getString(R.string.uploading) + " " + numSuccess.toString() + "/" + allImageUri.size.toString(),
+//                Toast.LENGTH_SHORT
+//            )
+//        } else {
+//            toast(getString(R.string.upload_success), Toast.LENGTH_SHORT)
+//        }
+//    }
 
     private fun openLocationEnterPasswordDialog() {
         val locationEnterPasswordDialog = LocationEnterPasswordDialog()
@@ -468,7 +469,7 @@ class ItemEditActivity : AppCompatActivity(), LocationEnterPasswordDialog.OnView
         }
     }
 
-    private fun toast(msg: String, duration: Int) {
+    fun toast(msg: String, duration: Int) {
         Toast.makeText(this, msg, duration).show()
     }
 
