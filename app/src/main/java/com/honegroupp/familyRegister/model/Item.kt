@@ -1,11 +1,14 @@
 package com.honegroupp.familyRegister.model
 
 
+import android.net.Uri
 import android.widget.ImageButton
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.PropertyName
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.backend.FirebaseStorageManager
+import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -29,7 +32,7 @@ data class Item(
 
     @set:PropertyName("itemLocation")
     @get:PropertyName("itemLocation")
-    var itemLocation:  String = "",
+    var itemLocation: String = "",
 
     @set:PropertyName("imageURLs")
     @get:PropertyName("imageURLs")
@@ -49,13 +52,13 @@ data class Item(
 
 ) {
     /*This is the primary constructor to create an item instance*/
-//    constructor(itemName: String, itemDescription: String, itemOwnerUID: String, imageURLs: ArrayList<String>, itemPrivacy: String) : this() {
-//        this.itemName = "itemName"
-//        this.itemDescription = "itemDescription"
-//        this.itemOwnerUID = itemOwnerUID
-//        this.imageURLs = imageURLs
-//        this.itemPrivacy = itemPrivacy
-//    }
+    //    constructor(itemName: String, itemDescription: String, itemOwnerUID: String, imageURLs: ArrayList<String>, itemPrivacy: String) : this() {
+    //        this.itemName = "itemName"
+    //        this.itemDescription = "itemDescription"
+    //        this.itemOwnerUID = itemOwnerUID
+    //        this.imageURLs = imageURLs
+    //        this.itemPrivacy = itemPrivacy
+    //    }
 
     var key: String? = null
 
@@ -73,14 +76,20 @@ data class Item(
     /**
      * this is the help callback function of store item, use to get current index of item list and upload new item
      * */
-    private fun callbackStore(uid: String, categoryName: String, dataSnapshot: DataSnapshot) {
+    private fun callbackStore(
+        uid: String,
+        categoryName: String,
+        dataSnapshot: DataSnapshot
+    ) {
         // get user's family ID
-        val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+        val currFamilyId =
+                FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
 
         //get last index
         val familyItemsDataSnapshot =
-            dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId)
-                .child("items")
+                dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH)
+                    .child(currFamilyId)
+                    .child("items")
 
         // if there has item in the family
 
@@ -95,7 +104,7 @@ data class Item(
 
         val path = FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/"
         val categoryPath =
-            FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/" + "categories/" + categoryName + "/"
+                FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/" + "categories/" + categoryName + "/"
         FirebaseDatabaseManager.uploadItem(this, path, items, categoryPath)
     }
 
@@ -113,14 +122,20 @@ data class Item(
     /**
      * this is the help callback function of edit item, use to get current index of item list and edit item
      * */
-    private fun callbackEdit(uid: String, categoryName: String, dataSnapshot: DataSnapshot) {
+    private fun callbackEdit(
+        uid: String,
+        categoryName: String,
+        dataSnapshot: DataSnapshot
+    ) {
         // get user's family ID
-        val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+        val currFamilyId =
+                FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
 
         //get last index
         val familyItemsDataSnapshot =
-            dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(currFamilyId)
-                .child("items")
+                dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH)
+                    .child(currFamilyId)
+                    .child("items")
 
         // if there has item in the family
 
@@ -135,7 +150,7 @@ data class Item(
 
         val path = FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/"
         val categoryPath =
-            FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/" + "categories/" + categoryName + "/"
+                FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/" + "categories/" + categoryName + "/"
         FirebaseDatabaseManager.UeditItem(this, path, items, categoryPath)
     }
 
@@ -159,22 +174,42 @@ data class Item(
         dataSnapshot: DataSnapshot
     ) {
         // get user's family ID
-        val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+        val currFamilyId =
+                FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
 
         // First check whether this user's uid in the item's showPageUids
         val showPageUidsPath =
-            "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/items/$key/showPageUids/"
-        val isInItemShowPageUids = dataSnapshot.child(showPageUidsPath).hasChild(uid)
+                "${FirebaseDatabaseManager.FAMILY_PATH}$currFamilyId/items/$key/showPageUids/"
+        val isInItemShowPageUids =
+                dataSnapshot.child(showPageUidsPath).hasChild(uid)
 
         // if it is not in the showPageUids, then the user now want to click to add it in
         if (!isInItemShowPageUids) {
             // add this user's uid
-            FirebaseDatabase.getInstance().getReference(showPageUidsPath).child(uid)
+            FirebaseDatabase.getInstance().getReference(showPageUidsPath)
+                .child(uid)
                 .setValue(FirebaseDatabaseManager.NOTHING)
         } else {
             // remove user's uid
-            FirebaseDatabase.getInstance().getReference(showPageUidsPath).child(uid).removeValue()
+            FirebaseDatabase.getInstance().getReference(showPageUidsPath)
+                .child(uid).removeValue()
         }
 
+    }
+
+    companion object {
+
+        /**
+         * This method is responsible for upload image to the firebase storage
+         *
+         * */
+        fun uploadImageToFirebaseStorage(
+            allImageUri: ArrayList<Uri>,
+            categoryName: String,
+            activity: ItemUploadActivity
+        ) {
+            FirebaseStorageManager
+                .uploadToFirebase(allImageUri, categoryName, activity)
+        }
     }
 }

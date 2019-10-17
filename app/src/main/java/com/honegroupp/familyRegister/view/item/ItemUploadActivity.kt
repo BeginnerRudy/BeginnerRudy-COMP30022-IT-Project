@@ -240,9 +240,7 @@ class ItemUploadActivity : AppCompatActivity() {
 
         } else {
             //upload uri to firebase
-            FirebaseStorageManager
-                .uploadToFirebase(allImageUri, categoryName, this)
-
+            ItemController.uploadImageToStorage(allImageUri, categoryName, this)
             this.finish()
         }
 
