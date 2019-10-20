@@ -12,6 +12,10 @@ import com.honegroupp.familyRegister.view.authentication.LoginActivity
 
 class AuthenticationController {
     companion object {
+
+        /**
+         * This method is responsible for the user log routine
+         * */
         fun logout(btn_log_out: Button, mConntext: Context) {
             btn_log_out.setOnClickListener {
                 AuthUI.getInstance()

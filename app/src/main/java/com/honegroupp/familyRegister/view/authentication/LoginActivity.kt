@@ -8,18 +8,19 @@ import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import com.honegroupp.familyRegister.IDoubleClickToExit
+import com.honegroupp.familyRegister.utility.IDoubleClickToExit
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.AuthenticationController
-import com.honegroupp.familyRegister.utility.EmailPathSwitch
+import com.honegroupp.familyRegister.utility.EmailPathSwitchUtil
 import com.honegroupp.familyRegister.model.User
 
 /**
  * This class is responsible for Login functionality.
- *
+ * use the AuthUI api
  * */
 
-class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
+class LoginActivity : AppCompatActivity(),
+                      IDoubleClickToExit {
     // This is the request code for sign in
     var RC_SIGN_IN = 1
 
@@ -48,6 +49,9 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
         )
     }
 
+    /**
+     * Handle the result of authentication, receive information and upload
+     * it to firebase*/
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -58,7 +62,7 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                 // Successfully signed d
                 val user = FirebaseAuth.getInstance().currentUser
 
-
+                //set the userName and userContact
                 var userContact = "Default"
                 var userName = "Default"
                 if (user != null) {
@@ -66,14 +70,9 @@ class LoginActivity : AppCompatActivity(), IDoubleClickToExit {
                         userContact = user.email.toString()
                         userName = user!!.displayName as String
                     }
-//                    }else if (user.phoneNumber != null) {
-//                        userContact = user.phoneNumber.toString()
-//                        userName = user.phoneNumber.toString()
-//                    }
                 }
 
-                val relativePath = EmailPathSwitch.emailToPath(userContact)
-
+                val relativePath = EmailPathSwitchUtil.emailToPath(userContact)
 
                 AuthenticationController.storeUser(this, User(username = userName), relativePath)
 

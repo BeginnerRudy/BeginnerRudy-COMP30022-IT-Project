@@ -1,14 +1,17 @@
 package com.honegroupp.familyRegister.utility
-
-
 import java.security.MessageDigest
 
 
-class Hash {
+/**
+ * HashUtil class is for apply hash to the password to improve privacy
+ * The algorithm used is SHA-256 and the salt is "BAILLIEU"
+ * The salt can prevent dictionary attack
+ * */
+class HashUtil {
     companion object {
 
-        val salt: String = "BAILLIEU"
-        val algorithm = "SHA-256"
+        private const val salt: String = "BAILLIEU"
+        private const val algorithm:String = "SHA-256"
 
         fun applyHash(text: String): String {
 

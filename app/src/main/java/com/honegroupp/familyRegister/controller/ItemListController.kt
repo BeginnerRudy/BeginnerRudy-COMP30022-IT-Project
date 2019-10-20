@@ -15,6 +15,10 @@ import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 
 class ItemListController {
     companion object {
+
+        /**
+         * This method is responsible for add item to the list
+         * */
         fun addItem(
             uid: String,
             categoryName: String,
@@ -70,7 +74,9 @@ class ItemListController {
             Family.deleteItem(uid, categoryName, itemId, mActivity)
         }
 
-        //activity adapter
+        /**
+         * This method is responsible for sort item in the itemList
+         * */
         private fun sortItem(
             mActivity: ItemListActivity,
             adapter: ContainerAdapter

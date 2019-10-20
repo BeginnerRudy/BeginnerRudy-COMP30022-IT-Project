@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 
 import com.google.android.material.tabs.TabLayout
-import com.honegroupp.familyRegister.IDoubleClickToExit
+import com.honegroupp.familyRegister.utility.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
 
 import android.widget.TextView
@@ -27,6 +27,11 @@ import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.controller.HomeController
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.model.User
+import com.honegroupp.familyRegister.view.account.AboutActivity
+import com.honegroupp.familyRegister.view.account.AccountActivity
+import com.honegroupp.familyRegister.view.account.HelpFeedbackActivity
+import com.honegroupp.familyRegister.view.account.UserDetailActivity
+import com.honegroupp.familyRegister.view.family.ViewFamilyActivity
 import com.honegroupp.familyRegister.view.item.DetailSlide
 
 import com.honegroupp.familyRegister.view.search.SearchActivity
@@ -34,7 +39,8 @@ import com.squareup.picasso.Picasso
 
 
 @Suppress("DEPRECATION")
-class HomeActivity : ContainerActivity(), IDoubleClickToExit {
+class HomeActivity : ContainerActivity(),
+                     IDoubleClickToExit {
 
     private lateinit var toolbar: Toolbar
     private lateinit var tabLayout: TabLayout

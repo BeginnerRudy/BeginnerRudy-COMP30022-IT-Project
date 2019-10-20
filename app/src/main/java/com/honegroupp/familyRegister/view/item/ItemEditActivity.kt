@@ -23,7 +23,7 @@ import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.backend.FirebaseStorageManager
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.model.User
-import com.honegroupp.familyRegister.utility.EmailPathSwitch
+import com.honegroupp.familyRegister.utility.EmailPathSwitchUtil
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationChangeDialog
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationEnterPasswordDialog
 import com.honegroupp.familyRegister.view.item.itemEditDialogs.LocationViewDialog
@@ -188,7 +188,7 @@ class ItemEditActivity : AppCompatActivity(),
 
                     // upload new images
                     FirebaseStorageManager
-                        .uploadEditToFirebase(currItem, this@ItemEditActivity)
+                        .uploadEditImageToFirebase(this@ItemEditActivity)
 
                     // need to check item name is not empty
                     if (editName.text.toString() == "") {
@@ -472,7 +472,7 @@ class ItemEditActivity : AppCompatActivity(),
             // such as GoogleAuthProvider or FacebookAuthProvider.
             val credential: AuthCredential = EmailAuthProvider
                 .getCredential(
-                    EmailPathSwitch.pathToEmail(currItem.itemOwnerUID),
+                    EmailPathSwitchUtil.pathToEmail(currItem.itemOwnerUID),
                     enteredPassword
                 )
 

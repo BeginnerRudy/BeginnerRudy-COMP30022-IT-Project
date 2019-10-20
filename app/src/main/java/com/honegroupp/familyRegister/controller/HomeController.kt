@@ -11,7 +11,10 @@ import com.honegroupp.familyRegister.view.home.HomeActivity
 
 class HomeController {
     companion object {
-        //activity adapter
+        /**
+         * This method is responsible sort item in the home page, include
+         * all_page and the show_page.
+         * */
         fun sortItem(
             allTabFragment: AllTabFragment,
             allTabAdapter: ContainerAdapter,

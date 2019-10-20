@@ -5,8 +5,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Family
 import com.honegroupp.familyRegister.model.User
-import com.honegroupp.familyRegister.view.home.ViewFamilyActivity
-import com.honegroupp.familyRegister.view.home.ViewFamilyAdapter
+import com.honegroupp.familyRegister.view.family.ViewFamilyActivity
+import com.honegroupp.familyRegister.view.family.ViewFamilyAdapter
 
 class ViewFamilyController {
     companion object {

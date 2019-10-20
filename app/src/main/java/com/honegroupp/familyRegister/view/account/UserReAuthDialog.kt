@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.view.home
+package com.honegroupp.familyRegister.view.account
 
 import android.app.Dialog
 import android.content.Context
@@ -16,7 +16,9 @@ import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.utility.EmailPathSwitch
+import com.honegroupp.familyRegister.utility.EmailPathSwitchUtil
+import com.honegroupp.familyRegister.view.family.FamilyPasswordChangeDialog
+import com.honegroupp.familyRegister.view.family.ViewFamilyActivity
 
 /**
  * This class is responsible for the family password change in the view family page logic.
@@ -69,13 +71,14 @@ class UserReAuthDialog(
                 // such as GoogleAuthProvider or FacebookAuthProvider.
 
                 val credential: AuthCredential = EmailAuthProvider
-                    .getCredential(EmailPathSwitch.pathToEmail(uid), userPassword)
+                    .getCredential(EmailPathSwitchUtil.pathToEmail(uid), userPassword)
 
                 user!!.reauthenticate(credential)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             // navigate to family password change dialog
-                            val familyNameChangeDialog = FamilyPasswordChangeDialog(uid)
+                            val familyNameChangeDialog =
+                                    FamilyPasswordChangeDialog(uid)
                             familyNameChangeDialog.show(mActivity.supportFragmentManager, "Family Password Change Dialog")
                             // make the dialog disappear
                             this.dismiss()

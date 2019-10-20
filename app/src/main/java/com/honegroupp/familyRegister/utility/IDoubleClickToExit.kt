@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister
+package com.honegroupp.familyRegister.utility
 
 import android.app.Activity
 import android.os.Handler

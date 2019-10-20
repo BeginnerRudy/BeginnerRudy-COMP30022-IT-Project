@@ -14,7 +14,7 @@
         <activity
             android:name=".view.search.SearchActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.home.AccountActivity"
+        <activity android:name=".view.account.AccountActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.authentication.LoginActivity"
@@ -27,7 +27,7 @@
         </activity>
         <activity android:name=".view.home.HomeActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.home.ViewFamilyActivity"
+        <activity android:name=".view.family.ViewFamilyActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".view.family.FamilyActivity"
             android:screenOrientation="portrait"/>
@@ -46,26 +46,22 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".view.itemList.ItemListActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.home.HelpFeedbackActivity"
+        <activity android:name=".view.account.HelpFeedbackActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.home.AboutActivity"
+        <activity android:name=".view.account.AboutActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.home.UserDetailActivity"
+        <activity android:name=".view.account.UserDetailActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.home.UserEditActivity"
+        <activity android:name=".view.account.UserEditActivity"
             android:screenOrientation="portrait"/>
 
     </application>
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

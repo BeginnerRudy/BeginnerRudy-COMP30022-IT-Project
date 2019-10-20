@@ -5,7 +5,9 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 
-
+/**
+ * FilePathUtil is response for find the path of a image on the phone given
+ * the uri of that image*/
 class FilePathUtil {
     companion object {
         /*Convert the the uri of file to the absolute path*/

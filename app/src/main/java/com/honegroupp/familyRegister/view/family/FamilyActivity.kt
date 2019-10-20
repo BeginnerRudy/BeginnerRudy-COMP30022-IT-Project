@@ -2,7 +2,7 @@ package com.honegroupp.familyRegister.view.family
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.honegroupp.familyRegister.IDoubleClickToExit
+import com.honegroupp.familyRegister.utility.IDoubleClickToExit
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.FamilyController
 import kotlinx.android.synthetic.main.activity_create_join_family.*
@@ -14,7 +14,8 @@ import kotlinx.android.synthetic.main.activity_create_join_family.*
  * User click back button twice would exits the app when he/she is in this activity.
  * @author Renjie Meng
  * */
-class FamilyActivity: AppCompatActivity(), IDoubleClickToExit{
+class FamilyActivity: AppCompatActivity(),
+                      IDoubleClickToExit {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_join_family)

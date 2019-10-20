@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Category
 import com.honegroupp.familyRegister.model.Family
-import com.honegroupp.familyRegister.utility.Hash
+import com.honegroupp.familyRegister.utility.HashUtil
 
 
 /**
@@ -88,7 +88,7 @@ class FamilyController {
             username: String
         ) {
             //The password is encrypted using SHA256
-            val hashValue: String = Hash.applyHash(password.text.toString())
+            val hashValue: String = HashUtil.applyHash(password.text.toString())
             val family = Family(
                 familyName = familyName.text.toString(),
                 familyId = uid,
