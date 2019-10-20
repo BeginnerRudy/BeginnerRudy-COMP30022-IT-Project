@@ -10,6 +10,9 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 
+/**
+ * ListViewAdapter is an adapter to deal with data with listView
+ * */
 class ListViewAapter(
     val items: ArrayList<Item>,
     val mActivity: AppCompatActivity
@@ -19,18 +22,30 @@ class ListViewAapter(
     private val dateList: ArrayList<String> = ArrayList()
     private val imageURLList: ArrayList<String> = ArrayList()
 
+    /**
+     * the function is used to get the items' total number
+     * */
     override fun getCount(): Int {
         return items.size
     }
 
+    /**
+     * the function is used to get the item object by its position in list
+     * */
     override fun getItem(position: Int): Item {
         return items[position]
     }
 
+    /**
+     * the function is used to get item id by its position
+     * */
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
 
+    /**
+     * the function is used to present UI view for listView with necessary data
+     * */
     override fun getView(
         position: Int,
         convertView: View?,

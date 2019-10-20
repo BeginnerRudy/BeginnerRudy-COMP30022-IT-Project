@@ -24,10 +24,6 @@ data class Category(
     /*This constructor has no parameter, which is used to create CategoryUpload while retrieve data from database*/
     constructor() : this("", ArrayList<String>(), 0)
 
-    companion object {
-        val DEFAULT_COVER = "DEFAULT_COVER"
-    }
-
     /**
      * This method is responsible for get cover Url for the category.
      *
