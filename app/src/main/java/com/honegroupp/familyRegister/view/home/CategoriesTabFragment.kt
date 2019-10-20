@@ -1,17 +1,18 @@
 package com.honegroupp.familyRegister.view.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
+import androidx.fragment.app.Fragment
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.CategoryController
 
-
+/**
+ * This class is responsible for Categories tab in the home page
+ *
+ * */
 class CategoriesTabFragment : Fragment() {
     companion object {
         /*This constant is used as a flag, to show there is no cover image for the category*/
@@ -19,17 +20,19 @@ class CategoriesTabFragment : Fragment() {
         const val PLEASE_USE_DEFAULT_COVER = "Default Cover"
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_categories, container, false)
-
+        val view =
+                inflater.inflate(R.layout.fragment_categories, container, false)
 
         // Show all categories
-        CategoryController.showCategory((activity as HomeActivity).userID, view, (activity as AppCompatActivity))
+        CategoryController.showCategory(
+            (activity as HomeActivity).userID,
+            view,
+            (activity as AppCompatActivity))
 
         return view
     }

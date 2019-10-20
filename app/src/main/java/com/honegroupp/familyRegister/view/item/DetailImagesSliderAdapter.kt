@@ -36,17 +36,13 @@ class DetailImagesSliderAdapter(
     }
 
     override fun getItemPosition(`object`: Any): Int {
-        Log.d("dimgggggItemPosi",items.toString())
         return POSITION_NONE
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): View {
-        Log.d("ooonSlider",items[position])
         val layoutInflater:LayoutInflater = LayoutInflater.from(context)
         val view: View = layoutInflater.inflate(R.layout.slide_detail_images_layout, container, false)
-
         val slideImageView = view.findViewById<ImageView>(R.id.detail_images)
-
         val currItemUrls = items[position]
 
         // Load image to ImageView via its URL from Firebase Storage
@@ -58,7 +54,6 @@ class DetailImagesSliderAdapter(
             .into(slideImageView)
 
         view.findViewById<ImageView>(R.id.detail_images).setOnClickListener{
-            Log.d("ddddtailclickonviewp",items.toString())
             listener!!.onImageClick(position)
         }
 
@@ -66,7 +61,6 @@ class DetailImagesSliderAdapter(
 
         view.setOnLongClickListener{
             showDialog()
-            Log.d("longgggclicklis", "longclick")
             this.currSlideImageView = slideImageView
             this.currposition = position
             return@setOnLongClickListener true

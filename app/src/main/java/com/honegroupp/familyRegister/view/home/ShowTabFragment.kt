@@ -4,17 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ShowPageController
 import kotlinx.android.synthetic.main.activity_item_list.view.*
-import android.widget.RelativeLayout
 
-
-
-
+/**
+ * This class the for displaying the 3 tabs in the home page
+ * */
 class ShowTabFragment(private val showTabAdapter: ContainerAdapter) :
     Fragment() {
     override fun onCreateView(
@@ -26,7 +26,8 @@ class ShowTabFragment(private val showTabAdapter: ContainerAdapter) :
                 inflater.inflate(R.layout.activity_item_list, container, false)
 
         // Align the recycler view to the top of the parent
-        val params = view.item_list_recycler_view.layoutParams as RelativeLayout.LayoutParams
+        val params =
+                view.item_list_recycler_view.layoutParams as RelativeLayout.LayoutParams
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP)
         view.item_list_recycler_view.layoutParams = params
 
@@ -57,7 +58,6 @@ class ShowTabFragment(private val showTabAdapter: ContainerAdapter) :
         // User could not add item from the show page
         view.btn_add.visibility = View.INVISIBLE
         view.btn_sort.visibility = View.INVISIBLE
-
         view.btn_search.visibility = View.INVISIBLE
 
         return view

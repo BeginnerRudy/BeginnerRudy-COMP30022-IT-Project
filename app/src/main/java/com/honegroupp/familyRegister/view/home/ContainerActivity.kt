@@ -36,6 +36,9 @@ open class ContainerActivity : AppCompatActivity(), ContainerAdapter.OnItemClick
         startActivity(intent)
     }
 
+    /**
+     * This delete the item
+     * */
     override fun onDeleteClick(itemId: String) {
         ItemListController.deleteItems(uid, categoryPosition, itemId, this)
     }

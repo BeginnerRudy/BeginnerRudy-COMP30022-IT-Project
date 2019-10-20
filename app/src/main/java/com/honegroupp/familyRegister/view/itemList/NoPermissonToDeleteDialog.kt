@@ -35,10 +35,11 @@ class NoPermissonToDeleteDialog() : AppCompatDialogFragment() {
 
 
         builder.setView(view)
-            .setTitle(getString(R.string.tip)
+            .setTitle(
+                getString(R.string.tip)
             )
 
-        view.findViewById<Button>(R.id.ok_button).setOnClickListener{
+        view.findViewById<Button>(R.id.ok_button).setOnClickListener {
             // make the dialog disappear
             this.dismiss()
         }

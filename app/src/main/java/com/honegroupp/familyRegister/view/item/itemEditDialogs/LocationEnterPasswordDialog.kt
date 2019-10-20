@@ -12,7 +12,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import com.honegroupp.familyRegister.R
 
-
+/**
+ * This class the for enter the user password to see the location
+ * */
 class LocationEnterPasswordDialog : AppCompatDialogFragment() {
     private var editTextPassword: EditText? = null
     private var listener: OnViewClickerListener? = null
@@ -32,6 +34,7 @@ class LocationEnterPasswordDialog : AppCompatDialogFragment() {
         val inflater = activity!!.layoutInflater
         val view = inflater.inflate(R.layout.dialog_location_password_required, null)
 
+        //set up the dialog
         builder.setView(view)
             .setTitle(R.string.edit_password_required_for_location)
             .setNeutralButton(R.string.edit_cancel) { dialog, _ ->
@@ -41,11 +44,11 @@ class LocationEnterPasswordDialog : AppCompatDialogFragment() {
         editTextPassword = view.findViewById(R.id.edit_password)
         view.findViewById<Button>(R.id.view_button).setOnClickListener(){
 
+            //get the password
             val password = editTextPassword!!.text.toString()
 
            //check the correctness of password
             listener!!.applyPasswords(password,this)
-
         }
 
         return builder.create()
@@ -59,7 +62,6 @@ class LocationEnterPasswordDialog : AppCompatDialogFragment() {
         } catch (e: ClassCastException) {
             throw ClassCastException(context.toString() + "must implement OnViewClickerListener")
         }
-
     }
 
     interface OnViewClickerListener {

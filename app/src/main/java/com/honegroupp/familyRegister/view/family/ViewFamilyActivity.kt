@@ -9,9 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ViewFamilyController
-import com.honegroupp.familyRegister.view.account.UserReAuthDialog
 
-class ViewFamilyActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListener {
+/**
+ * This class is for view the Family name, family id ,family members and owner
+ * */
+class ViewFamilyActivity : AppCompatActivity(),
+                           PopupMenu.OnMenuItemClickListener {
     lateinit var uid: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +25,7 @@ class ViewFamilyActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListene
         val toolbar = findViewById<Toolbar>(R.id.toolbar_view_family)
         toolbar.title = getString(R.string.family)
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_white_24dp)
-        toolbar.setNavigationOnClickListener{
+        toolbar.setNavigationOnClickListener {
             finish()
         }
 
@@ -52,18 +55,27 @@ class ViewFamilyActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListene
 
     }
 
+    /**
+     * Handle the click menu actions
+     * */
     override fun onMenuItemClick(p0: MenuItem?): Boolean {
         when (p0!!.itemId) {
+
+            // open the dialog to change the family name
             R.id.change_family_name -> {
                 val familyNameChangeDialog =
                         FamilyNameChangeDialog(uid)
-                familyNameChangeDialog.show(supportFragmentManager, "Location Change Dialog")
+                familyNameChangeDialog
+                    .show(supportFragmentManager, "Location Change Dialog")
                 return true
             }
+
+            //open the dialog to change the family password
             R.id.change_family_pws -> {
                 val familyNameChangeDialog =
                         UserReAuthDialog(uid, this)
-                familyNameChangeDialog.show(supportFragmentManager, "Location Change Dialog")
+                familyNameChangeDialog
+                    .show(supportFragmentManager, "Location Change Dialog")
                 return true
             }
         }

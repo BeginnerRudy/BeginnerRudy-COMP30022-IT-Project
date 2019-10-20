@@ -74,7 +74,7 @@ class SearchMethod{
         }
 
         //set adapter to show items
-        listView.adapter = ListViewAapter(itemList, mActivity)
+        listView.adapter = ListViewAdapter(itemList, mActivity)
 
         //jump to item detail page with 4 necessary arguments
         listView.setOnItemClickListener { parent, view, position, id ->
@@ -157,7 +157,7 @@ class SearchMethod{
         newList = search(queryText, itemList)
 
         //set adapter to show items
-        listView.adapter = ListViewAapter(newList, mActivity)
+        listView.adapter = ListViewAdapter(newList, mActivity)
 
         for (i in 0 until itemList.size){
             itemPositionMap[itemList[i]] = i

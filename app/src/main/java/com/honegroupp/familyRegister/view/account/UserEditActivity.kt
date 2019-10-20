@@ -6,12 +6,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -25,23 +25,29 @@ import com.honegroupp.familyRegister.utility.ImageRotateUtil
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_user_edit.*
 
-
+/**
+ * This class is for show User Edit page, user can change name and their
+ * image on their page
+ * */
 class UserEditActivity : AppCompatActivity() {
     val GALLERY_REQUEST_CODE = 123
     private val READ_PERMISSION_CODE: Int = 1000
 
-    lateinit var isFamilyOwner:String
-    lateinit var familyId :String
-    lateinit var uid :String
-    var uri :Uri? = null
+    lateinit var isFamilyOwner: String
+    lateinit var familyId: String
+    lateinit var uid: String
+    var uri: Uri? = null
 
+    /**
+     * create the activity
+     * */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_edit)
 
         //get the uid from intent
         uid = intent.getStringExtra("UserID")
-        val usernameString= intent.getStringExtra("UserName")
+        val usernameString = intent.getStringExtra("UserName")
         val imageUrl = intent.getStringExtra("ImageUrl")
         familyId = intent.getStringExtra("familyId")
         isFamilyOwner = intent.getStringExtra("IsFamilyOwner")
@@ -51,7 +57,7 @@ class UserEditActivity : AppCompatActivity() {
         val imageView = findViewById<ImageView>(R.id.user_image_edit)
 
         // Load image to ImageView via its URL from Firebase Storage
-        if(imageUrl!="") {
+        if (imageUrl != "") {
             Picasso.get()
                 .load(imageUrl)
                 .placeholder(R.mipmap.loading_jewellery)
@@ -60,37 +66,41 @@ class UserEditActivity : AppCompatActivity() {
                 .into(imageView)
         }
 
-        choose_image.setOnClickListener {
-            if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
 
-                if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) ==
-                    PackageManager.PERMISSION_DENIED){
+        //get image from the api
+        choose_image.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) ==
+                    PackageManager.PERMISSION_DENIED) {
                     //permission denied
-                    requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),1000)
-                }else{
+                    requestPermissions(
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        1000)
+                } else {
                     //permission already granted
                     selectSingleImageInAlbum()
                 }
-            }else{
+            } else {
                 //system os less than mashmallow
                 selectSingleImageInAlbum()
             }
         }
 
-
-        user_update.setOnClickListener{
+        //update the
+        user_update.setOnClickListener {
             //some image selected
-            if(uri!=null) {
+            if (uri != null) {
                 FirebaseStorageManager.uploadUserImageToFirebase(uri!!, this)
-            }else{
+            } else {
                 uploadUser(imageUrl)
             }
         }
     }
 
-    /*
-    use the phone API to get single images from the album
-    */
+    /**
+     * Use the phone API to get single images from the album
+     * */
     private fun selectSingleImageInAlbum() {
 
         //reset the image url list
@@ -102,11 +112,14 @@ class UserEditActivity : AppCompatActivity() {
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
-
-    /*
-    process when receive the result of image selection
-    */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+    /**
+     * process when receive the result of image selection
+     * */
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
         super.onActivityResult(requestCode, resultCode, data)
 
         // Result code is RESULT_OK only if the user selects an Image
@@ -114,7 +127,7 @@ class UserEditActivity : AppCompatActivity() {
             when (requestCode) {
                 GALLERY_REQUEST_CODE -> {
 
-//                    adding multiple image
+                    //                    adding multiple image
                     if (data != null) {
 
                         //get the uri
@@ -122,50 +135,62 @@ class UserEditActivity : AppCompatActivity() {
 
 
                         //Find the image
-                        val imageView = findViewById<ImageView>(R.id.user_image_edit)
+                        val imageView =
+                                findViewById<ImageView>(R.id.user_image_edit)
 
                         //load the image the the view, get the orientation
-                        val path = FilePathUtil.getFilePathFromContentUri(uri!!,this)
-                        val orientation = ImageRotateUtil.
-                            getCameraPhotoOrientation(path!!).toFloat()
+                        val path = FilePathUtil
+                            .getFilePathFromContentUri(uri!!, this)
+                        val orientation = ImageRotateUtil
+                            .getCameraPhotoOrientation(path!!).toFloat()
 
                         //load the image
-                        Picasso.get().
-                            load(uri).
-                            fit().
-                            centerCrop().
-                            rotate(orientation).
-                            into(imageView)
+                        Picasso.get().load(uri).fit().centerCrop()
+                            .rotate(orientation).into(imageView)
 
                         this.uri = uri
 
-                    }else{
-                        Toast.makeText(this,"Error", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()
                     }
                 }
             }
         }
     }
 
-    //Over Android M version, need to request EXTERNAL STORAGE permission in order to save image
-    override fun onRequestPermissionsResult(requestCode: Int,permissions: Array<out String>,grantResults: IntArray){
-        when(requestCode){
-            READ_PERMISSION_CODE ->{
-                if(grantResults.isNotEmpty()&& grantResults[0] == PackageManager.PERMISSION_GRANTED){
 
-                    Toast.makeText(this,
+    /**
+     * Over Android M version, need to request EXTERNAL STORAGE permission
+     * in order to save image
+     * */
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            READ_PERMISSION_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(
+                        this,
                         getString(R.string.get_read_permission),
                         Toast.LENGTH_SHORT).show()
                     selectSingleImageInAlbum()
-                }else{
-                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG)
+                        .show()
                 }
             }
         }
     }
 
-    fun uploadUser(uri: String){
-        val user = User(username = username_edit.text.toString(),
+    /**
+     * Upload the user to the firebase
+     * */
+    fun uploadUser(uri: String) {
+        val user = User(
+            username = username_edit.text.toString(),
             familyId = familyId,
             imageUrl = uri,
             isFamilyOwner = isFamilyOwner.toBoolean())
@@ -173,7 +198,7 @@ class UserEditActivity : AppCompatActivity() {
         val databaseRef = FirebaseDatabase.getInstance()
             .getReference(FirebaseDatabaseManager.USER_PATH)
 
-        databaseRef.addValueEventListener(object : ValueEventListener{
+        databaseRef.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 //Don't ignore errors!
                 Log.d("TAG", p0.message)

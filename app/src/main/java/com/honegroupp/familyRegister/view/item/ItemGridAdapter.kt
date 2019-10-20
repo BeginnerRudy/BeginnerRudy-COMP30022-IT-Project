@@ -18,6 +18,9 @@ import com.honegroupp.familyRegister.view.item.GridViewItem
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.squareup.picasso.Picasso
 
+/**
+ *Thus adapter is to adapt the images in to the gridview
+ * */
 class ItemGridAdapter(
     private val context: ItemUploadActivity,
     private val allUris: ArrayList<Uri>

@@ -1,13 +1,10 @@
 package com.honegroupp.familyRegister.view.itemList
 
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.Gravity
-import androidx.core.view.GravityCompat
 import android.view.View
-import android.widget.RelativeLayout
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ItemListController

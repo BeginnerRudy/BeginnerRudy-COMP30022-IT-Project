@@ -1,9 +1,11 @@
 package com.honegroupp.familyRegister.view.account
+
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.*
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.database.*
 import com.honegroupp.familyRegister.R
@@ -13,6 +15,9 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_user.*
 
 
+/**
+ * This class is for showing User Detail including user name and image
+ * */
 class UserDetailActivity : AppCompatActivity() {
     lateinit var databaseRef: DatabaseReference
 
@@ -24,7 +29,7 @@ class UserDetailActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar_user_activity)
         toolbar.title = getString(R.string.change_user_photo)
         toolbar.setNavigationIcon(R.drawable.ic_chevron_left_white_24dp)
-        toolbar.setNavigationOnClickListener{
+        toolbar.setNavigationOnClickListener {
             finish()
         }
 
@@ -47,9 +52,9 @@ class UserDetailActivity : AppCompatActivity() {
 
                 // get current Item from data snap shot
                 currUser = p0
-                        .child(FirebaseDatabaseManager.USER_PATH)
-                        .child(uid)
-                        .getValue(User::class.java) as User
+                    .child(FirebaseDatabaseManager.USER_PATH)
+                    .child(uid)
+                    .getValue(User::class.java) as User
 
                 //set user's name in the page
                 val currUserName = currUser.username
@@ -60,7 +65,7 @@ class UserDetailActivity : AppCompatActivity() {
                 val imageUrl = currUser.imageUrl
 
                 // Load image to ImageView via its URL from Firebase Storage
-                if(imageUrl!="") {
+                if (imageUrl != "") {
                     Picasso.get()
                         .load(imageUrl)
                         .placeholder(R.mipmap.loading_jewellery)
@@ -70,24 +75,39 @@ class UserDetailActivity : AppCompatActivity() {
                 }
 
                 //click edit button
-                user_edit.setOnClickListener{
-                    startEdit(uid,currUserName,currUser.imageUrl,currUser.isFamilyOwner.toString(),currUser.familyId)
+                user_edit.setOnClickListener {
+                    startEdit(
+                        uid,
+                        currUserName,
+                        currUser.imageUrl,
+                        currUser.isFamilyOwner.toString(),
+                        currUser.familyId)
                 }
 
 
             }
         })
-        
+
     }
 
-    //start the edit user activity
-    fun startEdit(uid:String, usernameString:String, imageUrl:String,isFamilyOwner:String,familyId:String){
+    /* *
+     * start the edit user activity
+     * */
+    fun startEdit(
+        uid: String,
+        usernameString: String,
+        imageUrl: String,
+        isFamilyOwner: String,
+        familyId: String
+    ) {
         val intent = Intent(this, UserEditActivity::class.java)
-        intent.putExtra("familyId",familyId)
+
+        //put the intents
+        intent.putExtra("familyId", familyId)
         intent.putExtra("UserID", uid)
         intent.putExtra("UserName", usernameString)
         intent.putExtra("ImageUrl", imageUrl)
-        intent.putExtra("IsFamilyOwner",isFamilyOwner)
+        intent.putExtra("IsFamilyOwner", isFamilyOwner)
         startActivity(intent)
     }
 

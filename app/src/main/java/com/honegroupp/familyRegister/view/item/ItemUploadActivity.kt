@@ -21,13 +21,15 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.ceil
 
-
+/**
+ * This class for upload item, process input and upload to firebase
+ * */
 class ItemUploadActivity : AppCompatActivity() {
     private val GALLERY_REQUEST_CODE = 123
     var imagePathList = ArrayList<String>()
     private var allImageUri = ArrayList<Uri>()
     private lateinit var uid: String
-    lateinit var categoryName : String
+    lateinit var categoryName: String
 
     private var itemPrivacyPosition: Int = 0
     private val READ_PERMISSION_CODE: Int = 1000
@@ -79,7 +81,10 @@ class ItemUploadActivity : AppCompatActivity() {
         setDatePicker(text_date)
     }
 
-    //Over Android M version, need to request EXTERNAL STORAGE permission in order to save image
+    /**
+     * Over Android M version, need to request EXTERNAL STORAGE permission in
+     * order to save image
+     * */
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -102,7 +107,9 @@ class ItemUploadActivity : AppCompatActivity() {
         }
     }
 
-    /*create the item and upload*/
+    /**
+     * create the item and upload
+     * */
     fun uploadItem() {
 
         ItemController.createItem(
@@ -119,9 +126,9 @@ class ItemUploadActivity : AppCompatActivity() {
         )
     }
 
-    /*
-    use the phone API to get images from the album
-    */
+    /**
+     *use the phone API to get images from the album
+     */
     fun selectImageInAlbum() {
 
         //reset the image url list
@@ -133,9 +140,9 @@ class ItemUploadActivity : AppCompatActivity() {
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
-    /*
-    process when receive the result of image selection
-    */
+    /**
+     *process when receive the result of image selection
+     */
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
@@ -201,9 +208,9 @@ class ItemUploadActivity : AppCompatActivity() {
         }
     }
 
-    /*
-    remove already selected items from the list, update the view
-    */
+    /**
+     *remove already selected items from the list, update the view
+     * */
     fun removeItem(position: Int) {
 
         allImageUri.removeAt(position)
@@ -214,9 +221,9 @@ class ItemUploadActivity : AppCompatActivity() {
 
     }
 
-    /*
-    This method check the input is valid and upload to firebase if it is valid
-    */
+    /**
+     * This method check the input is valid and upload to firebase if it is valid
+     * */
     private fun checkInputAndUpload(categoryName: String) {
 
         // need to check item name is not empty
@@ -306,7 +313,9 @@ class ItemUploadActivity : AppCompatActivity() {
         Toast.makeText(this, msg, duration).show()
     }
 
-    /*get the screen pixel size and calculated the image size*/
+    /*
+     *get the screen pixel size and calculated the image size
+     * */
     private fun getScreenWidth(): Int {
         val display = this.windowManager.defaultDisplay
         val size = Point()
@@ -314,8 +323,9 @@ class ItemUploadActivity : AppCompatActivity() {
         return size.x
     }
 
-    /*change the height of gridview according to the number of images
-    */
+    /**
+     * change the height of gridview according to the number of images
+     * */
     private fun setGridViewHeight(gridView: GridView) {
         val columnsNumber = (ceil(gridView.adapter.count * 1.0 / 3)).toInt()
         val cloumnHeight = ceil(getScreenWidth() * 1.0 / 3).toInt()

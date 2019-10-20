@@ -10,7 +10,7 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Item
 import com.squareup.picasso.Picasso
 
-class ListViewAapter(
+class ListViewAdapter(
     val items: ArrayList<Item>,
     val mActivity: AppCompatActivity
 ) : BaseAdapter() {

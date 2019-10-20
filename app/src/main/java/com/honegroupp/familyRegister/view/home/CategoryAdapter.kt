@@ -1,6 +1,5 @@
 package com.honegroupp.familyRegister.view.home
 
-
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,7 +9,8 @@ import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.model.Category
 
 /**
- * This class is the Adapter for the recycler view with id -> category_recycler_view in the activity_category
+ * This class is the Adapter for the recycler view with id to
+ * category_recycler_view in the activity_category
  *
  * */
 
@@ -32,7 +32,7 @@ class CategoryAdapter(
         return CategoryViewHolder(v)
     }
 
-    private fun changelanguage(categoryName: String): String {
+    private fun changeanguage(categoryName: String): String {
         var categoryNameString = ""
         when (categoryName) {
             "Letter" -> categoryNameString =
@@ -48,11 +48,11 @@ class CategoryAdapter(
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val currCategory = items[position]
-        holder.textViewName.text = changelanguage(currCategory.name)
+        holder.textViewName.text = changeanguage(currCategory.name)
         holder.textViewCount.text = currCategory.count.toString()
 
         // Load image to ImageView via its URL from Firebase Storage
-    val categoryName =
+        val categoryName =
                 when (position) {
                     0 -> "Letter"
                     1 -> "Photo"
@@ -60,7 +60,12 @@ class CategoryAdapter(
                     3 -> "Others"
                     else -> "BUG"
                 }
-        currCategory.setCoverURL(holder, mActivity, position, uid, changelanguage(categoryName))
+        currCategory.setCoverURL(
+            holder,
+            mActivity,
+            position,
+            uid,
+            changeanguage(categoryName))
     }
 
     override fun getItemCount(): Int {

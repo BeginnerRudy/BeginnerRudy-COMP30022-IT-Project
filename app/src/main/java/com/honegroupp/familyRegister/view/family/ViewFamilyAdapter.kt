@@ -20,13 +20,19 @@ class ViewFamilyAdapter(
     private val users: ArrayList<User>,
     val mActivity: AppCompatActivity
 ) : RecyclerView.Adapter<ViewFamilyAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(mActivity).inflate(R.layout.family_member, parent, false)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder {
+        val v = LayoutInflater.from(mActivity)
+            .inflate(R.layout.family_member, parent, false)
         return ViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currUser = users[position]
+
+        //only family owner can see the button
         if (currUser.isFamilyOwner) {
             holder.ownerStar.visibility = View.VISIBLE
             holder.isOwnerText.visibility = View.VISIBLE
@@ -35,7 +41,8 @@ class ViewFamilyAdapter(
             holder.isOwnerText.visibility = View.INVISIBLE
         }
 
-        if (users[position].imageUrl != ""){
+        //fill the image
+        if (users[position].imageUrl != "") {
             Picasso.get()
                 .load(users[position].imageUrl)
                 .placeholder(R.mipmap.loading_jewellery)
@@ -43,10 +50,15 @@ class ViewFamilyAdapter(
                 .centerCrop()
                 .into(holder.memberImage)
         }
+
+        //fill name of member
         holder.memberName.visibility = View.VISIBLE
         holder.memberName.text = currUser.username
     }
 
+    /**
+     * Get the count of items
+     * */
     override fun getItemCount(): Int {
         Log.d("ABCDEFG", users.size.toString())
         return users.size
