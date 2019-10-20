@@ -17,7 +17,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
-import com.honegroupp.familyRegister.utility.Hash
+import com.honegroupp.familyRegister.utility.HashUtil
 import com.honegroupp.familyRegister.view.family.FamilyCreateActivity
 import com.honegroupp.familyRegister.view.home.HomeActivity
 import org.hamcrest.CoreMatchers
@@ -236,7 +236,7 @@ class SearchActivityTest {
                 Assert.assertEquals(familyName, p0.child("familyName").value as String)
 
                 // password in the database should match the user's password input
-                Assert.assertEquals(Hash.applyHash(password), p0.child("password").value as String)
+                Assert.assertEquals(HashUtil.applyHash(password), p0.child("password").value as String)
             }
         })
 

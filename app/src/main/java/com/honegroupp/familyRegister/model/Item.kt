@@ -52,13 +52,6 @@ data class Item(
 
 ) {
     /*This is the primary constructor to create an item instance*/
-//    constructor(itemName: String, itemDescription: String, itemOwnerUID: String, imageURLs: ArrayList<String>, itemPrivacy: String) : this() {
-//        this.itemName = "itemName"
-//        this.itemDescription = "itemDescription"
-//        this.itemOwnerUID = itemOwnerUID
-//        this.imageURLs = imageURLs
-//        this.itemPrivacy = itemPrivacy
-//    }
 
     var key: String? = null
 
@@ -181,19 +174,4 @@ data class Item(
 
     }
 
-    companion object {
-
-        /**
-         * This method is responsible for upload image to the firebase storage
-         *
-         * */
-        fun uploadImageToFirebaseStorage(
-            allImageUri: ArrayList<Uri>,
-            categoryName: String,
-            activity: ItemUploadActivity
-        ) {
-            FirebaseStorageManager
-                .uploadToFirebase(allImageUri, categoryName, activity)
-        }
-    }
 }

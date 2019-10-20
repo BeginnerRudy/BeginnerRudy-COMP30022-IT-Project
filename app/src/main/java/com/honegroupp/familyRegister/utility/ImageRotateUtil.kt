@@ -7,18 +7,23 @@ import androidx.exifinterface.media.ExifInterface
 import java.io.IOException
 
 
+/**
+ * ImageRotateUtil class is for keeping the image in gallery at its original
+ * direction. Not handle explicitly will result in the image in the wrong
+ * direction.
+ * */
 class ImageRotateUtil {
     companion object {
 
-        /*this function retutnt the rotation (Orientation) of image
-        modified from code written by Sumit Chakraborty on stackflow
-        https://stackoverflow.com/questions/42411409/why-image-auto-rotate-when-set-to-imageview-with-picasso
-        */
+        /* *this function return the rotation (Orientation) of image
+         * modified from code written by Sumit Chakraborty on stackflow
+         * https://stackoverflow.com/questions/42411409/why-image-auto-rotate-when-set-to-imageview-with-picasso
+         * */
 
         fun getCameraPhotoOrientation(imageFilePath: String): Int {
             var rotate = 0
 
-            Log.d("Orientationx", "XXXX".toString())
+            Log.d("Orientationx", "XXXX")
             try {
                 val exif: ExifInterface = ExifInterface(imageFilePath);
                 val orientation: Int = exif.getAttributeInt(
@@ -39,7 +44,9 @@ class ImageRotateUtil {
 
         }
 
-        /* rotate Bitmap to somedegree*/
+        /* *
+         * rotate Bitmap to some degree
+         * */
         fun rotateBitmap(bitmap: Bitmap, degrees: Float): Bitmap {
             val matrix = Matrix()
             matrix.postRotate(degrees)

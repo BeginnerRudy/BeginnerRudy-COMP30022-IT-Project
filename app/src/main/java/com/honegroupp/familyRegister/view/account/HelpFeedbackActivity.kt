@@ -1,13 +1,9 @@
-package com.honegroupp.familyRegister.view.home
+package com.honegroupp.familyRegister.view.account
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.google.firebase.auth.FirebaseAuth
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.utility.EmailPathSwitch
-import kotlinx.android.synthetic.main.activity_account.*
 
 class HelpFeedbackActivity : AppCompatActivity() {
 

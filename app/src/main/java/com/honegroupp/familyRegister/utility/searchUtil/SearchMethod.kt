@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.utility
+package com.honegroupp.familyRegister.utility.searchUtil
 
 import android.content.Intent
 import android.widget.ListView

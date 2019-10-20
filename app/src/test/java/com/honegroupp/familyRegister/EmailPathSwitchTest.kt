@@ -1,5 +1,5 @@
 package com.honegroupp.familyRegister
-import com.honegroupp.familyRegister.utility.EmailPathSwitch
+import com.honegroupp.familyRegister.utility.EmailPathSwitchUtil
 import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Before
@@ -53,7 +53,7 @@ class EmailPathSwitchTest {
     @Test
     fun emailToPath() {
         for (i in 0..emails.size) {
-            assertEquals(true, EmailPathSwitch.emailToPath(emails[i]).equals(paths[i]))
+            assertEquals(true, EmailPathSwitchUtil.emailToPath(emails[i]).equals(paths[i]))
         }
     }
 
@@ -63,7 +63,7 @@ class EmailPathSwitchTest {
     @Test
     fun pathToEmail() {
         for (i in 0..emails.size) {
-            assertEquals(true, EmailPathSwitch.pathToEmail(paths[i]).equals(emails[i]))
+            assertEquals(true, EmailPathSwitchUtil.pathToEmail(paths[i]).equals(emails[i]))
         }
     }
 

@@ -7,21 +7,25 @@ import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.utility.CompressionUtil
 import com.honegroupp.familyRegister.utility.FilePathUtil
 import com.honegroupp.familyRegister.utility.ImageRotateUtil
-import com.honegroupp.familyRegister.view.home.UserEditActivity
+import com.honegroupp.familyRegister.view.account.UserEditActivity
 import com.honegroupp.familyRegister.view.item.ItemEditActivity
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 
+/*
+* FirebaseStorageManager handling upload images to the firebase Storage
+* */
 class FirebaseStorageManager {
     companion object {
         private const val uploadPath = " "
 
-        fun uploadToFirebase(
+        /**
+         * uploadItemImageToFirebase handle upload item images to firebase
+         * */
+        fun uploadItemImageToFirebase(
             allImageUri: ArrayList<Uri>,
-            categoryName: String,
             activity: ItemUploadActivity
         ) {
             var numSuccess = 0
@@ -64,7 +68,7 @@ class FirebaseStorageManager {
                                 activity.imagePathList.add(url.toString())
                                 if (numSuccess == allImageUri.size) {
                                     //Create Item And Upload
-                                    activity.uploadItem(categoryName)
+                                    activity.uploadItem()
 
                                     activity.toast(
                                         activity.getString(R.string.upload_success) + numSuccess.toString() + "/" + allImageUri.size.toString(),
@@ -85,9 +89,10 @@ class FirebaseStorageManager {
             )
         }
 
-
-        fun uploadEditToFirebase(
-            currItem: Item,
+        /**
+         * uploadEditImageToFirebase handle upload edited item images to firebase
+         * */
+        fun uploadEditImageToFirebase(
             activity: ItemEditActivity
         ) {
             val uploadPath = " "
@@ -171,6 +176,10 @@ class FirebaseStorageManager {
             }
         }
 
+
+        /**
+         * uploadUserImageToFirebase handle upload user images to firebase
+         * */
         fun uploadUserImageToFirebase(
             imageUri: Uri,
             activity: UserEditActivity

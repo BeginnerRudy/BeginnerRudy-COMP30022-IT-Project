@@ -2,7 +2,7 @@ package com.honegroupp.familyRegister.controller
 
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import com.honegroupp.familyRegister.utility.SearchMethod
+import com.honegroupp.familyRegister.utility.searchUtil.SearchMethod
 
 
 /**

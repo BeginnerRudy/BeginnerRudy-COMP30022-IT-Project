@@ -14,7 +14,9 @@ import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.view.family.FamilyActivity
 import com.honegroupp.familyRegister.view.home.HomeActivity
 
-
+/*
+* FirebaseDatabaseManager handle uploading and retriving data to the firebase
+* */
 class FirebaseDatabaseManager() {
     companion object {
         val USER_PATH = "/Users/"

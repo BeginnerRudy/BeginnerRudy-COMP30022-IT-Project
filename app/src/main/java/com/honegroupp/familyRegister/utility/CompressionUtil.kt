@@ -2,7 +2,10 @@ package com.honegroupp.familyRegister.utility
 
 import android.graphics.Bitmap
 import java.io.ByteArrayOutputStream
-
+/**
+ * CompressionUtil contains function to compress the image and change resolution
+ * of the image to make uploading more efficient
+ * */
 class CompressionUtil {
 
     companion object {
