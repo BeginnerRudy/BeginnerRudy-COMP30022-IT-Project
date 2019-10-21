@@ -48,7 +48,8 @@ class LocationEnterPasswordDialog : AppCompatDialogFragment() {
             val password = editTextPassword!!.text.toString()
 
            //check the correctness of password
-            listener!!.applyPasswords(password,this)
+
+            listener!!.verifyPasswords(password,this)
         }
 
         return builder.create()
@@ -65,6 +66,6 @@ class LocationEnterPasswordDialog : AppCompatDialogFragment() {
     }
 
     interface OnViewClickerListener {
-        fun applyPasswords(password: String,dialog:LocationEnterPasswordDialog)
+        fun verifyPasswords(password: String, dialog:LocationEnterPasswordDialog)
     }
 }
