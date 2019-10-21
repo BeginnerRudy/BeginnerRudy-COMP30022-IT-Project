@@ -5,15 +5,17 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Point
-import android.view.*
-import android.widget.*
-import android.view.LayoutInflater
 import android.net.Uri
 import android.os.Build
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
+import android.widget.ImageView
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.utility.FilePathUtil
 import com.honegroupp.familyRegister.utility.ImageRotateUtil
 import com.squareup.picasso.Picasso
-import com.honegroupp.familyRegister.utility.FilePathUtil
 
 
 class ItemEditGridAdapter(
@@ -22,25 +24,29 @@ class ItemEditGridAdapter(
     private val allUris: ArrayList<Uri>
 ) : BaseAdapter() {
 
-    override fun getView(position:Int, convertView: View?, parent: ViewGroup?): View {
+    override fun getView(
+        position: Int,
+        convertView: View?,
+        parent: ViewGroup?
+    ): View {
 
         val uriPosition = position - detailImageUrls.size
         val urlMaxPosition = detailImageUrls.size - 1
         val currentIsUrl = position <= urlMaxPosition
         // Inflate the view
-        val inflater = parent?.context?.
-            getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater =
+                parent?.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         //get the image view
-        var view = inflater.inflate(R.layout.upload_image,null)
+        var view = inflater.inflate(R.layout.upload_image, null)
 
         //get the width of image
-//        var imageWidth = getImageWidth()
+        //        var imageWidth = getImageWidth()
 
         //set imageView size
         val imageView = view.findViewById<GridViewItem>(R.id.upload_image)
-//        val linearLayout = RelativeLayout.LayoutParams(imageWidth, imageWidth)
-//        imageView.layoutParams = linearLayout
+        //        val linearLayout = RelativeLayout.LayoutParams(imageWidth, imageWidth)
+        //        imageView.layoutParams = linearLayout
 
         when {
             isAddButton(position) -> {
@@ -53,26 +59,22 @@ class ItemEditGridAdapter(
 
             }
             currentIsUrl -> //show the image
-                Picasso.get().
-                    load(detailImageUrls[position]).
-                    placeholder(R.mipmap.loading_jewellery).
-                    resize(1000,1000).
-                    centerCrop().
-                    into(imageView)
+                Picasso.get().load(detailImageUrls[position]).placeholder(R.mipmap.loading_jewellery).resize(
+                    1000,
+                    1000).centerCrop().into(imageView)
             else -> {
 
                 //get the orientation and make sure image are at its original orientation
                 val uri = allUris?.get(uriPosition)
-                val path = FilePathUtil.getFilePathFromContentUri(uri!!, context!!)
-                val orientation = ImageRotateUtil.getCameraPhotoOrientation(path!!).toFloat()
+                val path =
+                        FilePathUtil.getFilePathFromContentUri(uri!!, context!!)
+                val orientation =
+                        ImageRotateUtil.getCameraPhotoOrientation(path!!)
+                            .toFloat()
 
                 //load the image the the view
-                Picasso.get().
-                    load(uri).
-                    resize(1000,1000).
-                    centerCrop().
-                    rotate(orientation).
-                    into(imageView)
+                Picasso.get().load(uri).resize(1000, 1000).centerCrop()
+                    .rotate(orientation).into(imageView)
             }
         }
 
@@ -103,9 +105,11 @@ class ItemEditGridAdapter(
 
         if (!isAddButton(position)) {
             val cancelBackground =
-                view.findViewById<ImageView>(R.id.upload_image_cancel_background)
+                    view
+                        .findViewById<ImageView>(R.id.upload_image_cancel_background)
             val cancelButton =
-                view.findViewById<ImageView>(R.id.upload_image_cancel_button)
+                    view
+                        .findViewById<ImageView>(R.id.upload_image_cancel_button)
 
             //set background of cancel button
             cancelBackground.setImageResource(R.drawable.ic_circle_white_24dp)
@@ -151,24 +155,24 @@ class ItemEditGridAdapter(
     }
 
     override fun getCount(): Int {
-        if (allUris == null){
+        if (allUris == null) {
             return detailImageUrls.size + 1
         }
         return detailImageUrls.size + allUris!!.size + 1
     }
 
     /*check whether the image view is the last one (add button)*/
-    private fun isAddButton(position: Int):Boolean{
-        return position == count -1
+    private fun isAddButton(position: Int): Boolean {
+        return position == count - 1
     }
 
 
     /*get the screen pixel size and calculated the image size*/
-    private fun getImageWidth(): Int{
+    private fun getImageWidth(): Int {
         val display = context.windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
-        val width = size.x/3.5
+        val width = size.x / 3.5
         return width.toInt()
 
     }

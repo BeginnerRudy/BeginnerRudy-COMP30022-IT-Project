@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso
 /**
  * ListViewAdapter is an adapter to deal with data with listView
  * */
-class ListViewAapter(
+class ListViewAdapter(
     val items: ArrayList<Item>,
     val mActivity: AppCompatActivity
 ) : BaseAdapter() {

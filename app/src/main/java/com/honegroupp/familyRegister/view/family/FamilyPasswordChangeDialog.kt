@@ -19,7 +19,8 @@ import com.honegroupp.familyRegister.controller.ViewFamilyController
  * This class is responsible for the family name change in the view family page logic.
  *
  * */
-class FamilyPasswordChangeDialog(private val uid: String) : AppCompatDialogFragment() {
+class FamilyPasswordChangeDialog(private val uid: String) :
+    AppCompatDialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,14 +43,18 @@ class FamilyPasswordChangeDialog(private val uid: String) : AppCompatDialogFragm
             .setPositiveButton(R.string.edit_ok) { _, _ -> }
 
         view.findViewById<TextView>(R.id.new_family_name).hint =
-            getString(R.string.new_family_password)
+                getString(R.string.new_family_password)
 
-        view.findViewById<Button>(R.id.view_family_name_change_confirm_Btn).setOnClickListener {
-            var newFamilyPassword = view.findViewById<EditText>(R.id.new_family_name).text.toString()
-            ViewFamilyController.changeFamilyPassword(uid, newFamilyPassword)
-            // make the dialog disappear
-            this.dismiss()
-        }
+        view.findViewById<Button>(R.id.view_family_name_change_confirm_Btn)
+            .setOnClickListener {
+                var newFamilyPassword =
+                        view.findViewById<EditText>(R.id.new_family_name).text
+                            .toString()
+                ViewFamilyController
+                    .changeFamilyPassword(uid, newFamilyPassword)
+                // make the dialog disappear
+                this.dismiss()
+            }
 
         return builder.create()
     }

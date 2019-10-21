@@ -12,8 +12,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import com.honegroupp.familyRegister.R
 
-
-class LocationViewDialog(private val itemLocation: String) : AppCompatDialogFragment() {
+/**
+ * This class the for view the location after correctly enter the user password
+ * */
+class LocationViewDialog(private val itemLocation: String) :
+    AppCompatDialogFragment() {
     private var listener: OnChangeClickListener? = null
 
     override fun onCreateView(
@@ -37,11 +40,11 @@ class LocationViewDialog(private val itemLocation: String) : AppCompatDialogFrag
             .setTitle(R.string.edit_dialog_location_text)
             .setPositiveButton(R.string.edit_ok) { _, _ -> }
 
-        view.findViewById<Button>(R.id.view_location_changeBtn).setOnClickListener{
-            listener!!.clickOnChangeLocation()
-            this.dismiss()
-        }
-
+        view.findViewById<Button>(R.id.view_location_changeBtn)
+            .setOnClickListener {
+                listener!!.clickOnChangeLocation()
+                this.dismiss()
+            }
         return builder.create()
     }
 
@@ -53,7 +56,6 @@ class LocationViewDialog(private val itemLocation: String) : AppCompatDialogFrag
         } catch (e: ClassCastException) {
             throw ClassCastException(context.toString() + "must implement OnChangeClickListener")
         }
-
     }
 
     interface OnChangeClickListener {

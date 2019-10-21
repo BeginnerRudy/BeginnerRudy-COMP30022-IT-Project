@@ -8,17 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import com.honegroupp.familyRegister.utility.IDoubleClickToExit
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.AuthenticationController
-import com.honegroupp.familyRegister.utility.EmailPathSwitchUtil
 import com.honegroupp.familyRegister.model.User
+import com.honegroupp.familyRegister.utility.EmailPathSwitchUtil
+import com.honegroupp.familyRegister.utility.IDoubleClickToExit
 
 /**
  * This class is responsible for Login functionality.
  * use the AuthUI api
  * */
-
 class LoginActivity : AppCompatActivity(),
                       IDoubleClickToExit {
     // This is the request code for sign in
@@ -26,7 +25,6 @@ class LoginActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
 
         // Choose authentication providers
@@ -43,7 +41,8 @@ class LoginActivity : AppCompatActivity(),
                 .setTheme(R.style.LoginTheme)
                 .setTosAndPrivacyPolicyUrls(
                     getString(R.string.term_of_service_url),
-                    getString(R.string.privacy_policy_url)).setIsSmartLockEnabled(false)
+                    getString(R.string.privacy_policy_url)).setIsSmartLockEnabled(
+                    false)
                 .build(),
             RC_SIGN_IN
         )
@@ -52,7 +51,11 @@ class LoginActivity : AppCompatActivity(),
     /**
      * Handle the result of authentication, receive information and upload
      * it to firebase*/
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {
@@ -74,7 +77,8 @@ class LoginActivity : AppCompatActivity(),
 
                 val relativePath = EmailPathSwitchUtil.emailToPath(userContact)
 
-                AuthenticationController.storeUser(this, User(username = userName), relativePath)
+                AuthenticationController
+                    .storeUser(this, User(username = userName), relativePath)
 
             } else if (response == null) {
                 // If the user press back button, exit the app

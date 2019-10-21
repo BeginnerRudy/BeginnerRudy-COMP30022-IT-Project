@@ -18,6 +18,9 @@ import com.honegroupp.familyRegister.view.item.GridViewItem
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.squareup.picasso.Picasso
 
+/**
+ *Thus adapter is to adapt the images in to the gridview
+ * */
 class ItemGridAdapter(
     private val context: ItemUploadActivity,
     private val allUris: ArrayList<Uri>
@@ -138,7 +141,9 @@ class ItemGridAdapter(
         return allUris!!.size + 1
     }
 
-    /*check whether the image view is the last one (add button)*/
+    /**
+     * check whether the image view is the last one (add button)
+     * */
     private fun isAddButton(position: Int): Boolean {
         return position == count - 1
     }

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.PropertyName
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.backend.DatabaseManager.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.view.home.CategoryAdapter
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 import com.squareup.picasso.Picasso

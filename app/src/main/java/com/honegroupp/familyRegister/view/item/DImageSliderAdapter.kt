@@ -1,12 +1,8 @@
 package com.honegroupp.familyRegister.view.item
 
-import android.content.Context
-import android.util.Log
-import android.view.*
-import android.widget.ImageButton
+import android.view.View
+import android.view.ViewGroup
 import androidx.viewpager.widget.PagerAdapter
-import android.widget.ImageView
-import android.widget.RelativeLayout
 import com.github.chrisbanes.photoview.PhotoView
 import com.honegroupp.familyRegister.R
 import com.squareup.picasso.Picasso
@@ -51,7 +47,11 @@ class DImageSliderAdapter(
         return photoView
     }
 
-    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+    override fun destroyItem(
+        container: ViewGroup,
+        position: Int,
+        `object`: Any
+    ) {
         container.removeView(`object` as View)
     }
 

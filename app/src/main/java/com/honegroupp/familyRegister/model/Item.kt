@@ -1,15 +1,10 @@
 package com.honegroupp.familyRegister.model
 
 
-import android.net.Uri
-import android.widget.ImageButton
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.PropertyName
-import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
-import com.honegroupp.familyRegister.backend.FirebaseStorageManager
-import com.honegroupp.familyRegister.view.item.ItemUploadActivity
-import java.util.*
+import com.honegroupp.familyRegister.backend.DatabaseManager.FirebaseDatabaseManager
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -71,7 +66,8 @@ data class Item(
      * */
     private fun callbackStore(uid: String, categoryName: String, dataSnapshot: DataSnapshot) {
         // get user's family ID
-        val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+        val currFamilyId = FirebaseDatabaseManager
+            .getFamilyIDByUID(uid, dataSnapshot)
 
         //get last index
         val familyItemsDataSnapshot =
@@ -111,7 +107,8 @@ data class Item(
      * */
     private fun callbackEdit(uid: String, categoryName: String, dataSnapshot: DataSnapshot) {
         // get user's family ID
-        val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+        val currFamilyId = FirebaseDatabaseManager
+            .getFamilyIDByUID(uid, dataSnapshot)
 
         //get last index
         val familyItemsDataSnapshot =
@@ -132,7 +129,7 @@ data class Item(
         val path = FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/"
         val categoryPath =
             FirebaseDatabaseManager.FAMILY_PATH + currFamilyId + "/" + "categories/" + categoryName + "/"
-        FirebaseDatabaseManager.UeditItem(this, path, items, categoryPath)
+        FirebaseDatabaseManager.ueditItem(this, path, items, categoryPath)
     }
 
     /**
@@ -155,7 +152,8 @@ data class Item(
         dataSnapshot: DataSnapshot
     ) {
         // get user's family ID
-        val currFamilyId = FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+        val currFamilyId = FirebaseDatabaseManager
+            .getFamilyIDByUID(uid, dataSnapshot)
 
         // First check whether this user's uid in the item's showPageUids
         val showPageUidsPath =

@@ -21,7 +21,7 @@ class FamilyCreateActivity : AppCompatActivity() {
         setContentView(R.layout.create_family_main)
 
         //get User ID
-        currUid= intent.getStringExtra("UserID")
+        currUid = intent.getStringExtra("UserID")
         val username = intent.getStringExtra("UserName")
 
         // Define the logic when the user click the button for creating family
@@ -32,7 +32,7 @@ class FamilyCreateActivity : AppCompatActivity() {
     /**
      * This function is responsible for defining the logic of the confirm creating family button.
      * */
-    private fun clickConfirm(buttonConfirm: Button, username:String) {
+    private fun clickConfirm(buttonConfirm: Button, username: String) {
 
 
         buttonConfirm.setOnClickListener {

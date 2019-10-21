@@ -10,20 +10,17 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-
 import com.honegroupp.familyRegister.R
 import kotlinx.android.synthetic.main.activity_home.*
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
-
 import com.google.android.material.tabs.TabLayout
 import com.honegroupp.familyRegister.utility.IDoubleClickToExit
 import com.honegroupp.familyRegister.controller.AuthenticationController
-
 import android.widget.TextView
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.firebase.database.*
-import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.backend.DatabaseManager.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.controller.HomeController
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.model.User
@@ -33,12 +30,15 @@ import com.honegroupp.familyRegister.view.account.HelpFeedbackActivity
 import com.honegroupp.familyRegister.view.account.UserDetailActivity
 import com.honegroupp.familyRegister.view.family.ViewFamilyActivity
 import com.honegroupp.familyRegister.view.item.DetailSlide
-
 import com.honegroupp.familyRegister.view.search.SearchActivity
 import com.squareup.picasso.Picasso
 
 
-@Suppress("DEPRECATION")
+
+/**
+ * This class the HomeActivity which include 3 tabs and can drag left and right
+ * to switch between them.
+ * */
 class HomeActivity : ContainerActivity(),
                      IDoubleClickToExit {
 
@@ -67,7 +67,6 @@ class HomeActivity : ContainerActivity(),
         } else if (viewPager.currentItem == 2) {
             categoryPosition = DetailSlide.SHOW_PAGE_SIGNAL.toString()
         }
-
 
         val intent = Intent(this, DetailSlide::class.java)
         intent.putExtra("UserID", uid)
@@ -142,15 +141,12 @@ class HomeActivity : ContainerActivity(),
             override fun onDrawerStateChanged(arg0: Int) {
                 // do nothing
             }
-
             override fun onDrawerSlide(view: View, arg1: Float) {
                 // do nothing
             }
-
             override fun onDrawerOpened(view: View) {
                 // do nothing
             }
-
             override fun onDrawerClosed(view: View) {
                 // do nothing
             }
@@ -211,12 +207,12 @@ class HomeActivity : ContainerActivity(),
             drawer_layout.openDrawer(GravityCompat.START)
         }
 
-
         //display User information
         displayUserInfo(uid)
 
 
-        // Interaction with menuitems contained in the navigation drawer
+        // Interaction with menu items contained in the navigation drawer
+        //jump to different pages
         nav_view.menu.findItem(R.id.nav_account).setOnMenuItemClickListener {
             val intent = Intent(this, AccountActivity::class.java)
             intent.putExtra("UserID", userID)
@@ -256,12 +252,15 @@ class HomeActivity : ContainerActivity(),
             startActivity(intent)
 
         }
-
-
     }
 
+    /**
+     * This method is for drag left and right to switch between tabs
+     * */
     private fun setupViewPager(viewPager: ViewPager): ViewPagerAdapter {
         val adapter = ViewPagerAdapter(supportFragmentManager)
+
+        //add 3 fragments to the adapter
         adapter
             .addFragment(AllTabFragment(allTabAdapter), getString(R.string.all))
         adapter

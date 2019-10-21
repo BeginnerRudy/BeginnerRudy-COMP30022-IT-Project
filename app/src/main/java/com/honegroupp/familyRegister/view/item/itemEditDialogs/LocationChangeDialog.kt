@@ -13,8 +13,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import com.honegroupp.familyRegister.R
 
-
-class LocationChangeDialog(private val itemLocation: String) : AppCompatDialogFragment() {
+/**
+ * This class the for change the location in the edit item page
+ * */
+class LocationChangeDialog(private val itemLocation: String) :
+    AppCompatDialogFragment() {
     private var listener: OnChangeConfirmClickListener? = null
 
     override fun onCreateView(
@@ -32,17 +35,21 @@ class LocationChangeDialog(private val itemLocation: String) : AppCompatDialogFr
         val inflater = activity!!.layoutInflater
         val view = inflater.inflate(R.layout.dialog_location_change, null)
 
-        view.findViewById<TextView>(R.id.view_location_change_text).text = itemLocation
+        view.findViewById<TextView>(R.id.view_location_change_text).text =
+                itemLocation
 
         builder.setView(view)
             .setTitle(R.string.edit_dialog_location_text)
             .setPositiveButton(R.string.edit_ok) { _, _ -> }
 
-        view.findViewById<Button>(R.id.view_location_change_confirm_Btn).setOnClickListener{
-            var newLocation = view.findViewById<EditText>(R.id.new_location).text.toString()
-            listener!!.clickOnChangeLocation(newLocation)
-            this.dismiss()
-        }
+        view.findViewById<Button>(R.id.view_location_change_confirm_Btn)
+            .setOnClickListener {
+                var newLocation =
+                        view.findViewById<EditText>(R.id.new_location).text
+                            .toString()
+                listener!!.clickOnChangeLocation(newLocation)
+                this.dismiss()
+            }
 
         return builder.create()
     }
@@ -55,7 +62,6 @@ class LocationChangeDialog(private val itemLocation: String) : AppCompatDialogFr
         } catch (e: ClassCastException) {
             throw ClassCastException(context.toString() + "must implement OnChangeClickListener")
         }
-
     }
 
     interface OnChangeConfirmClickListener {

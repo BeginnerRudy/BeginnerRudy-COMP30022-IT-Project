@@ -4,7 +4,7 @@ import android.content.Intent
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
-import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.backend.DatabaseManager.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.view.home.ContainerActivity
 import com.honegroupp.familyRegister.view.item.DetailSlide
@@ -78,7 +78,7 @@ class SearchMethod{
         }
 
         //set adapter to show items
-        listView.adapter = ListViewAapter(itemList, mActivity)
+        listView.adapter = ListViewAdapter(itemList, mActivity)
 
         //jump to item detail page with 4 necessary arguments
         listView.setOnItemClickListener { parent, view, position, id ->
@@ -162,7 +162,7 @@ class SearchMethod{
         newList = search(queryText, itemList)
 
         //set adapter to show items
-        listView.adapter = ListViewAapter(newList, mActivity)
+        listView.adapter = ListViewAdapter(newList, mActivity)
 
         for (i in 0 until itemList.size){
             itemPositionMap[itemList[i]] = i

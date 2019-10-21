@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.view.account
+package com.honegroupp.familyRegister.view.family
 
 import android.app.Dialog
 import android.content.Context
@@ -17,8 +17,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.utility.EmailPathSwitchUtil
-import com.honegroupp.familyRegister.view.family.FamilyPasswordChangeDialog
-import com.honegroupp.familyRegister.view.family.ViewFamilyActivity
 
 /**
  * This class is responsible for the family password change in the view family page logic.
@@ -38,14 +36,17 @@ class UserReAuthDialog(
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
+    /**
+     * This function is when dialog is created
+     * */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
 
         val builder = AlertDialog.Builder(context as Context)
 
         val inflater = activity!!.layoutInflater
-        val view = inflater.inflate(R.layout.dialog_change_password_reauth, null)
-
+        val view =
+                inflater.inflate(R.layout.dialog_change_password_reauth, null)
 
         builder.setView(view)
             .setTitle(getString(R.string.reauth))
@@ -53,7 +54,9 @@ class UserReAuthDialog(
             { _, _ -> }
 
         view.findViewById<Button>(R.id.reAuth_ok).setOnClickListener {
-            var userPassword = view.findViewById<EditText>(R.id.user_password).text.toString()
+            var userPassword =
+                    view.findViewById<EditText>(R.id.user_password).text
+                        .toString()
 
             if (userPassword.isNullOrEmpty()) {
                 Toast.makeText(
@@ -62,24 +65,29 @@ class UserReAuthDialog(
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-
-
-                val user = FirebaseAuth.getInstance().currentUser as FirebaseUser
+                val user =
+                        FirebaseAuth.getInstance().currentUser as FirebaseUser
 
                 // Get auth credentials from the user for re-authentication. The example below shows
                 // email and password credentials but there are multiple possible providers,
                 // such as GoogleAuthProvider or FacebookAuthProvider.
 
                 val credential: AuthCredential = EmailAuthProvider
-                    .getCredential(EmailPathSwitchUtil.pathToEmail(uid), userPassword)
+                    .getCredential(
+                        EmailPathSwitchUtil.pathToEmail(uid),
+                        userPassword)
 
                 user!!.reauthenticate(credential)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
+
                             // navigate to family password change dialog
                             val familyNameChangeDialog =
                                     FamilyPasswordChangeDialog(uid)
-                            familyNameChangeDialog.show(mActivity.supportFragmentManager, "Family Password Change Dialog")
+                            familyNameChangeDialog.show(
+                                mActivity.supportFragmentManager,
+                                "Family Password Change Dialog")
+
                             // make the dialog disappear
                             this.dismiss()
                         } else {

@@ -19,8 +19,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
-import com.honegroupp.familyRegister.backend.FirebaseStorageManager
+import com.honegroupp.familyRegister.backend.DatabaseManager.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.backend.StorageManager.FirebaseStorageManager
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.utility.EmailPathSwitchUtil
