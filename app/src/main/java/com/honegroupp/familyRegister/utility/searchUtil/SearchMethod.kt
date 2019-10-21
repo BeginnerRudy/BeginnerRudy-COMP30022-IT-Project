@@ -9,6 +9,9 @@ import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.view.home.ContainerActivity
 import com.honegroupp.familyRegister.view.item.DetailSlide
 
+/**
+ * SearchMethod is used to deal with data in database and search activity
+ * */
 class SearchMethod{
 
     /**
@@ -25,7 +28,8 @@ class SearchMethod{
     }
 
     /**
-     * This callback function is the help function to create search view*/
+     * This callback function is the help function to create search view
+     * */
     private fun callbackInit(mActivity: AppCompatActivity, uid:String, category: Int, listView: ListView, dataSnapshot: DataSnapshot){
 
         var itemList: ArrayList<Item> = ArrayList()
@@ -102,7 +106,8 @@ class SearchMethod{
     }
 
     /**
-     * This function is the help function to show search view with query*/
+     * This function is the help function to show search view with query
+     * */
     private fun callbackDoSearch(mActivity: AppCompatActivity, uid: String, category: Int, queryText: String, listView: ListView, dataSnapshot: DataSnapshot) {
 
         var itemList: ArrayList<Item> = ArrayList()
@@ -176,10 +181,13 @@ class SearchMethod{
         }
     }
 
-    //a search function depending on item Name
+    /**
+     * a search function depending on item Name or item date
+     * */
     fun search(queryText: String, itemList: ArrayList<Item>):ArrayList<Item>{
         val newItemList: ArrayList<Item> = ArrayList()
         for (item in itemList){
+            //check query text is corresponding to item name or data
             if (item.itemName.contains(queryText, ignoreCase = true) || item.date.contains(queryText)){
                 newItemList.add(item);
             }

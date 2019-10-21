@@ -40,14 +40,6 @@ data class User(
     }
 
     /**
-     * This method is responsible for showing user information in view family page.
-     *
-     * */
-    fun showUserInfor() {
-
-    }
-
-    /**
      * This method is responsible for check whether the user has a family or not
      *
      * */
