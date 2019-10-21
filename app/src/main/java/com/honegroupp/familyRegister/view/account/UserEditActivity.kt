@@ -17,8 +17,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
-import com.honegroupp.familyRegister.backend.FirebaseStorageManager
+import com.honegroupp.familyRegister.backend.DatabaseManager.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.backend.StorageManager.FirebaseStorageManager
 import com.honegroupp.familyRegister.model.User
 import com.honegroupp.familyRegister.utility.FilePathUtil
 import com.honegroupp.familyRegister.utility.ImageRotateUtil
@@ -91,7 +91,8 @@ class UserEditActivity : AppCompatActivity() {
         user_update.setOnClickListener {
             //some image selected
             if (uri != null) {
-                FirebaseStorageManager.uploadUserImageToFirebase(uri!!, this)
+                FirebaseStorageManager
+                    .uploadUserImageToFirebase(uri!!, this)
             } else {
                 uploadUser(imageUrl)
             }

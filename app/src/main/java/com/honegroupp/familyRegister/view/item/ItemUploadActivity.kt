@@ -127,8 +127,8 @@ class ItemUploadActivity : AppCompatActivity() {
     }
 
     /**
-     *use the phone API to get images from the album
-     */
+     *use the phone API to get images from the album*
+     * */
     fun selectImageInAlbum() {
 
         //reset the image url list
@@ -142,7 +142,7 @@ class ItemUploadActivity : AppCompatActivity() {
 
     /**
      *process when receive the result of image selection
-     */
+     * */
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
@@ -313,8 +313,8 @@ class ItemUploadActivity : AppCompatActivity() {
         Toast.makeText(this, msg, duration).show()
     }
 
-    /*
-     *get the screen pixel size and calculated the image size
+    /**
+     * get the screen pixel size and calculated the image size
      * */
     private fun getScreenWidth(): Int {
         val display = this.windowManager.defaultDisplay
@@ -328,8 +328,8 @@ class ItemUploadActivity : AppCompatActivity() {
      * */
     private fun setGridViewHeight(gridView: GridView) {
         val columnsNumber = (ceil(gridView.adapter.count * 1.0 / 3)).toInt()
-        val cloumnHeight = ceil(getScreenWidth() * 1.0 / 3).toInt()
-        gridView.layoutParams.height = columnsNumber * cloumnHeight
+        val columnHeight = ceil(getScreenWidth() * 1.0 / 3).toInt()
+        gridView.layoutParams.height = columnsNumber * columnHeight
 
     }
 

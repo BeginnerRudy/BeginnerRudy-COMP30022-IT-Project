@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.backend
+package com.honegroupp.familyRegister.backend.StorageManager
 
 import android.net.Uri
 import android.provider.MediaStore
@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.honegroupp.familyRegister.R
+import com.honegroupp.familyRegister.backend.DatabaseManager.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.utility.CompressionUtil
 import com.honegroupp.familyRegister.utility.FilePathUtil
 import com.honegroupp.familyRegister.utility.ImageRotateUtil

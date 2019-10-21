@@ -13,7 +13,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.PropertyName
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.backend.DatabaseManager.FirebaseDatabaseManager
 import com.honegroupp.familyRegister.utility.EmailPathSwitchUtil
 import com.honegroupp.familyRegister.utility.HashUtil
 import com.honegroupp.familyRegister.view.family.ViewFamilyActivity
@@ -398,7 +398,8 @@ data class Family(
                         categoryItemKeys.filterNotNull() as ArrayList<String>
                 categoryItemKeys.remove(itemId)
 
-                FirebaseDatabaseManager.update(itemKeysPath, categoryItemKeys)
+                FirebaseDatabaseManager
+                    .update(itemKeysPath, categoryItemKeys)
 
                 // remove item
                 FirebaseDatabase.getInstance()
@@ -604,7 +605,8 @@ data class Family(
             dataSnapshot: DataSnapshot
         ) {
             val familyId =
-                    FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+                    FirebaseDatabaseManager
+                        .getFamilyIDByUID(uid, dataSnapshot)
 
             // get family name
             val familyName =
@@ -672,7 +674,8 @@ data class Family(
             dataSnapshot: DataSnapshot
         ) {
             val familyId =
-                    FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+                    FirebaseDatabaseManager
+                        .getFamilyIDByUID(uid, dataSnapshot)
             val familyNamePath =
                     "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/familyName"
 
@@ -702,7 +705,8 @@ data class Family(
             dataSnapshot: DataSnapshot
         ) {
             val familyId =
-                    FirebaseDatabaseManager.getFamilyIDByUID(uid, dataSnapshot)
+                    FirebaseDatabaseManager
+                        .getFamilyIDByUID(uid, dataSnapshot)
             val familyNamePath =
                     "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/password"
 

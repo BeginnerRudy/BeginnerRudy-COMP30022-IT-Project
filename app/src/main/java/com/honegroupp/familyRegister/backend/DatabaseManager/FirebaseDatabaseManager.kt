@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.backend
+package com.honegroupp.familyRegister.backend.DatabaseManager
 
 import android.content.Intent
 import android.util.Log
@@ -19,9 +19,9 @@ import com.honegroupp.familyRegister.view.home.HomeActivity
 * */
 class FirebaseDatabaseManager() {
     companion object {
-        val USER_PATH = "/Users/"
-        val FAMILY_PATH = "/Family/"
-        val NOTHING = "=_="
+        const val USER_PATH = "/Users/"
+        const val FAMILY_PATH = "/Family/"
+        const val NOTHING = "=_="
 
         /**
          * This method is responsible for retrieving object from the database depends on given path
@@ -181,7 +181,7 @@ class FirebaseDatabaseManager() {
         /**
          * This method is responsible for edit given item to specified path of the database.
          * */
-        fun UeditItem(
+        fun ueditItem(
             item: Item,
             path: String,
             items: HashMap<String, Item>,
@@ -240,7 +240,7 @@ class FirebaseDatabaseManager() {
          * */
         fun getFamilyIDByUID(uid: String, dataSnapshot: DataSnapshot): String {
             val currFamilyId =
-                    dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(
+                    dataSnapshot.child(USER_PATH).child(
                         uid).child("familyId").getValue(
                         String::class.java
                     ) as String

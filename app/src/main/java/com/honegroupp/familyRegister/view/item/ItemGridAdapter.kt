@@ -141,7 +141,9 @@ class ItemGridAdapter(
         return allUris!!.size + 1
     }
 
-    /*check whether the image view is the last one (add button)*/
+    /**
+     * check whether the image view is the last one (add button)
+     * */
     private fun isAddButton(position: Int): Boolean {
         return position == count - 1
     }
