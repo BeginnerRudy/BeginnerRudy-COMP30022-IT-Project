@@ -1,11 +1,14 @@
 package com.honegroupp.familyRegister.model
 
 
+import android.net.Uri
 import android.widget.ImageButton
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.PropertyName
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.backend.FirebaseStorageManager
+import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -29,7 +32,7 @@ data class Item(
 
     @set:PropertyName("itemLocation")
     @get:PropertyName("itemLocation")
-    var itemLocation:  String = "",
+    var itemLocation: String = "",
 
     @set:PropertyName("imageURLs")
     @get:PropertyName("imageURLs")
@@ -49,13 +52,6 @@ data class Item(
 
 ) {
     /*This is the primary constructor to create an item instance*/
-//    constructor(itemName: String, itemDescription: String, itemOwnerUID: String, imageURLs: ArrayList<String>, itemPrivacy: String) : this() {
-//        this.itemName = "itemName"
-//        this.itemDescription = "itemDescription"
-//        this.itemOwnerUID = itemOwnerUID
-//        this.imageURLs = imageURLs
-//        this.itemPrivacy = itemPrivacy
-//    }
 
     var key: String? = null
 
@@ -177,4 +173,5 @@ data class Item(
         }
 
     }
+
 }

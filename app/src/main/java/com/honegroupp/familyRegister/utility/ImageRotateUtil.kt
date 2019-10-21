@@ -1,29 +1,36 @@
 package com.honegroupp.familyRegister.utility
 
+import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.util.Log
 import androidx.exifinterface.media.ExifInterface
 import java.io.IOException
-import android.graphics.Bitmap
-import android.graphics.Matrix
 
 
-class ImageRotateUtil{
-    companion object{
+/**
+ * ImageRotateUtil class is for keeping the image in gallery at its original
+ * direction. Not handle explicitly will result in the image in the wrong
+ * direction.
+ * */
+class ImageRotateUtil {
+    companion object {
 
-        /*this function retutnt the rotation (Orientation) of image
-        modified from code written by Sumit Chakraborty on stackflow
-        https://stackoverflow.com/questions/42411409/why-image-auto-rotate-when-set-to-imageview-with-picasso
-        */
+        /* *this function return the rotation (Orientation) of image
+         * modified from code written by Sumit Chakraborty on stackflow
+         * https://stackoverflow.com/questions/42411409/why-image-auto-rotate-when-set-to-imageview-with-picasso
+         * */
 
         fun getCameraPhotoOrientation(imageFilePath: String): Int {
             var rotate = 0
 
-            Log.d("Orientationx","XXXX".toString())
+            Log.d("Orientationx", "XXXX")
             try {
-                val exif:ExifInterface = ExifInterface(imageFilePath);
-                val orientation:Int = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+                val exif: ExifInterface = ExifInterface(imageFilePath);
+                val orientation: Int = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL)
 
-                Log.d("Orientationx",orientation.toString())
+                Log.d("Orientationx", orientation.toString())
                 when (orientation) {
                     ExifInterface.ORIENTATION_ROTATE_270 -> rotate = 270
                     ExifInterface.ORIENTATION_ROTATE_180 -> rotate = 180
@@ -37,11 +44,20 @@ class ImageRotateUtil{
 
         }
 
-       /* rotate Bitmap to somedegree*/
+        /* *
+         * rotate Bitmap to some degree
+         * */
         fun rotateBitmap(bitmap: Bitmap, degrees: Float): Bitmap {
             val matrix = Matrix()
             matrix.postRotate(degrees)
-            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+            return Bitmap.createBitmap(
+                bitmap,
+                0,
+                0,
+                bitmap.width,
+                bitmap.height,
+                matrix,
+                true)
         }
 
 

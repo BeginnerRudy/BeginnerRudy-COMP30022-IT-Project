@@ -1,18 +1,13 @@
 package com.honegroupp.familyRegister.model
 
-import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.PropertyName
-import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
-import com.honegroupp.familyRegister.view.home.CategoriesTabFragment
 import com.honegroupp.familyRegister.view.home.CategoryAdapter
-import com.honegroupp.familyRegister.view.home.HomeActivity
 import kotlinx.android.synthetic.main.fragment_categories.view.*
 
 /**
@@ -48,14 +43,6 @@ data class User(
     }
 
     /**
-     * This method is responsible for showing user information in view family page.
-     *
-     * */
-    fun showUserInfor() {
-
-    }
-
-    /**
      * This method is responsible for check whether the user has a family or not
      *
      * */
@@ -69,7 +56,11 @@ data class User(
          * This method is responsible for showing all categories belongs to the User's family
          *
          * */
-        fun showCategories(uid: String, view: View, mActivity: AppCompatActivity) {
+        fun showCategories(
+            uid: String,
+            view: View,
+            mActivity: AppCompatActivity
+        ) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
                 callbackShowCategories(
@@ -93,23 +84,30 @@ data class User(
         ) {
             // get User by UID
             val currUser =
-                dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(uid).getValue(User::class.java) as User
+                    dataSnapshot.child(FirebaseDatabaseManager.USER_PATH).child(
+                        uid).getValue(User::class.java) as User
 
             // get family by Family ID
             val familyId = currUser?.familyId
 
             // Check whether user has family
             if (!currUser!!.hasFamily()) {
-                Toast.makeText(mActivity, "Please join family First", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    mActivity,
+                    "Please join family First",
+                    Toast.LENGTH_SHORT).show()
             } else {
                 // get family
-                val family = dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(familyId).getValue(Family::class.java) as Family
+                val family =
+                        dataSnapshot.child(FirebaseDatabaseManager.FAMILY_PATH).child(
+                            familyId).getValue(Family::class.java) as Family
 
                 // get categories from Family
                 val categories = family.categories
 
                 // Bind it to adapter of the recycler view
-                val categoryAdapter = CategoryAdapter(uid, categories, mActivity)
+                val categoryAdapter =
+                        CategoryAdapter(uid, categories, mActivity)
                 // It would update recycler after loading image from firebase storage
                 categoryAdapter.notifyDataSetChanged()
 
@@ -118,7 +116,8 @@ data class User(
 
 
                 // set it into the adapter
-                view.category_recycler_view.layoutManager = GridLayoutManager(mActivity, 2)
+                view.category_recycler_view.layoutManager =
+                        GridLayoutManager(mActivity, 2)
                 view.category_recycler_view.adapter = categoryAdapter
             }
 

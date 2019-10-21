@@ -4,11 +4,17 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.view.home.*
+import com.honegroupp.familyRegister.view.home.AllTabFragment
+import com.honegroupp.familyRegister.view.home.ContainerActivity
+import com.honegroupp.familyRegister.view.home.ContainerAdapter
+import com.honegroupp.familyRegister.view.home.HomeActivity
 
 class HomeController {
     companion object {
-        //activity adapter
+        /**
+         * This method is responsible sort item in the home page, include
+         * all_page and the show_page.
+         * */
         fun sortItem(
             allTabFragment: AllTabFragment,
             allTabAdapter: ContainerAdapter,

@@ -11,15 +11,27 @@
         android:layout_alignParentTop="true" />
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/search_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
         android:layout_toRightOf="@+id/picture"
         android:paddingLeft="30dp"
-        android:text="TextView"
-        android:textSize="25sp" />
+        android:text="Name"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/search_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_toRightOf="@+id/picture"
+        android:paddingLeft="30dp"
+        android:text="2019"
+        android:textSize="12dp" />
 
 </RelativeLayout>

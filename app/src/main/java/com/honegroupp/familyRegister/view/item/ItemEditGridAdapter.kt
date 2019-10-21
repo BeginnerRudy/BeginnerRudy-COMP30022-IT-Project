@@ -48,8 +48,7 @@ class ItemEditGridAdapter(
                 //load the the add sign to the imageView
                 //set background colour
                 imageView.setBackgroundColor(Color.rgb(240, 240, 240))
-                imageView.setImageResource(R.drawable.add_thin_grey_512)
-                imageView.setPadding(100,100,100,100)
+                imageView.setImageResource(R.drawable.add_thin_blue_512)
 
 
             }

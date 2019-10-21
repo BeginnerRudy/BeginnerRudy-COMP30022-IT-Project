@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.view.home
+package com.honegroupp.familyRegister.view.family
 
 import android.os.Bundle
 import android.view.Gravity
@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ViewFamilyController
+import com.honegroupp.familyRegister.view.account.UserReAuthDialog
 
 class ViewFamilyActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListener {
     lateinit var uid: String
@@ -54,12 +55,14 @@ class ViewFamilyActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListene
     override fun onMenuItemClick(p0: MenuItem?): Boolean {
         when (p0!!.itemId) {
             R.id.change_family_name -> {
-                val familyNameChangeDialog = FamilyNameChangeDialog(uid)
+                val familyNameChangeDialog =
+                        FamilyNameChangeDialog(uid)
                 familyNameChangeDialog.show(supportFragmentManager, "Location Change Dialog")
                 return true
             }
             R.id.change_family_pws -> {
-                val familyNameChangeDialog = UserReAuthDialog(uid, this)
+                val familyNameChangeDialog =
+                        UserReAuthDialog(uid, this)
                 familyNameChangeDialog.show(supportFragmentManager, "Location Change Dialog")
                 return true
             }

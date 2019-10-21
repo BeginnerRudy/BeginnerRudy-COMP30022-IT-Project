@@ -2,18 +2,18 @@ package com.honegroupp.familyRegister.controller
 
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import com.honegroupp.familyRegister.utility.SearchMethod
+import com.honegroupp.familyRegister.utility.searchUtil.SearchMethod
 
 
 /**
  * This class is responsible for controller the event related to search.
  *
  * */
-class   SearchController {
+class SearchController {
     companion object {
 
         val searchMethod: SearchMethod =
-            SearchMethod()
+                SearchMethod()
 
         //TODO 1 user could create one item each time
         /**
@@ -24,9 +24,9 @@ class   SearchController {
             listView: ListView,
             uid: String,
             category: Int
-        ){
+        ) {
             //actual logic function for init function
-            searchMethod.init(mActivity,listView, uid, category)
+            searchMethod.init(mActivity, listView, uid, category)
         }
 
         /**
@@ -41,7 +41,8 @@ class   SearchController {
             listView: ListView
         ) {
             //actual logic function for doSearch function
-            searchMethod.doSearch(mActivity, listView, uid, category, queryText);
+            searchMethod
+                .doSearch(mActivity, listView, uid, category, queryText);
 
             //Toast.makeText(mActivity, "Search Finished", Toast.LENGTH_SHORT).show()
         }

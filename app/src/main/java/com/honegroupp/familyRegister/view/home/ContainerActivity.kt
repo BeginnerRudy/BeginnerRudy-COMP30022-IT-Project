@@ -3,8 +3,6 @@ package com.honegroupp.familyRegister.view.home
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.storage.FirebaseStorage
-import com.honegroupp.familyRegister.R
 import com.honegroupp.familyRegister.controller.ItemListController
 import com.honegroupp.familyRegister.view.item.DetailSlide
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
@@ -27,19 +25,19 @@ open class ContainerActivity : AppCompatActivity(), ContainerAdapter.OnItemClick
     lateinit var uid: String
     lateinit var familyId: String
     lateinit var path: String
-    lateinit var categoryName: String
+    lateinit var categoryPosition: String
 
     override fun onItemClick(position: Int) {
         val intent = Intent(this, DetailSlide::class.java)
         intent.putExtra("UserID", uid)
         intent.putExtra("FamilyId", familyId)
         intent.putExtra("PositionList", position.toString())
-        intent.putExtra("CategoryNameList", categoryName)
+        intent.putExtra("CategoryNameList", categoryPosition)
         startActivity(intent)
     }
 
     override fun onDeleteClick(itemId: String) {
-        ItemListController.deleteItems(uid, categoryName, itemId, this)
+        ItemListController.deleteItems(uid, categoryPosition, itemId, this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +46,7 @@ open class ContainerActivity : AppCompatActivity(), ContainerAdapter.OnItemClick
         uid = intent.getStringExtra("UserID")
 
         if (this is ItemListActivity) {
-            categoryName = intent.getStringExtra("categoryPath")
+            categoryPosition = intent.getStringExtra("categoryPath")
         }
     }
 

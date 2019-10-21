@@ -1,4 +1,5 @@
-package com.honegroupp.familyRegister.view.home
+
+package com.honegroupp.familyRegister.view.account
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,10 +7,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.auth.FirebaseAuth
-
-import com.honegroupp.familyRegister.utility.EmailPathSwitch
+import com.honegroupp.familyRegister.utility.EmailPathSwitchUtil
 import kotlinx.android.synthetic.main.activity_account.*
-
 import com.honegroupp.familyRegister.R
 
 
@@ -40,7 +39,7 @@ class AccountActivity : AppCompatActivity() {
 
             var mAuth: FirebaseAuth? = null
             mAuth = FirebaseAuth.getInstance()
-            mAuth!!.sendPasswordResetEmail(EmailPathSwitch.pathToEmail(uid))
+            mAuth!!.sendPasswordResetEmail(EmailPathSwitchUtil.pathToEmail(uid))
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         //nothing
@@ -60,3 +59,4 @@ class AccountActivity : AppCompatActivity() {
 
     }
 }
+

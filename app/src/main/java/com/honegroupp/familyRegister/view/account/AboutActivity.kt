@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.view.home
+package com.honegroupp.familyRegister.view.account
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

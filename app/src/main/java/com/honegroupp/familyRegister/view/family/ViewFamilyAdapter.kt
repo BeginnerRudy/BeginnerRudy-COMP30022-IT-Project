@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.view.home
+package com.honegroupp.familyRegister.view.family
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -46,7 +46,6 @@ class ViewFamilyAdapter(
         holder.memberName.visibility = View.VISIBLE
         holder.memberName.text = currUser.username
     }
-
 
     override fun getItemCount(): Int {
         Log.d("ABCDEFG", users.size.toString())

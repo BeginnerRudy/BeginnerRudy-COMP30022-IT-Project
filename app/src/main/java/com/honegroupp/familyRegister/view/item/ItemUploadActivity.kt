@@ -11,7 +11,7 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.backend.FirebaseStorageManager
+import com.honegroupp.familyRegister.controller.ImageController
 import com.honegroupp.familyRegister.controller.ItemController
 import com.honegroupp.familyRegister.view.itemList.ItemGridAdapter
 import kotlinx.android.synthetic.main.item_upload_page.*
@@ -27,6 +27,7 @@ class ItemUploadActivity : AppCompatActivity() {
     var imagePathList = ArrayList<String>()
     private var allImageUri = ArrayList<Uri>()
     private lateinit var uid: String
+    lateinit var categoryName : String
 
     private var itemPrivacyPosition: Int = 0
     private val READ_PERMISSION_CODE: Int = 1000
@@ -37,7 +38,7 @@ class ItemUploadActivity : AppCompatActivity() {
         setContentView(R.layout.item_upload_page)
 
         uid = intent.getStringExtra("UserID").toString()
-        val categoryName = intent.getStringExtra("categoryPath").toString()
+        categoryName = intent.getStringExtra("categoryPath").toString()
         val sortOrder = intent.getStringExtra("SortOrder")
 
         //set up the spinner (select public and privacy)
@@ -66,7 +67,7 @@ class ItemUploadActivity : AppCompatActivity() {
         setGridViewHeight(itemGridView)
 
         addItemConfirm.setOnClickListener {
-            it.isEnabled = false
+            //            it.isEnabled = false
             itemPrivacyPosition = spinner.selectedItemPosition
 
             //            progressBarRound.visibility = View.VISIBLE
@@ -102,7 +103,7 @@ class ItemUploadActivity : AppCompatActivity() {
     }
 
     /*create the item and upload*/
-    fun uploadItem(categoryName: String) {
+    fun uploadItem() {
 
         ItemController.createItem(
             this,
@@ -153,13 +154,13 @@ class ItemUploadActivity : AppCompatActivity() {
 
                         val allUris: ArrayList<Uri> = arrayListOf()
 
-                        if (data.getClipData() != null) {
+                        if (data.clipData != null) {
 
                             //handle multiple images
-                            val count = data.getClipData()!!.getItemCount()
+                            val count = data.clipData!!.getItemCount()
 
                             for (i in 0 until count) {
-                                var uri = data.getClipData()!!.getItemAt(i).uri
+                                var uri = data.clipData!!.getItemAt(i).uri
                                 if (uri != null) {
 
                                     //add into Uri List
@@ -239,10 +240,10 @@ class ItemUploadActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT).show()
 
         } else {
-            //upload uri to firebase
-            FirebaseStorageManager
-                .uploadToFirebase(allImageUri, categoryName, this)
+            addItemConfirm.isEnabled = false
 
+            //upload uri to firebase
+            ImageController.uploadImages(allImageUri, this)
             this.finish()
         }
 

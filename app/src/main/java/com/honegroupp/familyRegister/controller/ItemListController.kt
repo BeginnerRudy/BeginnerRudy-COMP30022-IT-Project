@@ -15,7 +15,15 @@ import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 
 class ItemListController {
     companion object {
-        fun addItem(uid: String, categoryName: String, mActivity: AppCompatActivity) {
+
+        /**
+         * This method is responsible for add item to the list
+         * */
+        fun addItem(
+            uid: String,
+            categoryName: String,
+            mActivity: AppCompatActivity
+        ) {
             Family.addItem(uid, categoryName, mActivity)
         }
 
@@ -31,14 +39,18 @@ class ItemListController {
             // get items of that category
             val items = ArrayList<Item>()
 
-            val recyclerView = mActivity.findViewById<RecyclerView>(R.id.item_list_recycler_view)
+            val recyclerView = mActivity
+                .findViewById<RecyclerView>(R.id.item_list_recycler_view)
 
             // Setting the recycler view
             recyclerView.setHasFixedSize(true)
             recyclerView.layoutManager = GridLayoutManager(mActivity, 2)
 
             // setting one ItemListAdapter
-            val itemListAdapter = ContainerAdapter(items, mActivity, ContainerAdapter.CATEGORY)
+            val itemListAdapter = ContainerAdapter(
+                items,
+                mActivity,
+                ContainerAdapter.CATEGORY)
             recyclerView.adapter = itemListAdapter
             itemListAdapter.listener = mActivity
 
@@ -46,59 +58,73 @@ class ItemListController {
             sortItem(mActivity, itemListAdapter)
 
             // show the items
-            Family.showItems(uid, items, itemListAdapter, categoryName, mActivity)
+            Family
+                .showItems(uid, items, itemListAdapter, categoryName, mActivity)
         }
 
         /**
          * This method is responsible for delete the items in the given category
          * */
-        fun deleteItems(uid: String, categoryName: String, itemId: String, mActivity: AppCompatActivity) {
+        fun deleteItems(
+            uid: String,
+            categoryName: String,
+            itemId: String,
+            mActivity: AppCompatActivity
+        ) {
             Family.deleteItem(uid, categoryName, itemId, mActivity)
         }
 
-        //activity adapter
+        /**
+         * This method is responsible for sort item in the itemList
+         * */
         private fun sortItem(
             mActivity: ItemListActivity,
             adapter: ContainerAdapter
         ) {
-            val drawerSortLayout = mActivity.findViewById<DrawerLayout>(R.id.drawer_sort_layout)
-            val navi_sort_view = mActivity.findViewById<NavigationView>(R.id.navi_sort_view)
-            navi_sort_view.menu.findItem(R.id.sort_name_asc).setOnMenuItemClickListener {
-                //sort logic
-                adapter.items.sortBy { it.itemName }
-                //update sort order
-                mActivity.sortOrder = ContainerActivity.NAME_ASCENDING
-                // update the UI layer
-                updateRecyclerView(adapter, drawerSortLayout)
-                true
-            }
-            navi_sort_view.menu.findItem(R.id.sort_name_desc).setOnMenuItemClickListener {
-                //sort logic
-                adapter.items.sortByDescending { it.itemName }
-                //update sort order
-                mActivity.sortOrder = ContainerActivity.NAME_DESCENDING
-                // update the UI layer
-                updateRecyclerView(adapter, drawerSortLayout)
-                true
-            }
-            navi_sort_view.menu.findItem(R.id.sort_time_asc).setOnMenuItemClickListener {
-                //sort logic
-                adapter.items.sortBy { it.date }
-                //update sort order
-                mActivity.sortOrder = ContainerActivity.TIME_ASCENDING
-                // update the UI layer
-                updateRecyclerView(adapter, drawerSortLayout)
-                true
-            }
-            navi_sort_view.menu.findItem(R.id.sort_time_desc).setOnMenuItemClickListener {
-                //sort logic
-                adapter.items.sortByDescending { it.date }
-                //update sort order
-                mActivity.sortOrder = ContainerActivity.TIME_DESCENDING
-                // update the UI layer
-                updateRecyclerView(adapter, drawerSortLayout)
-                true
-            }
+            val drawerSortLayout = mActivity
+                .findViewById<DrawerLayout>(R.id.drawer_sort_layout)
+            val navi_sort_view =
+                    mActivity.findViewById<NavigationView>(R.id.navi_sort_view)
+            navi_sort_view.menu.findItem(R.id.sort_name_asc)
+                .setOnMenuItemClickListener {
+                    //sort logic
+                    adapter.items.sortBy { it.itemName }
+                    //update sort order
+                    mActivity.sortOrder = ContainerActivity.NAME_ASCENDING
+                    // update the UI layer
+                    updateRecyclerView(adapter, drawerSortLayout)
+                    true
+                }
+            navi_sort_view.menu.findItem(R.id.sort_name_desc)
+                .setOnMenuItemClickListener {
+                    //sort logic
+                    adapter.items.sortByDescending { it.itemName }
+                    //update sort order
+                    mActivity.sortOrder = ContainerActivity.NAME_DESCENDING
+                    // update the UI layer
+                    updateRecyclerView(adapter, drawerSortLayout)
+                    true
+                }
+            navi_sort_view.menu.findItem(R.id.sort_time_asc)
+                .setOnMenuItemClickListener {
+                    //sort logic
+                    adapter.items.sortBy { it.date }
+                    //update sort order
+                    mActivity.sortOrder = ContainerActivity.TIME_ASCENDING
+                    // update the UI layer
+                    updateRecyclerView(adapter, drawerSortLayout)
+                    true
+                }
+            navi_sort_view.menu.findItem(R.id.sort_time_desc)
+                .setOnMenuItemClickListener {
+                    //sort logic
+                    adapter.items.sortByDescending { it.date }
+                    //update sort order
+                    mActivity.sortOrder = ContainerActivity.TIME_DESCENDING
+                    // update the UI layer
+                    updateRecyclerView(adapter, drawerSortLayout)
+                    true
+                }
 
         }
 
@@ -106,7 +132,10 @@ class ItemListController {
          * This method is responsible for updating the corresponding recycler view
          *
          * */
-        private fun updateRecyclerView(adapter: ContainerAdapter, drawer_sort_layout: DrawerLayout) {
+        private fun updateRecyclerView(
+            adapter: ContainerAdapter,
+            drawer_sort_layout: DrawerLayout
+        ) {
             // hide the item
             drawer_sort_layout.closeDrawer(GravityCompat.END)
             // update the recycler view

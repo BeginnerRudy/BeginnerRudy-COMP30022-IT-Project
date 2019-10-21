@@ -24,10 +24,6 @@ data class Category(
     /*This constructor has no parameter, which is used to create CategoryUpload while retrieve data from database*/
     constructor() : this("", ArrayList<String>(), 0)
 
-    companion object {
-        val DEFAULT_COVER = "DEFAULT_COVER"
-    }
-
     /**
      * This method is responsible for get cover Url for the category.
      *
@@ -35,7 +31,8 @@ data class Category(
     fun setCoverURL(
         holder: CategoryAdapter.CategoryViewHolder,
         mActivity: AppCompatActivity,
-        position: Int, uid: String
+        position: Int, uid: String,
+        categoryName: String
     ) {
         //        var url = DEFAULT_COVER
         if (itemKeys.isNotEmpty()) {
@@ -48,13 +45,19 @@ data class Category(
                     position,
                     uid,
                     firstItemKey,
+                    categoryName,
                     d
                 )
             }
         } else {
             holder.imageView
                 .setImageResource(R.drawable.ic_image_grey_24dp)
-            navigateToItemListActivity(holder, mActivity, uid, position)
+            navigateToItemListActivity(
+                holder,
+                mActivity,
+                uid,
+                position,
+                categoryName)
         }
     }
 
@@ -66,7 +69,8 @@ data class Category(
         holder: CategoryAdapter.CategoryViewHolder,
         mActivity: AppCompatActivity,
         uid: String,
-        position: Int
+        position: Int,
+        categoryName: String
     ) {
         holder.imageView.setOnClickListener {
             // Snippet from navigate to the ItemListActivity along with the category path
@@ -77,6 +81,9 @@ data class Category(
             goToItemListActivity.putExtra("UserID", uid)
             // pass category path to goToItemListActivity
             goToItemListActivity.putExtra("categoryPath", position.toString())
+
+            // pass category path to goToItemListActivity
+            goToItemListActivity.putExtra("categoryName", categoryName)
             // pass default sort order to next activity
             goToItemListActivity.putExtra("sortOrder", "default")
             mActivity.startActivity(goToItemListActivity)
@@ -93,6 +100,7 @@ data class Category(
         position: Int,
         uid: String,
         itemKeys: String,
+        categoryName: String,
         dataSnapshot: DataSnapshot
     ) {
         // get user's family ID
@@ -126,6 +134,6 @@ data class Category(
                 .into(holder.imageView)
         }
 
-        navigateToItemListActivity(holder, mActivity, uid, position)
+        navigateToItemListActivity(holder, mActivity, uid, position, categoryName)
     }
 }

@@ -3,21 +3,25 @@ package com.honegroupp.familyRegister.model
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.View
-import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.database.*
-import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.PropertyName
 import com.honegroupp.familyRegister.R
-import com.honegroupp.familyRegister.utility.EmailPathSwitch
-import com.honegroupp.familyRegister.utility.Hash
+import com.honegroupp.familyRegister.backend.FirebaseDatabaseManager
+import com.honegroupp.familyRegister.utility.EmailPathSwitchUtil
+import com.honegroupp.familyRegister.utility.HashUtil
+import com.honegroupp.familyRegister.view.family.ViewFamilyActivity
+import com.honegroupp.familyRegister.view.family.ViewFamilyAdapter
 import com.honegroupp.familyRegister.view.home.*
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
+import com.honegroupp.familyRegister.view.itemList.NoPermissonToDeleteDialog
 
 /**
  * This class is responsible for storing data and business logic for Family
@@ -172,7 +176,7 @@ data class Family(
                             Family::class.java
                         ) as Family
                 // Check password
-                if (family.password != Hash.applyHash(familyPasswordInput)) {
+                if (family.password != HashUtil.applyHash(familyPasswordInput)) {
                     Toast.makeText(
                         currActivity,
                         mActivity.getString(R.string.password_is_incorrect),
@@ -418,7 +422,7 @@ data class Family(
             }
             // otherwise, show the warning dialog
             else {
-                val familyNameChangeDialog = FamilyNameChangeDialog(uid)
+                val familyNameChangeDialog = NoPermissonToDeleteDialog()
                 familyNameChangeDialog.show(
                     mActivity.supportFragmentManager,
                     "Location Change Dialog")
@@ -503,7 +507,9 @@ data class Family(
             }
         }
 
-
+        /**
+         * This method is the for show all_page
+         * */
         fun showAll(
             uid: String,
             showTabAdapter: ContainerAdapter,
@@ -522,7 +528,9 @@ data class Family(
             }
         }
 
-
+        /**
+         * This method is the callback for showing all items
+         * */
         private fun callbackShowAll(
             uid: String,
             showTabAdapter: ContainerAdapter,
@@ -617,7 +625,7 @@ data class Family(
             }
 
             familyIdView.text =
-                    "${mActivity.getString(R.string.family_id_show)}  ${EmailPathSwitch.pathToEmail(
+                    "${mActivity.getString(R.string.family_id_show)}  ${EmailPathSwitchUtil.pathToEmail(
                         familyId
                     )}"
             familyNameView.text =
@@ -699,7 +707,7 @@ data class Family(
                     "${FirebaseDatabaseManager.FAMILY_PATH}$familyId/password"
 
             FirebaseDatabase.getInstance().getReference(familyNamePath)
-                .setValue(Hash.applyHash(newFamilyPassword))
+                .setValue(HashUtil.applyHash(newFamilyPassword))
         }
 
         /**

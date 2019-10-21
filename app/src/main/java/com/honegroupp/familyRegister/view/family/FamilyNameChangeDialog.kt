@@ -1,4 +1,4 @@
-package com.honegroupp.familyRegister.view.home
+package com.honegroupp.familyRegister.view.family
 
 import android.app.Dialog
 import android.content.Context
