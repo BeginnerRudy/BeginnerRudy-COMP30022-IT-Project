@@ -32,7 +32,7 @@ interface IDoubleClickToExit {
     /**
      * To exit app.
      * */
-    fun exitApp(mActivity: Activity) {
+    private fun exitApp(mActivity: Activity) {
         mActivity.finish()
         mActivity.moveTaskToBack(true)
         exitProcess(0)

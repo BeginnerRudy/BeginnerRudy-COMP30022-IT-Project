@@ -34,7 +34,6 @@ import com.honegroupp.familyRegister.view.search.SearchActivity
 import com.squareup.picasso.Picasso
 
 
-
 /**
  * This class the HomeActivity which include 3 tabs and can drag left and right
  * to switch between them.
@@ -46,9 +45,6 @@ class HomeActivity : ContainerActivity(),
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
     lateinit var userID: String
-
-    var sortOrderAll = SORT_DEFAULT
-    var sortOrderShow = SORT_DEFAULT
 
 
     // set items adapter for show page
@@ -62,23 +58,27 @@ class HomeActivity : ContainerActivity(),
 
 
     override fun onItemClick(position: Int) {
+        val intent = Intent(this, DetailSlide::class.java)
         if (viewPager.currentItem == 0) {
             categoryPosition = DetailSlide.ALL_PAGE_SIGNAL.toString()
+            intent.putExtra("sortOrder", sortOrderALL)
         } else if (viewPager.currentItem == 2) {
             categoryPosition = DetailSlide.SHOW_PAGE_SIGNAL.toString()
+            intent.putExtra("sortOrder", sortOrderShow)
         }
 
-        val intent = Intent(this, DetailSlide::class.java)
         intent.putExtra("UserID", uid)
         intent.putExtra("FamilyId", familyId)
         intent.putExtra("PositionList", position.toString())
         intent.putExtra("CategoryNameList", categoryPosition)
+
         startActivity(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
 
         // Press  key to navigate to navigation drawer
         btn_home_sort.setOnClickListener {
@@ -88,7 +88,6 @@ class HomeActivity : ContainerActivity(),
         //get User ID
         userID = intent.getStringExtra("UserID")
         val username = intent.getStringExtra("UserName") as String
-        Log.d("Username", username)
 
         // Configure the toolbar setting
         toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -105,6 +104,7 @@ class HomeActivity : ContainerActivity(),
         val allTabFragment = viewPagerAdapter.getItem(0) as AllTabFragment
         HomeController
             .sortItem(allTabFragment, allTabAdapter, showTabAdapter, this)
+
 
         // this object is the lisener to disable the navi_home_sort_view
         val disableNaviHomeSort = object : DrawerLayout.DrawerListener {
@@ -141,12 +141,15 @@ class HomeActivity : ContainerActivity(),
             override fun onDrawerStateChanged(arg0: Int) {
                 // do nothing
             }
+
             override fun onDrawerSlide(view: View, arg1: Float) {
                 // do nothing
             }
+
             override fun onDrawerOpened(view: View) {
                 // do nothing
             }
+
             override fun onDrawerClosed(view: View) {
                 // do nothing
             }

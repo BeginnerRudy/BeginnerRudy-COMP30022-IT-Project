@@ -1,5 +1,6 @@
 package com.honegroupp.familyRegister.view.home
 
+import android.util.Log
 import android.view.*
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -122,6 +123,7 @@ open class ContainerAdapter(
         }
 
         override fun onClick(p0: View?) {
+
             if (listener != null) {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
@@ -133,7 +135,7 @@ open class ContainerAdapter(
             }
         }
 
-        override fun onMenuItemClick(p0: MenuItem?): Boolean {
+            override fun onMenuItemClick(p0: MenuItem?): Boolean {
             if (listener != null) {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
