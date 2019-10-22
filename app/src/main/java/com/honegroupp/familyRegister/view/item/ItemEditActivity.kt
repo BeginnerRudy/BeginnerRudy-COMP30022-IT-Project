@@ -6,9 +6,9 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Point
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -409,11 +409,11 @@ class ItemEditActivity : AppCompatActivity(),
         textView.isCursorVisible = false
 
         //disable keyboard because select date
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            textView.showSoftInputOnFocus = false
-        } else {
-            textView.setTextIsSelectable(true)
-        }
+        //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        //            textView.showSoftInputOnFocus = false
+        //        } else {
+        //            textView.setTextIsSelectable(true)
+        //        }
 
         val cal = Calendar.getInstance()
         val dateSetListener =
@@ -429,6 +429,11 @@ class ItemEditActivity : AppCompatActivity(),
                     }
 
         textView.setOnClickListener {
+
+            //hide the Keyboard
+            hideSoftKeyboard(this)
+
+            //show the dialog
             DatePickerDialog(
                 this, dateSetListener,
                 cal.get(Calendar.YEAR),
@@ -519,6 +524,16 @@ class ItemEditActivity : AppCompatActivity(),
         val cloumnHeight = ceil(getScreenWidth() * 1.0 / 3).toInt()
         gridView.layoutParams.height = columnsNumber * cloumnHeight
 
+    }
+
+    /**
+     * Hide keyboard when click the dete picker
+     * */
+    private fun hideSoftKeyboard(activity: Activity) {
+        val inputMethodManager =
+                activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager!!
+            .hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
     }
 
 }

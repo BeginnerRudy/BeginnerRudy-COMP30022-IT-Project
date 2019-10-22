@@ -48,7 +48,7 @@
     <string name="edit_last_original_image_cannot_delete">Cannot delete last
         original image</string>
     <string name="edit_confirm">CONFIRM CHANGE</string>
-    <string name="edit_date">Click to change date time</string>
+    <string name="edit_date">Double click to change date</string>
     <string name="edit_visibility">Visibility</string>
     <string name="edit_location">Location</string>
     <string name="edit_enter_password_to_view_location">Enter password to view</string>
@@ -87,7 +87,8 @@
     <string name="join_family_successfully">Join family successful!</string>
     <string name="delete_from_this_category">Delete From This Category</string>
     <string name="get_read_permission">Already get the permission to access photos</string>
-    <string name="please_pick_date_for_item">Please pick a date for item</string>
+    <string name="please_pick_date_for_item">Double click to pick a date for
+        item</string>
     <string name="no_items_for_the_show_page">No Items For The Show Page</string>
     <string name="reset_email_message">The reset password email has been sent, please click the link in the email to reset your email.</string>
     <string name="password_rest_success">Email reset successful!</string>
@@ -122,7 +123,6 @@
     <string name="family_members">Family members</string>
     <string name="change_family_name">Change Family Name</string>
     <string name="change_family_password">Change Family Password</string>
-
     <string name="sort_name_asc">Ascending sort by item name</string>
     <string name="sort_name_desc">Descending sort by item name</string>
     <string name="sort_time_asc">Ascending sort by date</string>
@@ -132,7 +132,8 @@
     <string name="reauth">Please enter your account password first:</string>
     <string name="owner">Owner</string>
     <string name="change_user_photo">User name and image</string>
-    <string name="please_enter_location">Please enter item storage location (only visible by yourself)</string>
+    <string name="please_enter_location">Enter item storing location (only
+        visible by yourself)</string>
     <string name="you_have_not_permission_to_delete_this_item_since_you_are_not_the_owner_of_this_item">You have not permission to delete this item, since you are not the owner of this item.</string>
     <string name="tip">Tip</string>
 </resources>
