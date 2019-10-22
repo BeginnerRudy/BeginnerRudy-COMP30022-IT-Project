@@ -87,7 +87,7 @@ class SearchMethod{
             intent.putExtra("PositionList", listView.adapter.getItemId(position).toString())
             intent.putExtra("CategoryNameList", category.toString())
             intent.putExtra("FamilyId", currFamilyId)
-            intent.putExtra("SortOrder", ContainerActivity.SORT_DEFAULT)
+            intent.putExtra("sortOrder", ContainerActivity.SORT_DEFAULT)
             mActivity.startActivity(intent)
         }
     }

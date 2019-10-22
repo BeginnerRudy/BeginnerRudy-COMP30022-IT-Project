@@ -201,6 +201,7 @@ class HomeActivity : ContainerActivity(),
             val intent = Intent(this, SearchActivity::class.java)
             intent.putExtra("UserID", userID)
             intent.putExtra("Category", DetailSlide.ALL_PAGE_SIGNAL.toString())
+
             startActivity(intent)
             true
         }
