@@ -46,7 +46,7 @@
     <string name="detail_delete_fail">图片删除失败</string>
     <string name="edit_last_original_image_cannot_delete">至少得留最后一张原图</string>
     <string name="edit_confirm">确定</string>
-    <string name="edit_date">点击更改日期</string>
+    <string name="edit_date">双击更改日期</string>
     <string name="edit_visibility">可见</string>
     <string name="edit_location">存放地点</string>
     <string name="edit_enter_password_to_view_location">输入密码查看</string>
@@ -86,7 +86,7 @@
     <string name="image">张照片</string>
     <string name="delete_from_this_category">从分类中删除</string>
     <string name="get_read_permission">已获得访问您设备照片的权限</string>
-    <string name="please_pick_date_for_item">请选择日期</string>
+    <string name="please_pick_date_for_item">双击选择日期</string>
     <string name="reset_email_message">重置密码的邮件已发送到您的邮箱，请点击邮件中的链接修改密码</string>
     <string name="password_rest_success">密码重置成功</string>
 
