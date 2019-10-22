@@ -49,7 +49,6 @@ class DetailSlide : AppCompatActivity(),
     private lateinit var detailFamilyId: String
 
 
-
     private lateinit var databaseReferenceItem: DatabaseReference
     private lateinit var dbListenerItem: ValueEventListener
     private var itemUploads: ArrayList<Item> = ArrayList()
@@ -70,9 +69,11 @@ class DetailSlide : AppCompatActivity(),
             ContainerActivity.NAME_DESCENDING -> itemUploads.sortByDescending {
                 it.itemName
             }
-            ContainerActivity.TIME_ASCENDING -> itemUploads.sortBy { it.date }
+            ContainerActivity.TIME_ASCENDING -> itemUploads.sortBy {
+                reverseDate(it.date)
+            }
             ContainerActivity.TIME_DESCENDING -> itemUploads.sortByDescending {
-                it.date
+                reverseDate(it.date)
             }
         }
     }
@@ -418,5 +419,21 @@ class DetailSlide : AppCompatActivity(),
 
     private fun toast(msg: String, duration: Int) {
         Toast.makeText(this, msg, duration).show()
+    }
+
+
+    /**
+     * Reverse date for easier sort
+     * */
+    private fun reverseDate(date: String): String {
+        val array: List<String> = date.split("/")
+        val day = array[0]
+        var month = array[1]
+        val year = array[2]
+        if (month.length == 1) {
+            month = "0" + month
+        }
+        val reversedate = year + "/" + month + "/" + day
+        return reversedate
     }
 }

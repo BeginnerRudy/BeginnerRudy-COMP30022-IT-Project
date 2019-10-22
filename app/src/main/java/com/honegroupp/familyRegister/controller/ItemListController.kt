@@ -11,7 +11,6 @@ import com.honegroupp.familyRegister.model.Family
 import com.honegroupp.familyRegister.model.Item
 import com.honegroupp.familyRegister.view.home.ContainerActivity
 import com.honegroupp.familyRegister.view.home.ContainerAdapter
-import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 
 class ItemListController {
     companion object {
@@ -90,7 +89,8 @@ class ItemListController {
                     //sort logic
                     adapter.items.sortBy { it.itemName }
                     //update sort order
-                    mActivity.sortOrderItemList = ContainerActivity.NAME_ASCENDING
+                    mActivity.sortOrderItemList =
+                            ContainerActivity.NAME_ASCENDING
                     // update the UI layer
                     updateRecyclerView(adapter, drawerSortLayout)
                     true
@@ -100,7 +100,8 @@ class ItemListController {
                     //sort logic
                     adapter.items.sortByDescending { it.itemName }
                     //update sort order
-                    mActivity.sortOrderItemList = ContainerActivity.NAME_DESCENDING
+                    mActivity.sortOrderItemList =
+                            ContainerActivity.NAME_DESCENDING
                     // update the UI layer
                     updateRecyclerView(adapter, drawerSortLayout)
                     true
@@ -108,9 +109,10 @@ class ItemListController {
             navi_sort_view.menu.findItem(R.id.sort_time_asc)
                 .setOnMenuItemClickListener {
                     //sort logic
-                    adapter.items.sortBy { it.date }
+                    adapter.items.sortBy { reverseDate(it.date) }
                     //update sort order
-                    mActivity.sortOrderItemList = ContainerActivity.TIME_ASCENDING
+                    mActivity.sortOrderItemList =
+                            ContainerActivity.TIME_ASCENDING
                     // update the UI layer
                     updateRecyclerView(adapter, drawerSortLayout)
                     true
@@ -118,9 +120,10 @@ class ItemListController {
             navi_sort_view.menu.findItem(R.id.sort_time_desc)
                 .setOnMenuItemClickListener {
                     //sort logic
-                    adapter.items.sortByDescending { it.date }
+                    adapter.items.sortByDescending { reverseDate(it.date) }
                     //update sort order
-                    mActivity.sortOrderItemList = ContainerActivity.TIME_DESCENDING
+                    mActivity.sortOrderItemList =
+                            ContainerActivity.TIME_DESCENDING
                     // update the UI layer
                     updateRecyclerView(adapter, drawerSortLayout)
                     true
@@ -140,6 +143,22 @@ class ItemListController {
             drawer_sort_layout.closeDrawer(GravityCompat.END)
             // update the recycler view
             adapter.notifyDataSetChanged()
+        }
+
+
+        /**
+         * Reverse date for easier sort
+         * */
+        private fun reverseDate(date: String): String {
+            val array: List<String> = date.split("/")
+            val day = array[0]
+            var month = array[1]
+            val year = array[2]
+            if (month.length == 1) {
+                month = "0" + month
+            }
+            val reversedate = year + "/" + month + "/" + day
+            return reversedate
         }
     }
 }

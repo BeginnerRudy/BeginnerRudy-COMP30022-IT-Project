@@ -18,9 +18,10 @@ import com.honegroupp.familyRegister.utility.EmailPathSwitchUtil
 import com.honegroupp.familyRegister.utility.HashUtil
 import com.honegroupp.familyRegister.view.family.ViewFamilyActivity
 import com.honegroupp.familyRegister.view.family.ViewFamilyAdapter
-import com.honegroupp.familyRegister.view.home.*
+import com.honegroupp.familyRegister.view.home.ContainerActivity
+import com.honegroupp.familyRegister.view.home.ContainerAdapter
+import com.honegroupp.familyRegister.view.home.HomeActivity
 import com.honegroupp.familyRegister.view.item.ItemUploadActivity
-import com.honegroupp.familyRegister.view.itemList.ItemListActivity
 import com.honegroupp.familyRegister.view.itemList.NoPermissonToDeleteDialog
 
 /**
@@ -725,9 +726,9 @@ data class Family(
                 ContainerActivity.NAME_DESCENDING -> //sort by name descending
                     items.sortByDescending { it.itemName }
                 ContainerActivity.TIME_ASCENDING -> //sort by time ascending
-                    items.sortBy { it.date }
+                    items.sortBy { reverseDate(it.date) }
                 ContainerActivity.TIME_DESCENDING -> //sort by time descending
-                    items.sortByDescending { it.date }
+                    items.sortByDescending { reverseDate(it.date) }
             }
         }
 
@@ -762,6 +763,21 @@ data class Family(
                 mActivity.findViewById<TextView>(emptyTextViewId).visibility =
                         View.INVISIBLE
             }
+        }
+
+        /**
+         * Reverse date for easier sort
+         * */
+        private fun reverseDate(date: String): String {
+            val array: List<String> = date.split("/")
+            val day = array[0]
+            var month = array[1]
+            val year = array[2]
+            if (month.length == 1) {
+                month = "0" + month
+            }
+            val reversedate = year + "/" + month + "/" + day
+            return reversedate
         }
 
     }
