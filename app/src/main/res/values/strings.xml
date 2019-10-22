@@ -123,7 +123,6 @@
     <string name="family_members">Family members</string>
     <string name="change_family_name">Change Family Name</string>
     <string name="change_family_password">Change Family Password</string>
-
     <string name="sort_name_asc">Ascending sort by item name</string>
     <string name="sort_name_desc">Descending sort by item name</string>
     <string name="sort_time_asc">Ascending sort by date</string>
@@ -133,7 +132,8 @@
     <string name="reauth">Please enter your account password first:</string>
     <string name="owner">Owner</string>
     <string name="change_user_photo">User name and image</string>
-    <string name="please_enter_location">Please enter item storage location (only visible by yourself)</string>
+    <string name="please_enter_location">Enter item storing location (only
+        visible by yourself)</string>
     <string name="you_have_not_permission_to_delete_this_item_since_you_are_not_the_owner_of_this_item">You have not permission to delete this item, since you are not the owner of this item.</string>
     <string name="tip">Tip</string>
 </resources>
