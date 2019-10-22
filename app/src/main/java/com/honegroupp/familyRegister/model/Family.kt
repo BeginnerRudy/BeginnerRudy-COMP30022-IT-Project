@@ -230,7 +230,7 @@ data class Family(
             items: ArrayList<Item>,
             itemListAdapter: ContainerAdapter,
             categoryName: String,
-            mActivity: ItemListActivity
+            mActivity: ContainerActivity
         ) {
             val rootPath = "/"
             FirebaseDatabaseManager.retrieveLive(rootPath) { d: DataSnapshot ->
@@ -253,7 +253,7 @@ data class Family(
             items: ArrayList<Item>,
             itemListAdapter: ContainerAdapter,
             categoryName: String,
-            mActivity: ItemListActivity,
+            mActivity: ContainerActivity,
             dataSnapshot: DataSnapshot
         ) {
 
@@ -309,7 +309,7 @@ data class Family(
             }
 
             // sort the current item according to current app's sort order
-            sortItems(mActivity.sortOrder, items)
+            sortItems(mActivity.sortOrderItemList, items)
 
             // update the UI
             updateUI(
@@ -565,7 +565,7 @@ data class Family(
                     showTabAdapter.items.add(item)
                 }
                 // sort the current item according to current app's sort order
-                sortItems(mActivity.sortOrderAll, showTabAdapter.items)
+                sortItems(mActivity.sortOrderALL, showTabAdapter.items)
 
                 // update the UI
                 updateUI(

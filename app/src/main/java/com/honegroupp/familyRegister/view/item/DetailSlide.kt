@@ -48,6 +48,8 @@ class DetailSlide : AppCompatActivity(),
 
     private lateinit var detailFamilyId: String
 
+
+
     private lateinit var databaseReferenceItem: DatabaseReference
     private lateinit var dbListenerItem: ValueEventListener
     private var itemUploads: ArrayList<Item> = ArrayList()
@@ -88,6 +90,7 @@ class DetailSlide : AppCompatActivity(),
 
         // get position of item clicked in item list for setting Current page item
         val positionList = intent.getStringExtra("PositionList").toInt()
+        var sortOrder: String = intent.getStringExtra("sortOrder")
 
         // get userID for setting firbase database reference for items and categories
         detailUserId = intent.getStringExtra("UserID").toString()
@@ -195,6 +198,9 @@ class DetailSlide : AppCompatActivity(),
                             }
                         }
                     }
+
+                    // sort item according to the sort order
+                    sortItem(sortOrder)
 
                     // Notify ViewPager to update
                     if (itemUploads.size == 0) {

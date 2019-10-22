@@ -42,7 +42,7 @@ class HomeController {
                     adapter.items.sortBy { it.itemName }
                     //update sort order
                     if (allTabFragment.isVisible) {
-                        mActivity.sortOrderAll =
+                        mActivity.sortOrderALL =
                                 ContainerActivity.NAME_ASCENDING
                     } else {
                         mActivity.sortOrderShow =
@@ -65,7 +65,7 @@ class HomeController {
                     adapter.items.sortByDescending { it.itemName }
                     //update sort order
                     if (allTabFragment.isVisible) {
-                        mActivity.sortOrderAll =
+                        mActivity.sortOrderALL =
                                 ContainerActivity.NAME_DESCENDING
                     } else {
                         mActivity.sortOrderShow =
@@ -88,7 +88,7 @@ class HomeController {
 
                     //update sort order
                     if (allTabFragment.isVisible) {
-                        mActivity.sortOrderAll =
+                        mActivity.sortOrderALL =
                                 ContainerActivity.TIME_ASCENDING
                     } else {
                         mActivity.sortOrderShow =
@@ -111,7 +111,7 @@ class HomeController {
 
                     //update sort order
                     if (allTabFragment.isVisible) {
-                        mActivity.sortOrderAll =
+                        mActivity.sortOrderALL =
                                 ContainerActivity.TIME_DESCENDING
                     } else {
                         mActivity.sortOrderShow =

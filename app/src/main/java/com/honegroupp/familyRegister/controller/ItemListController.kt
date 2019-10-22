@@ -33,7 +33,7 @@ class ItemListController {
         fun showItems(
             uid: String,
             categoryName: String,
-            mActivity: ItemListActivity
+            mActivity: ContainerActivity
         ) {
 
             // get items of that category
@@ -78,7 +78,7 @@ class ItemListController {
          * This method is responsible for sort item in the itemList
          * */
         private fun sortItem(
-            mActivity: ItemListActivity,
+            mActivity: ContainerActivity,
             adapter: ContainerAdapter
         ) {
             val drawerSortLayout = mActivity
@@ -90,7 +90,7 @@ class ItemListController {
                     //sort logic
                     adapter.items.sortBy { it.itemName }
                     //update sort order
-                    mActivity.sortOrder = ContainerActivity.NAME_ASCENDING
+                    mActivity.sortOrderItemList = ContainerActivity.NAME_ASCENDING
                     // update the UI layer
                     updateRecyclerView(adapter, drawerSortLayout)
                     true
@@ -100,7 +100,7 @@ class ItemListController {
                     //sort logic
                     adapter.items.sortByDescending { it.itemName }
                     //update sort order
-                    mActivity.sortOrder = ContainerActivity.NAME_DESCENDING
+                    mActivity.sortOrderItemList = ContainerActivity.NAME_DESCENDING
                     // update the UI layer
                     updateRecyclerView(adapter, drawerSortLayout)
                     true
@@ -110,7 +110,7 @@ class ItemListController {
                     //sort logic
                     adapter.items.sortBy { it.date }
                     //update sort order
-                    mActivity.sortOrder = ContainerActivity.TIME_ASCENDING
+                    mActivity.sortOrderItemList = ContainerActivity.TIME_ASCENDING
                     // update the UI layer
                     updateRecyclerView(adapter, drawerSortLayout)
                     true
@@ -120,7 +120,7 @@ class ItemListController {
                     //sort logic
                     adapter.items.sortByDescending { it.date }
                     //update sort order
-                    mActivity.sortOrder = ContainerActivity.TIME_DESCENDING
+                    mActivity.sortOrderItemList = ContainerActivity.TIME_DESCENDING
                     // update the UI layer
                     updateRecyclerView(adapter, drawerSortLayout)
                     true

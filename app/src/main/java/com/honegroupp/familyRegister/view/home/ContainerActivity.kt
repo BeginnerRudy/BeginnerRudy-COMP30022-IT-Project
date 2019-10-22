@@ -2,7 +2,9 @@ package com.honegroupp.familyRegister.view.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.honegroupp.familyRegister.controller.ItemListController
 import com.honegroupp.familyRegister.view.item.DetailSlide
 import com.honegroupp.familyRegister.view.itemList.ItemListActivity
@@ -11,7 +13,8 @@ import com.honegroupp.familyRegister.view.itemList.ItemListActivity
  * This class is responsible for the logic of activities which contains a list of items.
  *
  * */
-open class ContainerActivity : AppCompatActivity(), ContainerAdapter.OnItemClickerListener {
+open class ContainerActivity : AppCompatActivity(),
+                               ContainerAdapter.OnItemClickerListener {
 
     companion object {
 
@@ -27,12 +30,19 @@ open class ContainerActivity : AppCompatActivity(), ContainerAdapter.OnItemClick
     lateinit var path: String
     lateinit var categoryPosition: String
 
+    var sortOrderItemList = SORT_DEFAULT
+    var sortOrderALL = SORT_DEFAULT
+    var sortOrderShow = SORT_DEFAULT
+
+
     override fun onItemClick(position: Int) {
         val intent = Intent(this, DetailSlide::class.java)
         intent.putExtra("UserID", uid)
         intent.putExtra("FamilyId", familyId)
         intent.putExtra("PositionList", position.toString())
         intent.putExtra("CategoryNameList", categoryPosition)
+        intent.putExtra("sortOrder", sortOrderItemList)
+
         startActivity(intent)
     }
 

@@ -17,18 +17,18 @@ class ItemController {
          * This methods is responsible for creating a item and upload it to the database.
          *
          * */
-        fun createItem(
-            mContext: AppCompatActivity,
-            itemName: EditText,
-            itemDescription: EditText,
-            itemMaterial: EditText,
-            itemLocation: EditText,
-            uid: String,
-            categoryName: String,
-            imageURLs: ArrayList<String>,
-            isPublic: Boolean,
-            date: String
-        ) {
+            fun createItem(
+                mContext: AppCompatActivity,
+                itemName: EditText,
+                itemDescription: EditText,
+                itemMaterial: EditText,
+                itemLocation: EditText,
+                uid: String,
+                categoryName: String,
+                imageURLs: ArrayList<String>,
+                isPublic: Boolean,
+                date: String
+            ) {
 
             val item = Item(
                 itemName = itemName.text.toString(),

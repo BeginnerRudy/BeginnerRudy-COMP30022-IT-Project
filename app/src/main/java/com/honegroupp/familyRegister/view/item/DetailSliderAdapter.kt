@@ -78,6 +78,8 @@ class DetailSliderAdapter(
         //        slideToolbar.title = currItemUploads.itemName
 
 
+
+
         // show item name
         slideName.text = currItemUploads.itemName
 
