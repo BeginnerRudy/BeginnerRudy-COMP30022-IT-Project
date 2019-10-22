@@ -461,7 +461,7 @@ class ItemEditActivity : AppCompatActivity(),
     /*
     Compare the password, if the password is correct, show the location view dialog
      */
-    override fun applyPasswords(
+    override fun verifyPasswords(
         enteredPassword: String,
         dialog: LocationEnterPasswordDialog
     ) {
