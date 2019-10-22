@@ -84,7 +84,7 @@ class HomeController {
                         showTabAdapter
                     }
                     //sort logic
-                    adapter.items.sortBy { it.date }
+                    adapter.items.sortBy { reverseDate(it.date) }
 
                     //update sort order
                     if (allTabFragment.isVisible) {
@@ -107,7 +107,7 @@ class HomeController {
                         showTabAdapter
                     }
                     //sort logic
-                    adapter.items.sortByDescending { it.date }
+                    adapter.items.sortByDescending { reverseDate(it.date) }
 
                     //update sort order
                     if (allTabFragment.isVisible) {
@@ -137,6 +137,22 @@ class HomeController {
             drawer_sort_layout.closeDrawer(GravityCompat.END)
             // update the recycler view
             adapter.notifyDataSetChanged()
+        }
+
+
+        /**
+         * Reverse date for easier sort
+         * */
+        private fun reverseDate(date: String): String {
+            val array: List<String> = date.split("/")
+            val day = array[0]
+            var month = array[1]
+            val year = array[2]
+            if (month.length == 1) {
+                month = "0" + month
+            }
+            val reversedate = year + "/" + month + "/" + day
+            return reversedate
         }
 
     }
