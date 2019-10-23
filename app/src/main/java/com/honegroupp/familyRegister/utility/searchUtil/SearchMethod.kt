@@ -176,7 +176,7 @@ class SearchMethod{
             intent.putExtra("PositionList", itemPositionMap[element].toString())
             intent.putExtra("CategoryNameList", category.toString())
             intent.putExtra("FamilyId", currFamilyId)
-            intent.putExtra("SortOrder", ContainerActivity.SORT_DEFAULT)
+            intent.putExtra("sortOrder", ContainerActivity.SORT_DEFAULT)
             mActivity.startActivity(intent)
         }
     }
