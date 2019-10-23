@@ -489,7 +489,7 @@ data class Family(
                     val item = it.getValue(Item::class.java) as Item
 
                     // add it to the items, check item is visible, if not check user is owner
-                    if (item.showPageUids.contains(uid)) {
+                    if (item.showPageUids.contains(uid) && (item.isPublic || item.itemOwnerUID == uid)) {
                         item.key = it.key.toString()
                         allTabAdapter.items.add(item)
                     }
@@ -562,8 +562,12 @@ data class Family(
                 allItems.forEach {
                     val item = it.getValue(Item::class.java) as Item
 
-                    item.key = it.key.toString()
-                    showTabAdapter.items.add(item)
+                    // only show the item has permission wo view
+                    if (item.isPublic || item.itemOwnerUID == uid){
+                        item.key = it.key.toString()
+                        showTabAdapter.items.add(item)
+                    }
+
                 }
                 // sort the current item according to current app's sort order
                 sortItems(mActivity.sortOrderALL, showTabAdapter.items)
