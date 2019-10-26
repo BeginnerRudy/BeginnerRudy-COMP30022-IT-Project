@@ -3,8 +3,21 @@
 
 All teams in COMP30022 in 2019 wil build a Family artifacts register for their capstone project. The problem being addressed is that almost every family has items they may want to pass down the generations. Photographs, letters, previous items such as art or jewellery, items of cultural significance are examples. The project is to build a front end to browse the items in the register, and a back end that stores the items or links to the item.
 
-## Demo
-![](demo/itemlist.png)
+## ScreenShot
+<table border="0">
+ <tr>
+    <td><img src="demo/familySystem.png"!></td>
+    <td><img src="demo/familyInfo.png"!></td>
+    <td><img src="demo/home page.png"!></td>
+    <td><img src="demo/itemlist.png"!></td>
+ </tr>
+ <tr>
+    <td><img src="demo/upload.png"!></td>
+    <td><img src="demo/ItemDetail.png"!></td>
+    <td><img src="demo/DetailImages.png"!></td>
+    <td><img src="demo/edit.png"!></td>
+ </tr>
+</table>
 
 ## Contributors ✨
 
